@@ -23,12 +23,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.DefaultCaret;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
@@ -88,9 +85,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		});
 		
 	}
-
-	private JTextArea textArea;
-	private JScrollPane scrollPane;
 
 	private JButton startButton;
 	private JButton stopButton;
@@ -167,7 +161,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 				logger.trace("actionPerformed "+ e.getSource().getClass().getName());
 
 				timer = new Timer();
-				timer.scheduleAtFixedRate(new SerialTimeOut(),0, 50);
+				timer.scheduleAtFixedRate(new SerialTimeOut(),0, 80);
 
 			}});
 
@@ -192,8 +186,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		pane = new JPanel();
 		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
 		pane.setBorder(new EmptyBorder(1, 1, 1, 1));
-
-		//    autoscrollBox =new JCheckBox(("Autoscroll"), true);
 
 		List<String> portNames = new ArrayList<String>();
 		
@@ -281,11 +273,11 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		pack();
 
 	}
+	
 	public static SerialListener getInstance() {
 		// TODO Auto-generated method stub
 		return serialListener;
 	}
-
 
 	public static JFrame getDebugFrame() {
 		if (debugFrame ==null){
@@ -360,15 +352,12 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		return menubar;
 	}
 
-
-
 	// send string 
 	private void send(String s) {
 		if (com!=null){
 			com.send(s, 0 /*lineEndings.getSelectedIndex()*/);
 		}
 	}
-
 
 	//send msp without payload 
 	private void requestMSP(int msp) {
@@ -423,11 +412,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	 */
 	public void readSerialByte(final byte input) {
 		//System.currentTimeMillis();
-		if (debugFrame != null){
-			
-			debugFrame.readSerialByte(input);
-					        
-			
+		if (debugFrame != null){	
+			debugFrame.readSerialByte(input);	        	
 		}
 
 		char c = (char)input;
@@ -514,7 +500,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			ds.put(d,"magx", Double.valueOf(read16()/3 ));
 			ds.put(d,"magy", Double.valueOf(read16()/3 ));
 			ds.put(d,"magz", Double.valueOf(read16()/3 ));
-
 			break;
 		case MSP.SERVO:		
 			//        for(i=0;i<8;i++) servo[i] = read16(); 
@@ -626,11 +611,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 	}
 
-
 	private DataMwiiConfImplv2 getModel() {
 		return  this.model;
 	}
-
-
 
 }
