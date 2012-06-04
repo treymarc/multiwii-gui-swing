@@ -66,8 +66,8 @@ public class DebugFrame extends JFrame implements SerialListener {
     final JTextField textField;
     JButton sendButton;
     JCheckBox autoscrollBox;
-    final JComboBox<String> lineEndings;
-    final JComboBox<Integer> serialRates;
+    final JComboBox lineEndings;
+    final JComboBox serialRates;
 
     public DebugFrame(String tritle) {
         // TODO Auto-generated constructor stub
@@ -100,12 +100,12 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
-        lineEndings = new JComboBox<String>(new String[] { ("No line ending"),
+        lineEndings = new JComboBox(new String[] { ("No line ending"),
                 ("Newline"), ("Carriage return"), ("Both NL & CR") });
         lineEndings.setSelectedIndex(0);
         lineEndings.setMaximumSize(lineEndings.getMinimumSize());
 
-        serialRates = new JComboBox<Integer>();
+        serialRates = new JComboBox();
 
         for (Integer entry : SerialDevice.SerialRateStrings) {
             serialRates.addItem(entry);
