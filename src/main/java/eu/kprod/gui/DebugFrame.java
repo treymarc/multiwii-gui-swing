@@ -54,8 +54,6 @@ public class DebugFrame extends JFrame implements SerialListener{
 		    super.insertString(offs, str, a);
 		  }
 		}
-	
-	private static int MAX_SERIAL_CONSOLE_CHAR= 1000;
   
   /**
 	 * 
