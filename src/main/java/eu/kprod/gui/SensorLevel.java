@@ -4,7 +4,12 @@ import org.apache.log4j.Level;
 
 public class SensorLevel extends Level{
   
-  public static final int SENSOR_INT = INFO_INT +100; 
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public static final int SENSOR_INT = INFO_INT +100; 
   
   public static final Level SENSOR = new SensorLevel(SENSOR_INT,"SENSOR",6);  
   

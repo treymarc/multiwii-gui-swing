@@ -46,6 +46,10 @@ import gnu.io.CommPortIdentifier;
 
 public class MwGuiFrame extends JFrame  implements SerialListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static DebugFrame debugFrame;
 
 
@@ -64,7 +68,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	 * @param args
 	 * @throws SerialException 
 	 */
-	public static void main(String[] args) throws SerialException {
+	public static void main(String[] args) {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -88,8 +92,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	private JButton startButton;
 	private JButton stopButton;
 	//  private JCheckBox autoscrollBox;
-	private JComboBox serialPorts;
-	private JComboBox serialRates;
+	private JComboBox<String> serialPorts;
+	private JComboBox<Integer> serialRates;
 
 
 	private static final Logger logger = Logger.getLogger(MwGuiFrame.class);
@@ -203,9 +207,10 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		List<String> portNames = new ArrayList<String>();
 		
 		portNames.add("");
-		for (Enumeration enumeration = CommPortIdentifier.getPortIdentifiers(); enumeration.hasMoreElements();)
+		for (@SuppressWarnings("unchecked")
+		Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier.getPortIdentifiers(); enumeration.hasMoreElements();)
 		{
-			CommPortIdentifier commportidentifier = (CommPortIdentifier)enumeration.nextElement();
+			CommPortIdentifier commportidentifier = enumeration.nextElement();
 			//System.out.println("Found communication port: " + commportidentifier);
 			if (commportidentifier.getPortType() == CommPortIdentifier.PORT_SERIAL)
 			{
@@ -215,7 +220,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			}
 		}
 
-		serialPorts = new JComboBox(portNames.toArray());
+		serialPorts = new JComboBox<String>((String[])portNames.toArray());
 		//    serialPorts.setSelectedItem(com2.getDeviceName());
 		serialPorts.setMaximumSize(serialPorts.getMinimumSize());	
 		serialPorts.setSelectedIndex(0);		
@@ -245,7 +250,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			}});
 
 
-		serialRates = new JComboBox();
+		serialRates = new JComboBox<Integer>();
 
 		for (Integer entry :  SerialDevice.serialRateStrings) {
 			serialRates.addItem(entry);
@@ -327,7 +332,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		JMenuItem coller = new JMenuItem("Paste");
 
 
-		JMenuItem openLog = new JMenuItem("Open");
+//		JMenuItem openLog = new JMenuItem("Open");
 
 		/* Ajouter les choix au menu */
 		menu1.add(debug);

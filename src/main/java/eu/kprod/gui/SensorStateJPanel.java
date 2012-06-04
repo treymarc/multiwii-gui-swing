@@ -7,7 +7,11 @@ import javax.swing.JPanel;
 
 public class SensorStateJPanel extends JPanel {
 
-  private JLabel lblTemp1;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private JLabel lblTemp1;
   private JLabel lblHydro1;
  
 

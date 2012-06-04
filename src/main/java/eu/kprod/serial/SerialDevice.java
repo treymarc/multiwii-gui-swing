@@ -130,10 +130,10 @@ public class SerialDevice implements SerialPortEventListener {
 
     try {
       port = null;
-      Enumeration portList = CommPortIdentifier.getPortIdentifiers();
+      @SuppressWarnings("unchecked")
+	Enumeration<CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
       while (portList.hasMoreElements()) {
-        CommPortIdentifier portId =
-            (CommPortIdentifier) portList.nextElement();
+        CommPortIdentifier portId = portList.nextElement();
 
         if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
           //logger.debug("found " + portId.getName());

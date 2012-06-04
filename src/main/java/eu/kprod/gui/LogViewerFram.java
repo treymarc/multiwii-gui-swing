@@ -13,7 +13,11 @@ import eu.kprod.utils.logLoader;
 public class LogViewerFram extends JFrame{
 
   
-  private static final Logger LogViewerFram = Logger.getLogger(LogViewerFram.class);
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private static final Logger LogViewerFram = Logger.getLogger(LogViewerFram.class);
 
   
   public LogViewerFram(String name) {

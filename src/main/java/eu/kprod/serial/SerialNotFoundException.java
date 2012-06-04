@@ -21,7 +21,12 @@
 package eu.kprod.serial;
 
 public class SerialNotFoundException extends SerialException {
-  public SerialNotFoundException() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public SerialNotFoundException() {
     super();
   }
 

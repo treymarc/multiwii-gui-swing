@@ -35,15 +35,20 @@ import eu.kprod.serial.SerialListener;
 public class DebugFrame extends JFrame implements SerialListener{
 
   
-  private static final Logger logger = Logger.getLogger(DebugFrame.class);
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private static final Logger logger = Logger.getLogger(DebugFrame.class);
   
   JTextArea textArea;
   JScrollPane scrollPane;
   final JTextField textField;
   JButton sendButton;
   JCheckBox autoscrollBox;
-  final JComboBox lineEndings;
-  final JComboBox serialRates;
+  final JComboBox<String> lineEndings;
+  final JComboBox<Integer> serialRates;
   
   public DebugFrame(String tritle) {
     // TODO Auto-generated constructor stub
@@ -75,7 +80,7 @@ public class DebugFrame extends JFrame implements SerialListener{
 
     autoscrollBox =new JCheckBox(("Autoscroll"), true);
 
-    lineEndings = new JComboBox(new String[] { ("No line ending"), ("Newline"), ("Carriage return"), ("Both NL & CR") });
+    lineEndings = new JComboBox<String>(new String[] { ("No line ending"), ("Newline"), ("Carriage return"), ("Both NL & CR") });
 
 
     lineEndings.setSelectedIndex(0);
@@ -83,7 +88,7 @@ public class DebugFrame extends JFrame implements SerialListener{
     lineEndings.setMaximumSize(lineEndings.getMinimumSize());
 
 
-    serialRates = new JComboBox();
+    serialRates = new JComboBox<Integer>();
 
     for (Integer entry :  SerialDevice.serialRateStrings) {
       serialRates.addItem(entry);
