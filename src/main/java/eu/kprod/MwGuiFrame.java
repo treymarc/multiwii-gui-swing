@@ -25,6 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.DefaultCaret;
 
@@ -38,6 +40,7 @@ import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
 import eu.kprod.serial.SerialException;
 import eu.kprod.serial.SerialListener;
+import eu.kprod.serial.SerialNotFoundException;
 import gnu.io.CommPortIdentifier;
 
 
@@ -62,11 +65,21 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	 * @throws SerialException 
 	 */
 	public static void main(String[] args) throws SerialException {
-		//    SerialCom com = new SerialCom("/dev/ttyUSB0",115200);
-		MwGuiFrame frame = new MwGuiFrame();
-		MwGuiFrame.serialListener= (SerialListener)frame;
-		//    com.setListener(frame);
-		frame.setVisible(true);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				//Turn off metal's use of bold fonts
+				UIManager.put("swing.boldMetal", Boolean.FALSE);
+				
+				MwGuiFrame frame = new MwGuiFrame();
+				MwGuiFrame.serialListener= frame;
+				
+				frame.setVisible(true);
+
+
+			}
+		});
+		
 	}
 
 	private JTextArea textArea;
@@ -110,15 +123,12 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	}
 
 
-	public MwGuiFrame() throws SerialException {
+	public MwGuiFrame()  {
 		super();
 
 		model = new DataMwiiConfImplv2();
 
-
 		super.setTitle("MwGui");
-
-
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -156,7 +166,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		pane.setBorder(new EmptyBorder(4, 4, 4, 4));
 
 
-
 		startButton = new JButton(("Start"));
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -178,7 +187,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			}});
 
 
-
 		pane.add(stopButton);
 		pane.add(Box.createRigidArea(new Dimension(4, 0)));
 		pane.add(startButton);
@@ -193,6 +201,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		//    autoscrollBox =new JCheckBox(("Autoscroll"), true);
 
 		List<String> portNames = new ArrayList<String>();
+		
+		portNames.add("");
 		for (Enumeration enumeration = CommPortIdentifier.getPortIdentifiers(); enumeration.hasMoreElements();)
 		{
 			CommPortIdentifier commportidentifier = (CommPortIdentifier)enumeration.nextElement();
@@ -207,12 +217,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 		serialPorts = new JComboBox(portNames.toArray());
 		//    serialPorts.setSelectedItem(com2.getDeviceName());
-		serialPorts.setMaximumSize(serialPorts.getMinimumSize());
-
-		if (portNames.size()>0){
-			serialPorts.setSelectedIndex(0);
-		}
-
+		serialPorts.setMaximumSize(serialPorts.getMinimumSize());	
+		serialPorts.setSelectedIndex(0);		
 		serialPorts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 
@@ -223,13 +229,16 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 				}
 				try {
 					if ( serialPorts.getSelectedItem() !=null && serialRates.getSelectedItem()!=null){
-						com =  new SerialCom(serialPorts.getSelectedItem().toString(),(Integer)serialRates.getSelectedItem());
-
+						com =  new SerialCom(
+								serialPorts.getSelectedItem().toString(),
+								(Integer)serialRates.getSelectedItem());
 
 						com.openSerialPort();
 						com.setListener(MwGuiFrame.getInstance());
 					}
-				} catch (SerialException e) {
+				} catch (SerialNotFoundException e) {
+					
+				}catch (SerialException e) {
 					e.printStackTrace();
 				}
 
@@ -365,7 +374,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	}
 
 
-
 	//send msp without payload 
 	private void requestMSP(int msp) {
 		requestMSP( msp, null);
@@ -404,9 +412,9 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 
 	private static int p;
-	int read32() {return (inBuf[p++]&0xff) + ((inBuf[p++]&0xff)<<8) + ((inBuf[p++]&0xff)<<16) + ((inBuf[p++]&0xff)<<24); }
-	int read16() {return (inBuf[p++]&0xff) + ((inBuf[p++])<<8); }
-	int read8()  {return inBuf[p++]&0xff;}
+	private int read32() {return (inBuf[p++]&0xff) + ((inBuf[p++]&0xff)<<8) + ((inBuf[p++]&0xff)<<16) + ((inBuf[p++]&0xff)<<24); }
+	private int read16() {return (inBuf[p++]&0xff) + ((inBuf[p++])<<8); }
+	private int read8()  {return inBuf[p++]&0xff;}
 
 	private static byte checksum=0;
 	private static int stateMSP=0,offset=0,dataSize=0;
@@ -472,10 +480,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 	}
 
-
-
 	private void decode(int stateMSP2) {
-
 
 		switch(stateMSP2) {
 		case MSP.IDENT:
@@ -500,9 +505,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			break;
 		case MSP.RAW_IMU:
 			stateMSP = 0;
-			//        ax = read16();ay = read16();az = read16();
-			//        gx = read16()/8;gy = read16()/8;gz = read16()/8;
-			//        magx = read16()/3;magy = read16()/3;magz = read16()/3; 
 			Date d = new Date();
 			ds.put(d,"ax", Double.valueOf(read16() ));
 			ds.put(d,"ay", Double.valueOf(read16() ));
