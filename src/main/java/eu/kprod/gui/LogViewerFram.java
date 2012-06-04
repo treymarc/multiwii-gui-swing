@@ -25,8 +25,7 @@ public class LogViewerFram extends JFrame{
     try {
       ds = logLoader.getDataSourceContent(name);
     } catch (IOException e) {
-      LogViewerFram.error("Can not open log file : "+LogViewerFram);
-      e.printStackTrace();
+      LogViewerFram.error("Can not open log file : "+name);
       e.printStackTrace();
       ds = new myDataSource();
     }

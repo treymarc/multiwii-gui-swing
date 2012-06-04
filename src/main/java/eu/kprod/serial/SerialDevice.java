@@ -27,6 +27,8 @@ package eu.kprod.serial;
 
 
 import java.io.UnsupportedEncodingException;
+
+import eu.kprod.I18n;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -148,11 +150,11 @@ public class SerialDevice implements SerialPortEventListener {
         }
       }
     } catch (PortInUseException e) {
-      throw new SerialException("Serial port ''{0}'' already in use. Try quiting any programs that may be using it."+ device
+      throw new SerialException(I18n.format("Serial port ''{0}'' already in use. Try quiting any programs that may be using it.", device)
                                     
           );
     } catch (Exception e) {
-      throw new SerialException("Error opening serial port ''{0}''."+ device
+      throw new SerialException(I18n.format("Error opening serial port ''{0}''.", device)
                                     ,
                                     e
           );
@@ -160,7 +162,7 @@ public class SerialDevice implements SerialPortEventListener {
     }
 
     if (port == null) {
-      throw new SerialNotFoundException("Serial port ''{0}'' not found."+  device
+      throw new SerialNotFoundException(I18n.format("Serial port ''{0}'' not found.",  device)
                                             
           );
     }
@@ -408,10 +410,10 @@ public class SerialDevice implements SerialPortEventListener {
   //      if (length > outgoing.length) {
   //        logger.trace(
   //          I18n.format(
-  //            eu.kprod.Int.getMsg("readBytesUntil() byte buffer is too small for the {0} bytes up to and including char {1}"),
+  //            I18n.format("readBytesUntil() byte buffer is too small for the {0} bytes up to and including char {1}"),
   //            length,
   //            interesting
-  //          )
+  //          ))
   //        );
   //        return -1;
   //      }
@@ -520,7 +522,7 @@ public class SerialDevice implements SerialPortEventListener {
    * I think of something slightly more intelligent to do.
    */
   static public void errorMessage(String where, Throwable e) {
-    logger.trace("Error inside Serial.{0}()"+ where);
+    logger.trace(I18n.format("Error inside Serial.{0}()", where));
     e.printStackTrace();
   }
 
