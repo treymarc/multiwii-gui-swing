@@ -18,14 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.PlainDocument;
-
 
 import org.apache.log4j.Logger;
 
@@ -35,20 +32,16 @@ import eu.kprod.serial.SerialException;
 import eu.kprod.serial.SerialListener;
 
 
-
 public class DebugFrame extends JFrame implements SerialListener{
+	
 	static class CustomDocument extends PlainDocument {
 		  private static int MAX_LENGTH = 1000;
 		  private JTextArea field;
-
-
 
 		  public CustomDocument(JTextArea textArea) {
 			// TODO Auto-generated constructor stub
 			  field=textArea;
 		}
-
-
 
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 
@@ -95,8 +88,6 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
       }
     }); 
 
-
-
     getContentPane().setLayout(new BorderLayout());
 
 
@@ -113,12 +104,8 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
     autoscrollBox =new JCheckBox(("Autoscroll"), true);
 
     lineEndings = new JComboBox<String>(new String[] { ("No line ending"), ("Newline"), ("Carriage return"), ("Both NL & CR") });
-
-
     lineEndings.setSelectedIndex(0);
-
     lineEndings.setMaximumSize(lineEndings.getMinimumSize());
-
 
     serialRates = new JComboBox<Integer>();
 
@@ -126,22 +113,16 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
       serialRates.addItem(entry);
     }
 
-
     serialRates.setSelectedIndex(10);
     serialRates.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
-
         logger.trace("actionPerformed "+ event.getSource().getClass().getName());
 
         MwGuiFrame.getCom().closeSerialPort();
 
-
         try {
-
           MwGuiFrame.getCom().setSerialRate((Integer)serialRates.getSelectedItem());
-
           MwGuiFrame.getCom().openSerialPort();
-
 
         } catch (SerialException e) {
           e.printStackTrace();
@@ -157,14 +138,12 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
 
     JPanel pane = new JPanel();
     pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-    pane.setBorder(new EmptyBorder(4, 4, 4, 4));
+    pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
     textField = new JTextField(40);
     textField.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         logger.trace("actionPerformed "+ e.getSource().getClass().getName());
-
-
 
         MwGuiFrame.getCom().send(textField.getText(), lineEndings.getSelectedIndex());
         textField.setText("");
@@ -180,21 +159,19 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
       }});
 
     pane.add(textField);
-    pane.add(Box.createRigidArea(new Dimension(4, 0)));
+    pane.add(Box.createRigidArea(new Dimension(1, 0)));
     pane.add(sendButton);
 
     getContentPane().add(pane, BorderLayout.NORTH);
 
     pane = new JPanel();
     pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-    pane.setBorder(new EmptyBorder(4, 4, 4, 4));
-
-
+    pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
     pane.add(autoscrollBox);
     pane.add(Box.createHorizontalGlue());
     pane.add(lineEndings);
-    pane.add(Box.createRigidArea(new Dimension(8, 0)));
+    pane.add(Box.createRigidArea(new Dimension(1, 0)));
     pane.add(serialRates);
 
     getContentPane().add(pane, BorderLayout.SOUTH);
@@ -204,9 +181,7 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
   }
 
   public void readSerialByte(final byte newMessage) {
-    // TODO Auto-generated method stub
     
-
 //    SwingUtilities.invokeLater(new Runnable() {
 //      public void run() {
         textArea.append(String.valueOf((char)newMessage)) ;
