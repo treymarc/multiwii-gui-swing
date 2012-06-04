@@ -1,10 +1,16 @@
-
 package eu.kprod.serial;
 
-
-
+/**
+ *
+ * @author treym
+ *
+ */
 public interface SerialListener {
 
-  public void readSerialByte(byte s);
+    /**
+     *
+     * @param s recieved byte
+     */
+    void readSerialByte(byte s);
 
 }
