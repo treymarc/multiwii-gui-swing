@@ -112,7 +112,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 	public MwGuiFrame() throws SerialException {
 		super();
-		
+
 		model = new DataMwiiConfImplv2();
 
 
@@ -128,6 +128,10 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 			public void windowClosing(WindowEvent e) {
 				logger.trace("windowClosing "+ e.getSource().getClass().getName());
+				if (timer!=null){
+					timer.cancel();
+					timer.purge();
+				}  
 				if(com!=null){
 					com.closeSerialPort();
 				}
@@ -219,11 +223,11 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 				}
 				try {
 					if ( serialPorts.getSelectedItem() !=null && serialRates.getSelectedItem()!=null){
-					com =  new SerialCom(serialPorts.getSelectedItem().toString(),(Integer)serialRates.getSelectedItem());
+						com =  new SerialCom(serialPorts.getSelectedItem().toString(),(Integer)serialRates.getSelectedItem());
 
-					
-					com.openSerialPort();
-					com.setListener(MwGuiFrame.getInstance());
+
+						com.openSerialPort();
+						com.setListener(MwGuiFrame.getInstance());
 					}
 				} catch (SerialException e) {
 					e.printStackTrace();
@@ -248,14 +252,11 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 					com.closeSerialPort();
 				}
 				try {
-if(com!=null){
-			        com.setSerialRate((Integer) serialRates.getSelectedItem());
-					com.openSerialPort();
-					com.setListener(MwGuiFrame.serialListener);
-					System.err.println("MwGuiFrame.serialListener "+MwGuiFrame.serialListener );
-					System.err.println("(Integer) serialRates.getSelectedItem() "+(Integer) serialRates.getSelectedItem() );
-					System.err.println("MwGuiFrame.serialListener "+MwGuiFrame.serialListener );
-}
+					if(com!=null){
+						com.setSerialRate((Integer) serialRates.getSelectedItem());
+						com.openSerialPort();
+						com.setListener(MwGuiFrame.serialListener);
+					}
 				} catch (SerialException e) {
 					e.printStackTrace();
 				}
@@ -447,25 +448,25 @@ if(com!=null){
 				} 
 			}
 			// with/without payload ?
-					if (stateMSP == 3) {
-						if (c<100) {
-							stateMSP++;
-							dataSize = c;
-							if (dataSize>63) dataSize=63;
-						} else {
-							stateMSP = (int)c;
-						}
-					}
+			if (stateMSP == 3) {
+				if (c<100) {
+					stateMSP++;
+					dataSize = c;
+					if (dataSize>63) dataSize=63;
+				} else {
+					stateMSP = (int)c;
+				}
+			}
 
-					//header detection $M>
-					switch(c) {
-					case '$':                                         
-						if (stateMSP == 0) stateMSP++;break;
-					case 'M':
-						if (stateMSP == 1) stateMSP++;break;
-					case '>':
-						if (stateMSP == 2) stateMSP++;break;
-					}
+			//header detection $M>
+			switch(c) {
+			case '$':                                         
+				if (stateMSP == 0) stateMSP++;break;
+			case 'M':
+				if (stateMSP == 1) stateMSP++;break;
+			case '>':
+				if (stateMSP == 2) stateMSP++;break;
+			}
 
 		}    
 
