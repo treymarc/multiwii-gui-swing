@@ -5,11 +5,16 @@
 	<artifactId>mwgui</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -19,6 +24,17 @@
 					</archive>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>			
+			
 			<plugin>
 				<!-- NOTE: We don't need a groupId specification because the group is 
 					org.apache.maven.plugins ...which is assumed by default. -->
@@ -47,7 +63,7 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -55,10 +71,10 @@
 			<version>1.2.16</version>
 		</dependency>
 		<dependency>
-		<scope>compile</scope>
 			<groupId>gnu</groupId>
 			<artifactId>serial</artifactId>
 			<version>1.0</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>jfree</groupId>
