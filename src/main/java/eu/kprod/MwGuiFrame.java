@@ -56,10 +56,13 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	class SerialTimeOut extends TimerTask {
 
 		public void run() {
-
+try{
 			requestMSP(MSP.ATTITUDE);
 			requestMSP(MSP.RAW_IMU);
-
+}catch (NullPointerException e) {
+	this.cancel();
+	timer.purge();
+}
 		}
 
 	}
@@ -92,7 +95,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	private JButton startButton;
 	private JButton stopButton;
 	//  private JCheckBox autoscrollBox;
-	private JComboBox<String> serialPorts;
+	private JComboBox<Object> serialPorts;
 	private JComboBox<Integer> serialRates;
 
 
@@ -220,7 +223,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			}
 		}
 
-		serialPorts = new JComboBox<String>((String[])portNames.toArray());
+		serialPorts = new JComboBox<Object>(portNames.toArray());
 		//    serialPorts.setSelectedItem(com2.getDeviceName());
 		serialPorts.setMaximumSize(serialPorts.getMinimumSize());	
 		serialPorts.setSelectedIndex(0);		
