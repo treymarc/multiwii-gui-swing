@@ -74,7 +74,9 @@ public  class SerialCom    {
 
   public void setListener(SerialListener l)   {
     listener = l;
+    if (serial!=null){
     serial.addListener(l);
+    }
   }
 
   public void openSerialPort() throws SerialException  {
