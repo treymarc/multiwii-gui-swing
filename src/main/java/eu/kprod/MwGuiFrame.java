@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Timer;
@@ -32,7 +31,6 @@ import org.jfree.chart.ChartPanel;
 
 import eu.kprod.gui.DebugFrame;
 import eu.kprod.gui.myChartFactory;
-import eu.kprod.gui.myDataSource;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
 import eu.kprod.serial.SerialException;
@@ -47,15 +45,14 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static DebugFrame debugFrame;
-
+	private static final Logger logger = Logger.getLogger(MwGuiFrame.class);
 
 	class SerialTimeOut extends TimerTask {
 
 		public void run() {
 			try{
 				//requestMSP(MSP.ATTITUDE);
-				requestMSP(MSP.RAW_IMU);
+				send(MSP.request(MSP.RAW_IMU));
 			}catch (NullPointerException e) {
 				this.cancel();
 				timer.purge();
@@ -63,7 +60,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		}
 
 	}
-
+	
 	/**
 	 * @param args
 	 * @throws SerialException 
@@ -74,13 +71,11 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			public void run() {
 				//Turn off metal's use of bold fonts
 				UIManager.put("swing.boldMetal", Boolean.FALSE);
-				
+			
 				MwGuiFrame frame = new MwGuiFrame();
 				MwGuiFrame.serialListener= frame;
 				
 				frame.setVisible(true);
-
-
 			}
 		});
 		
@@ -88,29 +83,24 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 	private JButton startButton;
 	private JButton stopButton;
-	//  private JCheckBox autoscrollBox;
+
 	private JComboBox<Object> serialPorts;
 	private JComboBox<Integer> serialRates;
-
-
-	private static final Logger logger = Logger.getLogger(MwGuiFrame.class);
 
 	private static SerialCom com;
 	private static SerialListener serialListener;
 
-
 	private Timer timer ;
 
-	private myDataSource ds = new myDataSource();
+	private static DebugFrame debugFrame;
 	private ChartPanel chartTrendPanel;
 	private JPanel overviewPanel;
 
-	private DataMwiiConfImplv2 model;
 
 	private JPanel getOverviewPanel() {
 
 		if (overviewPanel==null){
-			chartTrendPanel = new ChartPanel(myChartFactory.createChart(ds));
+			chartTrendPanel = new ChartPanel(myChartFactory.createChart(MSP.getModel().getDs()));
 			chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
 			overviewPanel = new JPanel();
@@ -127,9 +117,9 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	public MwGuiFrame()  {
 		super();
 
-		model = new DataMwiiConfImplv2();
-
-		super.setTitle("MwGui");
+		MSP.setModel( new DataMwiiModel());
+		
+		super.setTitle("MwGui - v0.0.1");
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -204,7 +194,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		}
 
 		serialPorts = new JComboBox<Object>(portNames.toArray());
-		//    serialPorts.setSelectedItem(com2.getDeviceName());
 		serialPorts.setMaximumSize(serialPorts.getMinimumSize());	
 		serialPorts.setSelectedIndex(0);		
 		serialPorts.addActionListener(new ActionListener() {
@@ -262,8 +251,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 		serialRates.setMaximumSize(serialRates.getMinimumSize());
 
-		//    pane.add(autoscrollBox);
-		//    pane.add(Box.createHorizontalGlue());
 		pane.add(serialPorts);
 		pane.add(Box.createRigidArea(new Dimension(1, 0)));
 		pane.add(serialRates);
@@ -271,17 +258,15 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		getContentPane().add(pane, BorderLayout.SOUTH);
 
 		pack();
-
 	}
 	
 	public static SerialListener getInstance() {
-		// TODO Auto-generated method stub
 		return serialListener;
 	}
 
 	public static JFrame getDebugFrame() {
 		if (debugFrame ==null){
-			debugFrame = new DebugFrame("Debug Panel");
+			debugFrame = new DebugFrame("Debug serial");
 		}
 		return debugFrame;
 	}
@@ -359,52 +344,6 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		}
 	}
 
-	//send msp without payload 
-	private void requestMSP(int msp) {
-		requestMSP( msp, null);
-	}
-
-	//send multiple msp without payload 
-	private void requestMSP(int[] msps) {
-		StringBuffer bf = new StringBuffer();
-		for (int m : msps) {
-			bf.append(MSP.OUT).append((char)(m));
-		}
-		send(bf.toString());
-	}
-
-	//send msp with payload 
-	private void requestMSP(int msp, Character[] payload) {
-		if(msp < 0) {
-			return; 
-		}
-		StringBuffer bf = new StringBuffer().append(MSP.OUT);
-
-		if (payload != null){
-			bf.append((char)(payload.length)).append((char)(msp)); 
-			byte checksum=0;
-			for (char c :payload){
-				bf.append(c);
-				checksum ^= (int)(c);
-			}
-			bf.append((char) ((int)(checksum)) );
-		}else{
-			bf.append((char)(msp));
-		}
-
-		send(bf.toString());  
-	}
-
-
-	private static int p;
-	private int read32() {return (inBuf[p++]&0xff) + ((inBuf[p++]&0xff)<<8) + ((inBuf[p++]&0xff)<<16) + ((inBuf[p++]&0xff)<<24); }
-	private int read16() {return (inBuf[p++]&0xff) + ((inBuf[p++])<<8); }
-	private int read8()  {return inBuf[p++]&0xff;}
-
-	private static byte checksum=0;
-	private static int stateMSP=0,offset=0,dataSize=0;
-	private static byte[] inBuf   = new byte[128];
-
 
 	/*
 	 * (non-Javadoc)
@@ -415,204 +354,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		if (debugFrame != null){	
 			debugFrame.readSerialByte(input);	        	
 		}
-
-		char c = (char)input;
-
-		if (stateMSP > 99) {
-			if (offset <= dataSize) {
-				if (offset < dataSize) checksum ^= c;
-				inBuf[offset++] = (byte)(c);
-			} else {
-				if ( checksum == inBuf[dataSize] ) {
-					decode(stateMSP);
-				}
-				stateMSP = 0;
-			}
-		}
-
-		if (stateMSP <5) {
-
-			if (stateMSP == 4) {
-				if (c > 99) {
-					stateMSP = c;
-					offset = 0;checksum = 0;p=0;
-				} else {
-					stateMSP = 0;
-				} 
-			}
-			// with/without payload ?
-			if (stateMSP == 3) {
-				if (c<100) {
-					stateMSP++;
-					dataSize = c;
-					if (dataSize>63) dataSize=63;
-				} else {
-					stateMSP = (int)c;
-				}
-			}
-
-			//header detection $M>
-			switch(c) {
-			case '$':                                         
-				if (stateMSP == 0) stateMSP++;break;
-			case 'M':
-				if (stateMSP == 1) stateMSP++;break;
-			case '>':
-				if (stateMSP == 2) stateMSP++;break;
-			}
-
-		}    
-
+		MSP.decode(input);
 	}
 
-	private void decode(int stateMSP2) {
-
-		switch(stateMSP2) {
-		case MSP.IDENT:
-			this.getModel().setVersion( read8() );
-			this.getModel().setMultiType( read8() );
-			break;
-		case MSP.STATUS:
-			
-			//        cycleTime = read16();
-			//        i2cError = read16();
-			//        present = read16();
-			//        mode = read16();
-			//        if ((present&1) >0) {buttonAcc.setColorBackground(green_);} else {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false); tACC_PITCH.setState(false); tACC_Z.setState(false);}
-			//        if ((present&2) >0) {buttonBaro.setColorBackground(green_);} else {buttonBaro.setColorBackground(red_); tBARO.setState(false); }
-			//        if ((present&4) >0) {buttonMag.setColorBackground(green_);} else {buttonMag.setColorBackground(red_); tMAGX.setState(false); tMAGY.setState(false); tMAGZ.setState(false); }
-			//        if ((present&8) >0) {buttonGPS.setColorBackground(green_);} else {buttonGPS.setColorBackground(red_); tHEAD.setState(false);}
-			//        if ((present&16)>0) {buttonSonar.setColorBackground(green_);} else {buttonSonar.setColorBackground(red_);}
-			//        for(i=0;i<CHECKBOXITEMS;i++) {
-			//          if ((mode&(1<<i))>0) buttonCheckbox[i].setColorBackground(green_); else buttonCheckbox[i].setColorBackground(red_);
-			//        } 
-			break;
-		case MSP.RAW_IMU:	
-			Date d = new Date();
-			ds.put(d,"ax", Double.valueOf(read16() ));
-			ds.put(d,"ay", Double.valueOf(read16() ));
-			ds.put(d,"az", Double.valueOf(read16() ));
-
-			ds.put(d,"gx", Double.valueOf(read16()/8 ));
-			ds.put(d,"gy", Double.valueOf(read16()/8 ));
-			ds.put(d,"gz", Double.valueOf(read16()/8 ));
-
-			ds.put(d,"magx", Double.valueOf(read16()/3 ));
-			ds.put(d,"magy", Double.valueOf(read16()/3 ));
-			ds.put(d,"magz", Double.valueOf(read16()/3 ));
-			break;
-		case MSP.SERVO:		
-			//        for(i=0;i<8;i++) servo[i] = read16(); 
-			break;
-		case MSP.MOTOR:		
-			//        for(i=0;i<8;i++) mot[i] = read16(); 
-			break;
-		case MSP.RC:		
-			//        rcRoll = read16();rcPitch = read16();rcYaw = read16();rcThrottle = read16();    
-			//        rcAUX1 = read16();rcAUX2 = read16();rcAUX3 = read16();rcAUX4 = read16(); 
-			break;
-		case MSP.RAW_GPS:		
-			//        GPS_fix = read8();
-			//        GPS_numSat = read8();
-			//        GPS_latitude = read32();
-			//        GPS_longitude = read32();
-			//        GPS_altitude = read16();
-			//        GPS_speed = read16(); 
-			break;
-		case MSP.COMP_GPS:			
-			//        GPS_distanceToHome = read16();
-			//        GPS_directionToHome = read16();
-			//        GPS_update = read8(); 
-			break;
-		case MSP.ATTITUDE:			
-			//        angx = read16()/10;angy = read16()/10;
-			//        head = read16(); 
-			break;
-		case MSP.ALTITUDE:			
-			//        alt = read32(); 
-			break;
-		case MSP.BAT:			
-			//        bytevbat = read8();
-			//        pMeterSum = read16(); 
-			break;
-		case MSP.RC_TUNING:	
-			this.getModel().setRC_RATE((int)(read8()/100.0));
-			this.getModel().setRC_EXPO((int)(read8()/100.0));
-			this.getModel().setRollPitchRate((int)(read8()/100.0));
-			this.getModel().setYawRate((int)(read8()/100.0));
-			this.getModel().setDynThrPID((int)(read8()/100.0));
-			this.getModel().setThrottleMID((int)(read8()/100.0));
-			this.getModel().setThrottleEXPO((int)(read8()/100.0));
-			break;
-		case MSP.ACC_CALIBRATION:
-			break;
-		case MSP.MAG_CALIBRATION:	 
-			break;
-		case MSP.PID:
-			
-			//        for(i=0;i<PIDITEMS;i++) {
-			//          byteP[i] = read8();byteI[i] = read8();byteD[i] = read8();
-			//          switch (i) {
-			//           case 0: 
-			//confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-			//break;
-			//           case 1:
-			//confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-			//break;
-			//           case 2:
-			//confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-			//break;
-			//           case 3:
-			//confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-			//break;
-			//           case 7:
-			//confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-			//break;
-			//           case 8:
-			//              confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-			//              break;
-			//           //Different rates fot POS-4 POSR-5 NAVR-6
-			//           case 4:
-			//              confP[i].setValue(byteP[i]/100.0);confI[i].setValue(byteI[i]/100.0);confD[i].setValue(byteD[i]/1000.0);
-			//              break;
-			//           case 5:
-			//              confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/100.0);confD[i].setValue(byteD[i]/1000.0);
-			//              break;                   
-			//           case 6:
-			//              confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/100.0);confD[i].setValue(byteD[i]/1000.0);
-			//              break;                   
-			//          }
-			//          confP[i].setColorBackground(green_);
-			//          confI[i].setColorBackground(green_);
-			//          confD[i].setColorBackground(green_);
-			//        } 
-			//        
-			break;
-		case MSP.BOX:
-			//        for( i=0;i<CHECKBOXITEMS;i++) {
-			//          activation[i] = read16();
-			//          for( aa=0;aa<12;aa++) {
-			//            if ((activation[i]&(1<<aa))>0) checkbox[i].activate(aa); else checkbox[i].deactivate(aa);
-			//          }
-			//        }
-			break;
-		case MSP.MISC:
-			//        intPowerTrigger = read16();
-			break;
-		case MSP.MOTOR_PINS:			
-			//        for( i=0;i<8;i++) {
-			//          byteMP[i] = read8();
-			//        } 
-			break;
-		case MSP.DEBUG:			
-			//        debug1 = read16();debug2 = read16();debug3 = read16();debug4 = read16();
-			break;
-		}
-
-	}
-
-	private DataMwiiConfImplv2 getModel() {
-		return  this.model;
-	}
-
+	
 }

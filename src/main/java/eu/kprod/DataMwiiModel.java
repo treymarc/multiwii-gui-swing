@@ -1,11 +1,17 @@
 package eu.kprod;
 
-public class DataMwiiConfImplv2  {
+import eu.kprod.gui.myDataSource;
 
+public class DataMwiiModel  {
+
+	// for real time data
+	private myDataSource ds = new myDataSource();
+
+	// global ident
 	int version,
 	multiType ;
 
-
+	// rc conf
 	int RC_RATE,
 	RC_EXPO,
 	RollPitchRate,
@@ -87,11 +93,13 @@ public class DataMwiiConfImplv2  {
 		this.multiType = multiType;
 	}
 
-	public DataMwiiConfImplv2(){
+	public DataMwiiModel(){
 		super();
 	}
 
-
+	public myDataSource getDs() {
+		return  ds ;
+	}
 
 
 	//
