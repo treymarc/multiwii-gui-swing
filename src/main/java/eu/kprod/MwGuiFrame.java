@@ -84,8 +84,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	private JButton startButton;
 	private JButton stopButton;
 
-	private JComboBox<Object> serialPorts;
-	private JComboBox<Integer> serialRates;
+	private JComboBox serialPorts;
+	private JComboBox serialRates;
 
 	private static SerialCom com;
 	private static SerialListener serialListener;
@@ -199,7 +199,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			}
 		}
 
-		serialPorts = new JComboBox<Object>(portNames.toArray());
+		serialPorts = new JComboBox(portNames.toArray());
 		serialPorts.setMaximumSize(serialPorts.getMinimumSize());	
 		serialPorts.setSelectedIndex(0);		
 		serialPorts.addActionListener(new ActionListener() {
@@ -228,7 +228,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			}});
 
 
-		serialRates = new JComboBox<Integer>();
+		serialRates = new JComboBox();
 
 		for (Integer entry :  SerialDevice.serialRateStrings) {
 			serialRates.addItem(entry);
