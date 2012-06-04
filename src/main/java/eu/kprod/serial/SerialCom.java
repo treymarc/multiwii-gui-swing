@@ -20,9 +20,7 @@ package eu.kprod.serial;
 
 
 
-
 public  class SerialCom    {
-
 
 
   private SerialDevice serial;
@@ -34,7 +32,6 @@ public  class SerialCom    {
   private String deviceName;
 
   private SerialListener listener;
-
 
 
   public String getDeviceName() {
@@ -95,8 +92,6 @@ public  class SerialCom    {
   }
 
 
-
-
   public int getSerialRate() {
     return serialRate;
   }
@@ -105,11 +100,6 @@ public  class SerialCom    {
   public void setSerialRate(int serialRate) {
     this.serialRate = serialRate;
   }
-
-
-
-
-
 
 
 }
