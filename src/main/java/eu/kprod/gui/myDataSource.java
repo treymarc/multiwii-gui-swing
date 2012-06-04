@@ -3,9 +3,7 @@ package eu.kprod.gui;
 import java.util.Date;
 import java.util.HashMap;
 
-
 import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
