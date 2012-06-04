@@ -24,6 +24,10 @@ unix only :  change the script mwi-swing.sh  to macth the mane of you rfcom devi
 ex  : device is "rfcomm0"
  
 	-Dgnu.io.rxtx.SerialPorts=/dev/rfcomm0
+	
+
+http://mailman.qbang.org/2004-May/8214506.html
+
 
 BUILD
 =====
