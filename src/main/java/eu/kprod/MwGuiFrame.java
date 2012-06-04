@@ -57,7 +57,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 		public void run() {
 			try{
-				requestMSP(MSP.ATTITUDE);
+				//requestMSP(MSP.ATTITUDE);
 				requestMSP(MSP.RAW_IMU);
 			}catch (NullPointerException e) {
 				this.cancel();
@@ -121,7 +121,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 			overviewPanel = new JPanel();
 			overviewPanel.setLayout(new BorderLayout());
-			overviewPanel.setBorder(new EmptyBorder(4, 4, 4, 4));
+			overviewPanel.setBorder(new EmptyBorder(1, 1, 1, 1));
 
 			overviewPanel.add(chartTrendPanel,BorderLayout.CENTER);
 		}
@@ -157,21 +157,9 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 		getContentPane().setLayout(new BorderLayout());
 
-		textArea = new JTextArea(16, 40);
-		textArea.setEditable(false);    
-
-		// don't automatically update the caret.  that way we can manually decide
-		// whether or not to do so based on the autoscroll checkbox.
-		((DefaultCaret)textArea.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-
-		scrollPane = new JScrollPane(textArea);
-
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-
 		JPanel pane = new JPanel();
 		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-		pane.setBorder(new EmptyBorder(4, 4, 4, 4));
-
+		pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
 		startButton = new JButton(("Start"));
 		startButton.addActionListener(new ActionListener() {
@@ -179,7 +167,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 				logger.trace("actionPerformed "+ e.getSource().getClass().getName());
 
 				timer = new Timer();
-				timer.scheduleAtFixedRate(new SerialTimeOut(),0, 20);
+				timer.scheduleAtFixedRate(new SerialTimeOut(),0, 50);
 
 			}});
 
@@ -195,7 +183,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 
 		pane.add(stopButton);
-		pane.add(Box.createRigidArea(new Dimension(4, 0)));
+		pane.add(Box.createRigidArea(new Dimension(1, 0)));
 		pane.add(startButton);
 
 		getContentPane().add(pane, BorderLayout.NORTH);    
@@ -203,7 +191,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 		pane = new JPanel();
 		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-		pane.setBorder(new EmptyBorder(4, 4, 4, 4));
+		pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
 		//    autoscrollBox =new JCheckBox(("Autoscroll"), true);
 
@@ -285,7 +273,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		//    pane.add(autoscrollBox);
 		//    pane.add(Box.createHorizontalGlue());
 		pane.add(serialPorts);
-		pane.add(Box.createRigidArea(new Dimension(8, 0)));
+		pane.add(Box.createRigidArea(new Dimension(1, 0)));
 		pane.add(serialRates);
 
 		getContentPane().add(pane, BorderLayout.SOUTH);
