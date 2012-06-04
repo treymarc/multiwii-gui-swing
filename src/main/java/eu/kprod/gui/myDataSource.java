@@ -64,7 +64,11 @@ public class myDataSource {
       dataset.addSeries(timeserie);
     }
 
+    try{
     timeserie.add(new Millisecond(date ), value);
+    }catch (Exception e) {
+		// TODO: handle exception
+	}
     return true;
 
 

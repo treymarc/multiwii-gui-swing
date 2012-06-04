@@ -361,11 +361,16 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			public void run() { 
 
 				MSP.decode(input);
-			}});
+			
 		
 		if (getDebugFrame().isVisible()){
+	
+
 			debugFrame.readSerialByte(input);
+		
+			
 		}
+			}});
 	}
 
 	
