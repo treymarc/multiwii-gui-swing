@@ -436,7 +436,10 @@ try{
 	public void readSerialByte(final byte input) {
 		//System.currentTimeMillis();
 		if (debugFrame != null){
+			
 			debugFrame.readSerialByte(input);
+					        
+			
 		}
 
 		char c = (char)input;

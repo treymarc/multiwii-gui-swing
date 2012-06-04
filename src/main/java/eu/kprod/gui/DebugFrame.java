@@ -20,7 +20,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.PlainDocument;
 
 
 import org.apache.log4j.Logger;
@@ -33,7 +37,32 @@ import eu.kprod.serial.SerialListener;
 
 
 public class DebugFrame extends JFrame implements SerialListener{
+	static class CustomDocument extends PlainDocument {
+		  private static int MAX_LENGTH = 1000;
+		  private JTextArea field;
 
+
+
+		  public CustomDocument(JTextArea textArea) {
+			// TODO Auto-generated constructor stub
+			  field=textArea;
+		}
+
+
+
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+
+		    if(str == null) 
+		      return;
+
+		    if (field.getText().length() > MAX_LENGTH){
+		    	super.remove(0, str.length());
+		    }
+		    super.insertString(offs, str, a);
+		  }
+		}
+	
+	private static int MAX_SERIAL_CONSOLE_CHAR= 1000;
   
   /**
 	 * 
@@ -72,6 +101,9 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
 
 
     textArea = new JTextArea(16, 40);
+    textArea.setDocument(new CustomDocument(textArea));
+
+//    doc.setDocumentFilter(new DocumentSizeFilter(MAX_SERIAL_CONSOLE_CHAR));
     textArea.setEditable(false);    
 
     // don't automatically update the caret.  that way we can manually decide
@@ -175,13 +207,13 @@ private static final Logger logger = Logger.getLogger(DebugFrame.class);
     // TODO Auto-generated method stub
     
 
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        textArea.append(""+newMessage);
+//    SwingUtilities.invokeLater(new Runnable() {
+//      public void run() {
+        textArea.append(String.valueOf((char)newMessage)) ;
         if (autoscrollBox.isSelected()) {
           textArea.setCaretPosition(textArea.getDocument().getLength());
         }
-      }});
+//      }});
     
   }
 
