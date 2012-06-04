@@ -1,7 +1,7 @@
 package eu.kprod.gui;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
@@ -12,7 +12,7 @@ public class myDataSource {
 
 
 
-  private  HashMap<String,TimeSeries> Sensors = new HashMap<String,TimeSeries>(); 
+  private  Hashtable<String,TimeSeries> Sensors = new Hashtable<String,TimeSeries>(); 
   private  TimeSeriesCollection dataset;
 
 
@@ -48,7 +48,7 @@ public class myDataSource {
   }
 
 
-  public  boolean put(Date date , String sensorName, Double value){
+  synchronized public  boolean put(Date date , String sensorName, Double value){
 
     if (sensorName == null || sensorName.length() == 0){
       return false;
@@ -58,8 +58,8 @@ public class myDataSource {
 
     if(timeserie == null){
       timeserie = new TimeSeries(sensorName, Millisecond.class);
-      timeserie.setMaximumItemCount(300);
-      timeserie.setMaximumItemAge(10000);
+//      timeserie.setMaximumItemCount(300);
+      timeserie.setMaximumItemAge(5000);
       Sensors.put(sensorName, timeserie);
       dataset.addSeries(timeserie);
     }

@@ -54,16 +54,25 @@ public class MSP {
 
 	private static int p;
 
-	public static int read32() {
+	/*
+	 * read 32byte from the inputBuffer
+	 */
+	synchronized public static int read32() {
 		return (inBuf[p++] & 0xff) + ((inBuf[p++] & 0xff) << 8)
 				+ ((inBuf[p++] & 0xff) << 16) + ((inBuf[p++] & 0xff) << 24);
 	}
 
-	public static int read16() {
+	/*
+	 * read 16byte from the inputBuffer
+	 */
+	synchronized public static int read16() {
 		return (inBuf[p++] & 0xff) + ((inBuf[p++]) << 8);
 	}
 
-	public static int read8() {
+	/*
+	 * read 8byte from the inputBuffer
+	 */
+	synchronized public static int read8() {
 		return inBuf[p++] & 0xff;
 	}
 
@@ -71,7 +80,7 @@ public class MSP {
 	private static int stateMSP = 0, offset = 0, dataSize = 0;
 	private static byte[] inBuf = new byte[128];
 
-	public static void decode(byte input) {
+	synchronized public static void decode(byte input) {
 		char c = (char) input;
 
 		if (stateMSP > 99) {
@@ -81,7 +90,7 @@ public class MSP {
 				inBuf[offset++] = (byte) (c);
 			} else {
 				if (checksum == inBuf[dataSize]) {
-					decode(stateMSP);
+					decodeInBuf();
 				}
 				stateMSP = 0;
 			}
@@ -131,9 +140,10 @@ public class MSP {
 
 	}
 
-	private static void decode(int stateMSP2) {
 
-		switch (stateMSP2) {
+
+	private static void decodeInBuf() {
+		switch (stateMSP) {
 		case IDENT:
 			getModel().setVersion(read8());
 			getModel().setMultiType(read8());
@@ -287,7 +297,7 @@ public class MSP {
 			// read16();
 			break;
 		}
-
+		
 	}
 
 	//create msp request without payload 
