@@ -56,13 +56,13 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	class SerialTimeOut extends TimerTask {
 
 		public void run() {
-try{
-			requestMSP(MSP.ATTITUDE);
-			requestMSP(MSP.RAW_IMU);
-}catch (NullPointerException e) {
-	this.cancel();
-	timer.purge();
-}
+			try{
+				requestMSP(MSP.ATTITUDE);
+				requestMSP(MSP.RAW_IMU);
+			}catch (NullPointerException e) {
+				this.cancel();
+				timer.purge();
+			}
 		}
 
 	}
@@ -495,12 +495,11 @@ try{
 
 		switch(stateMSP2) {
 		case MSP.IDENT:
-			stateMSP = 0;
 			this.getModel().setVersion( read8() );
 			this.getModel().setMultiType( read8() );
 			break;
 		case MSP.STATUS:
-			stateMSP = 0;
+			
 			//        cycleTime = read16();
 			//        i2cError = read16();
 			//        present = read16();
@@ -514,8 +513,7 @@ try{
 			//          if ((mode&(1<<i))>0) buttonCheckbox[i].setColorBackground(green_); else buttonCheckbox[i].setColorBackground(red_);
 			//        } 
 			break;
-		case MSP.RAW_IMU:
-			stateMSP = 0;
+		case MSP.RAW_IMU:	
 			Date d = new Date();
 			ds.put(d,"ax", Double.valueOf(read16() ));
 			ds.put(d,"ay", Double.valueOf(read16() ));
@@ -530,21 +528,17 @@ try{
 			ds.put(d,"magz", Double.valueOf(read16()/3 ));
 
 			break;
-		case MSP.SERVO:
-			stateMSP = 0;
+		case MSP.SERVO:		
 			//        for(i=0;i<8;i++) servo[i] = read16(); 
 			break;
-		case MSP.MOTOR:
-			stateMSP = 0;
+		case MSP.MOTOR:		
 			//        for(i=0;i<8;i++) mot[i] = read16(); 
 			break;
-		case MSP.RC:
-			stateMSP = 0;
+		case MSP.RC:		
 			//        rcRoll = read16();rcPitch = read16();rcYaw = read16();rcThrottle = read16();    
 			//        rcAUX1 = read16();rcAUX2 = read16();rcAUX3 = read16();rcAUX4 = read16(); 
 			break;
-		case MSP.RAW_GPS:
-			stateMSP = 0;
+		case MSP.RAW_GPS:		
 			//        GPS_fix = read8();
 			//        GPS_numSat = read8();
 			//        GPS_latitude = read32();
@@ -552,29 +546,23 @@ try{
 			//        GPS_altitude = read16();
 			//        GPS_speed = read16(); 
 			break;
-		case MSP.COMP_GPS:
-			stateMSP = 0;
+		case MSP.COMP_GPS:			
 			//        GPS_distanceToHome = read16();
 			//        GPS_directionToHome = read16();
 			//        GPS_update = read8(); 
 			break;
-		case MSP.ATTITUDE:
-			stateMSP = 0;
+		case MSP.ATTITUDE:			
 			//        angx = read16()/10;angy = read16()/10;
 			//        head = read16(); 
 			break;
-		case MSP.ALTITUDE:
-			stateMSP = 0;
+		case MSP.ALTITUDE:			
 			//        alt = read32(); 
 			break;
-		case MSP.BAT:
-			stateMSP = 0;
+		case MSP.BAT:			
 			//        bytevbat = read8();
 			//        pMeterSum = read16(); 
 			break;
-		case MSP.RC_TUNING:
-			stateMSP = 0;
-
+		case MSP.RC_TUNING:	
 			this.getModel().setRC_RATE((int)(read8()/100.0));
 			this.getModel().setRC_EXPO((int)(read8()/100.0));
 			this.getModel().setRollPitchRate((int)(read8()/100.0));
@@ -582,16 +570,13 @@ try{
 			this.getModel().setDynThrPID((int)(read8()/100.0));
 			this.getModel().setThrottleMID((int)(read8()/100.0));
 			this.getModel().setThrottleEXPO((int)(read8()/100.0));
-
 			break;
 		case MSP.ACC_CALIBRATION:
-			stateMSP = 0; 
 			break;
-		case MSP.MAG_CALIBRATION:
-			stateMSP = 0; 
+		case MSP.MAG_CALIBRATION:	 
 			break;
 		case MSP.PID:
-			stateMSP = 0;
+			
 			//        for(i=0;i<PIDITEMS;i++) {
 			//          byteP[i] = read8();byteI[i] = read8();byteD[i] = read8();
 			//          switch (i) {
@@ -631,7 +616,6 @@ try{
 			//        
 			break;
 		case MSP.BOX:
-			stateMSP = 0;
 			//        for( i=0;i<CHECKBOXITEMS;i++) {
 			//          activation[i] = read16();
 			//          for( aa=0;aa<12;aa++) {
@@ -640,17 +624,14 @@ try{
 			//        }
 			break;
 		case MSP.MISC:
-			stateMSP = 0;
 			//        intPowerTrigger = read16();
 			break;
-		case MSP.MOTOR_PINS:
-			stateMSP = 0;
+		case MSP.MOTOR_PINS:			
 			//        for( i=0;i<8;i++) {
 			//          byteMP[i] = read8();
 			//        } 
 			break;
-		case MSP.DEBUG:
-			stateMSP = 0;
+		case MSP.DEBUG:			
 			//        debug1 = read16();debug2 = read16();debug3 = read16();debug4 = read16();
 			break;
 		}
@@ -659,52 +640,8 @@ try{
 
 
 	private DataMwiiConfImplv2 getModel() {
-		// TODO Auto-generated method stub
-
 		return  this.model;
 	}
-
-
-	//  private void decode(List<Byte> bytBuffer2) {
-	//    // TODO Auto-generated method stub
-	//
-	//   
-	//    try {
-	//      DataMwiiConfImplv2 pp =new DataMwiiConfImplv2();
-	//     
-	//      Map<String, Integer> data = pp.getListforDs();
-	//      Set<String> keys = data.keySet();
-	////      for (String key : keys) {
-	////        System.err.println(key+" "+data.get(key)) ;
-	////
-	////           }
-	//      Date d = new Date();
-	//      ds.put(d,"ax", Double.valueOf(data.get("ax")) );
-	//      ds.put(d,"ay", Double.valueOf(data.get("ay")) );
-	//      ds.put(d,"az", Double.valueOf(data.get("az")) );
-	//     
-	//      ds.put(d,"gx", Double.valueOf(data.get("gx")) );
-	//      ds.put(d,"gy", Double.valueOf(data.get("gy")) );
-	//      ds.put(d,"gz", Double.valueOf(data.get("gz")) );
-	//
-	//    
-	//
-	//    } catch (bufferErrorException e) {
-	//      // TODO Auto-generated catch block
-	//      e.printStackTrace();    
-	//      final String msg = "bufferErrorException\n";
-	//      SwingUtilities.invokeLater(new Runnable() {
-	//        public void run() {
-	//          textArea.append(msg);
-	//          if (autoscrollBox.isSelected()) {
-	//            chartTrendPanel.setChart(myChartFactory.createChart(ds));
-	//            
-	//            textArea.setCaretPosition(textArea.getDocument().getLength());
-	//          }
-	//        }});
-	//    }   
-	//  }
-
 
 
 
