@@ -16,6 +16,15 @@ use the MultiWiiConf folder as the root directory
  
  windows : mwi-swing.bat
 
+Bluetooth
+=====
+
+unix only :  change the script mwi-swing.sh  to macth the mane of you rfcom device.
+
+ex  : device is "rfcomm0"
+ 
+	-Dgnu.io.rxtx.SerialPorts=/dev/rfcomm0
+
 BUILD
 =====
 
