@@ -69,6 +69,12 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				String os = System.getProperty("os.name").toLowerCase();
+						        
+	            if (os.indexOf("mac") >= 0) {
+	                System.setProperty("apple.laf.useScreenMenuBar", "true");
+	            }
+				
 				//Turn off metal's use of bold fonts
 				UIManager.put("swing.boldMetal", Boolean.FALSE);
 			
