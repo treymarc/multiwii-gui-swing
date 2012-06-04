@@ -54,8 +54,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 				//requestMSP(MSP.ATTITUDE);
 				send(MSP.request(MSP.RAW_IMU));
 			}catch (NullPointerException e) {
-				this.cancel();
-				timer.purge();
+				timer.cancel();
+//				timer.purge();
 			}
 		}
 
@@ -150,8 +150,14 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 			public void actionPerformed(ActionEvent e) {
 				logger.trace("actionPerformed "+ e.getSource().getClass().getName());
 
+				if (timer !=null){
+					timer.cancel();
+//					timer.purge();
+					
+				}
 				timer = new Timer();
-				timer.scheduleAtFixedRate(new SerialTimeOut(),0, 80);
+				
+				timer.schedule(new SerialTimeOut(),0, 80);
 
 			}});
 
@@ -277,8 +283,8 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 
 	public static void closeDebugFrame() {
 		if (debugFrame != null){
-			debugFrame.dispose();
-			MwGuiFrame.debugFrame = null;
+			getDebugFrame().setVisible(false);
+			
 		}
 	}
 
@@ -338,7 +344,7 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	}
 
 	// send string 
-	private void send(String s) {
+	synchronized private void send(String s) {
 		if (com!=null){
 			com.send(s, 0 /*lineEndings.getSelectedIndex()*/);
 		}
@@ -349,12 +355,17 @@ public class MwGuiFrame extends JFrame  implements SerialListener{
 	 * (non-Javadoc)
 	 * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
 	 */
-	public void readSerialByte(final byte input) {
-		//System.currentTimeMillis();
-		if (debugFrame != null){	
-			debugFrame.readSerialByte(input);	        	
+	synchronized public void readSerialByte(final byte input) {
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() { 
+
+				MSP.decode(input);
+			}});
+		
+		if (getDebugFrame().isVisible()){
+			debugFrame.readSerialByte(input);
 		}
-		MSP.decode(input);
 	}
 
 	

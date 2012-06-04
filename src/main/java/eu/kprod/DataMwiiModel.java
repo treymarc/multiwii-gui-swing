@@ -97,7 +97,7 @@ public class DataMwiiModel  {
 		super();
 	}
 
-	public myDataSource getDs() {
+	synchronized public myDataSource getDs() {
 		return  ds ;
 	}
 

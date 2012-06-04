@@ -142,7 +142,7 @@ public class MSP {
 
 
 
-	private static void decodeInBuf() {
+	synchronized private static void decodeInBuf() {
 		switch (stateMSP) {
 		case IDENT:
 			getModel().setVersion(read8());

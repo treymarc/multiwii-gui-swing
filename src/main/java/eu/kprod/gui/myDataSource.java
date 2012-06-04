@@ -12,7 +12,7 @@ public class myDataSource {
 
 
 
-  private  Hashtable<String,TimeSeries> Sensors = new Hashtable<String,TimeSeries>(); 
+	 private  Hashtable<String,TimeSeries> Sensors = new Hashtable<String,TimeSeries>(); 
   private  TimeSeriesCollection dataset;
 
 
@@ -24,7 +24,7 @@ public class myDataSource {
    */
 
 
-  public  XYDataset getLatestDataset() {
+   public  XYDataset getLatestDataset() {
     if (dataset== null){
 
       dataset = new TimeSeriesCollection();
@@ -34,13 +34,13 @@ public class myDataSource {
       }
 
 
-      dataset.setDomainIsPointsInTime(true);
+//      dataset.setDomainIsPointsInTime(true);
     }
     return dataset;
 
   }
 
-  public  XYDataset getDataset(){
+   public  XYDataset getDataset(){
     if (dataset == null){
       return getLatestDataset();
     }
@@ -48,7 +48,7 @@ public class myDataSource {
   }
 
 
-  synchronized public  boolean put(Date date , String sensorName, Double value){
+   public  boolean put(Date date , String sensorName, Double value){
 
     if (sensorName == null || sensorName.length() == 0){
       return false;
