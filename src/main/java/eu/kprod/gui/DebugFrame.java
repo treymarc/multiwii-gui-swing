@@ -67,7 +67,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     JButton sendButton;
     JCheckBox autoscrollBox;
     final JComboBox lineEndings;
-    final JComboBox serialRates;
+
 
     public DebugFrame(final String tritle,final Integer bdrate) {
         // TODO Auto-generated constructor stub
@@ -105,35 +105,7 @@ public class DebugFrame extends JFrame implements SerialListener {
         lineEndings.setSelectedIndex(0);
         lineEndings.setMaximumSize(lineEndings.getMinimumSize());
 
-        serialRates = new JComboBox();
-
-        for (Integer entry : SerialDevice.SerialRateStrings) {
-            serialRates.addItem(entry);
-        }
-
-        serialRates.setSelectedItem(bdrate);
-        serialRates.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                logger.trace("actionPerformed "
-                        + event.getSource().getClass().getName());
-
-                
-
-                try {
-                    MwGuiFrame.closeSerialPort();
-                    MwGuiFrame.setSerialRate(
-                            (Integer) serialRates.getSelectedItem());
-                    MwGuiFrame.getCom().openSerialPort();
-
-                } catch (SerialException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
-        serialRates.setMaximumSize(serialRates.getMinimumSize());
-
+      
         scrollPane = new JScrollPane(textArea);
 
         getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -189,8 +161,7 @@ public class DebugFrame extends JFrame implements SerialListener {
         pane.add(autoscrollBox);
         pane.add(Box.createHorizontalGlue());
         pane.add(lineEndings);
-        pane.add(Box.createRigidArea(new Dimension(1, 0)));
-        pane.add(serialRates);
+
 
         getContentPane().add(pane, BorderLayout.SOUTH);
 
@@ -206,8 +177,5 @@ public class DebugFrame extends JFrame implements SerialListener {
 
     }
 
-    public void setSerialRate(Object selectedItem) {
-        serialRates.setSelectedItem(selectedItem);
-    }
 
 }

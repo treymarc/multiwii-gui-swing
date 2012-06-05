@@ -2,7 +2,6 @@ package eu.kprod;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -175,6 +174,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 logger.trace("actionPerformed "
                         + e.getSource().getClass().getName());
 
+                boolean openCom = false;
+                try {
+                   if (! getCom().isOpen()){
+                       openCom = true;
+                   }
+                        
+                } catch (SerialException e1) {
+
+                    openCom = true;
+                }finally{
+                    if ( openCom ){
+                        openSerialPort();
+                    }
+                }
                restartTimer();
             }
         });
@@ -228,28 +241,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         serialPorts.setRenderer(new MwComboBoxRenderer("Serial Port"));
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
+        
         serialPorts.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-
-                logger.trace("actionPerformed "
-                        + event.getSource().getClass().getName());
-
-                closeSerialPort();
-                try {
-                    if (serialPorts.getSelectedItem() != null
-                            && serialRates.getSelectedItem() != null) {
-                        com = new SerialCom(serialPorts.getSelectedItem()
-                                .toString(), (Integer) serialRates
-                                .getSelectedItem());
-
-                        com.openSerialPort();
-                        com.setListener(MwGuiFrame.getInstance());
-                    }
-                } catch (SerialNotFoundException e) {
-
-                } catch (SerialException e) {
-                    e.printStackTrace();
-                }
+//                logger.trace("actionPerformed "
+//                        + event.getSource().getClass().getName());
+               openSerialPort();
 
             }
         });
@@ -286,6 +283,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 logger.trace("actionPerformed "
                         + event.getSource().getClass().getName());
 
+               
                 closeSerialPort();
                 try {
                     if (com != null) {
@@ -319,6 +317,27 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         pack();
     }
 
+    protected void openSerialPort() {
+
+        closeSerialPort();
+        try {
+            if (serialPorts.getSelectedItem() != null
+                    && serialRates.getSelectedItem() != null) {
+                com = new SerialCom(serialPorts.getSelectedItem()
+                        .toString(), (Integer) serialRates
+                        .getSelectedItem());
+
+                com.openSerialPort();
+                com.setListener(MwGuiFrame.getInstance());
+            }
+        } catch (SerialNotFoundException e) {
+
+        } catch (SerialException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
     protected void restartTimer() {
         if (timer != null) {
             timer.cancel();
@@ -345,8 +364,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     protected static void showDebugFrame() {
         getDebugFrame().setVisible(true);
-        getDebugFrame().setSerialRate(serialRates.getSelectedItem());
-        getDebugFrame().repaint();
+         getDebugFrame().repaint();
         
     }
 
