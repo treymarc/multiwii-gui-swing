@@ -2,8 +2,17 @@ package eu.kprod;
 
 import java.util.Date;
 
+/**
+ * Multiwii Serial Protocol
+ * 
+ * @author treym
+ *
+ */
 public class MSP {
 
+    /**
+     *  the model for holding the value that decode by the MSP
+     */
     private static DataMwiiModel model;
 
     public static DataMwiiModel getModel() {
@@ -54,9 +63,16 @@ public class MSP {
     DEBUG                = 254;
 
 
+    /**
+     * position in the reception inputBuffer
+     */
     private static int p;
 
-    /*
+    /**
+     * reception buffer
+     */
+    private static byte[] inBuf = new byte[BUFFERSize ];
+    /**
      * read 32byte from the inputBuffer
      */
     public static synchronized int read32() {
@@ -64,14 +80,14 @@ public class MSP {
                 + ((inBuf[p++] & MASK) << 16) + ((inBuf[p++] & MASK) << 24);
     }
 
-    /*
+    /**
      * read 16byte from the inputBuffer
      */
     synchronized public static int read16() {
         return (inBuf[p++] & MASK) + ((inBuf[p++]) << 8);
     }
 
-    /*
+    /**
      * read 8byte from the inputBuffer
      */
     synchronized public static int read8() {
@@ -79,10 +95,9 @@ public class MSP {
     }
 
     private static byte checksum = 0;
-    private static int stateMSP = 0, offset = 0, dataSize = 0;
+    private static int stateMSP = 0, 
+            offset = 0, dataSize = 0;
 
-
-    private static byte[] inBuf = new byte[BUFFERSize ];
 
     synchronized public static void decode(final byte input) {
         char c = (char) input;

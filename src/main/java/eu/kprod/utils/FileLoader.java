@@ -8,6 +8,11 @@ import java.util.List;
 
 import eu.kprod.gui.MwiDataSource;
 
+/**
+ * load a DataSource from a file.
+ * @author treym
+ *
+ */
 public class FileLoader implements DSLoadable{
 
     /**

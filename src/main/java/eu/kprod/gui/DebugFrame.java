@@ -69,7 +69,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     final JComboBox lineEndings;
     final JComboBox serialRates;
 
-    public DebugFrame(String tritle) {
+    public DebugFrame(final String tritle,final Integer bdrate) {
         // TODO Auto-generated constructor stub
         super(tritle);
 
@@ -111,16 +111,17 @@ public class DebugFrame extends JFrame implements SerialListener {
             serialRates.addItem(entry);
         }
 
-        serialRates.setSelectedIndex(10);
+        serialRates.setSelectedItem(bdrate);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 logger.trace("actionPerformed "
                         + event.getSource().getClass().getName());
 
-                MwGuiFrame.getCom().closeSerialPort();
+                
 
                 try {
-                    MwGuiFrame.getCom().setSerialRate(
+                    MwGuiFrame.closeSerialPort();
+                    MwGuiFrame.setSerialRate(
                             (Integer) serialRates.getSelectedItem());
                     MwGuiFrame.getCom().openSerialPort();
 
@@ -147,8 +148,13 @@ public class DebugFrame extends JFrame implements SerialListener {
                 logger.trace("actionPerformed "
                         + e.getSource().getClass().getName());
 
-                MwGuiFrame.getCom().send(textField.getText(),
-                        lineEndings.getSelectedIndex());
+                try {
+                    MwGuiFrame.getCom().send(textField.getText(),
+                            lineEndings.getSelectedIndex());
+                } catch (SerialException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 textField.setText("");
             }
         });
@@ -159,8 +165,13 @@ public class DebugFrame extends JFrame implements SerialListener {
                 logger.trace("actionPerformed "
                         + e.getSource().getClass().getName());
 
-                MwGuiFrame.getCom().send(textField.getText(),
-                        lineEndings.getSelectedIndex());
+                try {
+                    MwGuiFrame.getCom().send(textField.getText(),
+                            lineEndings.getSelectedIndex());
+                } catch (SerialException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 textField.setText("");
             }
         });
@@ -188,12 +199,15 @@ public class DebugFrame extends JFrame implements SerialListener {
     }
 
     public void readSerialByte(final byte newMessage) {
-
         textArea.append(String.valueOf((char) newMessage));
         if (autoscrollBox.isSelected()) {
             textArea.setCaretPosition(textArea.getDocument().getLength());
         }
 
+    }
+
+    public void setSerialRate(Object selectedItem) {
+        serialRates.setSelectedItem(selectedItem);
     }
 
 }

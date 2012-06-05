@@ -8,7 +8,11 @@ import java.text.SimpleDateFormat;
 import eu.kprod.gui.MwiDataSource;
 
 
-
+/**
+ * load a DataSource from a formated Log file.
+ * @author treym
+ *
+ */
 public class LogLoader implements DSLoadable {
 
     public LogLoader() {
