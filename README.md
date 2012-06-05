@@ -19,7 +19,7 @@ use the MultiWiiConf folder as the root directory
 BLUETOOTH
 =====
 
-unix only :  change the script mwi-swing.sh  to match the name of you rfcom device.
+* unix only :  change the script mwi-swing.sh  to match the name of you rfcom device.
 
 ex  : device is "rfcomm0"
  
@@ -27,6 +27,10 @@ ex  : device is "rfcomm0"
 	
 
 http://mailman.qbang.org/2004-May/8214506.html
+
+
+* windows/mac : work out of the box
+
 
 
 BUILD
