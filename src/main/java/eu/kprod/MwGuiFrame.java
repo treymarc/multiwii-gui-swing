@@ -305,12 +305,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     protected void restartTimer() {
         if (timer != null) {
             timer.cancel();
-            // timer.purge();
+             timer.purge();
 
         }
         timer = new Timer();
 
-        timer.schedule(new SerialTimeOut(), 0, 1000/(Integer)serialRefreshRate.getSelectedItem());
+        timer.schedule(new SerialTimeOut(), 10, 1000/(Integer)serialRefreshRate.getSelectedItem());
 
         
     }

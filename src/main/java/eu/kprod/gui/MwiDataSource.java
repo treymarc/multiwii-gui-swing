@@ -58,7 +58,7 @@ public class MwiDataSource {
         }
 
         try {
-            timeserie.add(new Millisecond(date), value);
+            timeserie.addOrUpdate(new Millisecond(date), value);
         } catch (Exception e) {
             e.printStackTrace();
         }
