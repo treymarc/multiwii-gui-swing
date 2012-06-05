@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
 import eu.kprod.gui.DebugFrame;
-import eu.kprod.gui.MwiChartFactory;
+import eu.kprod.gui.MwChartFactory;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
 import eu.kprod.serial.SerialException;
@@ -122,7 +122,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JPanel getOverviewPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = new ChartPanel(MwiChartFactory.createChart(MSP
+            chartTrendPanel = new ChartPanel(MwChartFactory.createChart(MSP
                     .getModel().getDs()));
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
@@ -139,7 +139,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     public MwGuiFrame() {
         super();
 
-        MSP.setModel(new DataMwiiModel());
+        MSP.setModel(new MwDataModel());
 
         super.setTitle("MwGui - v0.0.1a");
 

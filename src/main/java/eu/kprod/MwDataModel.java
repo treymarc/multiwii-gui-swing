@@ -1,11 +1,11 @@
 package eu.kprod;
 
-import eu.kprod.gui.MwiDataSource;
+import eu.kprod.gui.MwDataSource;
 
-public class DataMwiiModel {
+public class MwDataModel {
 
     // for real time data
-    private MwiDataSource ds = new MwiDataSource();
+    private MwDataSource ds = new MwDataSource();
 
     // global ident
     int version, multiType;
@@ -86,11 +86,11 @@ public class DataMwiiModel {
         this.multiType = multiType;
     }
 
-    public DataMwiiModel() {
+    public MwDataModel() {
         super();
     }
 
-    synchronized public MwiDataSource getDs() {
+    synchronized public MwDataSource getDs() {
         return ds;
     }
 

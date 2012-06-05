@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.kprod.gui.MwiDataSource;
+import eu.kprod.gui.MwDataSource;
 
 /**
  * load a DataSource from a file.
@@ -52,7 +52,7 @@ public class FileLoader implements DSLoadable{
         return content;
     }
 
-    public MwiDataSource getDataSourceContent(String s) {
+    public MwDataSource getDataSourceContent(String s) {
         // TODO Auto-generated method stub
         return null;
     }

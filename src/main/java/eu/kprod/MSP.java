@@ -13,13 +13,13 @@ public class MSP {
     /**
      *  the model for holding the value that decode by the MSP
      */
-    private static DataMwiiModel model;
+    private static MwDataModel model;
 
-    public static DataMwiiModel getModel() {
+    public static MwDataModel getModel() {
         return model;
     }
 
-    public static void setModel(final DataMwiiModel model1) {
+    public static void setModel(final MwDataModel model1) {
         MSP.model = model1;
     }
 

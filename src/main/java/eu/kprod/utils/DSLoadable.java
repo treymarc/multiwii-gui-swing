@@ -1,6 +1,6 @@
 package eu.kprod.utils;
 
-import eu.kprod.gui.MwiDataSource;
+import eu.kprod.gui.MwDataSource;
 
 /**
  * DataSource that can be load from a source
@@ -8,5 +8,5 @@ import eu.kprod.gui.MwiDataSource;
  *
  */
 public interface DSLoadable {
-    public MwiDataSource getDataSourceContent(String source) throws DSLoadableException;
+    public MwDataSource getDataSourceContent(String source) throws DSLoadableException;
 }

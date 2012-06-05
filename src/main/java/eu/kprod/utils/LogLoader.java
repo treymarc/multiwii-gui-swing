@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import eu.kprod.gui.MwiDataSource;
+import eu.kprod.gui.MwDataSource;
 
 
 /**
@@ -27,11 +27,11 @@ public class LogLoader implements DSLoadable {
      *         en cas d'erreur
      * @throws DSLoadableException 
      */
-    public final MwiDataSource getDataSourceContent(final String filePath) throws DSLoadableException {
+    public final MwDataSource getDataSourceContent(final String filePath) throws DSLoadableException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");
 
-        MwiDataSource content = new MwiDataSource();
+        MwDataSource content = new MwDataSource();
 
         try {
             BufferedReader buff = new BufferedReader(new FileReader(filePath));

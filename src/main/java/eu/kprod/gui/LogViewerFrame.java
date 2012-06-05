@@ -9,30 +9,30 @@ import eu.kprod.utils.DSLoadableException;
 import eu.kprod.utils.LogLoader;
 
 
-public class LogViewerFram extends JFrame {
+public class LogViewerFrame extends JFrame {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger
-            .getLogger(LogViewerFram.class);
+            .getLogger(LogViewerFrame.class);
 
-    public LogViewerFram(String name) {
+    public LogViewerFrame(String name) {
         // TODO Auto-generated constructor stub
         super(name);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        MwiDataSource ds;
+        MwDataSource ds;
         try {
             ds = new LogLoader().getDataSourceContent(name);
         } catch (DSLoadableException e) {
             LOGGER.error("Can not open log file : " + name);
             e.printStackTrace();
-            ds = new MwiDataSource();
+            ds = new MwDataSource();
         }
         ChartPanel chartTrendPanel = new ChartPanel(
-                MwiChartFactory.createChart(ds));
+                MwChartFactory.createChart(ds));
 
         getContentPane().add(chartTrendPanel);
         setPreferredSize(new java.awt.Dimension(500, 270));

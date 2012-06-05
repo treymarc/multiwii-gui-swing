@@ -8,7 +8,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
-public class MwiDataSource {
+public class MwDataSource {
 
     private Hashtable<String, TimeSeries> sensors = new Hashtable<String, TimeSeries>();
     private TimeSeriesCollection dataset;

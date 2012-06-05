@@ -8,13 +8,13 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
 
-public final class MwiChartFactory {
+public final class MwChartFactory {
 
-    private MwiChartFactory() {
+    private MwChartFactory() {
 
     }
     
-    public static JFreeChart createChart(final MwiDataSource ds) {
+    public static JFreeChart createChart(final MwDataSource ds) {
 
         // final XYDataset dataset
 
