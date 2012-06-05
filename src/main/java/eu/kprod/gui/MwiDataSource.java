@@ -51,6 +51,7 @@ public class MwiDataSource {
 
         if (timeserie == null) {
             timeserie = new TimeSeries(sensorName, Millisecond.class);
+            // TODO get user settings
             // timeserie.setMaximumItemCount(300);
             timeserie.setMaximumItemAge(5000);
             sensors.put(sensorName, timeserie);
@@ -58,6 +59,7 @@ public class MwiDataSource {
         }
 
         try {
+            // if the refresh rate is high , we may have multiple answer within the same millis
             timeserie.addOrUpdate(new Millisecond(date), value);
         } catch (Exception e) {
             e.printStackTrace();

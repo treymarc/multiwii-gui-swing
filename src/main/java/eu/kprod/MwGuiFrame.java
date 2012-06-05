@@ -50,6 +50,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         public void run() {
             try {
+             // TODO get user settings
                 // requestMSP(MSP.ATTITUDE);
                 send(MSP.request(MSP.RAW_IMU));
             } catch (NullPointerException e) {
@@ -89,14 +90,15 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static List<Integer> initializeMap() {
         List<Integer> m = new ArrayList<Integer>();
         m.add(1);
+        m.add(2);
         m.add(5);
         m.add(10);
+        m.add(15);
         m.add(20);
+        m.add(25);
         m.add(30);
         m.add(40);
         m.add(50);
-        m.add(60);
-        m.add(100);
 
         return Collections.unmodifiableList(m);
     }
@@ -139,7 +141,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         MSP.setModel(new DataMwiiModel());
 
-        super.setTitle("MwGui - v0.0.1");
+        super.setTitle("MwGui - v0.0.1a");
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -185,6 +187,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                     timer.cancel();
                     timer.purge();
                 }
+                timer =null;
             }
         });
 
@@ -254,7 +257,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         serialRefreshRate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
 
-                restartTimer();
+                if( timer != null){
+                    restartTimer();
+
+                }
 
             }
         });
@@ -388,6 +394,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         });
 
+        // TODO about multiwii
         return menubar;
     }
 
@@ -398,7 +405,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         }
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)

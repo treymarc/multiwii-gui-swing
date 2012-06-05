@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.kprod</groupId>
 	<artifactId>mwgui</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-
+	<version>0.0.1a-SNAPSHOT</version>
+	<!-- TODO build properties -->
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	</properties>
