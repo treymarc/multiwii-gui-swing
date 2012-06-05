@@ -1,4 +1,4 @@
-mwi-swing
+MWI-SWING
 =========
 
 a small swing frontend for multiwii
@@ -10,13 +10,13 @@ use the MultiWiiConf folder as the root directory
 
  move the file "mwgui-<Version>-<Release>-jar-with-dependencies.jar" to the lib folder
 
- move the script mwi-swing to the root folder 
+ move all scripts to the root folder 
  
- unix/mac : mwi-swing.sh 
- 
- windows : mwi-swing.bat
+ 	unix/mac : mwi-swing.sh 
 
-Bluetooth
+	windows : mwi-swing.bat
+
+BLUETOOTH
 =====
 
 unix only :  change the script mwi-swing.sh  to macth the mane of you rfcom device.
@@ -38,7 +38,10 @@ TODO
 ====
 
 add other msp messages
+
 allow datasource configuration (lenght of timeSerie)
+
 allow efficient logging
+
 etc..
 
