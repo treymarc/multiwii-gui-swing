@@ -1,10 +1,9 @@
 Getting RTXT
 ============
 
+Download and unzip the latest lib
 
-Download the matest Multiwii firmware
+http://rxtx.qbang.org/pub/rxtx/rxtx-2.1-7-bins-r2.zip
 
- http://code.google.com/p/multiwii/downloads/list
 
-copy the content of "MultiWiiConf/lib" to this folder
 
