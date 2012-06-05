@@ -1,11 +1,27 @@
 package eu.kprod;
 
-
 import java.text.MessageFormat;
 
-public class I18n {
+/**
+ *
+ * @author treym
+ *
+ */
+public final class I18n {
 
-  public static String format(String fmt, Object ... args) {
-    return MessageFormat.format(fmt, args);
-  }
+    /**
+     * prevent direct instance
+     */
+    private I18n() {
+    }
+
+    /**
+     * @see java.text.MessageFormat
+     * @param fmt
+     * @param args
+     * @return
+     */
+    public static String format(final String fmt, final Object... args) {
+        return MessageFormat.format(fmt, args);
+    }
 }
