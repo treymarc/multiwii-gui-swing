@@ -15,11 +15,12 @@ After that just run:
 
 RUN
 ===
-* You can either use the "build" or "MultiWiiConf" folder to install mwi-swing
+You can either use the "build" or "MultiWiiConf" as the INSTALL folder for mwi-swing
 
-When the build process is finished copy the mwgui-Version-release-jar-with-dependencies.jar file to INSTALL/lib.
-Then run the shell script in the INSTALL folder:  
-`build/mwi-swing.sh`
+When the build process is finished 
+*copy the mwgui-Version-release-jar-with-dependencies.jar file to INSTALL/lib.
+*run the shell script in the INSTALL folder:  
+ `build/mwi-swing.sh`
 
 
 BLUETOOTH
