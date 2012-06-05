@@ -2,6 +2,7 @@ package eu.kprod;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -165,10 +166,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         getContentPane().setLayout(new BorderLayout());
 
         JPanel pane = new JPanel();
-        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
+//        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+//        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
-        startButton = new JButton(("Start"));
+        startButton = new JButton(("Start"));  
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 logger.trace("actionPerformed "
@@ -191,20 +192,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         });
 
-        pane.add(stopButton);
-        pane.add(Box.createRigidArea(new Dimension(1, 0)));
-        pane.add(startButton);
-
-        getContentPane().add(pane, BorderLayout.NORTH);
+//        pane.add(stopButton);
+//        pane.add(Box.createRigidArea(new Dimension(1, 0)));
+//        pane.add(startButton);
+//
+//        getContentPane().add(pane, BorderLayout.NORTH);
         getContentPane().add(getOverviewPanel(), BorderLayout.CENTER);
 
-        pane = new JPanel();
+//        pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
+          pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
         List<String> portNames = new ArrayList<String>();
 
-        portNames.add("");
+        
         for (@SuppressWarnings("unchecked")
         Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier
         .getPortIdentifiers(); enumeration.hasMoreElements();) {
@@ -219,7 +220,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         }
 
+        if (portNames.size()==0) {
+            portNames.add("");
+        }
+            
         serialPorts = new JComboBox(portNames.toArray());
+        serialPorts.setRenderer(new MwComboBoxRenderer("Serial Port"));
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
         serialPorts.addActionListener(new ActionListener() {
@@ -249,6 +255,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
 
         serialRefreshRate = new JComboBox();
+        serialRefreshRate.setRenderer(new MwComboBoxRenderer("Refresh rate"));
         for (Integer entry : SerialRefreashRateStrings) {
             serialRefreshRate.addItem(entry);
         }
@@ -267,7 +274,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         
         
         serialRates = new JComboBox();
-
+        serialRates.setRenderer(new MwComboBoxRenderer("baud rate"));
         for (Integer entry : SerialDevice.SerialRateStrings) {
             serialRates.addItem(entry);
         }
@@ -296,12 +303,16 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         serialRates.setMaximumSize(serialRates.getMinimumSize());
 
-        pane.add(serialPorts, BorderLayout.WEST);
+        
+        pane.add(stopButton,  BorderLayout.WEST);
+        pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
+        pane.add(startButton, BorderLayout.WEST);
+        pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
+        pane.add(serialPorts,  BorderLayout.WEST);
         pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
         pane.add(serialRates, BorderLayout.WEST);
         pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
-        
-        pane.add(serialRefreshRate, BorderLayout.WEST);
+        pane.add(serialRefreshRate,  BorderLayout.WEST);
         
         getContentPane().add(pane, BorderLayout.SOUTH);
 
