@@ -177,5 +177,4 @@ public class DebugFrame extends JFrame implements SerialListener {
 
     }
 
-
 }
