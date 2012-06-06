@@ -105,10 +105,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 // Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
 
-                MwGuiFrame frame = new MwGuiFrame();
-                MwGuiFrame.serialListener = frame;
+                MwGuiFrame frame;
+                try {
+                    frame = new MwGuiFrame();
+                    MwGuiFrame.serialListener = frame;
 
-                frame.setVisible(true);
+                    frame.setVisible(true);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    throw new RuntimeException("Failed to load app properties",e);
+                }
+
             }
         });
 
@@ -169,7 +177,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return overviewPanel;
     }
 
-    public MwGuiFrame() {
+    public MwGuiFrame() throws IOException {
         super();
 
         
