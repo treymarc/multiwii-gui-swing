@@ -68,11 +68,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         public void run() {
             try {
-             // TODO do no send all requests at the same time
-             
-                // TODO attitude panel
+             // TODO get user settings
                 // requestMSP(MSP.ATTITUDE);
-                
                 if (showMotor){
                     send(MSP.request(MSP.MOTOR));
                 }
