@@ -42,6 +42,16 @@ import eu.kprod.serial.SerialListener;
 import eu.kprod.serial.SerialNotFoundException;
 import gnu.io.CommPortIdentifier;
 
+/**
+ * Know issues
+ * 
+ * - when zooming the chart : news values are still recorded 
+ *  so due to the dataSource maxItemcounts and AgeLimite , 
+ *  the chart gets emptied at the zoomed date
+ * 
+ * @author treym
+ *
+ */
 public class MwGuiFrame extends JFrame implements SerialListener {
 
     /**
@@ -251,7 +261,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             portNames.add("");
         }
             
-        serialPorts = new MwJComboBox("Serial Port",portNames.toArray());
+        serialPorts = new MwJComboBox<String>("Serial Port",portNames.toArray());
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
         
