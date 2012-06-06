@@ -68,7 +68,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     final JTextField textField;
     JButton sendButton;
     JCheckBox autoscrollBox;
-    final JComboBox lineEndings;
+    final JComboBox<String> lineEndings;
 
 
     public DebugFrame(final String title,final Integer bdrate) {
@@ -100,7 +100,7 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
-        lineEndings = new MwJComboBox("line Ending",new String[] { ("No line ending"),
+        lineEndings = new MwJComboBox<String>("line Ending",new String[] { ("No line ending"),
                 ("Newline"), ("Carriage return"), ("Both NL & CR") });
         lineEndings.setSelectedIndex(0);
         lineEndings.setMaximumSize(lineEndings.getMinimumSize());

@@ -16,8 +16,12 @@ public interface MwDataSource {
 
     public  XYDataset getLatestDataset() ;
 
-    public  XYDataset getDataset();
+//    public  XYDataset getDataset();
 
-    public  boolean put(final Date date, final String sensorName, final Double value);
+    public  boolean put(final Date date, final String sensorName, final Double value, Class<? extends MwSensorClass> sclass);
 
+    public void addListener(MwSensorClass sensor,  MwDataSourceListener listener );
+
+    boolean removeListener(MwSensorClass sensorClass,
+            MwDataSourceListener newListener);
 }

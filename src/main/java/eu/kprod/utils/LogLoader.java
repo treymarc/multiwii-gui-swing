@@ -55,7 +55,7 @@ public class LogLoader implements DSLoadable {
                                 + line.substring(0, line.indexOf(":") + 6);
                         // System.err.println("date = "+date);
                         content.put(sdf.parse(date), content1[0],
-                                Double.valueOf(content1[1]));
+                                Double.valueOf(content1[1]),null);
                     } catch (Exception e) {
                          e.printStackTrace();
                          // failed to load

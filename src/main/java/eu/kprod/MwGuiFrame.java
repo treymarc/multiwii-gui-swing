@@ -107,9 +107,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JButton startButton;
     private JButton stopButton;
 
-    private static JComboBox serialPorts;
-    private static JComboBox serialRates;
-    private static JComboBox serialRefreshRate;
+    private static JComboBox<String> serialPorts;
+    private static JComboBox<Integer> serialRates;
+    private static JComboBox<Integer> serialRefreshRate;
     
     private static SerialCom com;
     private static SerialListener serialListener;
@@ -249,7 +249,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
 
         
-        serialRefreshRate = new MwJComboBox("Refresh rate (hz)",SerialRefreshRateStrings.toArray());
+        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",SerialRefreshRateStrings.toArray());
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
@@ -262,7 +262,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
         
         
-        serialRates = new MwJComboBox("baud rate", SerialDevice.SerialRateStrings.toArray());
+        serialRates = new MwJComboBox<Integer>("baud rate", SerialDevice.SerialRateStrings.toArray());
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
