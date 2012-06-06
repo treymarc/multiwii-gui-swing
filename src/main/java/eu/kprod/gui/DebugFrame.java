@@ -26,18 +26,20 @@ import javax.swing.text.PlainDocument;
 import org.apache.log4j.Logger;
 
 import eu.kprod.MwGuiFrame;
-import eu.kprod.serial.SerialDevice;
+import eu.kprod.gui.comboBox.MwJComboBox;
 import eu.kprod.serial.SerialException;
 import eu.kprod.serial.SerialListener;
 
 public class DebugFrame extends JFrame implements SerialListener {
 
-    static class CustomDocument extends PlainDocument {
+    static class RollingDocument extends PlainDocument {
+        /**
+         * max length of the fifo document
+         */
         private static int MAX_LENGTH = 1000;
         private JTextArea field;
 
-        public CustomDocument(JTextArea textArea) {
-            // TODO Auto-generated constructor stub
+        public RollingDocument(JTextArea textArea) {
             field = textArea;
         }
 
@@ -55,8 +57,8 @@ public class DebugFrame extends JFrame implements SerialListener {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = Logger.getLogger(DebugFrame.class);
@@ -66,12 +68,11 @@ public class DebugFrame extends JFrame implements SerialListener {
     final JTextField textField;
     JButton sendButton;
     JCheckBox autoscrollBox;
-    final JComboBox lineEndings;
+    final JComboBox<String> lineEndings;
 
 
-    public DebugFrame(final String tritle,final Integer bdrate) {
-        // TODO Auto-generated constructor stub
-        super(tritle);
+    public DebugFrame(final String title,final Integer bdrate) {
+        super(title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -87,10 +88,9 @@ public class DebugFrame extends JFrame implements SerialListener {
         getContentPane().setLayout(new BorderLayout());
 
         textArea = new JTextArea(16, 40);
-        textArea.setDocument(new CustomDocument(textArea));
+        textArea.setDocument(new RollingDocument(textArea));
 
-        // doc.setDocumentFilter(new
-        // DocumentSizeFilter(MAX_SERIAL_CONSOLE_CHAR));
+
         textArea.setEditable(false);
 
         // don't automatically update the caret. that way we can manually decide
@@ -100,7 +100,7 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
-        lineEndings = new JComboBox(new String[] { ("No line ending"),
+        lineEndings = new MwJComboBox<String>("line Ending",new String[] { ("No line ending"),
                 ("Newline"), ("Carriage return"), ("Both NL & CR") });
         lineEndings.setSelectedIndex(0);
         lineEndings.setMaximumSize(lineEndings.getMinimumSize());
@@ -169,6 +169,9 @@ public class DebugFrame extends JFrame implements SerialListener {
         setSize(new Dimension(500, 200));
     }
 
+    /**
+     * add to textArea
+     */
     public void readSerialByte(final byte newMessage) {
         textArea.append(String.valueOf((char) newMessage));
         if (autoscrollBox.isSelected()) {

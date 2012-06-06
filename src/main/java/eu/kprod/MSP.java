@@ -2,6 +2,10 @@ package eu.kprod;
 
 import java.util.Date;
 
+import eu.kprod.ds.MwSensorClassIMU;
+import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassServo;
+
 /**
  * Multiwii Serial Protocol
  * 
@@ -99,6 +103,10 @@ public class MSP {
             offset = 0, dataSize = 0;
 
 
+    /**
+     * Decode the byte 
+     * @param input
+     */
     synchronized public static void decode(final byte input) {
         char c = (char) input;
 
@@ -160,6 +168,7 @@ public class MSP {
     }
 
     synchronized private static void decodeInBuf() {
+        final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
                 getModel().setVersion(read8());
@@ -195,24 +204,33 @@ public class MSP {
                 // }
                 break;
             case RAW_IMU:
-                Date d = new Date();
-                getModel().getDs().put(d, "ax", Double.valueOf(read16()));
-                getModel().getDs().put(d, "ay", Double.valueOf(read16()));
-                getModel().getDs().put(d, "az", Double.valueOf(read16()));
+                getModel().getDs().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
+                getModel().getDs().put(d, "ay", Double.valueOf(read16()),MwSensorClassIMU.class);
+                getModel().getDs().put(d, "az", Double.valueOf(read16()),MwSensorClassIMU.class);
 
-                getModel().getDs().put(d, "gx", Double.valueOf(read16() / 8));
-                getModel().getDs().put(d, "gy", Double.valueOf(read16() / 8));
-                getModel().getDs().put(d, "gz", Double.valueOf(read16() / 8));
+                getModel().getDs().put(d, "gx", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                getModel().getDs().put(d, "gy", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                getModel().getDs().put(d, "gz", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
 
-                getModel().getDs().put(d, "magx", Double.valueOf(read16() / 3));
-                getModel().getDs().put(d, "magy", Double.valueOf(read16() / 3));
-                getModel().getDs().put(d, "magz", Double.valueOf(read16() / 3));
+                getModel().getDs().put(d, "magx", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                getModel().getDs().put(d, "magy", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                getModel().getDs().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
                 break;
             case SERVO:
                 // for(i=0;i<8;i++) servo[i] = read16();
+                for(int i=0;i<8;i++){
+                    getModel().getDs().put(d, new StringBuffer().append("servo").append(i).toString(), 
+                            Double.valueOf(read16()),
+                            MwSensorClassServo.class);
+                }
                 break;
             case MOTOR:
                 // for(i=0;i<8;i++) mot[i] = read16();
+                for(int i=0;i<8;i++){
+                    getModel().getDs().put(d, new StringBuffer().append("mot").append(i).toString(),
+                            Double.valueOf(read16()),
+                            MwSensorClassMotor.class);
+                }
                 break;
             case RC:
                 // rcRoll = read16();rcPitch = read16();rcYaw =
@@ -245,6 +263,7 @@ public class MSP {
             case BAT:
                 // bytevbat = read8();
                 // pMeterSum = read16();
+
                 break;
             case RC_TUNING:
                 getModel().setRCRATE((int) (read8() / 100.0));

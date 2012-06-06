@@ -5,7 +5,10 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
-import eu.kprod.utils.DSLoadableException;
+import eu.kprod.ds.DSLoadableException;
+import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwDataSourceImpl;
+
 import eu.kprod.utils.LogLoader;
 
 
@@ -29,7 +32,8 @@ public class LogViewerFrame extends JFrame {
         } catch (DSLoadableException e) {
             LOGGER.error("Can not open log file : " + name);
             e.printStackTrace();
-            ds = new MwDataSource();
+            //TODO get datasource impl
+            ds = new MwDataSourceImpl();
         }
         ChartPanel chartTrendPanel = new ChartPanel(
                 MwChartFactory.createChart(ds));

@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.kprod.gui.MwDataSource;
+import eu.kprod.ds.DSLoadable;
+import eu.kprod.ds.MwDataSource;
+
+
 
 /**
  * load a DataSource from a file.

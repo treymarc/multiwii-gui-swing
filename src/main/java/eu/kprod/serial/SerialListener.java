@@ -8,7 +8,6 @@ package eu.kprod.serial;
 public interface SerialListener {
 
     /**
-     *
      * @param s recieved byte
      */
     void readSerialByte(byte s);

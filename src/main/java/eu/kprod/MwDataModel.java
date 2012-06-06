@@ -1,11 +1,15 @@
 package eu.kprod;
 
-import eu.kprod.gui.MwDataSource;
+import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwDataSourceImpl;
+
+
 
 public class MwDataModel {
 
     // for real time data
-    private MwDataSource ds = new MwDataSource();
+    // TODO get impl 
+    private MwDataSource ds = new MwDataSourceImpl();
 
     // global ident
     int version, multiType;

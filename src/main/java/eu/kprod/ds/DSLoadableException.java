@@ -1,4 +1,4 @@
-package eu.kprod.utils;
+package eu.kprod.ds;
 
 
 public class DSLoadableException extends Exception {

@@ -8,6 +8,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
 
+import eu.kprod.ds.MwDataSource;
+
 public final class MwChartFactory {
 
     private MwChartFactory() {
