@@ -4,14 +4,10 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
-
-import eu.kprod.ds.MwDataSource;
-import eu.kprod.ds.MwDataSourceListener;
-import eu.kprod.ds.MwSensorClass;
+import org.jfree.data.xy.XYDataset;
 
 public final class MwChartFactory {
 
@@ -19,12 +15,12 @@ public final class MwChartFactory {
 
     }
     
-    public static ChartPanel createChart(final MwDataSource ds,Class<? extends MwSensorClass> sclass) {
+    public static MwChartPanel createChart(final XYDataset xyDataset) {
         final JFreeChart chart;
         // final XYDataset dataset
        
         chart = ChartFactory.createTimeSeriesChart(null, null,
-                    null, ds.getLatestDataset(sclass), true, true, false);
+                    null, xyDataset, true, true, false);
         
 
         chart.setBackgroundPaint(Color.white);
@@ -53,7 +49,6 @@ public final class MwChartFactory {
         chartPanel.setDomainZoomable(false);
         chartPanel.setRangeZoomable(false);
 
-        ds.addListener(sclass, (MwDataSourceListener)chartPanel);
         
         return chartPanel;
 

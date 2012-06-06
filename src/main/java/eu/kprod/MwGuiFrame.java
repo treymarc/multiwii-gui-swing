@@ -31,6 +31,7 @@ import javax.swing.border.EmptyBorder;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
+import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
@@ -159,7 +160,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs(),MwSensorClassIMU.class);
+            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs().getLatestDataset(MwSensorClassIMU.class));
+            MSP.getModel().getDs().addListener(MwSensorClassIMU.class, (MwDataSourceListener)chartTrendPanel);
+            
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
             overviewPanel = new JPanel();
@@ -487,22 +490,23 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         // TODO Auto-generated method stub
         showServo =true;
         if (servoFrame==null){
-        servoFrame =   new LogViewerFrame("Servo",MSP.getModel().getDs(),MwSensorClassServo.class);
-       }else{
-           servoFrame.setVisible(true);
+            servoFrame =   new LogViewerFrame("Servo", MSP.getModel().getDs(), MwSensorClassServo.class);
+        }else{
+            servoFrame.setVisible(true);
         }
     }
-    
+
     protected static void showMotor() {
         // TODO Auto-generated method stub
         showMotor =true;
         if (motorFrame==null){
-        motorFrame =  new LogViewerFrame("Motor",MSP.getModel().getDs(), MwSensorClassMotor.class);;
+            motorFrame =  new LogViewerFrame("Motor", MSP.getModel().getDs() ,MwSensorClassMotor.class);
+
         }else{
             motorFrame.setVisible(true);
         }
-        
-        }
+
+    }
 
     // send string
     synchronized private void send(String s) {
