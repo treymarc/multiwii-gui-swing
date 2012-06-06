@@ -36,7 +36,7 @@ public class LogViewerFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 
-        MwChartPanel chartTrendPanel = MwChartFactory.createChart(ds.getLatestDataset(sclass));
+        MwChartPanel chartTrendPanel = MwChartFactory.createChart(ds.getDS(sclass));
         ds.addListener(sclass, chartTrendPanel);
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();
@@ -57,7 +57,7 @@ public class LogViewerFrame extends JFrame {
             //TODO get datasource impl
             ds = new MwDataSourceImpl();
         }
-        ChartPanel chartTrendPanel = MwChartFactory.createChart(ds.getLatestDataset(MwSensorClass.class));
+        ChartPanel chartTrendPanel = MwChartFactory.createChart(ds.getDS(MwSensorClass.class));
         chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();

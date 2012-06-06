@@ -15,7 +15,7 @@ import eu.kprod.ds.MwSensorClassServo;
 public class MSP {
 
     /**
-     *  the model for holding the value that decode by the MSP
+     *  the model for holding the value decoded by the MSP
      */
     private static MwDataModel model;
 

@@ -160,7 +160,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs().getLatestDataset(MwSensorClassIMU.class));
+            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs().getDS(MwSensorClassIMU.class));
             MSP.getModel().getDs().addListener(MwSensorClassIMU.class, (MwDataSourceListener)chartTrendPanel);
             
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
