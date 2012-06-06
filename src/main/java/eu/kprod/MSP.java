@@ -99,6 +99,10 @@ public class MSP {
             offset = 0, dataSize = 0;
 
 
+    /**
+     * Decode the byte 
+     * @param input
+     */
     synchronized public static void decode(final byte input) {
         char c = (char) input;
 

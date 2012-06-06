@@ -45,7 +45,7 @@ public class SerialCom {
 
     }
 
-    public void send(String s) {
+    public void send(String s) throws SerialException {
         if (serial != null) {
             switch (cr) {
                 case 1:
@@ -62,7 +62,7 @@ public class SerialCom {
         }
     }
 
-    public void send(String s, Integer d) {
+    public void send(String s, Integer d) throws SerialException {
         cr = d;
         send(s);
     }

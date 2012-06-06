@@ -1,4 +1,4 @@
-package eu.kprod;
+package eu.kprod.gui.comboBox;
 
 import java.awt.Component;
 
@@ -19,7 +19,7 @@ class MwComboBoxRenderer extends BasicComboBoxRenderer {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
             if (-1 < index) {
-                list.setToolTipText(name);
+                list.setToolTipText(name+" : "+ ((value == null) ? "" : value.toString() ));
             }
         } else {
             setBackground(list.getBackground());

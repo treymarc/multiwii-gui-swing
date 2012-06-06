@@ -31,6 +31,7 @@ import org.jfree.chart.ChartPanel;
 
 import eu.kprod.gui.DebugFrame;
 import eu.kprod.gui.MwChartFactory;
+import eu.kprod.gui.comboBox.MwJComboBox;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
 import eu.kprod.serial.SerialException;
@@ -237,8 +238,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             portNames.add("");
         }
             
-        serialPorts = new JComboBox(portNames.toArray());
-        serialPorts.setRenderer(new MwComboBoxRenderer("Serial Port"));
+        serialPorts = new MwJComboBox("Serial Port",portNames.toArray());
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
         
@@ -251,11 +251,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         });
 
-        serialRefreshRate = new JComboBox();
-        serialRefreshRate.setRenderer(new MwComboBoxRenderer("Refresh rate"));
-        for (Integer entry : SerialRefreashRateStrings) {
-            serialRefreshRate.addItem(entry);
-        }
+        
+        serialRefreshRate = new MwJComboBox("Refresh rate (hz)",SerialRefreashRateStrings.toArray());
+//        serialRefreshRate.setRenderer(new MwComboBoxRenderer("));
+//        for (Integer entry : SerialRefreashRateStrings) {
+//            serialRefreshRate.addItem(entry);
+//        }
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
@@ -270,11 +271,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
         
         
-        serialRates = new JComboBox();
-        serialRates.setRenderer(new MwComboBoxRenderer("baud rate"));
-        for (Integer entry : SerialDevice.SerialRateStrings) {
-            serialRates.addItem(entry);
-        }
+        serialRates = new MwJComboBox("baud rate", SerialDevice.SerialRateStrings.toArray());
+//        serialRates.setRenderer(new MwComboBoxRenderer("baud rate"));
+//        for (Integer entry : SerialDevice.SerialRateStrings) {
+//            serialRates.addItem(entry);
+//        }
 
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
@@ -387,7 +388,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         /* différents menus */
         JMenu menu1 = new JMenu("File");
         JMenu menu2 = new JMenu("Edit");
-
+        JMenu menu3 = new JMenu("View");
+        
         /* differents choix de chaque menu */
         JMenuItem debug = new JMenuItem("Debug");
         JMenuItem quit = new JMenuItem("Quit");
@@ -397,17 +399,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         // JMenuItem openLog = new JMenuItem("Open");
 
-        /* Ajouter les choix au menu */
-        menu1.add(debug);
+        /* Ajouter les choix au menu */ 
         menu1.add(quit);
         menu2.add(annuler);
         menu2.add(copier);
         menu2.add(coller);
-
+        menu3.add(debug);
+        
         /* Ajouter les menu sur la bar de menu */
         menubar.add(menu1);
         menubar.add(menu2);
-
+        menubar.add(menu3);
+        
         /* clic sur le choix Démarrer du menu fichier */
         debug.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -430,7 +433,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     // send string
     synchronized private void send(String s) {
         if (com != null) {
-            com.send(s, 0 /* lineEndings.getSelectedIndex() */);
+            try {
+                com.send(s, 0 /* lineEndings.getSelectedIndex() */);
+            } catch (SerialException e) {
+                // TODO add error msg to logFrame
+                e.printStackTrace();
+                // TODO POPUp when unrecoverable error
+            }
         }
     }
 
@@ -447,22 +456,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 MSP.decode(input);
 
                 if (getDebugFrame().isVisible()) {
-
                     debugFrame.readSerialByte(input);
-
                 }
             }
         });
     }
 
     public static void setSerialRate(Integer selectedItem) throws SerialException {
-        // TODO Auto-generated method stub
         serialRates.setSelectedItem(selectedItem);
         getCom().setSerialRate(selectedItem);
     }
 
     public static void closeSerialPort() {
-        // TODO Auto-generated method stub
         if (com !=null){
             com.closeSerialPort();
         }

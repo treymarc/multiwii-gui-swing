@@ -31,6 +31,7 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -231,8 +232,9 @@ public class SerialDevice implements SerialPortEventListener {
                 }
                 // System.out.println("no more");
 
-            } catch (Exception e) {
-                errorMessage("serialEvent", e);
+            } catch (IOException e) {
+                //reportErrorMessage("serialEvent", null,e); cannot throw here
+                e.printStackTrace();
             }
         }
         // System.out.println("out of");
@@ -433,25 +435,32 @@ public class SerialDevice implements SerialPortEventListener {
 
     /**
      * This will handle both ints, bytes and chars transparently.
+     * @throws SerialException 
      */
-    public final void write(final int what) { // will also cover char
+    public final void write(final int what) throws SerialException { // will also cover char
         try {
             output.write(what & 0xff); // for good measure do the &
             output.flush(); // hmm, not sure if a good idea
 
-        } catch (Exception e) { // null pointer or serial port dead
-            errorMessage("write", e);
+        } catch (NullPointerException e) { // null pointer or serial port dead
+            reportErrorMessage("write", "output stream is closed",e);
+            
+        } catch (IOException e) {
+            reportErrorMessage("write","failed to write to output stream ",e);
         }
     }
 
-    public final void write(final byte[] bytes) {
+    public final void write(final byte[] bytes) throws SerialException {
         try {
+
             output.write(bytes);
             output.flush(); // hmm, not sure if a good idea
 
-        } catch (Exception e) { // null pointer or serial port dead
-            // errorMessage("write", e);
-            e.printStackTrace();
+        } catch (NullPointerException e) { // null pointer or serial port dead
+            reportErrorMessage("write", "output stream is closed",e);
+            
+        } catch (IOException e) {
+            reportErrorMessage("write","failed to write to output stream ",e);
         }
     }
 
@@ -465,8 +474,9 @@ public class SerialDevice implements SerialPortEventListener {
      * If you want to move Unicode data, you can first convert the String to a
      * byte stream in the representation of your choice (i.e. UTF8 or two-byte
      * Unicode data), and send it as a byte array.
+     * @throws SerialException 
      */
-    public final void write(final String what) {
+    public final void write(final String what) throws SerialException {
         write(what.getBytes());
 
         try {
@@ -490,10 +500,15 @@ public class SerialDevice implements SerialPortEventListener {
     /**
      * General error reporting, all corraled here just in case I think of
      * something slightly more intelligent to do.
+     * @param msg 
+     * @throws SerialException 
      */
-    public static final void errorMessage(final String where, final Throwable e) {
+    public static final void reportErrorMessage(final String where, String msg, final Throwable e) throws SerialException {
         LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
         e.printStackTrace();
+       
+        throw new SerialException(msg,e);
+        
     }
 
     public static final void addListener(List<SerialListener> listener2) {
