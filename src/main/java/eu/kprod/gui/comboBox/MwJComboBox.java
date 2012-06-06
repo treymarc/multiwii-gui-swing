@@ -4,9 +4,9 @@ import javax.swing.JComboBox;
 
 
 
-public class MwJComboBox<E> extends JComboBox{
+public class MwJComboBox<E> extends JComboBox<E>{
 
-    public MwJComboBox(String name, Object[] array) {
+    public MwJComboBox(String name, E[] array) {
         // TODO Auto-generated constructor stub
         super(array);
         super.setRenderer(new MwComboBoxRenderer(name));

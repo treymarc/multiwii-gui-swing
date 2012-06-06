@@ -34,6 +34,10 @@ public class DebugFrame extends JFrame implements SerialListener {
 
     static class RollingDocument extends PlainDocument {
         /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+        /**
          * max length of the fifo document
          */
         private static int MAX_LENGTH = 1000;
