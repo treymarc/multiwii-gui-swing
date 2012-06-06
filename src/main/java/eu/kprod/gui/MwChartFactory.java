@@ -8,10 +8,11 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.xy.XYDataset;
 
 import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClass;
-import eu.kprod.ds.MwSensorClassIMU;
 
 public final class MwChartFactory {
 
@@ -20,11 +21,12 @@ public final class MwChartFactory {
     }
     
     public static ChartPanel createChart(final MwDataSource ds,Class<? extends MwSensorClass> sclass) {
-
+        final JFreeChart chart;
         // final XYDataset dataset
-
-        final JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null,
-                null, ds.getLatestDataset(sclass), true, true, false);
+       
+        chart = ChartFactory.createTimeSeriesChart(null, null,
+                    null, ds.getLatestDataset(sclass), true, true, false);
+        
 
         chart.setBackgroundPaint(Color.white);
         
@@ -47,11 +49,14 @@ public final class MwChartFactory {
         final DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
 
-        ChartPanel p = new ChartPanel(chart);
-        p.setMouseWheelEnabled(true);
+        MwChartPanel chartPanel = new MwChartPanel(chart);
+        chartPanel.setMouseWheelEnabled(false);
+        chartPanel.setDomainZoomable(false);
+        chartPanel.setRangeZoomable(false);
 
+        ds.addListener(sclass, (MwDataSourceListener)chartPanel);
         
-        return p;
+        return chartPanel;
 
     }
 

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
@@ -22,7 +21,7 @@ public class MwDataSourceImpl implements MwDataSource {
     // TODO impl factory
 //    private MwDataSourceImpl(){}
     
-    private Hashtable<MwSensorClass, List<MwDataSourceListener>> listeners = new Hashtable< MwSensorClass,  List<MwDataSourceListener>>();
+    private Hashtable< Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable< Class<? extends MwSensorClass>,  List<MwDataSourceListener>>();
     
     private Hashtable<Class< ? extends MwSensorClass> , Hashtable<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass> , Hashtable<String, TimeSeries>>();
     private  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>  dataset = new  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>();
@@ -93,6 +92,7 @@ public class MwDataSourceImpl implements MwDataSource {
         if (s==null){
             s= new Hashtable<String, TimeSeries> ();
             sensors.put(sensorClass, s);
+            
         }
         for (String sensorName : s.keySet()) {
             ts.addSeries(  s.get(sensorName));
@@ -141,7 +141,7 @@ public class MwDataSourceImpl implements MwDataSource {
         TimeSeries timeserie = s.get(sensorName);
 
         if (timeserie == null) {
-            timeserie = new TimeSeries(sensorName, Millisecond.class);
+            timeserie = new TimeSeries(sensorName);
             timeserie.setMaximumItemCount(maxItemCount);
             timeserie.setMaximumItemAge(maxItemAge );
             
@@ -162,9 +162,21 @@ public class MwDataSourceImpl implements MwDataSource {
     }
 
 
+    @Override
+    public void notifyListener(MwSensorClass sensorClass) {
+        if (sensorClass !=null ){
+            List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
+            for (MwDataSourceListener mwDataSourceListener : listenersl) {
+                mwDataSourceListener.readNewValue(null, null);
+
+            }
+
+        }
+    }
+    
 
     @Override
-    public void addListener(MwSensorClass sensorClass, MwDataSourceListener newListener) {
+    public void addListener(Class<? extends MwSensorClass> sensorClass, MwDataSourceListener newListener) {
         if (sensorClass !=null && newListener != null ){
             List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
             if (listenersl == null){
