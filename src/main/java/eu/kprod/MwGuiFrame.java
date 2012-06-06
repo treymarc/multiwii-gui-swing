@@ -180,10 +180,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         MSP.setModel(new MwDataModel());
 
         props = new Properties();
-        URL url = ClassLoader.getSystemResource("app.properties");
+        
         try {
+            URL url = ClassLoader.getSystemResource("app.properties");
             props.load(url.openStream());
-        } catch (IOException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
            throw new MwGuiRuntimeException("Failed to load app properties", e);
         }
