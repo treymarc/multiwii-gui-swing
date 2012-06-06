@@ -6,10 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -68,6 +71,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
      */
     public static void main(String[] args) {
 
+
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
               
@@ -119,6 +124,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static DebugFrame debugFrame;
     private ChartPanel chartTrendPanel;
     private JPanel overviewPanel;
+    private Properties props;
 
     private JPanel getOverviewPanel() {
 
@@ -140,9 +146,19 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     public MwGuiFrame() {
         super();
 
+        
         MSP.setModel(new MwDataModel());
 
-        super.setTitle("MwGui - v0.0.1a");
+        props = new Properties();
+        URL url = ClassLoader.getSystemResource("app.properties");
+        try {
+            props.load(url.openStream());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        super.setTitle(props.getProperty("mainframe.title"));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
