@@ -86,7 +86,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     }
 
-    public static final List<Integer> SerialRefreashRateStrings = initializeMap();
+    public static final List<Integer> SerialRefreshRateStrings = initializeMap();
 
     private static List<Integer> initializeMap() {
         List<Integer> m = new ArrayList<Integer>();
@@ -224,11 +224,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier
         .getPortIdentifiers(); enumeration.hasMoreElements();) {
             CommPortIdentifier commportidentifier = enumeration.nextElement();
-            // System.out.println("Found communication port: " +
-            // commportidentifier);
+
             if (commportidentifier.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                // System.out.println("Adding port to serial port menu: " +
-                // commportidentifier);
                 String curr_port = commportidentifier.getName();
                 portNames.add(curr_port);
             }
@@ -252,19 +249,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
 
         
-        serialRefreshRate = new MwJComboBox("Refresh rate (hz)",SerialRefreashRateStrings.toArray());
-//        serialRefreshRate.setRenderer(new MwComboBoxRenderer("));
-//        for (Integer entry : SerialRefreashRateStrings) {
-//            serialRefreshRate.addItem(entry);
-//        }
+        serialRefreshRate = new MwJComboBox("Refresh rate (hz)",SerialRefreshRateStrings.toArray());
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-
                 if( timer != null){
                     restartTimer();
-
                 }
 
             }
@@ -272,11 +263,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         
         
         serialRates = new MwJComboBox("baud rate", SerialDevice.SerialRateStrings.toArray());
-//        serialRates.setRenderer(new MwComboBoxRenderer("baud rate"));
-//        for (Integer entry : SerialDevice.SerialRateStrings) {
-//            serialRates.addItem(entry);
-//        }
-
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -284,7 +270,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 logger.trace("actionPerformed "
                         + event.getSource().getClass().getName());
 
-               
                 closeSerialPort();
                 try {
                     if (com != null) {

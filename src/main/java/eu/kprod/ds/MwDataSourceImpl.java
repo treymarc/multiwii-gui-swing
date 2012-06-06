@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.ds;
 
 import java.util.Date;
 import java.util.Hashtable;
@@ -8,10 +8,51 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
-public class MwDataSource {
+/**
+ * 
+ * @author treym
+ *
+ */
+public class MwDataSourceImpl implements MwDataSource {
 
+    
+    // TODO impl factory
+//    private MwDataSourceImpl(){}
+    
     private Hashtable<String, TimeSeries> sensors = new Hashtable<String, TimeSeries>();
     private TimeSeriesCollection dataset;
+    
+    private long maxItemAge = 5000;
+    private int maxItemCount = 4000;
+    
+    public int getMaxItemCount() {
+        return maxItemCount;
+    }
+
+    public void setMaxItemCount(final int maxItemCount1) {       
+        if (maxItemCount1>0){
+            this.maxItemCount = maxItemCount1;
+            for (String sensorName : sensors.keySet()) {
+                sensors.get(sensorName).setMaximumItemCount(maxItemCount);
+            }
+        }
+
+    }
+
+    public long getMaxItemAge() {
+        return maxItemAge;
+    }
+
+    public void setMaxItemAge(final long maxItemAge1) {
+        if (maxItemAge1>0){
+            this.maxItemAge = maxItemAge1;
+            for (String sensorName : sensors.keySet()) {
+                sensors.get(sensorName).setMaximumItemAge(maxItemAge);
+            }
+        }
+
+    }
+
 
     /**
      * Creates a dataset.
@@ -51,9 +92,8 @@ public class MwDataSource {
 
         if (timeserie == null) {
             timeserie = new TimeSeries(sensorName, Millisecond.class);
-            // TODO get user settings
-            // timeserie.setMaximumItemCount(300);
-            timeserie.setMaximumItemAge(5000);
+            timeserie.setMaximumItemCount(maxItemCount);
+            timeserie.setMaximumItemAge(maxItemAge );
             sensors.put(sensorName, timeserie);
             dataset.addSeries(timeserie);
         }

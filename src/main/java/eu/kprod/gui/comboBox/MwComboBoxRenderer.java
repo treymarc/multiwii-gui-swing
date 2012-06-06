@@ -7,6 +7,10 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 class MwComboBoxRenderer extends BasicComboBoxRenderer {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private String name;
 
     public MwComboBoxRenderer(String comboBoxName){

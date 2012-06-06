@@ -164,6 +164,7 @@ public class MSP {
     }
 
     synchronized private static void decodeInBuf() {
+        final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
                 getModel().setVersion(read8());
@@ -199,7 +200,6 @@ public class MSP {
                 // }
                 break;
             case RAW_IMU:
-                Date d = new Date();
                 getModel().getDs().put(d, "ax", Double.valueOf(read16()));
                 getModel().getDs().put(d, "ay", Double.valueOf(read16()));
                 getModel().getDs().put(d, "az", Double.valueOf(read16()));
@@ -214,9 +214,15 @@ public class MSP {
                 break;
             case SERVO:
                 // for(i=0;i<8;i++) servo[i] = read16();
+                for(int i=0;i<8;i++){
+                    getModel().getDs().put(d, new StringBuffer().append("servo").append(i).toString(), Double.valueOf(read16()));
+                }
                 break;
             case MOTOR:
                 // for(i=0;i<8;i++) mot[i] = read16();
+                for(int i=0;i<8;i++){
+                    getModel().getDs().put(d, new StringBuffer().append("mot").append(i).toString(), Double.valueOf(read16()));
+                }
                 break;
             case RC:
                 // rcRoll = read16();rcPitch = read16();rcYaw =
@@ -249,6 +255,7 @@ public class MSP {
             case BAT:
                 // bytevbat = read8();
                 // pMeterSum = read16();
+
                 break;
             case RC_TUNING:
                 getModel().setRCRATE((int) (read8() / 100.0));

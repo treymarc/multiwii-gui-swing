@@ -5,7 +5,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import eu.kprod.gui.MwDataSource;
+import eu.kprod.ds.DSLoadable;
+import eu.kprod.ds.DSLoadableException;
+import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwDataSourceImpl;
+
+
 
 
 /**
@@ -31,7 +36,7 @@ public class LogLoader implements DSLoadable {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");
 
-        MwDataSource content = new MwDataSource();
+        MwDataSource content = new MwDataSourceImpl();
 
         try {
             BufferedReader buff = new BufferedReader(new FileReader(filePath));
