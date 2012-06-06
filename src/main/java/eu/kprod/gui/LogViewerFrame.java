@@ -26,7 +26,7 @@ public class LogViewerFrame extends JFrame {
     public LogViewerFrame(String name, MwDataSource ds) {
         // TODO Auto-generated constructor stub
         super(name);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
        
         ChartPanel chartTrendPanel = new ChartPanel(
@@ -34,9 +34,9 @@ public class LogViewerFrame extends JFrame {
 
         getContentPane().add(chartTrendPanel);
         setPreferredSize(new java.awt.Dimension(500, 270));
+        setSize(new java.awt.Dimension(500, 270));
         setVisible(true);
-        //repaint();
-        //pack();
+        pack();
     }
     
     public LogViewerFrame(String name,MwDataSource ds,Class<? extends MwSensorClass> sclass) {
@@ -50,13 +50,15 @@ public class LogViewerFrame extends JFrame {
 
         getContentPane().add(chartTrendPanel);
         setPreferredSize(new java.awt.Dimension(500, 270));
+        setSize(new java.awt.Dimension(500, 270));
         setVisible(true);
-//        repaint();
+        pack();
     }
     
     public LogViewerFrame(String name) {
         // TODO Auto-generated constructor stub
         super(name);
+        // we may want to dipose the frame after usage
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         MwDataSource ds;
@@ -70,11 +72,12 @@ public class LogViewerFrame extends JFrame {
         }
         ChartPanel chartTrendPanel = new ChartPanel(
                 MwChartFactory.createChart(MSP.getModel().getDs(),MwSensorClass.class));
-
+        chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         getContentPane().add(chartTrendPanel);
         setPreferredSize(new java.awt.Dimension(500, 270));
+        setSize(new java.awt.Dimension(500, 270));
         setVisible(true);
-        repaint();
+        pack();
     }
 
 }
