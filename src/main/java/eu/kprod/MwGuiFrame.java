@@ -56,6 +56,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             try {
              // TODO get user settings
                 // requestMSP(MSP.ATTITUDE);
+                if (showMotor){
+                    send(MSP.request(MSP.MOTOR));
+                }
+                if (showServo){
+                    send(MSP.request(MSP.SERVO));
+                }
                 send(MSP.request(MSP.RAW_IMU));
             } catch (NullPointerException e) {
                 timer.cancel();
@@ -122,6 +128,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private Timer timer;
 
     private static DebugFrame debugFrame;
+    private static boolean showServo;
+    private static boolean showMotor;
     private ChartPanel chartTrendPanel;
     private JPanel overviewPanel;
     private Properties props;
@@ -392,6 +400,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         JMenu menu3 = new JMenu("View");
         
         /* differents choix de chaque menu */
+        JMenuItem motor = new JMenuItem("Motor");
+        JMenuItem servo = new JMenuItem("Servo");
         JMenuItem debug = new JMenuItem("Debug");
         JMenuItem quit = new JMenuItem("Quit");
         JMenuItem annuler = new JMenuItem("Undo");
@@ -406,6 +416,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menu2.add(copier);
         menu2.add(coller);
         menu3.add(debug);
+        menu3.add(servo);
+        menu3.add(motor);
         
         /* Ajouter les menu sur la bar de menu */
         menubar.add(menu1);
@@ -416,6 +428,19 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         debug.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
+            }
+        });
+        
+       
+        servo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MwGuiFrame.showServo();
+            }
+        });
+        
+        motor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MwGuiFrame.showMotor();
             }
         });
 
@@ -429,6 +454,16 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         // TODO about multiwii
         return menubar;
+    }
+
+    protected static void showServo() {
+        // TODO Auto-generated method stub
+        showServo =true;
+    }
+    
+    protected static void showMotor() {
+        // TODO Auto-generated method stub
+        showMotor =true;
     }
 
     // send string

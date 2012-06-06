@@ -9,6 +9,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
 
 import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwSensorClassIMU;
 
 public final class MwChartFactory {
 
@@ -21,7 +22,7 @@ public final class MwChartFactory {
         // final XYDataset dataset
 
         final JFreeChart chart = ChartFactory.createTimeSeriesChart(null, null,
-                null, ds.getLatestDataset(), true, true, false);
+                null, ds.getLatestDataset(MwSensorClassIMU.class), true, true, false);
 
         chart.setBackgroundPaint(Color.white);
 
