@@ -32,7 +32,11 @@ import javax.swing.border.EmptyBorder;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
+import eu.kprod.ds.MwSensorClassIMU;
+import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.DebugFrame;
+import eu.kprod.gui.LogViewerFrame;
 import eu.kprod.gui.MwChartFactory;
 import eu.kprod.gui.comboBox.MwJComboBox;
 import eu.kprod.serial.SerialCom;
@@ -64,8 +68,17 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         public void run() {
             try {
-             // TODO get user settings
+             // TODO do no send all requests at the same time
+             
+                // TODO attitude panel
                 // requestMSP(MSP.ATTITUDE);
+                
+                if (showMotor){
+                    send(MSP.request(MSP.MOTOR));
+                }
+                if (showServo){
+                    send(MSP.request(MSP.SERVO));
+                }
                 send(MSP.request(MSP.RAW_IMU));
             } catch (NullPointerException e) {
                 timer.cancel();
@@ -92,10 +105,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 // Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
 
-                MwGuiFrame frame = new MwGuiFrame();
-                MwGuiFrame.serialListener = frame;
+                MwGuiFrame frame;
+                try {
+                    frame = new MwGuiFrame();
+                    MwGuiFrame.serialListener = frame;
 
-                frame.setVisible(true);
+                    frame.setVisible(true);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    throw new RuntimeException("Failed to load app properties",e);
+                }
+
             }
         });
 
@@ -132,15 +153,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private Timer timer;
 
     private static DebugFrame debugFrame;
+    private static boolean showServo;
+    private static boolean showMotor;
+    private static LogViewerFrame motorFrame;
+    private static LogViewerFrame servoFrame;
     private ChartPanel chartTrendPanel;
     private JPanel overviewPanel;
     private Properties props;
 
-    private JPanel getOverviewPanel() {
+    private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = new ChartPanel(MwChartFactory.createChart(MSP
-                    .getModel().getDs()));
+            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs(),MwSensorClassIMU.class);
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
             overviewPanel = new JPanel();
@@ -153,7 +177,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return overviewPanel;
     }
 
-    public MwGuiFrame() {
+    public MwGuiFrame() throws IOException {
         super();
 
         
@@ -216,6 +240,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                     }
                 }
                restartTimer();
+               chartTrendPanel.restoreAutoBounds();
             }
         });
 
@@ -237,7 +262,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 //        pane.add(startButton);
 //
 //        getContentPane().add(pane, BorderLayout.NORTH);
-        getContentPane().add(getOverviewPanel(), BorderLayout.CENTER);
+        getContentPane().add(getMainChartPanel(), BorderLayout.CENTER);
 
 //        pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
@@ -402,6 +427,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         JMenu menu3 = new JMenu("View");
         
         /* differents choix de chaque menu */
+        JMenuItem motor = new JMenuItem("Motor");
+        JMenuItem servo = new JMenuItem("Servo");
         JMenuItem debug = new JMenuItem("Debug");
         JMenuItem quit = new JMenuItem("Quit");
         JMenuItem annuler = new JMenuItem("Undo");
@@ -416,6 +443,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menu2.add(copier);
         menu2.add(coller);
         menu3.add(debug);
+        menu3.add(servo);
+        menu3.add(motor);
         
         /* Ajouter les menu sur la bar de menu */
         menubar.add(menu1);
@@ -426,6 +455,23 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         debug.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
+            }
+        });
+        
+       
+        servo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                MwGuiFrame.showServo();
+                
+            }
+        });
+        
+        motor.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+                MwGuiFrame.showMotor();
+            
             }
         });
 
@@ -440,6 +486,27 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         // TODO about multiwii
         return menubar;
     }
+
+    protected static void showServo() {
+        // TODO Auto-generated method stub
+        showServo =true;
+        if (servoFrame==null){
+        servoFrame =   new LogViewerFrame("Servo",MSP.getModel().getDs(),MwSensorClassServo.class);
+       }else{
+           servoFrame.setVisible(true);
+        }
+    }
+    
+    protected static void showMotor() {
+        // TODO Auto-generated method stub
+        showMotor =true;
+        if (motorFrame==null){
+        motorFrame =  new LogViewerFrame("Motor",MSP.getModel().getDs(), MwSensorClassMotor.class);;
+        }else{
+            motorFrame.setVisible(true);
+        }
+        
+        }
 
     // send string
     synchronized private void send(String s) {
