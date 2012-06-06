@@ -32,7 +32,11 @@ import javax.swing.border.EmptyBorder;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
+import eu.kprod.ds.MwSensorClassIMU;
+import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.DebugFrame;
+import eu.kprod.gui.LogViewerFrame;
 import eu.kprod.gui.MwChartFactory;
 import eu.kprod.gui.comboBox.MwJComboBox;
 import eu.kprod.serial.SerialCom;
@@ -130,15 +134,17 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static DebugFrame debugFrame;
     private static boolean showServo;
     private static boolean showMotor;
+    private static LogViewerFrame motorFrame;
+    private static LogViewerFrame servoFrame;
     private ChartPanel chartTrendPanel;
     private JPanel overviewPanel;
     private Properties props;
 
-    private JPanel getOverviewPanel() {
+    private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
             chartTrendPanel = new ChartPanel(MwChartFactory.createChart(MSP
-                    .getModel().getDs()));
+                    .getModel().getDs(),MwSensorClassIMU.class));
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
             overviewPanel = new JPanel();
@@ -235,7 +241,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 //        pane.add(startButton);
 //
 //        getContentPane().add(pane, BorderLayout.NORTH);
-        getContentPane().add(getOverviewPanel(), BorderLayout.CENTER);
+        getContentPane().add(getMainChartPanel(), BorderLayout.CENTER);
 
 //        pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
@@ -434,13 +440,17 @@ public class MwGuiFrame extends JFrame implements SerialListener {
        
         servo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                
                 MwGuiFrame.showServo();
+                
             }
         });
         
         motor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                
                 MwGuiFrame.showMotor();
+            
             }
         });
 
@@ -459,12 +469,23 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     protected static void showServo() {
         // TODO Auto-generated method stub
         showServo =true;
+        if (servoFrame==null){
+        servoFrame =   new LogViewerFrame("Servo",MSP.getModel().getDs(),MwSensorClassServo.class);
+       }else{
+           servoFrame.setVisible(true);
+        }
     }
     
     protected static void showMotor() {
         // TODO Auto-generated method stub
         showMotor =true;
-    }
+        if (motorFrame==null){
+        motorFrame =  new LogViewerFrame("Motor",MSP.getModel().getDs(), MwSensorClassMotor.class);;
+        }else{
+            motorFrame.setVisible(true);
+        }
+        
+        }
 
     // send string
     synchronized private void send(String s) {
