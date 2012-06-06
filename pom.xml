@@ -43,7 +43,7 @@
 				<version>1.0-alpha-2</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>write-project-properties</goal>
 						</goals>
