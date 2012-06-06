@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
-import eu.kprod.MSP;
 import eu.kprod.ds.DSLoadableException;
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwDataSourceImpl;

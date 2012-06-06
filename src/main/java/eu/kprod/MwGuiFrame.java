@@ -106,16 +106,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
 
                 MwGuiFrame frame;
-                try {
+                
                     frame = new MwGuiFrame();
                     MwGuiFrame.serialListener = frame;
 
                     frame.setVisible(true);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    throw new RuntimeException("Failed to load app properties",e);
-                }
+                
 
             }
         });
@@ -177,19 +173,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return overviewPanel;
     }
 
-    public MwGuiFrame() throws IOException {
+    public MwGuiFrame()   {
         super();
 
         
         MSP.setModel(new MwDataModel());
 
         props = new Properties();
-        URL url = ClassLoader.getSystemResource("app.properties");
+        
         try {
+            URL url = ClassLoader.getSystemResource("app.properties");
             props.load(url.openStream());
-        } catch (IOException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+           throw new MwGuiRuntimeException("Failed to load app properties", e);
         }
         
         super.setTitle(props.getProperty("mainframe.title"));
@@ -286,7 +283,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             portNames.add("");
         }
             
-        serialPorts = new MwJComboBox<String>("Serial Port",portNames.toArray());
+        serialPorts = new MwJComboBox<String>("Serial Port",(String[])portNames.toArray());
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
         
@@ -300,7 +297,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
 
         
-        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",SerialRefreshRateStrings.toArray());
+        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",(Integer[])SerialRefreshRateStrings.toArray());
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
@@ -313,7 +310,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
         
         
-        serialRates = new MwJComboBox<Integer>("baud rate", SerialDevice.SerialRateStrings.toArray());
+        serialRates = new MwJComboBox<Integer>("baud rate", (Integer[])SerialDevice.SerialRateStrings.toArray());
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
