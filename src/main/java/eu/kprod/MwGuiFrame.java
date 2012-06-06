@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -283,7 +282,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             portNames.add("");
         }
             
-        serialPorts = new MwJComboBox<String>("Serial Port",(String[])portNames.toArray());
+        serialPorts = new MwJComboBox<String>("Serial Port",portNames.toArray(new String[portNames.size()]));
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
         
@@ -297,7 +296,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
 
         
-        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",(Integer[])SerialRefreshRateStrings.toArray());
+        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",(Integer[])SerialRefreshRateStrings.toArray(new Integer[SerialRefreshRateStrings.size()]));
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
@@ -310,7 +309,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
         
         
-        serialRates = new MwJComboBox<Integer>("baud rate", (Integer[])SerialDevice.SerialRateStrings.toArray());
+        serialRates = new MwJComboBox<Integer>("baud rate", (Integer[])SerialDevice.SerialRateStrings.toArray(new Integer[SerialDevice.SerialRateStrings.size()]));
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
