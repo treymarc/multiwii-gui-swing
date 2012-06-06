@@ -35,8 +35,7 @@ public class LogViewerFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
        
-        ChartPanel chartTrendPanel = new ChartPanel(
-                MwChartFactory.createChart(ds,null));
+        ChartPanel chartTrendPanel = MwChartFactory.createChart(ds,null);
 
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();
@@ -48,8 +47,7 @@ public class LogViewerFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 
-        ChartPanel chartTrendPanel = new ChartPanel(
-                MwChartFactory.createChart(ds, sclass));
+        ChartPanel chartTrendPanel = MwChartFactory.createChart(ds, sclass);
 
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();
@@ -70,8 +68,7 @@ public class LogViewerFrame extends JFrame {
             //TODO get datasource impl
             ds = new MwDataSourceImpl();
         }
-        ChartPanel chartTrendPanel = new ChartPanel(
-                MwChartFactory.createChart(MSP.getModel().getDs(),MwSensorClass.class));
+        ChartPanel chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs(),MwSensorClass.class);
         chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();

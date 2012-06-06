@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
@@ -18,7 +19,7 @@ public final class MwChartFactory {
 
     }
     
-    public static JFreeChart createChart(final MwDataSource ds,Class<? extends MwSensorClass> sclass) {
+    public static ChartPanel createChart(final MwDataSource ds,Class<? extends MwSensorClass> sclass) {
 
         // final XYDataset dataset
 
@@ -26,12 +27,11 @@ public final class MwChartFactory {
                 null, ds.getLatestDataset(sclass), true, true, false);
 
         chart.setBackgroundPaint(Color.white);
-
+        
         final XYPlot plot = chart.getXYPlot();
         plot.setBackgroundPaint(Color.lightGray);
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
-
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 
@@ -47,7 +47,11 @@ public final class MwChartFactory {
         final DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
 
-        return chart;
+        ChartPanel p = new ChartPanel(chart);
+        p.setMouseWheelEnabled(true);
+
+        
+        return p;
 
     }
 
