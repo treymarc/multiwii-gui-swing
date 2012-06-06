@@ -4,7 +4,7 @@
 	<groupId>eu.kprod</groupId>
 	<artifactId>mwgui</artifactId>
 	<version>0.0.1a-SNAPSHOT</version>
-	<description>A Java Swing frontend for multiwii </description>
+	<description>A Java Swing frontend for multiwii</description>
 	<name>MwGui</name>
 	
 	<properties>
