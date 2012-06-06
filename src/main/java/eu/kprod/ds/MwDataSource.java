@@ -14,7 +14,7 @@ public interface MwDataSource {
 
  
 
-    public  XYDataset getLatestDataset() ;
+    public  XYDataset getLatestDataset( Class<? extends MwSensorClass> sclass) ;
 
 //    public  XYDataset getDataset();
 

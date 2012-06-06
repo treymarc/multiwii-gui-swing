@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
@@ -23,8 +24,8 @@ public class MwDataSourceImpl implements MwDataSource {
     
     private Hashtable<MwSensorClass, List<MwDataSourceListener>> listeners = new Hashtable< MwSensorClass,  List<MwDataSourceListener>>();
     
-    private Hashtable<String, TimeSeries> sensors = new Hashtable<String, TimeSeries>();
-    private TimeSeriesCollection dataset;
+    private Hashtable<Class< ? extends MwSensorClass> , Hashtable<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass> , Hashtable<String, TimeSeries>>();
+    private  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>  dataset = new  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>();
     
     private long maxItemAge = 5000;
     private int maxItemCount = 4000;
@@ -36,9 +37,12 @@ public class MwDataSourceImpl implements MwDataSource {
     public void setMaxItemCount(final int maxItemCount1) {       
         if (maxItemCount1>0){
             this.maxItemCount = maxItemCount1;
-            for (String sensorName : sensors.keySet()) {
-                sensors.get(sensorName).setMaximumItemCount(maxItemCount);
-            }
+            for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
+                Hashtable<String, TimeSeries> series = sensors.get(sclass);
+                for (String sensorName : series.keySet()) {
+                    series.get(sensorName).setMaximumItemCount(maxItemCount);
+                }
+            } 
         }
 
     }
@@ -47,16 +51,20 @@ public class MwDataSourceImpl implements MwDataSource {
         return maxItemAge;
     }
 
-    public void setMaxItemAge(final long maxItemAge1) {
+
+    
+    public void setMaxItemAge(final int maxItemAge1) {       
         if (maxItemAge1>0){
             this.maxItemAge = maxItemAge1;
-            for (String sensorName : sensors.keySet()) {
-                sensors.get(sensorName).setMaximumItemAge(maxItemAge);
-            }
+            for (Class< ? extends MwSensorClass> sclass : sensors.keySet()) {
+                Hashtable<String, TimeSeries> series = sensors.get(sclass);
+                for (String sensorName : series.keySet()) {
+                    series.get(sensorName).setMaximumItemAge(maxItemAge);
+                }
+            } 
         }
 
     }
-
 
     /**
      * Creates a dataset.
@@ -64,18 +72,35 @@ public class MwDataSourceImpl implements MwDataSource {
      * @return the dataset.
      */
 
-    public final XYDataset getLatestDataset() {
+    public final XYDataset getLatestDataset(Class<? extends MwSensorClass> sensorClass) {
+     
         if (dataset == null) {
-
-            dataset = new TimeSeriesCollection();
-
-            for (String sensorName : sensors.keySet()) {
-                dataset.addSeries(sensors.get(sensorName));
-            }
-
+            dataset = new  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>();
             // dataset.setDomainIsPointsInTime(true);
         }
-        return dataset;
+        if( sensorClass == null ){
+            return new TimeSeriesCollection();
+        }
+        
+
+       TimeSeriesCollection ts = dataset.get(sensorClass);
+        if (ts ==null){
+            ts = new TimeSeriesCollection();
+            dataset.put(sensorClass,ts);
+        }
+        
+        Hashtable<String, TimeSeries> s = sensors.get(sensorClass);
+        if (s==null){
+            s= new Hashtable<String, TimeSeries> ();
+            sensors.put(sensorClass, s);
+        }
+        for (String sensorName : s.keySet()) {
+            ts.addSeries(  s.get(sensorName));
+            
+        }
+      
+
+        return dataset.get(sensorClass);
 
     }
 
@@ -101,16 +126,31 @@ public class MwDataSourceImpl implements MwDataSource {
 
             } ;
         }
-        TimeSeries timeserie = sensors.get(sensorName);
+        Hashtable<String, TimeSeries> s = sensors.get(sensorClass);
+        if (s==null){
+            s=new Hashtable<String, TimeSeries>();
+            sensors.put(sensorClass, s);
+        }
+        TimeSeriesCollection ts = dataset.get(sensorClass);
+        if (ts ==null){
+            ts = new TimeSeriesCollection();
+            dataset.put(sensorClass,ts);
+            
+        }
+        
+        TimeSeries timeserie = s.get(sensorName);
 
         if (timeserie == null) {
             timeserie = new TimeSeries(sensorName, Millisecond.class);
             timeserie.setMaximumItemCount(maxItemCount);
             timeserie.setMaximumItemAge(maxItemAge );
-            sensors.put(sensorName, timeserie);
-            dataset.addSeries(timeserie);
+            
+            s.put(sensorName, timeserie);
+            ts.addSeries(s.get(sensorName));
+            
         }
 
+        
         try {
             // if the refresh rate is high , we may have multiple answer within the same millis
             timeserie.addOrUpdate(new Millisecond(date), value);
