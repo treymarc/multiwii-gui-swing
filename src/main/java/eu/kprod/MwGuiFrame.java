@@ -143,9 +143,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JButton startButton;
     private JButton stopButton;
 
-    private static JComboBox<String> serialPorts;
-    private static JComboBox<Integer> serialRates;
-    private static JComboBox<Integer> serialRefreshRate;
+    private static MwJComboBox<String> serialPorts;
+    private static MwJComboBox<Integer> serialRates;
+    private static MwJComboBox<Integer> serialRefreshRate;
     
     private static SerialCom com;
     private static SerialListener serialListener;

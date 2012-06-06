@@ -68,7 +68,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     final JTextField textField;
     JButton sendButton;
     JCheckBox autoscrollBox;
-    final JComboBox<String> lineEndings;
+    final MwJComboBox<String> lineEndings;
 
 
     public DebugFrame(final String title,final Integer bdrate) {
