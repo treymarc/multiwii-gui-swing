@@ -19,7 +19,7 @@ public interface MwDataSource {
      * @param sclass SensorClass of the dataset
      * @return the dataset
      */
-    public  XYDataset getDS( Class<? extends MwSensorClass> sclass) ;
+    public  XYDataset getDataSet( Class<? extends MwSensorClass> sclass) ;
 
     /**
      * add a value to a dataset
@@ -34,7 +34,7 @@ public interface MwDataSource {
 
     public void addListener(Class<? extends MwSensorClass> sensor,  MwDataSourceListener listener );
 
-    boolean removeListener(MwSensorClass sensorClass,
+    boolean removeListener(Class<? extends MwSensorClass> sensorClass,
             MwDataSourceListener newListener);
 
     /**

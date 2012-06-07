@@ -3,7 +3,6 @@ package eu.kprod.gui;
 import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartPanel;
 
 import eu.kprod.ds.DSLoadableException;
 import eu.kprod.ds.MwDataSource;
@@ -20,6 +19,9 @@ public class LogViewerFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger
             .getLogger(LogViewerFrame.class);
+    private MwDataSource refDs;
+    private Class<? extends MwSensorClass> refsclass;
+    private MwChartPanel chartTrendPanel;
 
     private final void frameSetDefaultPosition(){
         // TODO , get last frame position
@@ -33,10 +35,11 @@ public class LogViewerFrame extends JFrame {
     public LogViewerFrame(String name,MwDataSource ds, Class<? extends MwSensorClass> sclass) {
         // TODO Auto-generated constructor stub
         super(name);
-        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-
-        MwChartPanel chartTrendPanel = MwChartFactory.createChart(ds.getDS(sclass));
+        refDs = ds;
+        refsclass =sclass;
+        chartTrendPanel = MwChartFactory.createChart(ds.getDataSet(sclass));
         ds.addListener(sclass, chartTrendPanel);
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();
@@ -55,12 +58,21 @@ public class LogViewerFrame extends JFrame {
             LOGGER.error("Can not open log file : " + name);
             e.printStackTrace();
             //TODO get datasource impl
-            ds = new MwDataSourceImpl();
+            ds = new MwDataSourceImpl();  
         }
-        ChartPanel chartTrendPanel = MwChartFactory.createChart(ds.getDS(MwSensorClass.class));
+        refDs = ds;
+        chartTrendPanel = MwChartFactory.createChart(ds.getDataSet(MwSensorClass.class));
         chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();
+    }
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        if (refDs!=null){
+            refDs.removeListener(refsclass, chartTrendPanel);
+        }
+        super.dispose();
     }
 
 }

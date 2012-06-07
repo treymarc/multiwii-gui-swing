@@ -204,22 +204,22 @@ public class MSP {
                 // }
                 break;
             case RAW_IMU:
-                getModel().getDs().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
-                getModel().getDs().put(d, "ay", Double.valueOf(read16()),MwSensorClassIMU.class);
-                getModel().getDs().put(d, "az", Double.valueOf(read16()),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "ay", Double.valueOf(read16()),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "az", Double.valueOf(read16()),MwSensorClassIMU.class);
 
-                getModel().getDs().put(d, "gx", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
-                getModel().getDs().put(d, "gy", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
-                getModel().getDs().put(d, "gz", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "gx", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "gy", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "gz", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
 
-                getModel().getDs().put(d, "magx", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
-                getModel().getDs().put(d, "magy", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
-                getModel().getDs().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "magx", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "magy", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                getModel().getRealTimeData().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
                 break;
             case SERVO:
                 // for(i=0;i<8;i++) servo[i] = read16();
                 for(int i=0;i<8;i++){
-                    getModel().getDs().put(d, new StringBuffer().append("servo").append(i).toString(), 
+                    getModel().getRealTimeData().put(d, new StringBuffer().append("servo").append(i).toString(), 
                             Double.valueOf(read16()),
                             MwSensorClassServo.class);
                 }
@@ -227,7 +227,7 @@ public class MSP {
             case MOTOR:
                 // for(i=0;i<8;i++) mot[i] = read16();
                 for(int i=0;i<8;i++){
-                    getModel().getDs().put(d, new StringBuffer().append("mot").append(i).toString(),
+                    getModel().getRealTimeData().put(d, new StringBuffer().append("mot").append(i).toString(),
                             Double.valueOf(read16()),
                             MwSensorClassMotor.class);
                 }
