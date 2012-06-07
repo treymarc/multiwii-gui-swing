@@ -4,7 +4,7 @@ import javax.swing.JComboBox;
 
 
 
-public class MwJComboBox<E> extends JComboBox<E>{
+public class MwJComboBox<E> extends JComboBox {
 
     public MwJComboBox(String name, E[] array) {
         // TODO Auto-generated constructor stub
