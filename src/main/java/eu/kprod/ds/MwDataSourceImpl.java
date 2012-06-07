@@ -71,7 +71,7 @@ public class MwDataSourceImpl implements MwDataSource {
      * @return the dataset.
      */
 
-    public final XYDataset getLatestDataset(Class<? extends MwSensorClass> sensorClass) {
+    public final XYDataset getDS(Class<? extends MwSensorClass> sensorClass) {
      
         if (dataset == null) {
             dataset = new  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>();
@@ -188,6 +188,7 @@ public class MwDataSourceImpl implements MwDataSource {
     }
     
 
+//TODO call removeListener
     @Override
     public boolean removeListener(MwSensorClass sensorClass, MwDataSourceListener deadListener) {
         if (sensorClass !=null && deadListener != null ){

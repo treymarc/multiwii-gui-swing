@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +31,7 @@ import javax.swing.border.EmptyBorder;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;
 
+import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
@@ -160,7 +160,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs(),MwSensorClassIMU.class);
+            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs().getDS(MwSensorClassIMU.class));
+            MSP.getModel().getDs().addListener(MwSensorClassIMU.class, (MwDataSourceListener)chartTrendPanel);
+            
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
             overviewPanel = new JPanel();
@@ -283,7 +285,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             portNames.add("");
         }
             
-        serialPorts = new MwJComboBox<String>("Serial Port",(String[])portNames.toArray());
+        serialPorts = new MwJComboBox<String>("Serial Port",portNames.toArray(new String[portNames.size()]));
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
         
@@ -297,7 +299,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
 
         
-        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",(Integer[])SerialRefreshRateStrings.toArray());
+        serialRefreshRate = new MwJComboBox<Integer>("Refresh rate (hz)",(Integer[])SerialRefreshRateStrings.toArray(new Integer[SerialRefreshRateStrings.size()]));
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
@@ -310,7 +312,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
         
         
-        serialRates = new MwJComboBox<Integer>("baud rate", (Integer[])SerialDevice.SerialRateStrings.toArray());
+        serialRates = new MwJComboBox<Integer>("baud rate", (Integer[])SerialDevice.SerialRateStrings.toArray(new Integer[SerialDevice.SerialRateStrings.size()]));
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -488,22 +490,23 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         // TODO Auto-generated method stub
         showServo =true;
         if (servoFrame==null){
-        servoFrame =   new LogViewerFrame("Servo",MSP.getModel().getDs(),MwSensorClassServo.class);
-       }else{
-           servoFrame.setVisible(true);
+            servoFrame =   new LogViewerFrame("Servo", MSP.getModel().getDs(), MwSensorClassServo.class);
+        }else{
+            servoFrame.setVisible(true);
         }
     }
-    
+
     protected static void showMotor() {
         // TODO Auto-generated method stub
         showMotor =true;
         if (motorFrame==null){
-        motorFrame =  new LogViewerFrame("Motor",MSP.getModel().getDs(), MwSensorClassMotor.class);;
+            motorFrame =  new LogViewerFrame("Motor", MSP.getModel().getDs() ,MwSensorClassMotor.class);
+
         }else{
             motorFrame.setVisible(true);
         }
-        
-        }
+
+    }
 
     // send string
     synchronized private void send(String s) {
