@@ -160,8 +160,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getDs().getDS(MwSensorClassIMU.class));
-            MSP.getModel().getDs().addListener(MwSensorClassIMU.class, (MwDataSourceListener)chartTrendPanel);
+            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getRealTimeData().getDataSet(MwSensorClassIMU.class));
+            MSP.getModel().getRealTimeData().addListener(MwSensorClassIMU.class, (MwDataSourceListener)chartTrendPanel);
             
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
@@ -490,7 +490,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         // TODO Auto-generated method stub
         showServo =true;
         if (servoFrame==null){
-            servoFrame =   new LogViewerFrame("Servo", MSP.getModel().getDs(), MwSensorClassServo.class);
+            servoFrame =   new LogViewerFrame("Servo", MSP.getModel().getRealTimeData(), MwSensorClassServo.class);
         }else{
             servoFrame.setVisible(true);
         }
@@ -500,7 +500,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         // TODO Auto-generated method stub
         showMotor =true;
         if (motorFrame==null){
-            motorFrame =  new LogViewerFrame("Motor", MSP.getModel().getDs() ,MwSensorClassMotor.class);
+            motorFrame =  new LogViewerFrame("Motor", MSP.getModel().getRealTimeData() ,MwSensorClassMotor.class);
 
         }else{
             motorFrame.setVisible(true);

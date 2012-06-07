@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYDataset;
 
@@ -31,25 +33,19 @@ public final class MwChartFactory {
         plot.setRangeGridlinePaint(Color.white);
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
-
-        // final XYItemRenderer renderer = plot.getRenderer();
-        // if (renderer instanceof XYItemRenderer) {
-        // final XYItemRenderer rr = (XYItemRenderer) renderer;
-        //
-        // // rr.setBaseItemLabelsVisible(true );
-        // // rr.setItemLabelsVisible(true);
-        //
-        // }
-
+        
+        
         final DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
 
+        // force integer display
+        ValueAxis va = (ValueAxis) plot.getRangeAxis();
+        va.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); 
         MwChartPanel chartPanel = new MwChartPanel(chart);
         chartPanel.setMouseWheelEnabled(false);
         chartPanel.setDomainZoomable(false);
         chartPanel.setRangeZoomable(false);
-
-        
+    
         return chartPanel;
 
     }

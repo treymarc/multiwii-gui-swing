@@ -11,7 +11,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
 /**
- * 
+ * A pojo implementation of a datasource for holding severals dataset of sensors
+ *
  * @author treym
  *
  */
@@ -21,10 +22,12 @@ public class MwDataSourceImpl implements MwDataSource {
     // TODO impl factory
 //    private MwDataSourceImpl(){}
     
+    
     private Hashtable< Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable< Class<? extends MwSensorClass>,  List<MwDataSourceListener>>();
     
     private Hashtable<Class< ? extends MwSensorClass> , Hashtable<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass> , Hashtable<String, TimeSeries>>();
     private  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>  dataset = new  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>();
+    
     
     private long maxItemAge = 5000;
     private int maxItemCount = 4000;
@@ -32,7 +35,8 @@ public class MwDataSourceImpl implements MwDataSource {
     public int getMaxItemCount() {
         return maxItemCount;
     }
-
+ // TODO set max ages counts for each dataset not all
+    
     public void setMaxItemCount(final int maxItemCount1) {       
         if (maxItemCount1>0){
             this.maxItemCount = maxItemCount1;
@@ -43,13 +47,11 @@ public class MwDataSourceImpl implements MwDataSource {
                 }
             } 
         }
-
     }
 
     public long getMaxItemAge() {
         return maxItemAge;
     }
-
 
     
     public void setMaxItemAge(final int maxItemAge1) {       
@@ -71,7 +73,7 @@ public class MwDataSourceImpl implements MwDataSource {
      * @return the dataset.
      */
 
-    public final XYDataset getDS(Class<? extends MwSensorClass> sensorClass) {
+    public final XYDataset getDataSet(Class<? extends MwSensorClass> sensorClass) {
      
         if (dataset == null) {
             dataset = new  Hashtable<Class< ? extends MwSensorClass>, TimeSeriesCollection>();
@@ -188,9 +190,8 @@ public class MwDataSourceImpl implements MwDataSource {
     }
     
 
-//TODO call removeListener
     @Override
-    public boolean removeListener(MwSensorClass sensorClass, MwDataSourceListener deadListener) {
+    public boolean removeListener(Class<? extends MwSensorClass> sensorClass, MwDataSourceListener deadListener) {
         if (sensorClass !=null && deadListener != null ){
            
             List<MwDataSourceListener> listenersl = listeners.get(sensorClass);

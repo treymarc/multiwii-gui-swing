@@ -94,7 +94,7 @@ public class MwDataModel {
         super();
     }
 
-    synchronized public MwDataSource getDs() {
+    synchronized public MwDataSource getRealTimeData() {
         return ds;
     }
 
