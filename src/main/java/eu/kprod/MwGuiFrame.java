@@ -48,12 +48,12 @@ import gnu.io.CommPortIdentifier;
 /**
  * Know issues
  * 
- * - when zooming the chart : news values are still recorded 
- *  so due to the dataSource maxItemcounts and AgeLimite , 
- *  the chart gets emptied at the zoomed date
+ * - when zooming the chart : news values are still recorded so due to the
+ * dataSource maxItemcounts and AgeLimite , the chart gets emptied at the zoomed
+ * date
  * 
  * @author treym
- *
+ * 
  */
 public class MwGuiFrame extends JFrame implements SerialListener {
 
@@ -67,15 +67,15 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         public void run() {
             try {
-             // TODO do no send all requests at the same time
-             
+                // TODO do no send all requests at the same time
+
                 // TODO attitude panel
                 // requestMSP(MSP.ATTITUDE);
-                
-                if (showMotor){
+
+                if (showMotor) {
                     send(MSP.request(MSP.MOTOR));
                 }
-                if (showServo){
+                if (showServo) {
                     send(MSP.request(MSP.SERVO));
                 }
                 send(MSP.request(MSP.RAW_IMU));
@@ -93,11 +93,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
      */
     public static void main(String[] args) {
 
-
-        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-              
+
                 if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
                     System.setProperty("apple.laf.useScreenMenuBar", "true");
                 }
@@ -105,12 +103,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
 
                 MwGuiFrame frame;
-                
-                    frame = new MwGuiFrame();
-                    MwGuiFrame.serialListener = frame;
 
-                    frame.setVisible(true);
-                
+                frame = new MwGuiFrame();
+                MwGuiFrame.serialListener = frame;
+
+                frame.setVisible(true);
 
             }
         });
@@ -134,14 +131,14 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         return Collections.unmodifiableList(m);
     }
-    
+
     private JButton startButton;
     private JButton stopButton;
 
     private static JComboBox serialPorts;
     private static JComboBox serialRates;
     private static JComboBox serialRefreshRate;
-    
+
     private static SerialCom com;
     private static SerialListener serialListener;
 
@@ -159,9 +156,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JPanel getMainChartPanel() {
 
         if (overviewPanel == null) {
-            chartTrendPanel = MwChartFactory.createChart(MSP.getModel().getRealTimeData().getDataSet(MwSensorClassIMU.class));
-            MSP.getModel().getRealTimeData().addListener(MwSensorClassIMU.class, (MwDataSourceListener)chartTrendPanel);
-            
+            chartTrendPanel = MwChartFactory.createChart(MSP.getModel()
+                    .getRealTimeData().getDataSet(MwSensorClassIMU.class));
+            MSP.getModel()
+                    .getRealTimeData()
+                    .addListener(MwSensorClassIMU.class,
+                            (MwDataSourceListener) chartTrendPanel);
+
             chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 
             overviewPanel = new JPanel();
@@ -174,22 +175,21 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return overviewPanel;
     }
 
-    public MwGuiFrame()   {
+    public MwGuiFrame() {
         super();
 
-        
         MSP.setModel(new MwDataModel());
 
         props = new Properties();
-        
+
         try {
             URL url = ClassLoader.getSystemResource("app.properties");
             props.load(url.openStream());
         } catch (Exception e) {
             // TODO Auto-generated catch block
-           throw new MwGuiRuntimeException("Failed to load app properties", e);
+            throw new MwGuiRuntimeException("Failed to load app properties", e);
         }
-        
+
         super.setTitle(props.getProperty("mainframe.title"));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -213,8 +213,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         getContentPane().setLayout(new BorderLayout());
 
-
-        startButton = new JButton(("Start"));  
+        startButton = new JButton(("Start"));
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 logger.trace("actionPerformed "
@@ -222,20 +221,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
                 boolean openCom = false;
                 try {
-                   if (! getCom().isOpen()){
-                       openCom = true;
-                   }
-                        
+                    if (!getCom().isOpen()) {
+                        openCom = true;
+                    }
+
                 } catch (SerialException e1) {
 
                     openCom = true;
-                }finally{
-                    if ( openCom ){
+                } finally {
+                    if (openCom) {
                         openSerialPort();
                     }
                 }
-               restartTimer();
-               chartTrendPanel.restoreAutoBounds();
+                restartTimer();
+                chartTrendPanel.restoreAutoBounds();
             }
         });
 
@@ -244,47 +243,49 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             public void actionPerformed(ActionEvent e) {
                 logger.trace("actionPerformed "
                         + e.getSource().getClass().getName());
-               stopTimer();
+                stopTimer();
             }
         });
-
 
         getContentPane().add(getMainChartPanel(), BorderLayout.CENTER);
-  
+
         JPanel pane = new JPanel();
-        pane.setLayout(new FlowLayout( FlowLayout.LEADING));
+        pane.setLayout(new FlowLayout(FlowLayout.LEADING));
         pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
-
         List<String> list = getPortNameList();
-        serialPorts = new MwJComboBox("Serial Port",list.toArray(new String[list.size()]));
+        serialPorts = new MwJComboBox("Serial Port",
+                list.toArray(new String[list.size()]));
         serialPorts.setMaximumSize(serialPorts.getMinimumSize());
         serialPorts.setSelectedIndex(0);
-        
+
         serialPorts.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-//                logger.trace("actionPerformed "
-//                        + event.getSource().getClass().getName());
-               openSerialPort();
+                // logger.trace("actionPerformed "
+                // + event.getSource().getClass().getName());
+                openSerialPort();
 
             }
         });
-        
-        
-        serialRefreshRate = new MwJComboBox("Refresh rate (hz)",(Integer[])SerialRefreshRateStrings.toArray(new Integer[SerialRefreshRateStrings.size()]));
+
+        serialRefreshRate = new MwJComboBox("Refresh rate (hz)",
+                (Integer[]) SerialRefreshRateStrings
+                        .toArray(new Integer[SerialRefreshRateStrings.size()]));
         serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
         serialRefreshRate.setSelectedIndex(3);
         serialRefreshRate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                if( timer != null){
+                if (timer != null) {
                     restartTimer();
                 }
 
             }
         });
-        
-        
-        serialRates = new MwJComboBox("baud rate", (Integer[])SerialDevice.SerialRateStrings.toArray(new Integer[SerialDevice.SerialRateStrings.size()]));
+
+        serialRates = new MwJComboBox("baud rate",
+                (Integer[]) SerialDevice.SerialRateStrings
+                        .toArray(new Integer[SerialDevice.SerialRateStrings
+                                .size()]));
         serialRates.setSelectedIndex(10);
         serialRates.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -309,17 +310,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         serialRates.setMaximumSize(serialRates.getMinimumSize());
 
-        
-        pane.add(stopButton,  FlowLayout.LEFT);
-        //pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
+        pane.add(stopButton, FlowLayout.LEFT);
+        // pane.add(Box.createRigidArea(new Dimension(1, 0)),
+        // BorderLayout.WEST);
         pane.add(startButton, FlowLayout.LEFT);
-//        pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
-        pane.add(serialPorts,  FlowLayout.LEFT);
-//        pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
+        // pane.add(Box.createRigidArea(new Dimension(1, 0)),
+        // BorderLayout.WEST);
+        pane.add(serialPorts, FlowLayout.LEFT);
+        // pane.add(Box.createRigidArea(new Dimension(1, 0)),
+        // BorderLayout.WEST);
         pane.add(serialRates, FlowLayout.LEFT);
-//        pane.add(Box.createRigidArea(new Dimension(1, 0)), BorderLayout.WEST);
-        pane.add(serialRefreshRate,  FlowLayout.LEFT);
-        
+        // pane.add(Box.createRigidArea(new Dimension(1, 0)),
+        // BorderLayout.WEST);
+        pane.add(serialRefreshRate, FlowLayout.LEFT);
+
         getContentPane().add(pane, BorderLayout.SOUTH);
 
         pack();
@@ -330,17 +334,16 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             timer.cancel();
             timer.purge();
         }
-        timer =null;
-        
+        timer = null;
+
     }
 
     private List<String> getPortNameList() {
         List<String> portNames = new ArrayList<String>();
 
-        
         for (@SuppressWarnings("unchecked")
         Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier
-        .getPortIdentifiers(); enumeration.hasMoreElements();) {
+                .getPortIdentifiers(); enumeration.hasMoreElements();) {
             CommPortIdentifier commportidentifier = enumeration.nextElement();
 
             if (commportidentifier.getPortType() == CommPortIdentifier.PORT_SERIAL) {
@@ -349,7 +352,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         }
 
-        if (portNames.size()==0) {
+        if (portNames.size() == 0) {
             portNames.add("");
         }
         return portNames;
@@ -361,9 +364,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         try {
             if (serialPorts.getSelectedItem() != null
                     && serialRates.getSelectedItem() != null) {
-                com = new SerialCom(serialPorts.getSelectedItem()
-                        .toString(), (Integer) serialRates
-                        .getSelectedItem());
+                com = new SerialCom(serialPorts.getSelectedItem().toString(),
+                        (Integer) serialRates.getSelectedItem());
 
                 com.openSerialPort();
                 com.setListener(MwGuiFrame.getInstance());
@@ -373,19 +375,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         } catch (SerialException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     protected void restartTimer() {
         if (timer != null) {
             timer.cancel();
-             timer.purge();
+            timer.purge();
 
         }
         timer = new Timer();
 
-        timer.schedule(new SerialTimeOut(), 10, 1000/(Integer)serialRefreshRate.getSelectedItem());
-        
+        timer.schedule(new SerialTimeOut(), 10,
+                1000 / (Integer) serialRefreshRate.getSelectedItem());
+
     }
 
     public static SerialListener getInstance() {
@@ -394,15 +397,16 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     public static DebugFrame getDebugFrame() {
         if (debugFrame == null) {
-            debugFrame = new DebugFrame("Debug serial",(Integer)serialRates.getSelectedItem());
+            debugFrame = new DebugFrame("Debug serial",
+                    (Integer) serialRates.getSelectedItem());
         }
         return debugFrame;
     }
 
     protected static void showDebugFrame() {
         getDebugFrame().setVisible(true);
-         getDebugFrame().repaint();
-        
+        getDebugFrame().repaint();
+
     }
 
     public static void closeDebugFrame() {
@@ -413,7 +417,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     }
 
     public static SerialCom getCom() throws SerialException {
-        if (com == null){
+        if (com == null) {
             throw new SerialException("Serial Com is nul");
         }
         return com;
@@ -426,7 +430,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         JMenu menu2 = new JMenu("Edit");
         JMenu menu3 = new JMenu("View");
         JMenu menu4 = new JMenu("Serial");
-        
+
         /* differents choix de chaque menu */
         JMenuItem motor = new JMenuItem("Motor");
         JMenuItem servo = new JMenuItem("Servo");
@@ -439,7 +443,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         // JMenuItem openLog = new JMenuItem("Open");
 
-        /* Ajouter les choix au menu */ 
+        /* Ajouter les choix au menu */
         menu1.add(quit);
         menu2.add(annuler);
         menu2.add(copier);
@@ -453,38 +457,37 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menubar.add(menu2);
         menubar.add(menu3);
         menubar.add(menu4);
-        
+
         /* clic sur le choix Démarrer du menu fichier */
         debugSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
             }
         });
-        
-       
+
         servo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
+
                 MwGuiFrame.showServo();
-                
+
             }
         });
-        
+
         motor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
+
                 MwGuiFrame.showMotor();
-            
+
             }
         });
 
         rescanSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeSerialPort();
-               rescanSerial();
+                rescanSerial();
             }
         });
-        
+
         /* clic sur le choix Fin du menu fichier */
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -500,30 +503,33 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     protected void rescanSerial() {
         // TODO Auto-generated method stub
         serialPorts.removeAllItems();
-        
-        serialPorts.setModel( new DefaultComboBoxModel(getPortNameList().toArray())); 
-        serialPorts.setSize(10,100);
+
+        serialPorts.setModel(new DefaultComboBoxModel(getPortNameList()
+                .toArray()));
+        serialPorts.setSize(10, 100);
         serialPorts.revalidate();
         serialPorts.repaint();
     }
 
     protected static void showServo() {
         // TODO Auto-generated method stub
-        showServo =true;
-        if (servoFrame==null){
-            servoFrame =   new LogViewerFrame("Servo", MSP.getModel().getRealTimeData(), MwSensorClassServo.class);
-        }else{
+        showServo = true;
+        if (servoFrame == null) {
+            servoFrame = new LogViewerFrame("Servo", MSP.getModel()
+                    .getRealTimeData(), MwSensorClassServo.class);
+        } else {
             servoFrame.setVisible(true);
         }
     }
 
     protected static void showMotor() {
         // TODO Auto-generated method stub
-        showMotor =true;
-        if (motorFrame==null){
-            motorFrame =  new LogViewerFrame("Motor", MSP.getModel().getRealTimeData() ,MwSensorClassMotor.class);
+        showMotor = true;
+        if (motorFrame == null) {
+            motorFrame = new LogViewerFrame("Motor", MSP.getModel()
+                    .getRealTimeData(), MwSensorClassMotor.class);
 
-        }else{
+        } else {
             motorFrame.setVisible(true);
         }
 
@@ -532,9 +538,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     // send string
     synchronized private void send(String s) throws SerialException {
         if (com != null) {
-            
-                com.send(s, 0 /* lineEndings.getSelectedIndex() */);
-            
+
+            com.send(s, 0 /* lineEndings.getSelectedIndex() */);
+
         }
     }
 
@@ -557,16 +563,17 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
     }
 
-    public static void setSerialRate(Integer selectedItem) throws SerialException {
+    public static void setSerialRate(Integer selectedItem)
+            throws SerialException {
         serialRates.setSelectedItem(selectedItem);
         getCom().setSerialRate(selectedItem);
     }
 
     public static void closeSerialPort() {
-        if (com !=null){
+        if (com != null) {
             com.closeSerialPort();
         }
-        com =null;
+        com = null;
     }
 
     @Override
@@ -576,12 +583,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             public void run() {
 
                 stopTimer();
-//              rescanSerial();
-              closeSerialPort();
-//              JOptionPane.showMessageDialog(null, "Serial Com Error , you should restart");
+                // rescanSerial();
+                closeSerialPort();
+                // JOptionPane.showMessageDialog(null,
+                // "Serial Com Error , you should restart");
 
             }
         });
-           }
+    }
 
 }

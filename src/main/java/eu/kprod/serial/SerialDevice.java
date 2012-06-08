@@ -198,51 +198,35 @@ public class SerialDevice implements SerialPortEventListener {
         return listener;
     }
 
-    public final synchronized void serialEvent(final SerialPortEvent serialEvent){
+    public final synchronized void serialEvent(final SerialPortEvent serialEvent) {
         // logger.debug("serial port event");
 
         if (serialEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-            // System.out.println("data available");
-            // System.err.flush();
             try {
+
                 while (input.available() > 0) {
-                    // if (input.available() > 0) {
-                    // serial = input.read();
-                    // serialEvent();
-                    // buffer[bufferCount++] = (byte) serial;
                     synchronized (buffer) {
                         if (bufferLast == buffer.length) {
                             byte[] temp = new byte[bufferLast << 1];
                             System.arraycopy(buffer, 0, temp, 0, bufferLast);
                             buffer = temp;
                         }
-                        // buffer[bufferLast++] = (byte) input.read();
-
-                        // if(monitor == true)
-                        // System.out.print((char) input.read());
-
                         listener.readSerialByte((byte) input.read());
-
-                        /*
-                         * logger.trace(input.available() + " " + ((char)
-                         * buffer[bufferLast-1]));
-                         */// }
                     }
+
                 }
-                // System.out.println("no more");
 
             } catch (Exception e) {
-                //reportErrorMessage("serialEvent", null,e); cannot throw here
                 listener.reportSerial(e);
             }
         }
-        // System.out.println("out of");
-        // logger.trace("out of event " + serialEvent.getEventType());
+
     }
 
     /**
      * Returns the number of bytes that have been read from serial and are
      * waiting to be dealt with by the user.
+     * 
      * @return he number of bytes
      */
     public final int available() {
@@ -309,7 +293,7 @@ public class SerialDevice implements SerialPortEventListener {
      * Grab whatever is in the serial buffer, and stuff it into a byte buffer
      * passed in by the user. This is more memory/time efficient than
      * readBytes() returning a byte[] array.
-     *
+     * 
      * Returns an int for how many bytes were read. If more bytes are available
      * than can fit into the byte array, only those that will fit are read.
      */
@@ -363,7 +347,7 @@ public class SerialDevice implements SerialPortEventListener {
      * Reads from the serial port into a buffer of bytes until a particular
      * character. If the character isn't in the serial buffer, then 'null' is
      * returned.
-     *
+     * 
      * If outgoing[] is not big enough, then -1 is returned, and an error
      * message is printed on the console. If nothing is in the buffer, zero is
      * returned. If 'interesting' byte is not in the buffer, then 0 is returned.
@@ -434,34 +418,41 @@ public class SerialDevice implements SerialPortEventListener {
 
     /**
      * This will handle both ints, bytes and chars transparently.
-     * @throws SerialException 
+     * 
+     * @throws SerialException
      */
-    public final void write(final int what) throws SerialException { // will also cover char
+    public final void write(final int what) throws SerialException { // will
+                                                                     // also
+                                                                     // cover
+                                                                     // char
         try {
             if (output == null) {
-                reportErrorMessage("write","failed to write to output stream ",new SerialException());
+                reportErrorMessage("write",
+                        "failed to write to output stream ",
+                        new SerialException());
             }
             output.write(what & 0xff); // for good measure do the &
             output.flush(); // hmm, not sure if a good idea
 
         } catch (Exception e) {
-           // close();
-            reportErrorMessage("write","failed to write to output stream ",e);
+            // close();
+            reportErrorMessage("write", "failed to write to output stream ", e);
         }
     }
 
     public final void write(final byte[] bytes) throws SerialException {
         try {
             if (output == null) {
-                reportErrorMessage("write","failed to write to output stream ",null);
+                reportErrorMessage("write",
+                        "failed to write to output stream ", null);
             }
-            
+
             output.write(bytes);
             output.flush(); // hmm, not sure if a good idea
 
         } catch (Exception e) {
-          //  close();
-            reportErrorMessage("write","failed to write to output stream ",e);
+            // close();
+            reportErrorMessage("write", "failed to write to output stream ", e);
         }
     }
 
@@ -471,14 +462,14 @@ public class SerialDevice implements SerialPortEventListener {
      * you mean to send a byte buffer (most often the case for networking and
      * serial i/o) and will only use the bottom 8 bits of each char in the
      * string. (Meaning that internally it uses String.getBytes)
-     *
+     * 
      * If you want to move Unicode data, you can first convert the String to a
      * byte stream in the representation of your choice (i.e. UTF8 or two-byte
      * Unicode data), and send it as a byte array.
-     * @throws SerialException 
+     * 
+     * @throws SerialException
      */
     public final void write(final String what) throws SerialException {
-       
 
         try {
             write(what.getBytes("ISO-8859-1"));
@@ -501,21 +492,15 @@ public class SerialDevice implements SerialPortEventListener {
     /**
      * General error reporting, all corraled here just in case I think of
      * something slightly more intelligent to do.
-     * @param msg 
-     * @throws SerialException 
+     * 
+     * @param msg
+     * @throws SerialException
      */
-    public  final void reportErrorMessage(final String where, String msg, final Throwable e)   {
+    public final void reportErrorMessage(final String where, String msg,
+            final Throwable e) {
         LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
-       
-        
+
         listener.reportSerial(e);
-        
     }
-
-    public static final void addListener(List<SerialListener> listener2) {
-        if (listener2 != null)
-            listener2.addAll(listener2);
-    }
-
 
 }

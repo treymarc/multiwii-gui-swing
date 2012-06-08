@@ -74,8 +74,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     JCheckBox autoscrollBox;
     final JComboBox<String> lineEndings;
 
-
-    public DebugFrame(final String title,final Integer bdrate) {
+    public DebugFrame(final String title, final Integer bdrate) {
         super(title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -94,7 +93,6 @@ public class DebugFrame extends JFrame implements SerialListener {
         textArea = new JTextArea(16, 40);
         textArea.setDocument(new RollingDocument(textArea));
 
-
         textArea.setEditable(false);
 
         // don't automatically update the caret. that way we can manually decide
@@ -104,12 +102,12 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
-        lineEndings = new MwJComboBox("line Ending",new String[] { ("No line ending"),
-                ("Newline"), ("Carriage return"), ("Both NL & CR") });
+        lineEndings = new MwJComboBox("line Ending", new String[] {
+                ("No line ending"), ("Newline"), ("Carriage return"),
+                ("Both NL & CR") });
         lineEndings.setSelectedIndex(0);
         lineEndings.setMaximumSize(lineEndings.getMinimumSize());
 
-      
         scrollPane = new JScrollPane(textArea);
 
         getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -166,7 +164,6 @@ public class DebugFrame extends JFrame implements SerialListener {
         pane.add(Box.createHorizontalGlue());
         pane.add(lineEndings);
 
-
         getContentPane().add(pane, BorderLayout.SOUTH);
 
         pack();
@@ -187,7 +184,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     @Override
     public void reportSerial(Throwable e) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

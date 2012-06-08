@@ -2,9 +2,7 @@ package eu.kprod.gui.comboBox;
 
 import javax.swing.JComboBox;
 
-
-
-public class MwJComboBox extends JComboBox{
+public class MwJComboBox extends JComboBox {
 
     public MwJComboBox(String name, Object[] array) {
         // TODO Auto-generated constructor stub

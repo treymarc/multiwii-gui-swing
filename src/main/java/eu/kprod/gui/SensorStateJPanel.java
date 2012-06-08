@@ -28,7 +28,7 @@ public class SensorStateJPanel extends JPanel {
     }
 
     /**
-     *
+     * 
      * @param value
      */
     public void setHydro(final double value) {
@@ -38,7 +38,7 @@ public class SensorStateJPanel extends JPanel {
     }
 
     /**
-     *
+     * 
      * @param value
      */
     public void setTemp(final double value) {
