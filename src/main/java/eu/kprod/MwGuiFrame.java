@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
@@ -312,12 +313,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     protected void openSerialPort() {
 
         closeSerialPort();
-        if (portNameMenuGroup.getSelection() == null){
+        if (portNameMenuGroup.getSelection() == null) {
+            JOptionPane.showMessageDialog(this, "No serial port selected");
             return;
         }
+        
         try {
-
-            
+      
             String portname = (String) (portNameMenuGroup.getSelection().getActionCommand());
       
             if (portname != null ) {
@@ -342,10 +344,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         }
         timer = new Timer();
-
-        timer.schedule(new SerialTimeOut(), 10,
-                1000 / rate);
-
+        timer.schedule(new SerialTimeOut(), 10, 1000 / rate);
     }
 
     public static SerialListener getInstance() {
@@ -415,13 +414,14 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menu4.addSeparator();
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
-        /* Ajouter les menu sur la bar de menu */
+        
+        /* Ajouter les menus  */
         menubar.add(menu1);
         menubar.add(menu2);
         menubar.add(menu3);
         menubar.add(menu4);
 
-        /* clic sur le choix Démarrer du menu fichier */
+
         debugSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
@@ -451,7 +451,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         });
 
-        /* clic sur le choix Fin du menu fichier */
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeSerialPort();
@@ -464,9 +463,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     }
 
     private JMenuItem getSerialBaudAsMenuItem() {
-        
-        
-        // TODO Auto-generated method stub
         JMenu m = new JMenu("Baud");
         baudRateMenuGroup = new ButtonGroup(  );
         for (Integer p :  SerialDevice.SerialRateStrings){
@@ -489,8 +485,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                                 com.openSerialPort();
                                 com.setListener(MwGuiFrame.serialListener);
                                }
-                            }
-                           
+                            } 
                         
                     } catch (SerialException e) {
                         e.printStackTrace();
@@ -511,11 +506,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         // TODO Auto-generated method stub
         if (serialMenuPort == null){
             JMenu m = new JMenu("Port");
-
             serialMenuPort =m;
         }else{
             serialMenuPort.removeAll();
         }
+        
         portNameMenuGroup = new ButtonGroup( );
         for (String p : getPortNameList()){
             JMenuItem sm = new JRadioButtonMenuItem(p);
@@ -556,9 +551,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
      */
     synchronized private void send(String s) throws SerialException {
         if (com != null) {
-
             com.send(s, 0 /* lineEndings.getSelectedIndex() */);
-
         }
     }
 
@@ -580,12 +573,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         });
     }
-//
-//    public static void setSerialRate(Integer selectedItem)
-//            throws SerialException {
-//
-//        getCom().setSerialRate(selectedItem);
-//    }
+
 
     public static void closeSerialPort() {
         if (com != null) {
