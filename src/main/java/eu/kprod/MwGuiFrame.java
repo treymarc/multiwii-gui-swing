@@ -136,8 +136,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     }
 
 
-//    private static JComboBox serialRefreshRate;
-
     private static SerialCom com;
     private static SerialListener serialListener;
 
@@ -222,7 +220,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             overviewPanel.setLayout(new BorderLayout());
             overviewPanel.add(chartTrendPanel, BorderLayout.CENTER);
 
-           
             
             JPanel pane = new JPanel();
             pane.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -392,6 +389,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         JMenuItem servo = new JMenuItem("Servo");
         JMenuItem debugSerial = new JMenuItem("Debug");
         JMenuItem rescanSerial = new JMenuItem("Rescan");
+        JMenuItem disconnectSerial = new JMenuItem("Close");
         JMenuItem quit = new JMenuItem("Quit");
         JMenuItem annuler = new JMenuItem("Undo");
         JMenuItem copier = new JMenuItem("Copy");
@@ -411,6 +409,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         
         menu4.add(debugSerial);
         menu4.add(rescanSerial);
+        menu4.add(disconnectSerial);
         menu4.addSeparator();
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
@@ -420,8 +419,15 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menubar.add(menu2);
         menubar.add(menu3);
         menubar.add(menu4);
+        
 
-
+        disconnectSerial.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                closeSerialPort();
+                portNameMenuGroup.clearSelection();
+            }
+        });
+        
         debugSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
@@ -430,9 +436,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         servo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 MwGuiFrame.showServo();
-
             }
         });
 
@@ -575,7 +579,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     }
 
 
-    public static void closeSerialPort() {
+    void closeSerialPort() {
         if (com != null) {
             com.closeSerialPort();
         }
