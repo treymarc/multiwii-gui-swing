@@ -9,6 +9,7 @@ public class MwJComboBox<E> extends JComboBox<E>{
     public MwJComboBox(String name, E[] array) {
         // TODO Auto-generated constructor stub
         super(array);
+        setToolTipText(name);
         super.setRenderer(new MwComboBoxRenderer(name));
     }
 

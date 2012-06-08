@@ -88,6 +88,7 @@ public class SerialCom {
             serial.close();
             serial = null;
         }
+        
     }
 
     public int getSerialRate() {

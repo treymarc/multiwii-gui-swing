@@ -199,7 +199,7 @@ public class SerialDevice implements SerialPortEventListener {
         return listener;
     }
 
-    public final synchronized void serialEvent(final SerialPortEvent serialEvent) {
+    public final synchronized void serialEvent(final SerialPortEvent serialEvent){
         // logger.debug("serial port event");
 
         if (serialEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
@@ -232,9 +232,9 @@ public class SerialDevice implements SerialPortEventListener {
                 }
                 // System.out.println("no more");
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 //reportErrorMessage("serialEvent", null,e); cannot throw here
-                e.printStackTrace();
+                listener.reportSerial(e);
             }
         }
         // System.out.println("out of");
@@ -439,27 +439,29 @@ public class SerialDevice implements SerialPortEventListener {
      */
     public final void write(final int what) throws SerialException { // will also cover char
         try {
+            if (output == null) {
+                reportErrorMessage("write","failed to write to output stream ",new SerialException());
+            }
             output.write(what & 0xff); // for good measure do the &
             output.flush(); // hmm, not sure if a good idea
 
-        } catch (NullPointerException e) { // null pointer or serial port dead
-            reportErrorMessage("write", "output stream is closed",e);
-            
-        } catch (IOException e) {
+        } catch (Exception e) {
+           // close();
             reportErrorMessage("write","failed to write to output stream ",e);
         }
     }
 
     public final void write(final byte[] bytes) throws SerialException {
         try {
-
+            if (output == null) {
+                reportErrorMessage("write","failed to write to output stream ",null);
+            }
+            
             output.write(bytes);
             output.flush(); // hmm, not sure if a good idea
 
-        } catch (NullPointerException e) { // null pointer or serial port dead
-            reportErrorMessage("write", "output stream is closed",e);
-            
-        } catch (IOException e) {
+        } catch (Exception e) {
+          //  close();
             reportErrorMessage("write","failed to write to output stream ",e);
         }
     }
@@ -477,7 +479,7 @@ public class SerialDevice implements SerialPortEventListener {
      * @throws SerialException 
      */
     public final void write(final String what) throws SerialException {
-        write(what.getBytes());
+       
 
         try {
             write(what.getBytes("ISO-8859-1"));
@@ -503,11 +505,11 @@ public class SerialDevice implements SerialPortEventListener {
      * @param msg 
      * @throws SerialException 
      */
-    public static final void reportErrorMessage(final String where, String msg, final Throwable e) throws SerialException {
+    public  final void reportErrorMessage(final String where, String msg, final Throwable e)   {
         LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
-        e.printStackTrace();
        
-        throw new SerialException(msg,e);
+        
+        listener.reportSerial(e);
         
     }
 
@@ -515,4 +517,6 @@ public class SerialDevice implements SerialPortEventListener {
         if (listener2 != null)
             listener2.addAll(listener2);
     }
+
+
 }
