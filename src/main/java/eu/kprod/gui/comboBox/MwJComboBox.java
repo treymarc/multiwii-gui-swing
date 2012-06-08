@@ -2,13 +2,12 @@ package eu.kprod.gui.comboBox;
 
 import javax.swing.JComboBox;
 
+public class MwJComboBox extends JComboBox {
 
-
-public class MwJComboBox<E> extends JComboBox {
-
-    public MwJComboBox(String name, E[] array) {
+    public MwJComboBox(String name, Object[] array) {
         // TODO Auto-generated constructor stub
         super(array);
+        setToolTipText(name);
         super.setRenderer(new MwComboBoxRenderer(name));
     }
 

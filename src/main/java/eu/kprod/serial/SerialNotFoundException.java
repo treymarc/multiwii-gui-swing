@@ -19,7 +19,7 @@ public class SerialNotFoundException extends SerialException {
         super(message);
     }
 
-    public SerialNotFoundException(final String message,final Throwable cause) {
+    public SerialNotFoundException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

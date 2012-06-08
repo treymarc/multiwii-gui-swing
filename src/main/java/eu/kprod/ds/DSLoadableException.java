@@ -1,6 +1,5 @@
 package eu.kprod.ds;
 
-
 public class DSLoadableException extends Exception {
 
     public DSLoadableException(Exception e) {

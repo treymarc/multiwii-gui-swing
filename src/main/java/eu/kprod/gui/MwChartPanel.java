@@ -19,12 +19,12 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
 
     @Override
     public void readNewValue(String name, Double value) {
-      if(!isMouseWheelEnabled()){
-        super.setMouseWheelEnabled(true);
-        super.setDomainZoomable(true);
-        super.setRangeZoomable(true);
-      }
-        
+        if (!isMouseWheelEnabled()) {
+            super.setMouseWheelEnabled(true);
+            super.setDomainZoomable(true);
+            super.setRangeZoomable(true);
+        }
+
     }
-    
+
 }

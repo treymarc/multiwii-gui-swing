@@ -3,12 +3,10 @@ package eu.kprod;
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwDataSourceImpl;
 
-
-
 public class MwDataModel {
 
     // for real time data
-    // TODO get impl 
+    // TODO get impl
     private MwDataSource ds = new MwDataSourceImpl();
 
     // global ident

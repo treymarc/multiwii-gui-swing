@@ -11,6 +11,5 @@ public class MwGuiRuntimeException extends RuntimeException {
         // TODO Auto-generated constructor stub
         super(msg, e);
     }
-   
 
 }

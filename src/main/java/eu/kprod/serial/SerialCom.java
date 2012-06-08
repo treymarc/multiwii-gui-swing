@@ -88,6 +88,7 @@ public class SerialCom {
             serial.close();
             serial = null;
         }
+
     }
 
     public int getSerialRate() {
@@ -97,9 +98,9 @@ public class SerialCom {
     public void setSerialRate(int serialRate) {
         this.serialRate = serialRate;
     }
-    
-    public boolean isOpen(){
-        return (serial!=null);
+
+    public boolean isOpen() {
+        return (serial != null);
     }
 
 }
