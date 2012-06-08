@@ -237,7 +237,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     public MwGuiFrame() {
         super();
-
+        
         MSP.setModel(new MwDataModel());
 
         appProps = new Properties();
@@ -250,12 +250,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         }
 
         super.setTitle(appProps.getProperty("mainframe.title"));
-
+        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setJMenuBar(createMenuBar());
+        this.setJMenuBar(createMenuBar());
 
-        addWindowListener(new WindowAdapter() {
+        this.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
                 logger.trace("windowClosing "
@@ -269,7 +269,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 }
             }
         });
-
 
         getContentPane().setLayout(new BorderLayout());
 //      getContentPane().add(new JPanel(), BorderLayout.SOUTH);
@@ -319,13 +318,17 @@ public class MwGuiFrame extends JFrame implements SerialListener {
       
             String portname = (String) (portNameMenuGroup.getSelection().getActionCommand());
       
-            if (portname != null ) {
-                com = new SerialCom(portname,
-                        (Integer) Integer.valueOf(baudRateMenuGroup.getSelection().getActionCommand()));
-
-                com.openSerialPort();
-                com.setListener(MwGuiFrame.getInstance());
+            if (portname == null ) {
+                // this should not happen, unless a bug
+                return;
             }
+            
+            com = new SerialCom(portname,
+                    (Integer) Integer.valueOf(baudRateMenuGroup.getSelection().getActionCommand()));
+
+            com.openSerialPort();
+            com.setListener(MwGuiFrame.getInstance());
+            
         } catch (SerialNotFoundException e) {
 
         } catch (SerialException e) {
@@ -364,7 +367,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     public static void closeDebugFrame() {
         if (debugFrame != null) {
             getDebugFrame().setVisible(false);
-
         }
     }
 
@@ -406,7 +408,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         
         menu3.add(servo);
         menu3.add(motor);
-        
 
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
@@ -421,7 +422,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menubar.add(menu3);
         menubar.add(menu4);
         
-
         disconnectSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeSerialPort();
@@ -526,7 +526,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return serialMenuPort;
     }
 
-
     protected static void showServo() {
         showServo = true;
         if (servoFrame == null) {
@@ -579,7 +578,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         });
     }
 
-
     void closeSerialPort() {
         if (com != null) {
             com.closeSerialPort();
@@ -589,15 +587,12 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     @Override
     public void reportSerial(Throwable e) {
-        // TODO Auto-generated method stub
+        // we have an error
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
 
                 stopTimer();
-                // rescanSerial();
                 closeSerialPort();
-                // JOptionPane.showMessageDialog(null,
-                // "Serial Com Error , you should restart");
 
             }
         });

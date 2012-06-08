@@ -66,7 +66,6 @@ public class MSP {
 
     DEBUG                = 254;
 
-
     /**
      * position in the reception inputBuffer
      */
@@ -101,7 +100,6 @@ public class MSP {
     private static byte checksum = 0;
     private static int stateMSP = 0, 
             offset = 0, dataSize = 0;
-
 
     /**
      * Decode the byte 
