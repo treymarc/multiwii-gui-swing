@@ -407,12 +407,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menu3.add(servo);
         menu3.add(motor);
         
-        menu4.add(debugSerial);
-        menu4.add(rescanSerial);
-        menu4.add(disconnectSerial);
-        menu4.addSeparator();
+
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
+        menu4.addSeparator();
+        menu4.add(rescanSerial);
+        menu4.add(disconnectSerial);
+        menu4.add(debugSerial);
         
         /* Ajouter les menus  */
         menubar.add(menu1);
