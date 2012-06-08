@@ -74,7 +74,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     JCheckBox autoscrollBox;
     final JComboBox<String> lineEndings;
 
-    public DebugFrame(final String title, final Integer bdrate) {
+    public DebugFrame(final String title  ) {
         super(title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

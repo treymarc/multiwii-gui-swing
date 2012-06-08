@@ -48,14 +48,7 @@ public class SerialDevice implements SerialPortEventListener {
 
     private static List<Integer> initializeMap() {
         List<Integer> m = new ArrayList<Integer>();
-        m.add(300);
-        m.add(1200);
-        m.add(2400);
-        m.add(4800);
         m.add(9600);
-        m.add(14400);
-        m.add(19200);
-        m.add(28800);
         m.add(38400);
         m.add(57600);
         m.add(115200);
