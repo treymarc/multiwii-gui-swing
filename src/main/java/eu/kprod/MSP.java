@@ -31,40 +31,55 @@ public class MSP {
     private static final int BUFFERSize = 128;
     
     public static final String
-    OUT   = "$M<",
-    IN    = "$M>";
+    OUT   = "$M<";
+
+            /* processing does not accept enums? */
+            public static final int
+               IDLE = 0,
+               HEADER_START = 1,
+               HEADER_M = 2,
+               HEADER_ARROW = 3,
+               HEADER_SIZE = 4,
+               HEADER_CMD = 5,
+               HEADER_PAYLOAD = 6,
+               HEADER_CHK = 6
+            ;
+
+            static int c_state = IDLE;
 
     public static final int
-    IDENT                = 100,
-    STATUS               = 101,
-    RAW_IMU              = 102,
-    SERVO                = 103,
-    MOTOR                = 104,
-    RC                   = 105,
-    RAW_GPS              = 106,
-    COMP_GPS             = 107,
-    ATTITUDE             = 108,
-    ALTITUDE             = 109,
-    BAT                  = 110,
-    RC_TUNING            = 111,
-    PID                  = 112,
-    BOX                  = 113,
-    MISC                 = 114,
-    MOTOR_PINS           = 115,
+    IDENT                =100,
+   STATUS               =101,
+   RAW_IMU              =102,
+   SERVO                =103,
+   MOTOR                =104,
+   RC                   =105,
+   RAW_GPS              =106,
+   COMP_GPS             =107,
+   ATTITUDE             =108,
+   ALTITUDE             =109,
+   BAT                  =110,
+   RC_TUNING            =111,
+   PID                  =112,
+   BOX                  =113,
+   MISC                 =114,
+   MOTOR_PINS           =115,
+   BOXNAMES             =116,
+   PIDNAMES             =117,
 
-    SET_RAW_RC           = 200,
-    SET_RAW_GPS          = 201,
-    SET_PID              = 202,
-    SET_BOX              = 203,
-    SET_RC_TUNING        = 204,
-    ACC_CALIBRATION      = 205,
-    MAG_CALIBRATION      = 206,
-    SET_MISC             = 207,
-    RESET_CONF           = 208,
+   SET_RAW_RC           =200,
+   SET_RAW_GPS          =201,
+   SET_PID              =202,
+   SET_BOX              =203,
+   SET_RC_TUNING        =204,
+   ACC_CALIBRATION      =205,
+   MAG_CALIBRATION      =206,
+   SET_MISC             =207,
+   RESET_CONF           =208,
 
-    EEPROM_WRITE         = 250,
+   EEPROM_WRITE         =250,
 
-    DEBUG                = 254;
+   DEBUG                =254;
 
     /**
      * position in the reception inputBuffer
@@ -98,8 +113,9 @@ public class MSP {
     }
 
     private static byte checksum = 0;
-    private static int stateMSP = 0, 
-            offset = 0, dataSize = 0;
+//     stateMSP = 0, 
+    private static int       offset = 0, dataSize = 0;
+    private static byte cmd;
 
     /**
      * Decode the byte 
@@ -107,65 +123,43 @@ public class MSP {
      */
     synchronized public static void decode(final byte input) {
         char c = (char) input;
-
-        if (stateMSP > 99) {
-            if (offset <= dataSize) {
-                if (offset < dataSize)
-                    checksum ^= c;
-                inBuf[offset++] = (byte) (c);
+        if (c_state == IDLE) {
+            c_state = (c=='$') ? HEADER_START : IDLE;
+          } else if (c_state == HEADER_START) {
+            c_state = (c=='M') ? HEADER_M : IDLE;
+          } else if (c_state == HEADER_M) {
+            c_state = (c=='>') ? HEADER_ARROW : IDLE;
+          } else if (c_state == HEADER_ARROW) {
+            /* now we are expecting the payload size */
+            dataSize = (c&0xFF);
+            /* reset index variables */
+            p = 0;
+            offset = 0;
+            checksum = 0;
+            checksum ^= (c&0xFF);
+            /* the command is to follow */
+            c_state = HEADER_SIZE;
+          } else if (c_state == HEADER_SIZE) {
+            cmd = (byte)(c&0xFF);
+            checksum ^= (c&0xFF);
+            c_state = HEADER_CMD;
+          } else if (c_state == HEADER_CMD && offset < dataSize) {
+              checksum ^= (c&0xFF);
+              inBuf[offset++] = (byte)(c&0xFF);
+          } else if (c_state == HEADER_CMD && offset >= dataSize) {
+            /* compare calculated and transferred checksum */
+            if ((checksum&0xFF) == (c&0xFF)) {
+              /* we got a valid response packet, evaluate it */
+                decodeInBuf(cmd, (int)dataSize);
             } else {
-                if (checksum == inBuf[dataSize]) {
-                    decodeInBuf();
-                }
-                stateMSP = 0;
+              System.out.println("invalid checksum for command "+((int)(cmd&0xFF))+": "+(checksum&0xFF)+" expected, got "+(int)(c&0xFF));
             }
-        }
-
-        if (stateMSP < 5) {
-
-            if (stateMSP == 4) {
-                if (c > 99) {
-                    stateMSP = c;
-                    offset = 0;
-                    checksum = 0;
-                    p = 0;
-                } else {
-                    stateMSP = 0;
-                }
-            }
-            // with/without payload ?
-            if (stateMSP == 3) {
-                if (c < 100) {
-                    stateMSP++;
-                    dataSize = c;
-                    if (dataSize > 63)
-                        dataSize = 63;
-                } else {
-                    stateMSP = (int) c;
-                }
-            }
-
-            // header detection $M>
-            switch (c) {
-                case '$':
-                    if (stateMSP == 0)
-                        stateMSP++;
-                    break;
-                case 'M':
-                    if (stateMSP == 1)
-                        stateMSP++;
-                    break;
-                case '>':
-                    if (stateMSP == 2)
-                        stateMSP++;
-                    break;
-            }
-
-        }
+            c_state = IDLE;
+          }
 
     }
 
-    synchronized private static void decodeInBuf() {
+    synchronized private static void decodeInBuf(int stateMSP, int dataSize2) {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
@@ -342,39 +336,45 @@ public class MSP {
 
     }
 
-    // create msp request without payload
-    public static String request(final int msp) {
-        return request(msp, null);
+ // send msp without payload 
+    static String request(int msp) {
+         return   request( msp, null);
     }
 
-    // create multiple msp requests without payload
-    public static String request(int[] msps) {
-        StringBuffer bf = new StringBuffer();
-        for (int m : msps) {
-            bf.append(MSP.OUT).append((char) (m));
-        }
-        return (bf.toString());
+    //send multiple msp without payload 
+    private String requestMSP(int[] msps) {
+       StringBuffer bf = new StringBuffer();
+      for (int m : msps) {
+        bf.append(request(m, null));
+      }
+      return (bf.toString());
     }
 
-    // create msp request with payload
-    public static String request(final int msp, final Character[] payload) {
-        if (msp < 0) {
-            return null;
-        }
-        StringBuffer bf = new StringBuffer().append(MSP.OUT);
 
-        if (payload != null) {
-            bf.append((char) (payload.length)).append((char) (msp));
-            byte check = 0;
-            for (char p : payload) {
-                bf.append(p);
-                check ^= (int) (p);
-            }
-            bf.append((char) ((int) (check)));
-        } else {
-            bf.append((char) (msp));
-        }
+    //send msp with payload 
+    private static String request(final int msp, final Character[] payload) {
+      if(msp < 0) {
+        return null; 
+      }
+      
+      byte checksum=0;
+      char pl_size =  (char) (payload != null ? payload.length : 0);
+      
+      StringBuffer bf = new StringBuffer().append(OUT).append(pl_size).append((char)(msp));
 
-        return (bf.toString());
+      checksum ^= (int)(pl_size);
+      checksum ^= (int)(msp);
+      
+      if (payload != null){
+       
+        for (char c :payload){
+          bf.append(c);
+          checksum ^= (int)(c);
+        }
+        
+      }
+     bf.append((char)((int)(checksum)));
+     
+      return(bf.toString());        
     }
 }
