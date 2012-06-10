@@ -347,7 +347,7 @@ public class MSP {
     }
 
     //send multiple msp without payload 
-    static String requestMSP(int[] msps) {
+    static String request(int[] msps) {
        StringBuffer bf = new StringBuffer();
       for (int m : msps) {
         bf.append(request(m, null));

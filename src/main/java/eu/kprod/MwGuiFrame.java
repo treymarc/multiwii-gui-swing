@@ -145,15 +145,19 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
-    private JPanel rawImuChartPanel;
+    private JPanel realTimePanel;
     private Properties appProps;
     private JMenu serialMenuPort;
     private ButtonGroup baudRateMenuGroup;
     private ButtonGroup portNameMenuGroup;
+    private JPanel settingsPanel;
+    private Integer defaultRefreshRate = 10;
+    private JMenuItem rescanSerial;
+    private JMenuItem disconnectSerial;
 
     private JPanel getRawImuChartPanel() {
 
-        if (rawImuChartPanel == null) {
+        if (realTimePanel == null) {
 
             JButton stopButton = new JButton(("Stop"));
             stopButton.addActionListener(new ActionListener() {
@@ -179,18 +183,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 }
             });
             
-            final MwChartPanel rawImuChart = MwChartFactory.createChart(MSP.getModel()
+            final MwChartPanel realTimeChart = MwChartFactory.createChart(MSP.getModel()
                     .getRealTimeData().getDataSet(MwSensorClassIMU.class));
             MSP.getModel()
                     .getRealTimeData()
                     .addListener(MwSensorClassIMU.class,
-                            (MwDataSourceListener) rawImuChart);
+                            (MwDataSourceListener) realTimeChart);
 
-            rawImuChart.setPreferredSize(new java.awt.Dimension(500, 270));
+            realTimeChart.setPreferredSize(new java.awt.Dimension(500, 270));
 
-            rawImuChartPanel = new JPanel();
-            rawImuChartPanel.setLayout(new BorderLayout());
-            rawImuChartPanel.add(rawImuChart, BorderLayout.CENTER);
+            realTimePanel = new JPanel();
+            realTimePanel.setLayout(new BorderLayout());
+            realTimePanel.add(realTimeChart, BorderLayout.CENTER);
 
             JButton startButton = new JButton(("Start")); 
             startButton.addActionListener(new ActionListener() {
@@ -198,22 +202,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                     logger.trace("actionPerformed "
                             + e.getSource().getClass().getName());
 
-                    boolean openCom = false;
-                    try {
-                        if (!getCom().isOpen()) {
-                            openCom = true;
-                        }
-
-                    } catch (SerialException e1) {
-
-                        openCom = true;
-                    } finally {
-                        if (openCom) {
-                            openSerialPort();
-                        }
-                    }
+                    openSerialCom();
                     restartTimer((Integer)serialRefreshRate.getSelectedItem());
-                    rawImuChart.restoreAutoBounds();
+                    realTimeChart.restoreAutoBounds();
                 }
             });
             
@@ -225,10 +216,34 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             pane.add(stopButton, FlowLayout.LEFT);
             pane.add(startButton, FlowLayout.LEFT);
 
-            rawImuChartPanel.add(pane, BorderLayout.SOUTH);
+            realTimePanel.add(pane, BorderLayout.SOUTH);
+            realTimePanel.add(getUavPanel() ,BorderLayout.EAST);
         }
 
-        return rawImuChartPanel;
+        return realTimePanel;
+    }
+
+    protected void openSerialCom() {
+        boolean openCom = false;
+        try {
+            if (!getCom().isOpen()) {
+                openCom = true;
+            }
+
+        } catch (SerialException e1) {
+
+            openCom = true;
+        } finally {
+            if (openCom) {
+                openSerialPort();
+            }
+        }
+        
+    }
+
+    private JPanel getUavPanel() {
+        // TODO Auto-generated method stub
+        return new JPanel();
     }
 
     public MwGuiFrame() {
@@ -268,9 +283,72 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         getContentPane().setLayout(new BorderLayout());
 //      getContentPane().add(new JPanel(), BorderLayout.SOUTH);
-        getContentPane().add(new MwMainPanel(getRawImuChartPanel()), BorderLayout.CENTER);
+        getContentPane().add(new MwMainPanel(getRawImuChartPanel(),getSettingsPanel()), BorderLayout.CENTER);
 
         pack();
+    }
+
+    private JPanel getSettingsPanel() {
+        // TODO Auto-generated method stub
+        if (settingsPanel == null) {
+            settingsPanel = new JPanel();
+            settingsPanel.setLayout(new BorderLayout());
+
+            
+            JButton writeToEepromButton = new JButton(("Write"));
+            writeToEepromButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    logger.trace("actionPerformed "
+                            + e.getSource().getClass().getName());
+                    //TODO
+                }
+            });
+            JButton readFromEepromButton = new JButton(("Read"));
+            readFromEepromButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                     try {
+                         openSerialCom();
+                         boolean restart = false;
+                         if (timer!=null){
+                         stopTimer();
+                         restart=true;
+                         }
+                         int[] requests = {MSP.BOXNAMES, MSP.PIDNAMES, MSP.RC_TUNING, MSP.PID, MSP.BOX, MSP.MISC };
+                         for (int i : requests) {
+                             send(MSP.request(i));
+                             try {
+                                Thread.sleep(14);
+                            } catch (InterruptedException e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            }
+                        }
+                       
+                        
+                        if (restart) {
+                            restartTimer(defaultRefreshRate);
+                        }
+                    } catch (SerialException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    
+                }
+            });
+            
+            JPanel pane = new JPanel();
+            pane.setLayout(new FlowLayout(FlowLayout.LEADING));
+            pane.setBorder(new EmptyBorder(1, 1, 1, 1));
+
+            
+             pane.add(readFromEepromButton, FlowLayout.LEFT);
+             pane.add(writeToEepromButton, FlowLayout.LEFT);
+
+            settingsPanel.add(pane, BorderLayout.SOUTH);
+
+            
+        }
+        return settingsPanel;
     }
 
     protected void stopTimer() {
@@ -296,9 +374,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         }
 
-        if (portNames.size() == 0) {
-            portNames.add("");
-        }
         return portNames;
     }
 
@@ -341,6 +416,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         }
         timer = new Timer();
         timer.schedule(new SerialTimeOut(), 10, 1000 / rate);
+        defaultRefreshRate  = rate;
     }
 
     public static SerialListener getInstance() {
@@ -385,9 +461,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         /* differents choix de chaque menu */
         JMenuItem motor = new JMenuItem("Motor");
         JMenuItem servo = new JMenuItem("Servo");
-        JMenuItem debugSerial = new JMenuItem("Debug");
-        JMenuItem rescanSerial = new JMenuItem("Rescan");
-        JMenuItem disconnectSerial = new JMenuItem("Close");
+        JMenuItem consoleSerial = new JMenuItem("Console");
+
         JMenuItem quit = new JMenuItem("Quit");
         JMenuItem annuler = new JMenuItem("Undo");
         JMenuItem copier = new JMenuItem("Copy");
@@ -408,9 +483,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
         menu4.addSeparator();
-        menu4.add(rescanSerial);
-        menu4.add(disconnectSerial);
-        menu4.add(debugSerial);
+      
+        menu4.add(consoleSerial);
         
         /* Ajouter les menus  */
         menubar.add(menu1);
@@ -418,14 +492,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         menubar.add(menu3);
         menubar.add(menu4);
         
-        disconnectSerial.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeSerialPort();
-                portNameMenuGroup.clearSelection();
-            }
-        });
-        
-        debugSerial.addActionListener(new ActionListener() {
+
+        consoleSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
             }
@@ -456,13 +524,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             }
         });
 
-        rescanSerial.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeSerialPort();
-                getSerialPortAsMenuItem();
-            }
-        });
-
+      
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 closeSerialPort();
@@ -529,10 +591,44 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             serialMenuPort.add(sm);
             portNameMenuGroup.add(sm);
         }
+        serialMenuPort.addSeparator();
+        
+
+
+        
+        serialMenuPort.add(getRescanSerialMenuIten());
+        serialMenuPort.add(getDisconnectSerialMenuIten());
         return serialMenuPort;
     }
 
 
+
+    private JMenuItem getDisconnectSerialMenuIten() {
+        if (disconnectSerial==null){
+       disconnectSerial = new JMenuItem("Close");
+
+        
+        disconnectSerial.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                closeSerialPort();
+                portNameMenuGroup.clearSelection();
+            }
+        });
+        }
+        return disconnectSerial;
+    }
+
+    private JMenuItem getRescanSerialMenuIten() {
+        if (rescanSerial==null){
+rescanSerial = new JMenuItem("Rescan");
+        rescanSerial.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                closeSerialPort();
+                getSerialPortAsMenuItem();
+            }
+        });}
+        return rescanSerial;
+    }
 
     /**
      * send a string to the serial com
