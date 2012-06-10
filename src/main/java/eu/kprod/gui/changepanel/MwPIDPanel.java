@@ -1,26 +1,26 @@
-package eu.kprod.gui;
+package eu.kprod.gui.changepanel;
 
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 
 import eu.kprod.MwDataModel;
+import eu.kprod.gui.MwJLabel;
+import eu.kprod.gui.textfield.MwTextField;
 
 
-public class MwBOXPanel extends MwChangeablePanel {
+public class MwPIDPanel extends MwChangeablePanel  {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-
 
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -30,26 +30,24 @@ public class MwBOXPanel extends MwChangeablePanel {
            MwDataModel m = (MwDataModel)source;
            this.removeAll();
            super.setLayout(new GridLayout(1,1));
-           this.add(this.build(m.getBOXs(),m.getBoxNameIndex()));
+           this.add(this.build(m.getPIDs(),m.getPidNameIndex()));
            this.revalidate();
        }
     }
 
-    private Component build(Map<String, List<Boolean>> map, Map<Integer, String> index) {
+    private Component build(Map<String, List<Double>> piDs, Map<Integer, String> index) {
         JPanel mainPane = new JPanel();
         mainPane.setLayout(new GridLayout(1+(index == null ? 0 : index.size()),1));
         JPanel pane = new JPanel();
-        pane.setLayout(new GridLayout(1,5));
+        pane.setLayout(new GridLayout(1,4));
         pane.setBorder(new EmptyBorder(1, 1, 1, 1));
         pane.add(new MwJLabel());
-        pane.add(new MwJLabel("aux1"));
-        pane.add(new MwJLabel("aux2"));
-        pane.add(new MwJLabel("aux3"));
-        pane.add(new MwJLabel("aux4"));
-
+        pane.add(new MwJLabel("P"));
+        pane.add(new MwJLabel("I"));
+        pane.add(new MwJLabel("D"));
         mainPane.add(pane);
         
-        if (map == null || index == null){
+        if (piDs == null || index == null){
             return mainPane;
         }
        
@@ -57,36 +55,23 @@ public class MwBOXPanel extends MwChangeablePanel {
         for (int i = 0; i < index.size(); i++) {
             String name = index.get(i);
             pane = new JPanel();
-            pane.setLayout(new GridLayout(1,5));
-          
-            pane.add(new JLabel(name));
+            pane.setLayout(new GridLayout(1,4));
+            pane.setBorder(new EmptyBorder(1, 1, 1, 1));
             
-            List<Boolean> BoxItem = map.get(name);
+            List<Double> pidItem = piDs.get(name);
+            pane.add(new JLabel(name));
             int j = 0;
-            JPanel auxPane = new JPanel();
-            auxPane.setLayout(new GridLayout(1, 3));
-            auxPane.setBorder(new EmptyBorder(0,3,0, 3));
-            for (Boolean state : BoxItem) {
+            for (Double double1 : pidItem) {
                 
                 // TODO get step and bound  from msp
-                JCheckBox chck = new MwJCheckBox(name,j);
-                chck.setSelected(state);
-                auxPane.add(chck);
-                j++;
-                if (j==3){
-                    pane.add(auxPane);
-                    auxPane = new JPanel();
-                    auxPane.setLayout(new GridLayout(1, 3));
-                    auxPane.setBorder(new EmptyBorder(0,3,0, 3));
-                    j=0;
-                }
-               
+                
+                pane.add(new MwTextField(double1,0.1,j++));
             }
             mainPane.add(pane);
         }
-        
 
         return mainPane;
     }
+
 
 }

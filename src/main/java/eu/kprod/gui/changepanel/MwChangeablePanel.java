@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.gui.changepanel;
 
 import javax.swing.JPanel;
 import javax.swing.event.ChangeListener;
