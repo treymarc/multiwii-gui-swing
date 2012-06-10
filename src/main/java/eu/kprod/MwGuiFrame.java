@@ -36,6 +36,7 @@ import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.DebugFrame;
 import eu.kprod.gui.LogViewerFrame;
+import eu.kprod.gui.MwJButton;
 import eu.kprod.gui.MwMainPanel;
 import eu.kprod.gui.changepanel.MwBOXPanel;
 import eu.kprod.gui.changepanel.MwPIDPanel;
@@ -181,7 +182,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         if (realTimePanel == null) {
 
-            JButton stopButton = new JButton(("Stop"));
+            JButton stopButton = new MwJButton("Stop","Stop monitoring");
             stopButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     logger.trace("actionPerformed "
@@ -217,7 +218,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             realTimePanel.setLayout(new BorderLayout());
             realTimePanel.add(realTimeChart, BorderLayout.CENTER);
 
-            JButton startButton = new JButton(("Start")); 
+            JButton startButton = new MwJButton("Start","Start monitoring"); 
             startButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     logger.trace("actionPerformed "
@@ -319,7 +320,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             settingsPanel = new JPanel();
             settingsPanel.setLayout(new BorderLayout());
   
-            JButton writeToEepromButton = new JButton(("Write"));
+            JButton writeToEepromButton = new MwJButton("Write","Write to eeprom");
             writeToEepromButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     logger.trace("actionPerformed "
@@ -328,13 +329,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 }
             });
             
-            JButton readFromEepromButton = new JButton(("Read"));
+            JButton readFromEepromButton = new MwJButton("Read","Read eeprom");
             int[] req ={MSP.BOXNAMES, MSP.PIDNAMES, MSP.RC_TUNING, MSP.PID, MSP.BOX, MSP.MISC };
             readFromEepromButton.addActionListener(new actionMspSender(req));
             
-            JButton calibGyrButton = new JButton(("Gyro"));
-            JButton calibAccButton = new JButton(("Acc"));
-            JButton calibMagButton = new JButton(("Mag"));
+            JButton calibGyrButton = new MwJButton("Gyro","Gyro calibration");
+            JButton calibAccButton = new MwJButton("Acc","Acc calibration");
+            JButton calibMagButton = new MwJButton("Mag","Mag calibration");
             
             
             calibAccButton.addActionListener(new actionMspSender(MSP.ACC_CALIBRATION));
@@ -360,8 +361,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             pane = new JPanel();
             pane.setLayout(new FlowLayout(FlowLayout.LEADING));
             pane.setBorder(new EmptyBorder(1, 1, 1, 1));
-
-            
+   
              pane.add(readFromEepromButton );
              pane.add(writeToEepromButton );
              pane.add(calibGyrButton );

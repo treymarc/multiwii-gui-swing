@@ -132,7 +132,7 @@ public class DebugFrame extends JFrame implements SerialListener {
             }
         });
 
-        sendButton = new JButton(("Send"));
+        sendButton = new MwJButton("Send","Send serial commande");
         sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 logger.trace("actionPerformed "
