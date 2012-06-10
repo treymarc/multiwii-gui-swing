@@ -495,5 +495,22 @@ public class SerialDevice implements SerialPortEventListener {
 
         listener.reportSerial(e);
     }
+    
+    public static List<String> getPortNameList() {
+        List<String> portNames = new ArrayList<String>();
+
+        for (@SuppressWarnings("unchecked")
+        Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier
+                .getPortIdentifiers(); enumeration.hasMoreElements();) {
+            CommPortIdentifier commportidentifier = enumeration.nextElement();
+
+            if (commportidentifier.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+                String curr_port = commportidentifier.getName();
+                portNames.add(curr_port);
+            }
+        }
+
+        return portNames;
+    }
 
 }

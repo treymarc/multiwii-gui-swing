@@ -4,6 +4,7 @@ import java.util.Date;
 
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassRC;
 import eu.kprod.ds.MwSensorClassServo;
 
 /**
@@ -164,14 +165,7 @@ public class MSP {
 
     }
 
-    
 
-    
-
-
-
-
-   
         
     synchronized private static void decodeInBuf(int stateMSP, int dataSize2) {
         final Date d = new Date();
@@ -209,7 +203,6 @@ public class MSP {
                 getModel().getRealTimeData().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
                 break;
             case SERVO:
-                // for(i=0;i<8;i++) servo[i] = read16();
                 for(int i=0;i<8;i++){
                     getModel().getRealTimeData().put(d, new StringBuffer().append("servo").append(i).toString(), 
                             Double.valueOf(read16()),
@@ -217,7 +210,6 @@ public class MSP {
                 }
                 break;
             case MOTOR:
-                // for(i=0;i<8;i++) mot[i] = read16();
                 for(int i=0;i<8;i++){
                     getModel().getRealTimeData().put(d, new StringBuffer().append("mot").append(i).toString(),
                             Double.valueOf(read16()),
@@ -226,8 +218,14 @@ public class MSP {
                 break;
             case RC:
 
-//                rcRoll = read16();rcPitch = read16();rcYaw = read16();rcThrottle = read16();    
-//                rcAUX1 = read16();rcAUX2 = read16();rcAUX3 = read16();rcAUX4 = read16(); break;
+                getModel().getRealTimeData().put(d, "roll",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "pitch",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "yaw",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "throttle",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "aux1",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "aux2",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "aux3",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                getModel().getRealTimeData().put(d, "aux4",  Double.valueOf(read16()), MwSensorClassRC.class) ;
 
                 break;
             case RAW_GPS:
@@ -256,8 +254,8 @@ public class MSP {
 
                 break;
             case RC_TUNING:
-                getModel().setRCRATE((int) (read8() / 100.0));
-                getModel().setRCEXPO((int) (read8() / 100.0));
+                getModel().setRcRate((int) (read8() / 100.0));
+                getModel().setRcExpo((int) (read8() / 100.0));
                 getModel().setRollPitchRate((int) (read8() / 100.0));
                 getModel().setYawRate((int) (read8() / 100.0));
                 getModel().setDynThrPID((int) (read8() / 100.0));
@@ -269,74 +267,17 @@ public class MSP {
             case MAG_CALIBRATION:
                 break;
             case PID:
-
-//                for(i=0;i<PIDITEMS;i++) {
-//                    byteP[i] = read8();byteI[i] = read8();byteD[i] = read8();
-//                    
-//                    switch (i) {
-//                     case 0: 
-//                          confP[i].setValue(byteP[i]/10.0);
-//                          confI[i].setValue(byteI[i]/1000.0);
-//                          confD[i].setValue(byteD[i]);
-//                          break;
-//                     case 1:
-//                          confP[i].setValue(byteP[i]/10.0);
-//                          confI[i].setValue(byteI[i]/1000.0);
-//                          confD[i].setValue(byteD[i]);
-//                          break;
-//                     case 2:
-//                          confP[i].setValue(byteP[i]/10.0);
-//                          confI[i].setValue(byteI[i]/1000.0);
-//                          confD[i].setValue(byteD[i]);
-//                          break;
-//                     case 3:
-//                          confP[i].setValue(byteP[i]/10.0);
-//                          confI[i].setValue(byteI[i]/1000.0);
-//                          confD[i].setValue(byteD[i]);
-//                          break;
-//                     case 7:
-//                          confP[i].setValue(byteP[i]/10.0);
-//                          confI[i].setValue(byteI[i]/1000.0);
-//                          confD[i].setValue(byteD[i]);
-//                          break;
-//                     case 8:
-//                        confP[i].setValue(byteP[i]/10.0);
-//                        confI[i].setValue(byteI[i]/1000.0);
-//                        confD[i].setValue(byteD[i]);
-//                        break;
-//                     case 9:
-//                        confP[i].setValue(byteP[i]/10.0);
-//                        confI[i].setValue(byteI[i]/1000.0);
-//                        confD[i].setValue(byteD[i]);
-//                        break;
-//                     //Different rates fot POS-4 POSR-5 NAVR-6
-//                     case 4:
-//                        confP[i].setValue(byteP[i]/100.0);
-//                        confI[i].setValue(byteI[i]/100.0);
-//                        confD[i].setValue(byteD[i]/1000.0);
-//                        break;
-//                     case 5:
-//                        confP[i].setValue(byteP[i]/10.0);
-//                        confI[i].setValue(byteI[i]/100.0);
-//                        confD[i].setValue(byteD[i]/1000.0);
-//                        break;                   
-//                     case 6:
-//                        confP[i].setValue(byteP[i]/10.0);
-//                        confI[i].setValue(byteI[i]/100.0);
-//                        confD[i].setValue(byteD[i]/1000.0);
-//                        break;                   
-//                    }
-//                   
-//                  }
+                for( int index = 0;index<getModel().getPidNameCount();index++) { 
+                    getModel().setPidValue(index,read8(),read8(),read8()); 
+                  }
+                getModel().pidChanged();
                 break;
-            case BOX:
-               
-//                for( i=0;i<CHECKBOXITEMS;i++) {
-//                    activation[i] = read16();
-//                    for(int aa=0;aa<12;aa++) {
-//                      if ((activation[i]&(1<<aa))>0) checkbox[i].activate(aa); else checkbox[i].deactivate(aa);
-//                    }
-//                  } 
+            case BOX:         
+                for( int index = 0;index<getModel().getBoxNameCount();index++) {
+                    int bytread = read16();
+                   getModel().setBoxNameValue(index,bytread);    
+                  } 
+                getModel().boxChanged();
                 break;
             case MISC:
                 // intPowerTrigger = read16();
@@ -352,16 +293,25 @@ public class MSP {
                 // read16();
                 break;
             case BOXNAMES:
-//                create_checkboxes(new String(inBuf, 0, dataSize).split(";"));
+                getModel().removeAllBoxName();
+                int i = 0;
+                for (String name : new String(inBuf, 0, dataSize).split(";")) {
+                    getModel().addBoxName(name,i++);
+                }
                 break;
             case PIDNAMES:
-                /* TODO create GUI elements from this message */
-                System.out.println("Got PIDNAMES: "+new String(inBuf, 0, dataSize));
+                getModel().removeAllPIDName();
+                i = 0;
+                for (String name : new String(inBuf, 0, dataSize).split(";")) {
+                    getModel().addPIDName(name,i++);
+                }
                 break;
         }
 
     }
 
+
+    
  // send msp without payload 
     static String request(int msp) {
          return   request( msp, null);

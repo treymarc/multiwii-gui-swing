@@ -34,7 +34,7 @@ public interface MwDataSource {
      *            the sensorclass of the value
      * @return
      */
-    public boolean put(final Date date, final String sensorName,
+    public boolean put(final Date d, final String sensorName,
             final Double value, Class<? extends MwSensorClass> sclass);
 
     public void addListener(Class<? extends MwSensorClass> sensor,

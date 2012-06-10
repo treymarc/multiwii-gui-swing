@@ -1,9 +1,21 @@
 package eu.kprod;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwDataSourceImpl;
 
 public class MwDataModel {
+
+    private static final int ITEM_PID_COUNT = 3;
+
+    private static final int ITEM_BOX_COUNT = 12;
 
     // for real time data
     // TODO get impl
@@ -13,70 +25,105 @@ public class MwDataModel {
     int version, multiType;
 
     // rc conf
-    int RCRATE, RCEXPO, RollPitchRate, yawRate, DynThrPID, ThrottleMID,
-            ThrottleEXPO;
+    int rcRate, rcExpo, rollPitchRate, yawRate, dynThrPID, throttleMID,
+            throttleEXPO;
 
-    public int getRCRATE() {
-        return RCRATE;
+    private Map<Integer,String> boxNameIndex = new HashMap<Integer, String>();
+    public Map<Integer, String> getBoxNameIndex() {
+        return boxNameIndex;
     }
 
-    public void setRCRATE(int rCRATE) {
-        RCRATE = rCRATE;
+    public Map<Integer, String> getPidNameIndex() {
+        return pidNameIndex;
     }
 
-    public int getRCEXPO() {
-        return RCEXPO;
+    private Map<Integer,String> pidNameIndex = new HashMap<Integer, String>();
+    
+    
+    private Map<String,List<Boolean>> boxs = new HashMap<String, List<Boolean>>();
+   
+    private Map<String,List<Double>> pids = new HashMap<String, List<Double>>();
+
+    private ChangeListener boxChangeListener;
+    public ChangeListener getBoxChangeListener() {
+        return boxChangeListener;
     }
 
-    public void setRCEXPO(int rCEXPO) {
-        RCEXPO = rCEXPO;
+    public void setBoxChangeListener(ChangeListener boxChangeListener1) {
+        this.boxChangeListener = boxChangeListener1;
+    }
+
+    public ChangeListener getPidChangeListener() {
+        return pidChangeListener;
+    }
+
+    public void setPidChangeListener(ChangeListener pidChangeListener1) {
+        this.pidChangeListener = pidChangeListener1;
+    }
+
+    private ChangeListener pidChangeListener;
+    
+    public int getRcRate() {
+        return rcRate;
+    }
+
+    public void setRcRate(final int rCRATE) {
+        rcRate = rCRATE;
+    }
+
+    public int getRcExpo() {
+        return rcExpo;
+    }
+
+    public void setRcExpo(final int rCEXPO) {
+        rcExpo = rCEXPO;
     }
 
     public int getRollPitchRate() {
-        return RollPitchRate;
+        return rollPitchRate;
     }
 
-    public void setRollPitchRate(int rollPitchRate) {
-        RollPitchRate = rollPitchRate;
+    public void setRollPitchRate(final int rollPitchRate1) {
+        rollPitchRate = rollPitchRate1;
     }
 
     public int getYawRate() {
         return yawRate;
     }
 
-    public void setYawRate(int yawRate) {
+    public void setYawRate(final int yawRate) {
         this.yawRate = yawRate;
     }
 
     public int getDynThrPID() {
-        return DynThrPID;
+        return dynThrPID;
     }
 
-    public void setDynThrPID(int dynThrPID) {
-        DynThrPID = dynThrPID;
+    public void setDynThrPID(final int dynThrPID1) {
+        dynThrPID = dynThrPID1;
     }
 
     public int getThrottleMID() {
-        return ThrottleMID;
+        return throttleMID;
     }
 
-    public void setThrottleMID(int throttleMID) {
-        ThrottleMID = throttleMID;
+    public void setThrottleMID(final int throttleMID1) {
+        throttleMID = throttleMID1;
     }
 
     public int getThrottleEXPO() {
-        return ThrottleEXPO;
+        return throttleEXPO;
     }
 
-    public void setThrottleEXPO(int throttleEXPO) {
-        ThrottleEXPO = throttleEXPO;
+    public void setThrottleEXPO(final int throttleEXPO1) {
+        throttleEXPO = throttleEXPO1;
     }
 
     public int getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(final int version) {
         this.version = version;
     }
 
@@ -84,7 +131,7 @@ public class MwDataModel {
         return multiType;
     }
 
-    public void setMultiType(int multiType) {
+    public void setMultiType(final int multiType) {
         this.multiType = multiType;
     }
 
@@ -96,113 +143,147 @@ public class MwDataModel {
         return ds;
     }
 
-    //
-    // Map<String, Integer> getListforDs(){
-    //
-    //
-    // Map< String , Integer> result = new HashMap< String , Integer>();
-    //
-    // result.put("version" ,version ) ;
-    // result.put("ax" ,ax ) ;
-    // result.put("ay" , ay) ;
-    // result.put("az", az) ;
-    // result.put("gx" , gx) ;
-    // result.put("gy" ,gy ) ;
-    //
-    // result.put("gz" ,gz ) ;
-    // result.put("magx" ,magx ) ;
-    // result.put("magy",magy) ;
-    // result.put("magz" ,magz ) ;
-    // result.put("baro" ,baro ) ;
-    // result.put("head" ,head ) ;
-    //
-    // for(int k = 0; k < 8; k++){
-    // result.put(""+"servo"+k ,servo[k] ) ;
-    // }
-    //
-    // for(int k = 0; k < 8; k++){
-    // result.put(""+"motor"+k ,mot[k] ) ;
-    // }
-    //
-    //
-    //
-    // result.put("rcRoll" ,rcRoll ) ;
-    // result.put("rcPitch" ,rcPitch ) ;
-    // result.put("rcYaw" ,rcYaw ) ;
-    // result.put("rcThrottle" ,rcThrottle ) ;
-    //
-    // result.put("rcAUX1" ,rcAUX1 ) ;
-    // result.put("rcAUX2" ,rcAUX2 ) ;
-    // result.put("rcAUX3" ,rcAUX3 ) ;
-    // result.put("rcAUX4" ,rcAUX4 ) ;
-    //
-    // result.put("cycleTime" ,cycleTime ) ;
-    // result.put("i2cError" ,i2cError ) ;
-    // result.put("angx" ,angx ) ;
-    // result.put("angy" ,angy ) ;
-    // result.put("multiType" ,multiType ) ;
-    //
-    //
-    //
-    // for(int i1 = 0; i1 < PIDITEMS; i1++)
-    // {
-    //
-    // result.put(i1 + "byteP" ,byteP[i1] ) ;
-    // result.put(i1 + "byteI" ,byteI[i1] ) ;
-    // result.put(i1 + "byteD" ,byteD[i1] ) ;
-    // }
-    //
-    // result.put("byteRCRATE" ,byteRCRATE ) ;
-    // result.put("byteRCEXPO" ,byteRCEXPO ) ;
-    // result.put("byteRollPitchRate" ,byteRollPitchRate ) ;
-    // result.put("byteYawRate" ,byteYawRate ) ;
-    // result.put("byteDynThrPID" ,byteDynThrPID ) ;
-    //
-    // result.put("GPSdistanceToHome" ,GPSdistanceToHome ) ;
-    // result.put("GPSdirectionToHome" ,GPSdirectionToHome ) ;
-    // result.put("GPSnumSat" ,GPSnumSat ) ;
-    // result.put("GPSfix" ,GPSfix ) ;
-    // result.put("GPSupdate" ,GPSupdate ) ;
-    // result.put("pMeterSum ",pMeterSum ) ;
-    //
-    //
-    // result.put("intPowerTrigger" ,intPowerTrigger ) ;
-    // result.put("bytevbat" ,bytevbat ) ;
-    // result.put("debug1" ,debug1 ) ;
-    // result.put("debug2" ,debug2 ) ;
-    // result.put("debug3" ,debug3 ) ;
-    // result.put("debug4" ,debug4 ) ;
-    //
-    //
-    // result.put("nunchukPresent" ,nunchukPresent ? 1 : 0 ) ;
-    // result.put("i2cAccPresent" ,i2cAccPresent? 1 : 0 ) ;
-    // result.put("i2cBaroPresent" ,i2cBaroPresent ? 1 : 0) ;
-    // result.put("i2cMagnetoPresent" ,i2cMagnetoPresent? 1 : 0 ) ;
-    // result.put("GPSPresent" ,GPSPresent? 1 : 0 ) ;
-    // result.put("I2cAccActive" ,I2cAccActive ? 1 : 0) ;
-    // result.put("I2cBaroActive" ,I2cBaroActive ? 1 : 0) ;
-    // result.put("I2cMagnetoActive" ,I2cMagnetoActive ? 1 : 0) ;
-    // result.put("GPSActive" ,GPSActive ? 1 : 0) ;
-    //
-    //
-    // for(int k = 0; k < CHECKBOXITEMS; k++)
-    // {
-    //
-    // for(int l = 0; l < 6; l++)
-    // {
-    //
-    // result.put("item"+CHECKBOXITEMS+""+l ,(checkbox1[k][l] ) ? 1 : 0 ) ;
-    //
-    // }
-    //
-    // for(int l = 0; l < 6; l++)
-    // {
-    // result.put("item"+CHECKBOXITEMS+""+(6+l) ,(checkbox2[k][l]) ? 1 : 0) ;
-    //
-    // }
-    //
-    // }
-    // return result;
-    // }
+    public void addBoxName(String name,int i) {
+        this.boxs.put(name, null);
+        this.boxNameIndex.put(i, name);
+    }
 
+    public void removeAllBoxName() {
+        this.boxs.clear();
+        this.boxNameIndex.clear();
+    }
+
+    public void removeAllPIDName() {
+        // TODO Auto-generated method stub
+        this.pids.clear(); 
+        this.pidNameIndex.clear();
+    }
+
+    public void addPIDName(String name,int i) {
+        // TODO Auto-generated method stub
+        this.pids.put(name, null);
+        this.pidNameIndex.put(i, name);
+    }
+
+ 
+    public int getBoxNameCount(){
+        if (boxNameIndex==null){
+            return 0;
+        }else{
+            return boxNameIndex.size();
+        }
+        
+    }
+    
+    public int getPidNameCount(){
+        if (pidNameIndex==null){
+            return 0;
+        }else{
+            return pidNameIndex.size();
+        }
+    }
+
+    public void setBoxNameValue(int index, int bytread) {
+        // TODO Auto-generated method stub
+       List<Boolean> boxItem = new ArrayList<Boolean>(ITEM_BOX_COUNT) ;
+        for(int i=0;i<ITEM_BOX_COUNT;i++) {
+               
+            boxItem.add(i, ((bytread&(1<<i))>0) ); 
+
+          }
+        boxs.put(boxNameIndex.get(index),boxItem);
+        
+    }
+
+    public void setPidValue(int index, int p, int i, int d) {
+        // TODO Auto-generated method stub
+        List<Double> pidItem = new ArrayList<Double>(ITEM_PID_COUNT) ;
+        for(int f=0;f<ITEM_PID_COUNT;f++) {
+            double fp = 0, fd =0 , fi =0;   
+            switch (index) {
+              case 0: 
+                   fp = p /10.0;
+                   fi = i /1000.0;
+                   fd = d;
+                   break;
+              case 1:
+                  fp = p /10.0;
+                  fi = i /1000.0;
+                  fd = d;
+                   break;
+              case 2:
+                  fp = p /10.0;
+                  fi = i /1000.0;
+                  fd = d;
+                   break;
+              case 3:
+                  fp = p /10.0;
+                  fi = i /1000.0;
+                  fd = d;
+                   break;
+              case 7:
+                  fp = p /10.0;
+                  fi = i /1000.0;
+                  fd = d;
+                   break;
+              case 8:
+                  fp = p /10.0;
+                  fi = i /1000.0;
+                  fd = d;
+                 break;
+              case 9:
+                  fp = p /10.0;
+                  fi = i /1000.0;
+                  fd = d;
+                 break;
+              //Different rates fot POS-4 POSR-5 NAVR-6
+              case 4:
+                  fp = p /100.0;
+                  fi = i /100.0;
+                  fd = d /1000.0;
+                 break;
+              case 5:
+                  fp = p /10.0;
+                  fi = i /100.0;
+                  fd = d /1000.0;
+                 break;                   
+              case 6:
+                  fp = p /10.0;
+                  fi = i /100.0;
+                  fd = d /1000.0;
+                 break;                   
+             }
+                
+            pidItem.add(f++, fp ); 
+            pidItem.add(f++, fi );
+            pidItem.add(f++, fd );
+
+          }
+        pids.put(pidNameIndex.get(index),pidItem);
+    }
+
+    public void pidChanged() {
+        // TODO Auto-generated method stub
+        if (pidChangeListener != null){
+            pidChangeListener.stateChanged(new ChangeEvent(this));
+        }
+    }
+
+    public void boxChanged() {
+        // TODO Auto-generated method stub
+        if (boxChangeListener != null){
+            boxChangeListener.stateChanged(new ChangeEvent(this));
+        }
+    }
+
+    public Map<String,List<Double>> getPIDs() {
+        // TODO Auto-generated method stub
+        return pids;
+    }
+
+    
+    public Map<String, List<Boolean>> getBOXs() {
+        // TODO Auto-generated method stub
+        return boxs;
+    }
 }
