@@ -118,4 +118,11 @@
 	<repositories>
 	
 	</repositories>
+	 <distributionManagement>
+  		<snapshotRepository>
+		    <id>fiendie-snapshots-repo</id>
+		    <url>http://flexo.fiendie.net:8081/nexus/content/repositories/snapshots</url>
+  		</snapshotRepository>
+	</distributionManagement>
+	
 </project>
