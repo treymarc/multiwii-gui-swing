@@ -164,6 +164,15 @@ public class MSP {
 
     }
 
+    
+
+    
+
+
+
+
+   
+        
     synchronized private static void decodeInBuf(int stateMSP, int dataSize2) {
         final Date d = new Date();
         switch (stateMSP) {
@@ -173,32 +182,18 @@ public class MSP {
                 break;
             case STATUS:
 
-                // cycleTime = read16();
-                // i2cError = read16();
-                // present = read16();
-                // mode = read16();
-                // if ((present&1) >0) {buttonAcc.setColorBackground(green_);}
-                // else
-                // {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false);
-                // tACC_PITCH.setState(false); tACC_Z.setState(false);}
-                // if ((present&2) >0) {buttonBaro.setColorBackground(green_);}
-                // else
-                // {buttonBaro.setColorBackground(red_); tBARO.setState(false);
-                // }
-                // if ((present&4) >0) {buttonMag.setColorBackground(green_);}
-                // else
-                // {buttonMag.setColorBackground(red_); tMAGX.setState(false);
-                // tMAGY.setState(false); tMAGZ.setState(false); }
-                // if ((present&8) >0) {buttonGPS.setColorBackground(green_);}
-                // else
-                // {buttonGPS.setColorBackground(red_); tHEAD.setState(false);}
-                // if ((present&16)>0) {buttonSonar.setColorBackground(green_);}
-                // else {buttonSonar.setColorBackground(red_);}
-                // for(i=0;i<CHECKBOXITEMS;i++) {
-                // if ((mode&(1<<i))>0)
-                // buttonCheckbox[i].setColorBackground(green_); else
-                // buttonCheckbox[i].setColorBackground(red_);
-                // }
+//                cycleTime = read16();
+//                i2cError = read16();
+//                present = read16();
+//                mode = read16();
+//                if ((present&1) >0) {buttonAcc.setColorBackground(green_);} else {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false); tACC_PITCH.setState(false); tACC_Z.setState(false);}
+//                if ((present&2) >0) {buttonBaro.setColorBackground(green_);} else {buttonBaro.setColorBackground(red_); tBARO.setState(false); }
+//                if ((present&4) >0) {buttonMag.setColorBackground(green_);} else {buttonMag.setColorBackground(red_); tMAGX.setState(false); tMAGY.setState(false); tMAGZ.setState(false); }
+//                if ((present&8) >0) {buttonGPS.setColorBackground(green_);} else {buttonGPS.setColorBackground(red_); tHEAD.setState(false);}
+//                if ((present&16)>0) {buttonSonar.setColorBackground(green_);} else {buttonSonar.setColorBackground(red_);}
+//                for(i=0;i<CHECKBOXITEMS;i++) {
+//                  if ((mode&(1<<i))>0) buttonCheckbox[i].setColorBackground(green_); else buttonCheckbox[i].setColorBackground(red_);
+//                }
                 break;
             case RAW_IMU:
                 getModel().getRealTimeData().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
@@ -230,20 +225,18 @@ public class MSP {
                 }
                 break;
             case RC:
-                // rcRoll = read16();rcPitch = read16();rcYaw =
-                // read16();rcThrottle
-                // = read16();
-                // rcAUX1 = read16();rcAUX2 = read16();rcAUX3 = read16();rcAUX4
-                // =
-                // read16();
+
+//                rcRoll = read16();rcPitch = read16();rcYaw = read16();rcThrottle = read16();    
+//                rcAUX1 = read16();rcAUX2 = read16();rcAUX3 = read16();rcAUX4 = read16(); break;
+
                 break;
             case RAW_GPS:
-                // GPS_fix = read8();
-                // GPS_numSat = read8();
-                // GPS_latitude = read32();
-                // GPS_longitude = read32();
-                // GPS_altitude = read16();
-                // GPS_speed = read16();
+//                GPS_fix = read8();
+//                GPS_numSat = read8();
+//                GPS_latitude = read32();
+//                GPS_longitude = read32();
+//                GPS_altitude = read16();
+//                GPS_speed = read16(); 
                 break;
             case COMP_GPS:
                 // GPS_distanceToHome = read16();
@@ -277,52 +270,73 @@ public class MSP {
                 break;
             case PID:
 
-                // for(i=0;i<PIDITEMS;i++) {
-                // byteP[i] = read8();byteI[i] = read8();byteD[i] = read8();
-                // switch (i) {
-                // case 0:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-                // break;
-                // case 1:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-                // break;
-                // case 2:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-                // break;
-                // case 3:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-                // break;
-                // case 7:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-                // break;
-                // case 8:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/1000.0);confD[i].setValue(byteD[i]);
-                // break;
-                // //Different rates fot POS-4 POSR-5 NAVR-6
-                // case 4:
-                // confP[i].setValue(byteP[i]/100.0);confI[i].setValue(byteI[i]/100.0);confD[i].setValue(byteD[i]/1000.0);
-                // break;
-                // case 5:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/100.0);confD[i].setValue(byteD[i]/1000.0);
-                // break;
-                // case 6:
-                // confP[i].setValue(byteP[i]/10.0);confI[i].setValue(byteI[i]/100.0);confD[i].setValue(byteD[i]/1000.0);
-                // break;
-                // }
-                // confP[i].setColorBackground(green_);
-                // confI[i].setColorBackground(green_);
-                // confD[i].setColorBackground(green_);
-                // }
-                //
+//                for(i=0;i<PIDITEMS;i++) {
+//                    byteP[i] = read8();byteI[i] = read8();byteD[i] = read8();
+//                    
+//                    switch (i) {
+//                     case 0: 
+//                          confP[i].setValue(byteP[i]/10.0);
+//                          confI[i].setValue(byteI[i]/1000.0);
+//                          confD[i].setValue(byteD[i]);
+//                          break;
+//                     case 1:
+//                          confP[i].setValue(byteP[i]/10.0);
+//                          confI[i].setValue(byteI[i]/1000.0);
+//                          confD[i].setValue(byteD[i]);
+//                          break;
+//                     case 2:
+//                          confP[i].setValue(byteP[i]/10.0);
+//                          confI[i].setValue(byteI[i]/1000.0);
+//                          confD[i].setValue(byteD[i]);
+//                          break;
+//                     case 3:
+//                          confP[i].setValue(byteP[i]/10.0);
+//                          confI[i].setValue(byteI[i]/1000.0);
+//                          confD[i].setValue(byteD[i]);
+//                          break;
+//                     case 7:
+//                          confP[i].setValue(byteP[i]/10.0);
+//                          confI[i].setValue(byteI[i]/1000.0);
+//                          confD[i].setValue(byteD[i]);
+//                          break;
+//                     case 8:
+//                        confP[i].setValue(byteP[i]/10.0);
+//                        confI[i].setValue(byteI[i]/1000.0);
+//                        confD[i].setValue(byteD[i]);
+//                        break;
+//                     case 9:
+//                        confP[i].setValue(byteP[i]/10.0);
+//                        confI[i].setValue(byteI[i]/1000.0);
+//                        confD[i].setValue(byteD[i]);
+//                        break;
+//                     //Different rates fot POS-4 POSR-5 NAVR-6
+//                     case 4:
+//                        confP[i].setValue(byteP[i]/100.0);
+//                        confI[i].setValue(byteI[i]/100.0);
+//                        confD[i].setValue(byteD[i]/1000.0);
+//                        break;
+//                     case 5:
+//                        confP[i].setValue(byteP[i]/10.0);
+//                        confI[i].setValue(byteI[i]/100.0);
+//                        confD[i].setValue(byteD[i]/1000.0);
+//                        break;                   
+//                     case 6:
+//                        confP[i].setValue(byteP[i]/10.0);
+//                        confI[i].setValue(byteI[i]/100.0);
+//                        confD[i].setValue(byteD[i]/1000.0);
+//                        break;                   
+//                    }
+//                   
+//                  }
                 break;
             case BOX:
-                // for( i=0;i<CHECKBOXITEMS;i++) {
-                // activation[i] = read16();
-                // for( aa=0;aa<12;aa++) {
-                // if ((activation[i]&(1<<aa))>0) checkbox[i].activate(aa); else
-                // checkbox[i].deactivate(aa);
-                // }
-                // }
+               
+//                for( i=0;i<CHECKBOXITEMS;i++) {
+//                    activation[i] = read16();
+//                    for(int aa=0;aa<12;aa++) {
+//                      if ((activation[i]&(1<<aa))>0) checkbox[i].activate(aa); else checkbox[i].deactivate(aa);
+//                    }
+//                  } 
                 break;
             case MISC:
                 // intPowerTrigger = read16();
@@ -336,6 +350,13 @@ public class MSP {
                 // debug1 = read16();debug2 = read16();debug3 = read16();debug4
                 // =
                 // read16();
+                break;
+            case BOXNAMES:
+//                create_checkboxes(new String(inBuf, 0, dataSize).split(";"));
+                break;
+            case PIDNAMES:
+                /* TODO create GUI elements from this message */
+                System.out.println("Got PIDNAMES: "+new String(inBuf, 0, dataSize));
                 break;
         }
 
