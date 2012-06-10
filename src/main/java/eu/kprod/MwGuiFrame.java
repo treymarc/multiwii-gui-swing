@@ -9,12 +9,15 @@ import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -169,13 +172,13 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static LogViewerFrame servoFrame;
     private JPanel realTimePanel;
     private Properties appProps;
-    private JMenu serialMenuPort;
+    private static JMenu serialMenuPort;
     private static ButtonGroup baudRateMenuGroup;
     private static ButtonGroup portNameMenuGroup;
     private JPanel settingsPanel;
     private static Integer defaultRefreshRate = 10;
-    private JMenuItem rescanSerial;
-    private JMenuItem disconnectSerial;
+    private static JMenuItem rescanSerial;
+    private static JMenuItem disconnectSerial;
     private String frameTitle;
 
     private JPanel getRawImuChartPanel() {
@@ -194,7 +197,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             
             final MwJComboBox serialRefreshRate = new MwJComboBox("Refresh rate (hz)",
                     (Integer[]) SerialRefreshRateStrings
-                            .toArray(new Integer[SerialRefreshRateStrings.size()]));
+                            .toArray(new Integer[SerialRefreshRateStrings.size()]) );
             serialRefreshRate.setMaximumSize(serialRefreshRate.getMinimumSize());
             serialRefreshRate.setSelectedIndex(3);
             serialRefreshRate.addActionListener(new ActionListener() {
@@ -258,7 +261,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             openCom = true;
         } finally {
             if (openCom) {
+                try{
                 openSerialPort();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         
@@ -386,29 +393,64 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
 
     protected static void openSerialPort() {
+   
+                closeSerialPort();
+                getSerialPortAsMenuItem();
+                if (portNameMenuGroup.getSelection() == null) {
+                    List<String> list = SerialDevice.getPortNameList();
+                    if (list == null || list.size() == 0) {
+                        list.add("");
+                    }
+                    Object[] array =list.toArray(new String[list.size()]);
+                    String name = (String) JOptionPane.showInputDialog(
+                            MwGuiFrame.getInstance(),
 
-        closeSerialPort();
-        if (portNameMenuGroup.getSelection() == null) {
-            JOptionPane.showMessageDialog(null, "No serial port selected");
-            return;
-        }   
-        try {
-            String portname = (String) (portNameMenuGroup.getSelection().getActionCommand());
-            if (portname == null ) {
-                return; // this should not happen, unless a bug
-            }
-            com = new SerialCom(portname,
-                    (Integer) Integer.valueOf(baudRateMenuGroup.getSelection().getActionCommand()));
-            com.openSerialPort();
-            com.setListener(MwGuiFrame.getInstance());
-            
-            MwGuiFrame.getInstance().setTitle(new StringBuffer().append(portname).append("@").
-                    append(baudRateMenuGroup.getSelection().getActionCommand()).toString() );
-        } catch (SerialNotFoundException e) {
+                            "Select a Serial Port", "port",
 
-        } catch (SerialException e) {
-            e.printStackTrace();
-        }
+                            JOptionPane.INFORMATION_MESSAGE, null,
+
+                            array , array[0]);
+
+                    Enumeration<AbstractButton> els = portNameMenuGroup.getElements();
+                    ButtonModel model = null;
+                    while (els.hasMoreElements()) {
+                        AbstractButton abstractButton = (AbstractButton) els
+                                .nextElement();
+                        try {
+                            if (abstractButton.getActionCommand().equals(name)) {
+                                model = abstractButton.getModel();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (model != null) {
+                        portNameMenuGroup.setSelected(model, true);
+                    } else {
+
+                        JOptionPane.showMessageDialog(MwGuiFrame.getInstance(),
+                                "Error while getting serial port name");
+                        return;
+                    }
+                }
+                try {
+                    String portname = (String) (portNameMenuGroup.getSelection().getActionCommand());
+                    if (portname == null ) {
+                        return; // this should not happen, unless a bug
+                    }
+                    com = new SerialCom(portname,
+                            (Integer) Integer.valueOf(baudRateMenuGroup.getSelection().getActionCommand()));
+                    com.openSerialPort();
+                    com.setListener(MwGuiFrame.getInstance());
+                    
+                    MwGuiFrame.getInstance().setTitle(new StringBuffer().append(portname).append("@").
+                            append(baudRateMenuGroup.getSelection().getActionCommand()).toString() );
+                } catch (SerialNotFoundException e) {
+
+                } catch (SerialException e) {
+                    e.printStackTrace();
+                }
+      
 
     }
 
@@ -608,7 +650,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return m;
     }
 
-    private JMenu getSerialPortAsMenuItem() {
+    private static JMenu getSerialPortAsMenuItem() {
         if (serialMenuPort == null){
             JMenu m = new JMenu("Port");
             serialMenuPort =m;
@@ -630,7 +672,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     }
 
 
-    private JMenuItem getDisconnectSerialMenuIten() {
+    private static JMenuItem getDisconnectSerialMenuIten() {
         if (disconnectSerial == null) {
             disconnectSerial = new JMenuItem("Close");
 
@@ -644,7 +686,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return disconnectSerial;
     }
 
-    private JMenuItem getRescanSerialMenuIten() {
+    private static JMenuItem getRescanSerialMenuIten() {
         if (rescanSerial == null) {
             rescanSerial = new JMenuItem("Rescan");
             rescanSerial.addActionListener(new ActionListener() {
