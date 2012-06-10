@@ -30,12 +30,12 @@ public class SerialCom {
 
     private SerialListener listener;
 
-    public String getDeviceName() {
+    public final String getDeviceName() {
         return deviceName;
     }
 
-    public void setDeviceName(String deviceName) {
-        this.deviceName = deviceName;
+    public final void setDeviceName(final String deviceName1) {
+        this.deviceName = deviceName1;
     }
 
     public SerialCom(final String device, final int serialRateIn) {
@@ -45,36 +45,36 @@ public class SerialCom {
 
     }
 
-    public void send(String s) throws SerialException {
+    public final void send(final String s) throws SerialException {
         if (serial != null) {
-            switch (cr) {
-                case 1:
-                    s += "\n";
-                    break;
-                case 2:
-                    s += "\r";
-                    break;
-                case 3:
-                    s += "\r\n";
-                    break;
-            }
             serial.write(s);
         }
     }
 
-    public void send(String s, Integer d) throws SerialException {
+    public final void send(String s,final  Integer d) throws SerialException {
         cr = d;
+        switch (cr) {
+            case 1:
+                s += "\n";
+                break;
+            case 2:
+                s += "\r";
+                break;
+            case 3:
+                s += "\r\n";
+                break;
+        }
         send(s);
     }
 
-    public void setListener(SerialListener l) {
+    public final void setListener(SerialListener l) {
         listener = l;
         if (serial != null) {
             serial.addListener(l);
         }
     }
 
-    public void openSerialPort() throws SerialException {
+    public final void openSerialPort() throws SerialException {
         if (serial != null)
             return;
 
@@ -82,7 +82,7 @@ public class SerialCom {
         serial.addListener(listener);
     }
 
-    public void closeSerialPort() {
+    public final void closeSerialPort() {
         if (serial != null) {
 
             serial.close();
@@ -95,8 +95,8 @@ public class SerialCom {
         return serialRate;
     }
 
-    public void setSerialRate(int serialRate) {
-        this.serialRate = serialRate;
+    public void setSerialRate(final int serialRate1) {
+        this.serialRate = serialRate1;
     }
 
     public boolean isOpen() {

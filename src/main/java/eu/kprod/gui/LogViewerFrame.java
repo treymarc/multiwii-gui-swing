@@ -8,6 +8,8 @@ import eu.kprod.ds.DSLoadableException;
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwDataSourceImpl;
 import eu.kprod.ds.MwSensorClass;
+import eu.kprod.gui.chart.MwChartFactory;
+import eu.kprod.gui.chart.MwChartPanel;
 import eu.kprod.utils.LogLoader;
 
 public class LogViewerFrame extends JFrame {
@@ -31,7 +33,6 @@ public class LogViewerFrame extends JFrame {
 
     public LogViewerFrame(String name, MwDataSource ds,
             Class<? extends MwSensorClass> sclass) {
-        // TODO Auto-generated constructor stub
         super(name);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -44,7 +45,6 @@ public class LogViewerFrame extends JFrame {
     }
 
     public LogViewerFrame(String name, MwDataSource mwDataSource) {
-        // TODO Auto-generated constructor stub
         super(name);
         // when loading a file, we want to dipose the frame after usage
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -68,7 +68,6 @@ public class LogViewerFrame extends JFrame {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
         if (refDs != null) {
             refDs.removeListener(refsclass, chartTrendPanel);
         }

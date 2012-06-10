@@ -20,7 +20,7 @@ public class MwMainPanel extends JPanel {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        tabbedPane.addTab("Realtime Data", null, realTimePanel, null);
+        tabbedPane.addTab("Raw IMU", null, realTimePanel, null);
 
         this.add(tabbedPane);
 

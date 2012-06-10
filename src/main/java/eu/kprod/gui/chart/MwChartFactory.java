@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.gui.chart;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -19,7 +19,6 @@ public final class MwChartFactory {
 
     public static MwChartPanel createChart(final XYDataset xyDataset) {
         final JFreeChart chart;
-        // final XYDataset dataset
 
         chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
                 true, true, false);

@@ -1,9 +1,4 @@
-/* -*- mode: jde; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
-/*
- Copyright (c) 2007 David A. Mellis
-
- This program is free software; you can redistribute it and/or modify
+/*  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
@@ -14,31 +9,30 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software Foundation,
- Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ along with this program;
  */
 
 package eu.kprod.serial;
 
 public class SerialException extends Exception {
     /**
-	 * 
-	 */
+     *
+     */
     private static final long serialVersionUID = 1L;
 
     public SerialException() {
         super();
     }
 
-    public SerialException(String message) {
+    public SerialException(final String message) {
         super(message);
     }
 
-    public SerialException(String message, Throwable cause) {
+    public SerialException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public SerialException(Throwable cause) {
+    public SerialException(final Throwable cause) {
         super(cause);
     }
 }

@@ -29,7 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.ChartPanel;
 
 import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClassIMU;
@@ -37,8 +36,9 @@ import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.DebugFrame;
 import eu.kprod.gui.LogViewerFrame;
-import eu.kprod.gui.MwChartFactory;
 import eu.kprod.gui.MwMainPanel;
+import eu.kprod.gui.chart.MwChartFactory;
+import eu.kprod.gui.chart.MwChartPanel;
 import eu.kprod.gui.comboBox.MwJComboBox;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
@@ -74,10 +74,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 // TODO attitude panel
                 // requestMSP(MSP.ATTITUDE);
 
-                if (showMotor) {
+                if (motorFrame!=null && motorFrame.isVisible()) {
                     send(MSP.request(MSP.MOTOR));
                 }
-                if (showServo) {
+                if (servoFrame!=null && servoFrame.isVisible()) {
                     send(MSP.request(MSP.SERVO));
                 }
                 send(MSP.request(MSP.RAW_IMU));
@@ -142,20 +142,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private Timer timer;
 
     private static DebugFrame debugFrame;
-    private static boolean showServo;
-    private static boolean showMotor;
+
     private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
-    private ChartPanel chartTrendPanel;
-    private JPanel overviewPanel;
+    private JPanel rawImuChartPanel;
     private Properties appProps;
     private JMenu serialMenuPort;
     private ButtonGroup baudRateMenuGroup;
     private ButtonGroup portNameMenuGroup;
 
-    private JPanel getMainChartPanel() {
+    private JPanel getRawImuChartPanel() {
 
-        if (overviewPanel == null) {
+        if (rawImuChartPanel == null) {
 
             JButton stopButton = new JButton(("Stop"));
             stopButton.addActionListener(new ActionListener() {
@@ -181,7 +179,20 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 }
             });
             
-            JButton startButton = new JButton(("Start"));
+            final MwChartPanel rawImuChart = MwChartFactory.createChart(MSP.getModel()
+                    .getRealTimeData().getDataSet(MwSensorClassIMU.class));
+            MSP.getModel()
+                    .getRealTimeData()
+                    .addListener(MwSensorClassIMU.class,
+                            (MwDataSourceListener) rawImuChart);
+
+            rawImuChart.setPreferredSize(new java.awt.Dimension(500, 270));
+
+            rawImuChartPanel = new JPanel();
+            rawImuChartPanel.setLayout(new BorderLayout());
+            rawImuChartPanel.add(rawImuChart, BorderLayout.CENTER);
+
+            JButton startButton = new JButton(("Start")); 
             startButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     logger.trace("actionPerformed "
@@ -202,24 +213,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                         }
                     }
                     restartTimer((Integer)serialRefreshRate.getSelectedItem());
-                    chartTrendPanel.restoreAutoBounds();
+                    rawImuChart.restoreAutoBounds();
                 }
             });
-
-            chartTrendPanel = MwChartFactory.createChart(MSP.getModel()
-                    .getRealTimeData().getDataSet(MwSensorClassIMU.class));
-            MSP.getModel()
-                    .getRealTimeData()
-                    .addListener(MwSensorClassIMU.class,
-                            (MwDataSourceListener) chartTrendPanel);
-
-            chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-
-            overviewPanel = new JPanel();
-
-            overviewPanel.setLayout(new BorderLayout());
-            overviewPanel.add(chartTrendPanel, BorderLayout.CENTER);
-
             
             JPanel pane = new JPanel();
             pane.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -229,10 +225,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             pane.add(stopButton, FlowLayout.LEFT);
             pane.add(startButton, FlowLayout.LEFT);
 
-            overviewPanel.add(pane, BorderLayout.SOUTH);
+            rawImuChartPanel.add(pane, BorderLayout.SOUTH);
         }
 
-        return overviewPanel;
+        return rawImuChartPanel;
     }
 
     public MwGuiFrame() {
@@ -272,7 +268,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         getContentPane().setLayout(new BorderLayout());
 //      getContentPane().add(new JPanel(), BorderLayout.SOUTH);
-        getContentPane().add(new MwMainPanel(getMainChartPanel()), BorderLayout.CENTER);
+        getContentPane().add(new MwMainPanel(getRawImuChartPanel()), BorderLayout.CENTER);
 
         pack();
     }
@@ -437,14 +433,25 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
         servo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MwGuiFrame.showServo();
+                if (servoFrame == null) {
+                    servoFrame = new LogViewerFrame("Servo", MSP.getModel()
+                            .getRealTimeData(), MwSensorClassServo.class);
+                } else {
+                    servoFrame.setVisible(true);
+                }
             }
         });
 
         motor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                MwGuiFrame.showMotor();
+                if (motorFrame == null) {
+                    motorFrame = new LogViewerFrame("Motor", MSP.getModel()
+                            .getRealTimeData(), MwSensorClassMotor.class);
+
+                } else {
+                    motorFrame.setVisible(true);
+                }
 
             }
         });
@@ -470,7 +477,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private JMenuItem getSerialBaudAsMenuItem() {
         JMenu m = new JMenu("Baud");
         baudRateMenuGroup = new ButtonGroup(  );
-        for (Integer p :  SerialDevice.SerialRateStrings){
+        for (Integer p :  SerialDevice.SERIAL_BAUD_RATE){
             JMenuItem sm = new JRadioButtonMenuItem(p.toString());
             sm.setActionCommand(p.toString());
             sm.addActionListener(new ActionListener() {
@@ -508,7 +515,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     }
 
     private JMenu getSerialPortAsMenuItem() {
-        // TODO Auto-generated method stub
         if (serialMenuPort == null){
             JMenu m = new JMenu("Port");
             serialMenuPort =m;
@@ -526,27 +532,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         return serialMenuPort;
     }
 
-    protected static void showServo() {
-        showServo = true;
-        if (servoFrame == null) {
-            servoFrame = new LogViewerFrame("Servo", MSP.getModel()
-                    .getRealTimeData(), MwSensorClassServo.class);
-        } else {
-            servoFrame.setVisible(true);
-        }
-    }
 
-    protected static void showMotor() {
-        showMotor = true;
-        if (motorFrame == null) {
-            motorFrame = new LogViewerFrame("Motor", MSP.getModel()
-                    .getRealTimeData(), MwSensorClassMotor.class);
-
-        } else {
-            motorFrame.setVisible(true);
-        }
-
-    }
 
     /**
      * send a string to the serial com
@@ -555,7 +541,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
      */
     synchronized private void send(String s) throws SerialException {
         if (com != null) {
-            com.send(s, 0 /* lineEndings.getSelectedIndex() */);
+            com.send(s);
         }
     }
 

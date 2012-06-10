@@ -44,7 +44,7 @@ import org.apache.log4j.Logger;
 public class SerialDevice implements SerialPortEventListener {
     private static final Logger LOGGER = Logger.getLogger(SerialDevice.class);
 
-    public static final List<Integer> SerialRateStrings = initializeMap();
+    public static final List<Integer> SERIAL_BAUD_RATE = initializeMap();
 
     private static List<Integer> initializeMap() {
         List<Integer> m = new ArrayList<Integer>();
@@ -75,7 +75,7 @@ public class SerialDevice implements SerialPortEventListener {
     private SerialListener listener;
 
     public SerialDevice(final String device) throws SerialException {
-        this(device, SerialDevice.SerialRateStrings.get(115200), 'N', 8,
+        this(device, SerialDevice.SERIAL_BAUD_RATE.get(115200), 'N', 8,
                 new Float(1));
     }
 

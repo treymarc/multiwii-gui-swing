@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.gui.chart;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

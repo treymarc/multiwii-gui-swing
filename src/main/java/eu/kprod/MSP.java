@@ -28,7 +28,11 @@ public class MSP {
     }
 
     private static final int MASK = 0xff;
-    private static final int BUFFERSize = 128;
+    private static final int BUFFER_SIZE = 128;
+    
+    private static final Character char$ = new Character('$');
+    private static final Character charM = new Character('M');
+    private static final Character charArrow = new Character('>');
     
     public static final String
     OUT   = "$M<";
@@ -45,7 +49,7 @@ public class MSP {
                HEADER_CHK = 6
             ;
 
-            static int c_state = IDLE;
+            
 
     public static final int
     IDENT                =100,
@@ -89,7 +93,7 @@ public class MSP {
     /**
      * reception buffer
      */
-    private static byte[] inBuf = new byte[BUFFERSize ];
+    private static byte[] inBuf = new byte[BUFFER_SIZE ];
     /**
      * read 32byte from the inputBuffer
      */
@@ -112,10 +116,11 @@ public class MSP {
         return inBuf[p++] & MASK;
     }
 
-    private static byte checksum = 0;
-//     stateMSP = 0, 
-    private static int       offset = 0, dataSize = 0;
-    private static byte cmd;
+    
+    private static byte checksum = 0,cmd=0;
+    
+    private static int offset = 0, dataSize = 0, mspState = IDLE;
+
 
     /**
      * Decode the byte 
@@ -123,38 +128,38 @@ public class MSP {
      */
     synchronized public static void decode(final byte input) {
         char c = (char) input;
-        if (c_state == IDLE) {
-            c_state = (c=='$') ? HEADER_START : IDLE;
-          } else if (c_state == HEADER_START) {
-            c_state = (c=='M') ? HEADER_M : IDLE;
-          } else if (c_state == HEADER_M) {
-            c_state = (c=='>') ? HEADER_ARROW : IDLE;
-          } else if (c_state == HEADER_ARROW) {
+        if (mspState == IDLE) {
+            mspState = (char$.equals(c)) ? HEADER_START : IDLE;
+          } else if (mspState == HEADER_START) {
+            mspState =  (charM.equals(c)) ? HEADER_M : IDLE;
+          } else if (mspState == HEADER_M) {
+            mspState =  (charArrow.equals(c)) ? HEADER_ARROW : IDLE;
+          } else if (mspState == HEADER_ARROW) {
             /* now we are expecting the payload size */
-            dataSize = (c&0xFF);
+            dataSize = (c & MASK);
             /* reset index variables */
             p = 0;
             offset = 0;
             checksum = 0;
-            checksum ^= (c&0xFF);
+            checksum ^= (c & MASK);
             /* the command is to follow */
-            c_state = HEADER_SIZE;
-          } else if (c_state == HEADER_SIZE) {
-            cmd = (byte)(c&0xFF);
-            checksum ^= (c&0xFF);
-            c_state = HEADER_CMD;
-          } else if (c_state == HEADER_CMD && offset < dataSize) {
-              checksum ^= (c&0xFF);
-              inBuf[offset++] = (byte)(c&0xFF);
-          } else if (c_state == HEADER_CMD && offset >= dataSize) {
+            mspState = HEADER_SIZE;
+          } else if (mspState == HEADER_SIZE) {
+            cmd = (byte)(c & MASK);
+            checksum ^= (c & MASK);
+            mspState = HEADER_CMD;
+          } else if (mspState == HEADER_CMD && offset < dataSize) {
+              checksum ^= (c & MASK);
+              inBuf[offset++] = (byte)(c & MASK);
+          } else if (mspState == HEADER_CMD && offset >= dataSize) {
             /* compare calculated and transferred checksum */
-            if ((checksum&0xFF) == (c&0xFF)) {
+            if ((checksum & MASK) == (c & MASK)) {
               /* we got a valid response packet, evaluate it */
                 decodeInBuf(cmd, (int)dataSize);
             } else {
-              System.out.println("invalid checksum for command "+((int)(cmd&0xFF))+": "+(checksum&0xFF)+" expected, got "+(int)(c&0xFF));
+              System.out.println("invalid checksum for command "+((int)(cmd & MASK))+": "+(checksum & MASK)+" expected, got "+(int)(c & MASK));
             }
-            c_state = IDLE;
+            mspState = IDLE;
           }
 
     }
@@ -342,7 +347,7 @@ public class MSP {
     }
 
     //send multiple msp without payload 
-    private String requestMSP(int[] msps) {
+    static String requestMSP(int[] msps) {
        StringBuffer bf = new StringBuffer();
       for (int m : msps) {
         bf.append(request(m, null));
