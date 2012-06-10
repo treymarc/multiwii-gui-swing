@@ -51,6 +51,12 @@ public class SerialCom {
         }
     }
 
+    public final void send(byte []  s) throws SerialException {
+        if (serial != null) {
+            serial.write(s);
+        }
+    }
+    
     public final void send(String s,final  Integer d) throws SerialException {
         cr = d;
         switch (cr) {

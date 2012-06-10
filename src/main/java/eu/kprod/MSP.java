@@ -1,7 +1,12 @@
 package eu.kprod;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.swing.event.ChangeListener;
+
+import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassRC;
@@ -20,9 +25,9 @@ public class MSP {
      */
     private static MwDataModel model;
 
-    public static MwDataModel getModel() {
-        return model;
-    }
+//    public static MwDataModel getModel() {
+//        return model;
+//    }
 
     public static void setModel(final MwDataModel model1) {
         MSP.model = model1;
@@ -167,12 +172,12 @@ public class MSP {
 
 
         
-    synchronized private static void decodeInBuf(int stateMSP, int dataSize2) {
+    synchronized private static void decodeInBuf(final int stateMSP, final int dataSize2) {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
-                getModel().setVersion(read8());
-                getModel().setMultiType(read8());
+                model.setVersion(read8());
+                model.setMultiType(read8());
                 break;
             case STATUS:
 
@@ -190,42 +195,42 @@ public class MSP {
 //                }
                 break;
             case RAW_IMU:
-                getModel().getRealTimeData().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
-                getModel().getRealTimeData().put(d, "ay", Double.valueOf(read16()),MwSensorClassIMU.class);
-                getModel().getRealTimeData().put(d, "az", Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "ay", Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "az", Double.valueOf(read16()),MwSensorClassIMU.class);
 
-                getModel().getRealTimeData().put(d, "gx", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
-                getModel().getRealTimeData().put(d, "gy", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
-                getModel().getRealTimeData().put(d, "gz", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "gx", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "gy", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "gz", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
 
-                getModel().getRealTimeData().put(d, "magx", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
-                getModel().getRealTimeData().put(d, "magy", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
-                getModel().getRealTimeData().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "magx", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "magy", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
                 break;
             case SERVO:
                 for(int i=0;i<8;i++){
-                    getModel().getRealTimeData().put(d, new StringBuffer().append("servo").append(i).toString(), 
+                    model.getRealTimeData().put(d, new StringBuffer().append("servo").append(i).toString(), 
                             Double.valueOf(read16()),
                             MwSensorClassServo.class);
                 }
                 break;
             case MOTOR:
                 for(int i=0;i<8;i++){
-                    getModel().getRealTimeData().put(d, new StringBuffer().append("mot").append(i).toString(),
+                    model.getRealTimeData().put(d, new StringBuffer().append("mot").append(i).toString(),
                             Double.valueOf(read16()),
                             MwSensorClassMotor.class);
                 }
                 break;
             case RC:
 
-                getModel().getRealTimeData().put(d, "roll",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "pitch",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "yaw",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "throttle",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "aux1",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "aux2",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "aux3",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                getModel().getRealTimeData().put(d, "aux4",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "roll",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "pitch",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "yaw",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "throttle",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "aux1",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "aux2",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "aux3",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, "aux4",  Double.valueOf(read16()), MwSensorClassRC.class) ;
 
                 break;
             case RAW_GPS:
@@ -254,30 +259,30 @@ public class MSP {
 
                 break;
             case RC_TUNING:
-                getModel().setRcRate((int) (read8() / 100.0));
-                getModel().setRcExpo((int) (read8() / 100.0));
-                getModel().setRollPitchRate((int) (read8() / 100.0));
-                getModel().setYawRate((int) (read8() / 100.0));
-                getModel().setDynThrPID((int) (read8() / 100.0));
-                getModel().setThrottleMID((int) (read8() / 100.0));
-                getModel().setThrottleEXPO((int) (read8() / 100.0));
+                model.setRcRate((int) (read8() / 100.0));
+                model.setRcExpo((int) (read8() / 100.0));
+                model.setRollPitchRate((int) (read8() / 100.0));
+                model.setYawRate((int) (read8() / 100.0));
+                model.setDynThrPID((int) (read8() / 100.0));
+                model.setThrottleMID((int) (read8() / 100.0));
+                model.setThrottleEXPO((int) (read8() / 100.0));
                 break;
             case ACC_CALIBRATION:
                 break;
             case MAG_CALIBRATION:
                 break;
             case PID:
-                for( int index = 0;index<getModel().getPidNameCount();index++) { 
-                    getModel().setPidValue(index,read8(),read8(),read8()); 
+                for( int index = 0;index<model.getPidNameCount();index++) { 
+                    model.setPidValue(index,read8(),read8(),read8()); 
                   }
-                getModel().pidChanged();
+                model.pidChanged();
                 break;
             case BOX:         
-                for( int index = 0;index<getModel().getBoxNameCount();index++) {
+                for( int index = 0;index<model.getBoxNameCount();index++) {
                     int bytread = read16();
-                   getModel().setBoxNameValue(index,bytread);    
+                   model.setBoxNameValue(index,bytread);    
                   } 
-                getModel().boxChanged();
+                model.boxChanged();
                 break;
             case MISC:
                 // intPowerTrigger = read16();
@@ -293,64 +298,79 @@ public class MSP {
                 // read16();
                 break;
             case BOXNAMES:
-                getModel().removeAllBoxName();
+                model.removeAllBoxName();
                 int i = 0;
                 for (String name : new String(inBuf, 0, dataSize).split(";")) {
-                    getModel().addBoxName(name,i++);
+                    model.addBoxName(name,i++);
                 }
                 break;
             case PIDNAMES:
-                getModel().removeAllPIDName();
+                model.removeAllPIDName();
                 i = 0;
                 for (String name : new String(inBuf, 0, dataSize).split(";")) {
-                    getModel().addPIDName(name,i++);
+                    model.addPIDName(name,i++);
                 }
                 break;
         }
 
     }
 
-
-    
- // send msp without payload 
-    static String request(int msp) {
-         return   request( msp, null);
+  //send msp without payload
+    public static List<Byte> request(int msp) {
+        return  request( msp, null);
     }
 
-    //send multiple msp without payload 
-    static String request(int[] msps) {
-       StringBuffer bf = new StringBuffer();
-      for (int m : msps) {
-        bf.append(request(m, null));
-      }
-      return (bf.toString());
+    //send multiple msp without payload
+    public static List<Byte> request (int[] msps) {
+    List<Byte> s = new LinkedList<Byte>();
+    for (int m : msps) {
+     s.addAll(request(m, null));
+    }
+    return s;
     }
 
+    //send msp with payload
+     public static List<Byte> request (int msp, Character[] payload) {
+    if(msp < 0) {
+     return null;
+    }
+    List<Byte> bf = new LinkedList<Byte>();
+    for (byte c : OUT.getBytes()) {
+     bf.add( c );
+    }
 
-    //send msp with payload 
-    private static String request(final int msp, final Character[] payload) {
-      if(msp < 0) {
-        return null; 
-      }
-      
-      byte checksum=0;
-      char pl_size =  (char) (payload != null ? payload.length : 0);
-      
-      StringBuffer bf = new StringBuffer().append(OUT).append(pl_size).append((char)(msp));
+    byte checksum=0;
+    byte pl_size = (byte)((payload != null ? (payload.length) : 0)&0xFF);
+    bf.add(pl_size);
+    checksum ^= (pl_size&0xFF);
 
-      checksum ^= (int)(pl_size);
-      checksum ^= (int)(msp);
-      
-      if (payload != null){
-       
-        for (char c :payload){
-          bf.append(c);
-          checksum ^= (int)(c);
-        }
+    bf.add((byte)(msp & 0xFF));
+    checksum ^= (msp&0xFF);
+
+    if (payload != null) {
+     for (char c :payload){
+       bf.add((byte)(c&0xFF));
+       checksum ^= (c&0xFF);
+     }
+    }
+
+    bf.add(checksum);
+    return (bf);
+    }
+   
+    public static MwDataSource getRealTimeData() {
+        // TODO Auto-generated method stub
+        return model.getRealTimeData();
+    }
+
+    public static void setPidChangeListener(final ChangeListener pidPane) {
+        // TODO Auto-generated method stub
+        model.setPidChangeListener(pidPane);
+    }
+
+    public static void setBoxChangeListener(final ChangeListener boxPane) {
+        // TODO Auto-generated method stub
+        model.setBoxChangeListener(boxPane);
         
-      }
-     bf.append((char)((int)(checksum)));
-     
-      return(bf.toString());        
     }
 }
