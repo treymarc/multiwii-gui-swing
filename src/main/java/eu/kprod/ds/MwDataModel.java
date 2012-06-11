@@ -1,4 +1,4 @@
-package eu.kprod;
+package eu.kprod.ds;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,6 @@ import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import eu.kprod.ds.MwDataSource;
-import eu.kprod.ds.MwDataSourceImpl;
 
 public class MwDataModel {
 
@@ -62,7 +60,15 @@ public class MwDataModel {
     }
 
     private ChangeListener pidChangeListener;
+
+    private int powerTrigger;
+
+    private int[] motorPins = new int[8];
     
+    public int getPowerTrigger() {
+        return powerTrigger;
+    }
+
     public int getRcRate() {
         return rcRate;
     }
@@ -285,5 +291,21 @@ public class MwDataModel {
     public Map<String, List<Boolean>> getBOXs() {
         // TODO Auto-generated method stub
         return boxs;
+    }
+
+    public void setPowerTrigger(int read16) {
+        powerTrigger = read16;
+        
+    }
+
+    /**
+     * 
+     * @param i the motor number
+     * @param read8 the number of the pin
+     */
+    public void setMotorPin(int i, int read8) {
+        // TODO Auto-generated method stub
+        motorPins [i]=read8;
+        
     }
 }

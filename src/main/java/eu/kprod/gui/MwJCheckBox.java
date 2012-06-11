@@ -1,7 +1,5 @@
 package eu.kprod.gui;
 
-import java.awt.Dimension;
-
 import javax.swing.JCheckBox;
 
 public class MwJCheckBox extends JCheckBox {
@@ -13,7 +11,6 @@ public class MwJCheckBox extends JCheckBox {
 
     private String state = "l";
 
-    private static Dimension dim= new Dimension(3,3);
     
     public MwJCheckBox(String name, int j, String string) {
         super();
@@ -31,8 +28,7 @@ public class MwJCheckBox extends JCheckBox {
             default:
                 break;
         }
-//        setSize(dim);
-        setPreferredSize(dim);
+
         setToolTipText(new StringBuffer().append(string).append(" ").append(state).append(" : ").append(name).toString());
     }
 

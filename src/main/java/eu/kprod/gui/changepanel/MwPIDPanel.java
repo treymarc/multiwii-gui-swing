@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 
-import eu.kprod.MwDataModel;
+import eu.kprod.ds.MwDataModel;
 import eu.kprod.gui.MwJLabel;
 import eu.kprod.gui.textfield.MwTextField;
 
@@ -39,6 +39,14 @@ public class MwPIDPanel extends MwChangeablePanel  {
         JPanel mainPane = new JPanel();
         mainPane.setLayout(new GridLayout(1+(index == null ? 0 : index.size()),1));
         JPanel pane = new JPanel();
+       
+        if ( piDs == null || index == null ){
+            pane.setLayout(new GridLayout(1,1));
+            pane.add(new MwJLabel("PID - EMPTY"));
+            mainPane.add(pane);
+            return mainPane;
+        }
+        
         pane.setLayout(new GridLayout(1,4));
         pane.setBorder(new EmptyBorder(1, 1, 1, 1));
         pane.add(new MwJLabel());
@@ -47,11 +55,6 @@ public class MwPIDPanel extends MwChangeablePanel  {
         pane.add(new MwJLabel("D"));
         mainPane.add(pane);
         
-        if (piDs == null || index == null){
-            return mainPane;
-        }
-       
-
         for (int i = 0; i < index.size(); i++) {
             String name = index.get(i);
             pane = new JPanel();

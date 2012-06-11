@@ -6,9 +6,12 @@ import java.util.List;
 
 import javax.swing.event.ChangeListener;
 
+import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwSensorClassDebug;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassPower;
 import eu.kprod.ds.MwSensorClassRC;
 import eu.kprod.ds.MwSensorClassServo;
 
@@ -103,10 +106,10 @@ public class MSP {
     /**
      * read 32byte from the inputBuffer
      */
-    public static synchronized int read32() {
-        return (inBuf[p++] & MASK) + ((inBuf[p++] & MASK) << 8)
-                + ((inBuf[p++] & MASK) << 16) + ((inBuf[p++] & MASK) << 24);
-    }
+
+    synchronized public static int  read32() {
+        return (inBuf[p++]&MASK) + ((inBuf[p++]&MASK)<<8) + (((int)(inBuf[p++]&MASK))<<16) + (((int)(inBuf[p++]&MASK))<<24); }
+
 
     /**
      * read 16byte from the inputBuffer
@@ -247,16 +250,16 @@ public class MSP {
                 // GPS_update = read8();
                 break;
             case ATTITUDE:
-                // angx = read16()/10;angy = read16()/10;
-                // head = read16();
+                model.getRealTimeData().put(d, "angx", Double.valueOf(read16()/10),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "angy", Double.valueOf(read16()/10),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "head", Double.valueOf(read16()),MwSensorClassIMU.class);
                 break;
             case ALTITUDE:
-                // alt = read32();
+                model.getRealTimeData().put(d, "alt", Double.valueOf(read32())/100,MwSensorClassIMU.class);
                 break;
-            case BAT:
-                // bytevbat = read8();
-                // pMeterSum = read16();
-
+            case BAT: //TODO SEND
+                model.getRealTimeData().put(d, "vbat",  Double.valueOf(read8()), MwSensorClassPower.class) ;         
+                model.getRealTimeData().put(d, "powerMeterSum",  Double.valueOf(read16()), MwSensorClassPower.class) ;         
                 break;
             case RC_TUNING:
                 model.setRcRate((int) (read8() / 100.0));
@@ -284,18 +287,19 @@ public class MSP {
                   } 
                 model.boxChanged();
                 break;
-            case MISC:
-                // intPowerTrigger = read16();
+            case MISC: //TODO SEND
+                model.setPowerTrigger(read16());
                 break;
-            case MOTOR_PINS:
-                // for( i=0;i<8;i++) {
-                // byteMP[i] = read8();
-                // }
+            case MOTOR_PINS://TODO SEND
+                 for( int i=0;i<8;i++) {
+                     model.setMotorPin(i,read8());
+                 }
                 break;
-            case DEBUG:
-                // debug1 = read16();debug2 = read16();debug3 = read16();debug4
-                // =
-                // read16();
+            case DEBUG://TODO SEND
+                for (int i = 1; i <5; i++) {
+                    model.getRealTimeData().put(d, "debug"+i,  Double.valueOf(read16()), MwSensorClassDebug.class) ;         
+                }
+
                 break;
             case BOXNAMES:
                 model.removeAllBoxName();
@@ -340,17 +344,17 @@ public class MSP {
     }
 
     byte checksum=0;
-    byte pl_size = (byte)((payload != null ? (payload.length) : 0)&0xFF);
+    byte pl_size = (byte)((payload != null ? (payload.length) : 0)&MASK);
     bf.add(pl_size);
-    checksum ^= (pl_size&0xFF);
+    checksum ^= (pl_size&MASK);
 
-    bf.add((byte)(msp & 0xFF));
-    checksum ^= (msp&0xFF);
+    bf.add((byte)(msp & MASK));
+    checksum ^= (msp&MASK);
 
     if (payload != null) {
      for (char c :payload){
-       bf.add((byte)(c&0xFF));
-       checksum ^= (c&0xFF);
+       bf.add((byte)(c&MASK));
+       checksum ^= (c&MASK);
      }
     }
 

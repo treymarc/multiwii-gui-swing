@@ -33,6 +33,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
+import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
@@ -41,6 +42,7 @@ import eu.kprod.gui.DebugFrame;
 import eu.kprod.gui.LogViewerFrame;
 import eu.kprod.gui.MwJButton;
 import eu.kprod.gui.MwMainPanel;
+import eu.kprod.gui.MwSensorCheckBoxJPanel;
 import eu.kprod.gui.changepanel.MwBOXPanel;
 import eu.kprod.gui.changepanel.MwPIDPanel;
 import eu.kprod.gui.chart.MwChartFactory;
@@ -123,13 +125,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 // Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
 
-//                MwGuiFrame frame = 
-                        MwGuiFrame.getInstance().setVisible(true);
-//                MwGuiFrame.serialListener = frame;
-//                frame.setVisible(true);
+                MwGuiFrame.getInstance().setVisible(true);
+
             }
 
-    
         });
 
     }
@@ -167,11 +166,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static Timer timer;
 
     private static DebugFrame debugFrame;
-
     private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
+    
     private JPanel realTimePanel;
-    private Properties appProps;
+
     private static JMenu serialMenuPort;
     private static ButtonGroup baudRateMenuGroup;
     private static ButtonGroup portNameMenuGroup;
@@ -180,6 +179,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static JMenuItem rescanSerial;
     private static JMenuItem disconnectSerial;
     private String frameTitle;
+    private static MwSensorCheckBoxJPanel realTimeCheckBoxPanel;
 
     private JPanel getRawImuChartPanel() {
 
@@ -236,17 +236,25 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             JPanel pane = new JPanel();
             pane.setLayout(new FlowLayout(FlowLayout.LEADING));
             pane.setBorder(new EmptyBorder(1, 1, 1, 1));
-
-           
+     
             pane.add(stopButton );
             pane.add(startButton);
             pane.add(serialRefreshRate);
 
             realTimePanel.add(pane, BorderLayout.SOUTH);
             realTimePanel.add(getUavPanel() ,BorderLayout.EAST);
+            realTimePanel.add(getRealTimeCheckBowPanel() ,BorderLayout.WEST);
         }
 
         return realTimePanel;
+    }
+
+    private static MwSensorCheckBoxJPanel getRealTimeCheckBowPanel() {
+        // TODO Auto-generated method stub
+       if (realTimeCheckBoxPanel==null){
+           realTimeCheckBoxPanel= new MwSensorCheckBoxJPanel();
+       }
+        return realTimeCheckBoxPanel;
     }
 
     protected static void beginSerialCom() {
@@ -255,9 +263,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             if (!getCom().isOpen()) {
                 openCom = true;
             }
-
         } catch (SerialException e1) {
-
             openCom = true;
         } finally {
             if (openCom) {
@@ -268,7 +274,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 }
             }
         }
-        
     }
 
     private JPanel getUavPanel() {
@@ -278,19 +283,22 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
     public MwGuiFrame() {
         super();
+       
         
         MSP.setModel(new MwDataModel());
 
-        appProps = new Properties();
-
-        try {
-            URL url = ClassLoader.getSystemResource("app.properties");
-            appProps.load(url.openStream());
-        } catch (Exception e) {   
-            throw new MwGuiRuntimeException("Failed to load app properties", e);
+        
+        {
+            try {
+                URL url = ClassLoader.getSystemResource("app.properties");
+                final Properties appProps = new Properties();
+                appProps.load(url.openStream());
+                frameTitle = appProps.getProperty("mainframe.title");
+            } catch (Exception e) {   
+                throw new MwGuiRuntimeException("Failed to load app properties", e);
+            }
         }
-
-        frameTitle = appProps.getProperty("mainframe.title");
+        
         this.setTitle(null);
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -322,7 +330,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     
     private JPanel getSettingsPanel() {
         
-
         if (settingsPanel == null) {
             settingsPanel = new JPanel();
             settingsPanel.setLayout(new BorderLayout());
@@ -343,12 +350,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             JButton calibGyrButton = new MwJButton("Gyro","Gyro calibration");
             JButton calibAccButton = new MwJButton("Acc","Acc calibration");
             JButton calibMagButton = new MwJButton("Mag","Mag calibration");
-            
-            
+               
             calibAccButton.addActionListener(new actionMspSender(MSP.ACC_CALIBRATION));
             calibMagButton.addActionListener(new actionMspSender(MSP.MAG_CALIBRATION));
-            
-
 //          calibGyrButton.addActionListener(new actionMspSender(MSP.MAG_CALIBRATION));
             
             JPanel pane = new JPanel();
@@ -393,7 +397,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
 
     protected static void openSerialPort() {
-   
                 closeSerialPort();
                 getSerialPortAsMenuItem();
                 if (portNameMenuGroup.getSelection() == null) {
@@ -404,11 +407,8 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                     Object[] array =list.toArray(new String[list.size()]);
                     String name = (String) JOptionPane.showInputDialog(
                             MwGuiFrame.getInstance(),
-
                             "Select a Serial Port", "port",
-
                             JOptionPane.INFORMATION_MESSAGE, null,
-
                             array , array[0]);
 
                     Enumeration<AbstractButton> els = portNameMenuGroup.getElements();
@@ -450,8 +450,6 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 } catch (SerialException e) {
                     e.printStackTrace();
                 }
-      
-
     }
 
     public void setTitle(String s){
@@ -469,9 +467,9 @@ public class MwGuiFrame extends JFrame implements SerialListener {
                 try {
                     // TODO do no send all requests at the same time
 
-                    // TODO attitude panel
-                    // requestMSP(MSP.ATTITUDE);
-
+                     send(MSP.request(MSP.ATTITUDE));
+                     send(MSP.request(MSP.ALTITUDE));
+                     
                     if (motorFrame!=null && motorFrame.isVisible()) {
                         send(MSP.request(MSP.MOTOR));
                     }
@@ -755,6 +753,11 @@ public class MwGuiFrame extends JFrame implements SerialListener {
 
             }
         });
+    }
+
+    public static void AddSensorCheckBox(String sensorName) {
+        // TODO Auto-generated method stub
+        getRealTimeCheckBowPanel().addSensorBox(sensorName);
     }
 
 }
