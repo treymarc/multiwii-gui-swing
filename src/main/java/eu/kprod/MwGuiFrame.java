@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
@@ -48,6 +49,7 @@ import eu.kprod.gui.changepanel.MwPIDPanel;
 import eu.kprod.gui.chart.MwChartFactory;
 import eu.kprod.gui.chart.MwChartPanel;
 import eu.kprod.gui.comboBox.MwJComboBox;
+import eu.kprod.gui.hud.MwHudPanel;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
 import eu.kprod.serial.SerialException;
@@ -179,6 +181,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     private static JMenuItem rescanSerial;
     private static JMenuItem disconnectSerial;
     private String frameTitle;
+    private static MwHudPanel hudPanel;
     private static MwSensorCheckBoxJPanel realTimeCheckBoxPanel;
 
     private JPanel getRawImuChartPanel() {
@@ -242,7 +245,7 @@ public class MwGuiFrame extends JFrame implements SerialListener {
             pane.add(serialRefreshRate);
 
             realTimePanel.add(pane, BorderLayout.SOUTH);
-            realTimePanel.add(getUavPanel() ,BorderLayout.EAST);
+            realTimePanel.add(getHudPanel() ,BorderLayout.EAST);
             realTimePanel.add(getRealTimeCheckBowPanel() ,BorderLayout.WEST);
         }
 
@@ -276,9 +279,18 @@ public class MwGuiFrame extends JFrame implements SerialListener {
         }
     }
 
-    private JPanel getUavPanel() {
-        // TODO Auto-generated method stub
-        return new JPanel();
+    public static MwHudPanel getHudPanel() {
+        
+        
+        
+        if(hudPanel==null){
+            
+            hudPanel= new MwHudPanel();
+            MSP.getRealTimeData().addListener(MwSensorClassHUD.class, (MwDataSourceListener) hudPanel);
+            
+        }
+        return hudPanel;
+        
     }
 
     public MwGuiFrame() {
@@ -721,10 +733,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
      */
     synchronized public void readSerialByte(final byte input) {
 
+        MSP.decode(input);
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-
-                MSP.decode(input);
 
                 if (getDebugFrame().isVisible()) {
                     debugFrame.readSerialByte(input);
@@ -745,14 +757,10 @@ public class MwGuiFrame extends JFrame implements SerialListener {
     @Override
     public void reportSerial(Throwable e) {
         // we have an error
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
 
                 stopTimer();
                 closeSerialPort();
 
-            }
-        });
     }
 
     public static void AddSensorCheckBox(String sensorName) {

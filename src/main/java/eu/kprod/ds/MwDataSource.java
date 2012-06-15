@@ -50,5 +50,5 @@ public interface MwDataSource {
      * 
      * @param sensorClass
      */
-    void notifyListener(MwSensorClass sensorClass);
+    void notifyListener(Class<? extends MwSensorClass> sensorClass,String name, Double value);
 }
