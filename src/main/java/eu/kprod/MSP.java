@@ -9,6 +9,7 @@ import javax.swing.event.ChangeListener;
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwSensorClassDebug;
+import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassPower;
@@ -250,8 +251,8 @@ public class MSP {
                 // GPS_update = read8();
                 break;
             case ATTITUDE:
-                model.getRealTimeData().put(d, "angx", Double.valueOf(read16()/10),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "angy", Double.valueOf(read16()/10),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, "angx", Double.valueOf(read16()/10),MwSensorClassHUD.class);
+                model.getRealTimeData().put(d, "angy", Double.valueOf(read16()/10),MwSensorClassHUD.class);
                 model.getRealTimeData().put(d, "head", Double.valueOf(read16()),MwSensorClassIMU.class);
                 break;
             case ALTITUDE:

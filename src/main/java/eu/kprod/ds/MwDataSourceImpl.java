@@ -10,7 +10,6 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
-//TODO remove , use listener
 import eu.kprod.MwGuiFrame;
 
 /**
@@ -119,14 +118,7 @@ public class MwDataSourceImpl implements MwDataSource {
         }
 
         if (sensorClass != null) {
-//            List<MwDataSourceListener> lists = listeners.get(sensorClass);
-//            if (lists != null) {
-//                for (MwDataSourceListener mwDataSourceListener : lists) {
-//                    mwDataSourceListener.readNewValue(sensorName, value);
-//                }
-//
-//            }
-//            ;
+            notifyListener(sensorClass,sensorName,value);
         }
         Hashtable<String, TimeSeries> s = sensors.get(sensorClass);
         if (s == null) {
@@ -166,12 +158,15 @@ public class MwDataSourceImpl implements MwDataSource {
     }
 
     @Override
-    public void notifyListener(MwSensorClass sensorClass) {
+    public void notifyListener(Class<? extends MwSensorClass> sensorClass,String name, Double value) {
         if (sensorClass != null) {
             List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
             for (MwDataSourceListener mwDataSourceListener : listenersl) {
-                mwDataSourceListener.readNewValue(null, null);
-
+                mwDataSourceListener.readNewValue( name,  value);
+//                if (mwDataSourceListener instanceof JComponent){
+//                    JComponent p = (JComponent)mwDataSourceListener;
+//                   
+//                }
             }
 
         }
