@@ -10,10 +10,7 @@ public class MwJMenuItem extends JMenuItem {
     private static final long serialVersionUID = 1L;
 
     public MwJMenuItem(String string) {
-        // TODO Auto-generated constructor stub
-        
        super(string);
-
     }
 
 }

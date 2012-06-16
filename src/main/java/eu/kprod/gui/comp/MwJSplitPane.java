@@ -13,7 +13,7 @@ public class MwJSplitPane extends JSplitPane {
 
     public MwJSplitPane(int horizontalSplit, Component hudPanel,
             Component realTimeChart) {
-        super( horizontalSplit,  hudPanel,realTimeChart);
+        super(horizontalSplit, hudPanel, realTimeChart);
 
     }
 

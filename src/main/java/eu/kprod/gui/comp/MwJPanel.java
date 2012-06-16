@@ -12,15 +12,12 @@ public class MwJPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     public MwJPanel() {
-        
-
-        
+        super();
 
     }
 
     public MwJPanel(GridLayout gridLayout) {
-       super(gridLayout);
-
+        super(gridLayout);
     }
 
 }

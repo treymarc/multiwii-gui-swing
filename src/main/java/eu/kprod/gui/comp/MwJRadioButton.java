@@ -8,15 +8,14 @@ public class MwJRadioButton extends JRadioButton {
      * 
      */
     private static final long serialVersionUID = 1L;
-public MwJRadioButton() {
-    // TODO Auto-generated constructor stub
-    super();
 
-}
-public MwJRadioButton(String p) {
-    // TODO Auto-generated constructor stub
- super(p);
-    
+    public MwJRadioButton() {
 
-}
+        super();
+
+    }
+
+    public MwJRadioButton(String p) {
+        super(p);
+    }
 }
