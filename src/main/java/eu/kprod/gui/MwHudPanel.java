@@ -232,7 +232,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
             distance = Math.abs(i * 5); // Put the text and the lines length at
                                         // the right position
 
-            g2d.setPaint(Color.white);
+            g2d.setPaint(Color.green);
             g2d.setStroke(new BasicStroke(1));
             g2d.setFont(writing);
 
@@ -288,7 +288,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
                 centerPoint.getY());
         centerShape.lineTo((centerPoint.getX() + 25), centerPoint.getY());
 
-        g2d.setPaint(Color.white);
+        g2d.setPaint(Color.red);
         g2d.setStroke(new BasicStroke(2));
         g2d.draw(centerShape);
     }
@@ -370,7 +370,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
     public void readNewValue(String name, Double value) {
         // TODO Auto-generated method stub
         if ("angy".equals(name)) {
-            this.pitchAngle = value.intValue();
+            this.pitchAngle = -value.intValue();
         }
 
         if ("angx".equals(name)) {
