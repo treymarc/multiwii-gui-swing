@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.gui.comp;
 
 import javax.swing.JCheckBox;
 
@@ -14,6 +14,7 @@ public class MwJCheckBox extends JCheckBox {
     
     public MwJCheckBox(String name, int j, String string) {
         super();
+
         // TODO Auto-generated constructor stub
         switch (j) {
             case 0:

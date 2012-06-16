@@ -1,4 +1,4 @@
-package eu.kprod;
+package eu.kprod.msg;
 
 import java.text.MessageFormat;
 

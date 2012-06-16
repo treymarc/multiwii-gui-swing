@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.gui.comp;
 
 import java.awt.Color;
 

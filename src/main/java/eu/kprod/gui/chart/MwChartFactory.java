@@ -11,6 +11,8 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYDataset;
 
+import eu.kprod.gui.comp.StyleColor;
+
 public final class MwChartFactory {
 
     private MwChartFactory() {
@@ -23,12 +25,17 @@ public final class MwChartFactory {
         chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
                 true, true, false);
 
-        chart.setBackgroundPaint(Color.white);
 
+        chart.setBackgroundPaint(StyleColor.backGround);
+
+        
         final XYPlot plot = chart.getXYPlot();
-        plot.setBackgroundPaint(Color.lightGray);
+
+      plot.setBackgroundPaint(StyleColor.backGround);
+
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
+        
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 

@@ -1,4 +1,4 @@
-package eu.kprod;
+package eu.kprod.msp;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -27,15 +27,15 @@ public class MSP {
     /**
      *  the model for holding the value decoded by the MSP
      */
-    private static MwDataModel model;
+    private static  MwDataModel model=new MwDataModel();
 
 //    public static MwDataModel getModel() {
 //        return model;
 //    }
 
-    public static void setModel(final MwDataModel model1) {
-        MSP.model = model1;
-    }
+//    public static void setModel(final MwDataModel model1) {
+//        MSP.model = model1;
+//    }
 
     private static final int MASK = 0xff;
     private static final int BUFFER_SIZE = 128;

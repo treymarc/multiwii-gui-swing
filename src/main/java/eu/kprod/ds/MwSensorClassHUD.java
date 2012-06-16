@@ -1,5 +1,5 @@
 package eu.kprod.ds;
 
-public class MwSensorClassHUD extends MwSensorClassIMU {
+public class MwSensorClassHUD extends MwSensorClass {
 
 }

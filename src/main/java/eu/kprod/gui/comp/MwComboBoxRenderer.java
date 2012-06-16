@@ -1,4 +1,4 @@
-package eu.kprod.gui.comboBox;
+package eu.kprod.gui.comp;
 
 import java.awt.Component;
 

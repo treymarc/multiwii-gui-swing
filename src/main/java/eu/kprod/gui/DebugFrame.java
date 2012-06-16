@@ -12,7 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -24,8 +24,9 @@ import javax.swing.text.PlainDocument;
 
 import org.apache.log4j.Logger;
 
-import eu.kprod.MwGuiFrame;
-import eu.kprod.gui.comboBox.MwJComboBox;
+import eu.kprod.gui.comp.MwJButton;
+import eu.kprod.gui.comp.MwJComboBox;
+import eu.kprod.gui.comp.MwJPanel;
 import eu.kprod.serial.SerialException;
 import eu.kprod.serial.SerialListener;
 
@@ -111,7 +112,7 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        JPanel pane = new JPanel();
+        MwJPanel pane = new MwJPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
         pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
@@ -155,7 +156,7 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         getContentPane().add(pane, BorderLayout.NORTH);
 
-        pane = new JPanel();
+        pane = new MwJPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
         pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 

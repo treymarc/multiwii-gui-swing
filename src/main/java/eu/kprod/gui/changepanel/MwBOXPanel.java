@@ -8,12 +8,13 @@ import java.util.Map;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 
 import eu.kprod.ds.MwDataModel;
-import eu.kprod.gui.MwJCheckBox;
-import eu.kprod.gui.MwJLabel;
+import eu.kprod.gui.comp.MwJCheckBox;
+import eu.kprod.gui.comp.MwJLabel;
+import eu.kprod.gui.comp.MwJPanel;
 
 
 public class MwBOXPanel extends MwChangeablePanel {
@@ -27,20 +28,32 @@ public class MwBOXPanel extends MwChangeablePanel {
     @Override
     public void stateChanged(ChangeEvent e) {
         // TODO Auto-generated method stub
-       Object source = e.getSource();
+       final Object source = e.getSource();
        if (source instanceof MwDataModel){
-           MwDataModel m = (MwDataModel)source;
-           this.removeAll();
-           super.setLayout(new GridLayout(1,1));
-           this.add(this.build(m.getBOXs(),m.getBoxNameIndex()));
-           this.revalidate();
+           
+
+           SwingUtilities.invokeLater(new Runnable() {
+               public void run() {
+
+                   MwDataModel m = (MwDataModel)source;
+                   removeAll();
+                  setLayout(new GridLayout(1,1));
+                   add(build(m.getBOXs(),m.getBoxNameIndex()));
+                   revalidate();
+
+               }
+
+           });
+        
        }
     }
 
+
+
     private Component build(Map<String, List<Boolean>> map, Map<Integer, String> index) {
-        JPanel mainPane = new JPanel();
+        MwJPanel mainPane = new MwJPanel();
         mainPane.setLayout(new GridLayout(1+(index == null ? 0 : index.size()),1));
-        JPanel pane = new JPanel();
+        MwJPanel pane = new MwJPanel();
 
         mainPane.add(pane);
         
@@ -59,7 +72,7 @@ public class MwBOXPanel extends MwChangeablePanel {
         pane.add(new MwJLabel("aux4"));
         for (int i = 0; i < index.size(); i++) {
             String name = index.get(i);
-            pane = new JPanel();
+            pane = new MwJPanel();
             pane.setLayout(new GridLayout(1,5));
           
             pane.add(new JLabel(name));
@@ -67,7 +80,7 @@ public class MwBOXPanel extends MwChangeablePanel {
             List<Boolean> BoxItem = map.get(name);
             int j = 0;
             int auxCnt = 0;
-            JPanel auxPane = new JPanel();
+            MwJPanel auxPane = new MwJPanel();
             auxPane.setLayout(new GridLayout(1, 3));
             for (Boolean state : BoxItem) {
                 
@@ -78,7 +91,7 @@ public class MwBOXPanel extends MwChangeablePanel {
                 j++;
                 if (j==3){
                     pane.add(auxPane);
-                    auxPane = new JPanel();
+                    auxPane = new MwJPanel();
                     auxPane.setLayout(new GridLayout(1, 3));
                     j=0;
                     auxCnt++;

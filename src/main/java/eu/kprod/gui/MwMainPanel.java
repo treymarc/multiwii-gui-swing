@@ -3,10 +3,12 @@ package eu.kprod.gui;
 import java.awt.Component;
 import java.awt.GridLayout;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public class MwMainPanel extends JPanel {
+import eu.kprod.gui.comp.MwJPanel;
+import eu.kprod.gui.comp.MwJTabbedPane;
+
+public class MwMainPanel extends MwJPanel {
 
     /**
      * 
@@ -17,12 +19,12 @@ public class MwMainPanel extends JPanel {
         // take all the place
         super(new GridLayout(1, 1));
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        JTabbedPane tabbedPane = new MwJTabbedPane();
 
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.addTab("RealTime Data", null, realTimePanel, null);
         tabbedPane.addTab("Settings", null, settingsPanel, null);
-
+      
         this.add(tabbedPane);
 
     }

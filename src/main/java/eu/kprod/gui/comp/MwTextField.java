@@ -1,6 +1,5 @@
-package eu.kprod.gui.textfield;
+package eu.kprod.gui.comp;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -31,6 +30,7 @@ public class MwTextField extends JTextField implements MouseListener,MouseMotion
    
     public MwTextField(Double double1, Double step1, int j){
         super();
+
         switch (j) {
             case 0:
                 format= (formatP);
@@ -51,8 +51,8 @@ public class MwTextField extends JTextField implements MouseListener,MouseMotion
        step = step1;
     setEditable(false);
     
-    setSize(new Dimension(50,15));
-    setPreferredSize(getSize());
+//    setSize(new Dimension(50,15));
+//    setPreferredSize(getSize());
     addMouseMotionListener(this);
     addMouseListener(this);
     addActionListener(this);

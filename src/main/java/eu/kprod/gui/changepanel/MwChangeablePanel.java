@@ -1,9 +1,11 @@
 package eu.kprod.gui.changepanel;
 
-import javax.swing.JPanel;
+
 import javax.swing.event.ChangeListener;
 
-abstract public class MwChangeablePanel extends JPanel implements ChangeListener {
+import eu.kprod.gui.comp.MwJPanel;
+
+abstract public class MwChangeablePanel extends MwJPanel implements ChangeListener {
 
     /**
      * 
