@@ -163,6 +163,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     private String frameTitle;
     private int sizeY = 400;
     private int sizeX = 700;
+    private static MwChartPanel realTimeChart;
     private static MwHudPanel hudPanel;
     private static MwSensorCheckBoxJPanel realTimeCheckBoxPanel;
 
@@ -198,17 +199,17 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                 }
             });
 
-            final MwChartPanel realTimeChart = MwChartFactory.createChart(MSP
-                    .getRealTimeData().getDataSet(MwSensorClassIMU.class));
+            setRealTimeChart(MwChartFactory.createChart(MSP
+                    .getRealTimeData().getDataSet(MwSensorClassIMU.class)));
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
-                    (MwDataSourceListener) realTimeChart);
+                    (MwDataSourceListener) getRealTimeChart());
 
-            realTimeChart
+            getRealTimeChart()
                     .setPreferredSize(new java.awt.Dimension(sizeX, sizeY));
 
             // Create a split pane with the two scroll panes in it.
             JSplitPane splitPane = new MwJSplitPane(
-                    JSplitPane.HORIZONTAL_SPLIT, getHudPanel(), realTimeChart);
+                    JSplitPane.HORIZONTAL_SPLIT, getHudPanel(), getRealTimeChart());
             splitPane.setOneTouchExpandable(true);
             splitPane.setDividerLocation(0.8);
 
@@ -225,7 +226,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
                     beginSerialCom();
                     restartTimer((Integer) serialRefreshRate.getSelectedItem());
-                    realTimeChart.restoreAutoBounds();
+                    getRealTimeChart().restoreAutoBounds();
                 }
             });
 
@@ -769,6 +770,14 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     public void readNewValue(String name, Double value) {
         // TODO Auto-generated method stub
         MwGuiFrame.AddSensorCheckBox(name);
+    }
+
+    public static MwChartPanel getRealTimeChart() {
+        return realTimeChart;
+    }
+
+    public void setRealTimeChart(MwChartPanel realTimeChart1) {
+        realTimeChart = realTimeChart1;
     }
 
 

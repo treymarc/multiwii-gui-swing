@@ -25,17 +25,15 @@ public final class MwChartFactory {
         chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
                 true, true, false);
 
-
         chart.setBackgroundPaint(StyleColor.backGround);
 
-        
         final XYPlot plot = chart.getXYPlot();
 
-      plot.setBackgroundPaint(StyleColor.backGround);
+        plot.setBackgroundPaint(StyleColor.backGround);
 
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
-        
+
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 

@@ -9,7 +9,7 @@ public class MwJCheckBox extends JCheckBox {
      */
     private static final long serialVersionUID = 1L;
 
-    private String state = "l";
+    private String state = "";
 
     
     public MwJCheckBox(String name, int j, String string) {
@@ -32,5 +32,8 @@ public class MwJCheckBox extends JCheckBox {
 
         setToolTipText(new StringBuffer().append(string).append(" ").append(state).append(" : ").append(name).toString());
     }
+
+
+  
 
 }
