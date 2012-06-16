@@ -1,4 +1,4 @@
-package eu.kprod;
+package eu.kprod.gui;
 
 public class MwGuiRuntimeException extends RuntimeException {
 

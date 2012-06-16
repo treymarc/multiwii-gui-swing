@@ -8,9 +8,9 @@ import eu.kprod.ds.DSLoadableException;
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwDataSourceImpl;
 import eu.kprod.ds.MwSensorClass;
+import eu.kprod.ds.utils.LogLoader;
 import eu.kprod.gui.chart.MwChartFactory;
 import eu.kprod.gui.chart.MwChartPanel;
-import eu.kprod.utils.LogLoader;
 
 public class LogViewerFrame extends JFrame {
 

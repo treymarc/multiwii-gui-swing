@@ -1,19 +1,15 @@
-/************************************************************
- * Created and developed by @author wilhem (Davide Picchi)
+/**
+ * @author wilhem (Davide Picchi) Feb 24, 2010
+ * @author treym (Trey Marc) Jun 16 2012
  *
- * written in Java JVM 1.6.12 on Debian 5.0 (Lenny)
- *
- * created on: Feb 24, 2010
- *
- *********************************************/
-package eu.kprod.gui.hud;
+ */
+package eu.kprod.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -26,11 +22,10 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.swing.JPanel;
-
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.gui.comp.MwJPanel;
 
-public class MwHudPanel extends JPanel implements MwDataSourceListener {
+public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
 
     /**
      * 
@@ -39,11 +34,11 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
     /****************************
      * Defining instance variables
      ****************************/
-    // private String definePanel; // Stores whether the panel for kalman is or
-    // for the sensor
-    private Color blueSky;
-    private Color orangeEarth;
-    private GradientPaint outline;
+
+    private static final Color blueSky= new Color(10, 112, 156);
+    private static final Color orangeEarth = new Color(222, 132, 14);
+
+
     private Dimension dimPanel;
     private Arc2D upperArc; // Upper part of the Horizon
     private Arc2D lowerArc; // Bottom part of the Horizon
@@ -65,33 +60,28 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
 
     private int rollAngle;
     private int pitchAngle;
+    private int maxRadius= 220;
 
     /************************************
      * This constructor will create the initial panel for the Horizon
      ************************************/
 
-    public MwHudPanel() {
+    public MwHudPanel(Color c) {
 
-        // this.definePanel = type;
-
-        setBackground(Color.black);
-
-        // Define color used
-        blueSky = new Color(10, 112, 156);
-        orangeEarth = new Color(222, 132, 14);
+        setBackground(c);
 
         // Creates two arcs used to draw the outline
         upperArc = new Arc2D.Float();
         lowerArc = new Arc2D.Float();
+   
+        // Instance variables initialization
+        this.radius = ((Double)(0.45*this.maxRadius)).intValue();
 
         // Define a center point as a reference
-        centerPoint = new Point2D.Float(250, 250);
+        centerPoint = new Point2D.Float(this.maxRadius/2, this.maxRadius/2);
 
-        // Instance variables initialization
-        this.radius = 200;
-
-        this.dimMarker10Deg = 30;
-        this.dimMarker5Deg = 10;
+        this.dimMarker10Deg = 15;
+        this.dimMarker5Deg = 7;
 
         /*****************************************
          * Take resources from the folder for font
@@ -112,7 +102,7 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
     }
 
     public Dimension getPreferredSize() {
-        dimPanel = new Dimension(500, 500);
+        dimPanel = new Dimension(this.maxRadius, this.maxRadius);
         return dimPanel;
     }
 
@@ -135,12 +125,10 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
         // Draw the Bank roll lines on the top
         drawBankRollMarker(g2d);
 
-        // Display the outline of the Horizon
-        roundHorizon = new Ellipse2D.Float(50, 50, 2 * radius, 2 * radius);
-        outline = new GradientPaint(20, 20, Color.white, 500, 500, Color.gray,
-                true);
-        g2d.setPaint(outline);
-        g2d.setStroke(new BasicStroke(6));
+
+        roundHorizon = new Ellipse2D.Float((maxRadius-radius*2)/2, (maxRadius-radius*2)/2, 2 * radius, 2 * radius);
+
+        g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
     }
 
@@ -217,13 +205,10 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
     }
 
     private void drawMarkers(Graphics2D g2d) {
-
         // Draw the lines on the Horizon
         drawLines(g2d);
-
         // Draw the Bank roll display on the top
         drawBankRollTriangle(g2d);
-
     }
 
     private void drawLines(Graphics2D g2d) {
@@ -248,7 +233,7 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
                                         // the right position
 
             g2d.setPaint(Color.white);
-            g2d.setStroke(new BasicStroke(2));
+            g2d.setStroke(new BasicStroke(1));
             g2d.setFont(writing);
 
             // Longer markers
@@ -304,7 +289,7 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
         centerShape.lineTo((centerPoint.getX() + 25), centerPoint.getY());
 
         g2d.setPaint(Color.white);
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(2));
         g2d.draw(centerShape);
     }
 
@@ -313,20 +298,20 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
         // Draw the triangle on the upper position
         triangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         triangle.moveTo(centerPoint.getX(), (centerPoint.getY() - radius + 5));
-        triangle.lineTo((centerPoint.getX() - 15),
-                (centerPoint.getY() - radius + 30));
-        triangle.lineTo((centerPoint.getX() + 15),
-                (centerPoint.getY() - radius + 30));
+        triangle.lineTo((centerPoint.getX() - 7),
+                (centerPoint.getY() - radius + 18));
+        triangle.lineTo((centerPoint.getX() + 7),
+                (centerPoint.getY() - radius + 18));
         triangle.closePath();
 
         g2d.fill(triangle);
 
         // Draw the triangle in the lower position
         triangle.moveTo(centerPoint.getX(), (centerPoint.getY() + radius - 5));
-        triangle.lineTo((centerPoint.getX() - 10),
-                (centerPoint.getY() + radius - 25));
-        triangle.lineTo((centerPoint.getX() + 10),
-                (centerPoint.getY() + radius - 25));
+        triangle.lineTo((centerPoint.getX() - 7),
+                (centerPoint.getY() + radius - 18));
+        triangle.lineTo((centerPoint.getX() + 7),
+                (centerPoint.getY() + radius - 18));
         triangle.closePath();
 
         g2d.draw(triangle);
@@ -389,7 +374,7 @@ public class MwHudPanel extends JPanel implements MwDataSourceListener {
         }
 
         if ("angx".equals(name)) {
-            this.rollAngle = value.intValue();
+            this.rollAngle = -value.intValue();
         }
 
         repaint();

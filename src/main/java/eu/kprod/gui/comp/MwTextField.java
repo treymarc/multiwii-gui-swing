@@ -1,6 +1,5 @@
-package eu.kprod.gui.textfield;
+package eu.kprod.gui.comp;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -11,14 +10,15 @@ import java.text.NumberFormat;
 
 import javax.swing.JTextField;
 
-public class MwTextField extends JTextField implements MouseListener,MouseMotionListener, ActionListener{
+public class MwTextField extends JTextField implements MouseListener,
+        MouseMotionListener, ActionListener {
 
-    private static final NumberFormat formatP =  new DecimalFormat("0.00");
-    private static final NumberFormat formatI =  new DecimalFormat("0.0000");
-    private static final NumberFormat formatD =  new DecimalFormat("0.00");
-  
-    private  NumberFormat format;
-    
+    private static final NumberFormat formatP = new DecimalFormat("0.00");
+    private static final NumberFormat formatI = new DecimalFormat("0.0000");
+    private static final NumberFormat formatD = new DecimalFormat("0.00");
+
+    private NumberFormat format;
+
     /**
      * 
      */
@@ -28,55 +28,56 @@ public class MwTextField extends JTextField implements MouseListener,MouseMotion
     private Double step;
     private int previousX;
     private String previousValue;
-   
-    public MwTextField(Double double1, Double step1, int j){
+
+    public MwTextField(Double double1, Double step1, int j) {
         super();
+
         switch (j) {
             case 0:
-                format= (formatP);
+                format = (formatP);
                 break;
             case 1:
-                format= (formatI);
+                format = (formatI);
                 break;
             case 2:
-                format= (formatD);
+                format = (formatD);
                 break;
 
             default:
                 throw new RuntimeException();
-               
+
         }
         setText(format.format(double1));
-       value =double1;
-       step = step1;
-    setEditable(false);
-    
-    setSize(new Dimension(50,15));
-    setPreferredSize(getSize());
-    addMouseMotionListener(this);
-    addMouseListener(this);
-    addActionListener(this);
+        value = double1;
+        step = step1;
+        setEditable(false);
+
+        // setSize(new Dimension(50,15));
+        // setPreferredSize(getSize());
+        addMouseMotionListener(this);
+        addMouseListener(this);
+        addActionListener(this);
     }
 
     @Override
     public void mouseDragged(MouseEvent ev) {
-        
+
         int newX = ev.getX();
-          
+
         updateValue((newX - previousX));
         previousX = newX;
-        
+
         ev.consume();
     }
 
     private void updateValue(int y) {
 
-        value = value + (y>0?1 :-1)*step;
+        value = value + (y > 0 ? 1 : -1) * step;
 
-        if (value<0){
-            value=(double) 0;
+        if (value < 0) {
+            value = (double) 0;
         }
-    
+
         this.setText(format.format(value));
     }
 
@@ -87,13 +88,13 @@ public class MwTextField extends JTextField implements MouseListener,MouseMotion
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+
     }
 
     @Override
     public void mouseEntered(MouseEvent arg0) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -112,10 +113,10 @@ public class MwTextField extends JTextField implements MouseListener,MouseMotion
     public void mouseReleased(MouseEvent e) {
 
         previousValue = this.getText();
-        if (e.getClickCount()==2){
-            
+        if (e.getClickCount() == 2) {
+
             this.setEditable(true);
-        }else{
+        } else {
             this.setEditable(false);
         }
         e.consume();
@@ -123,19 +124,19 @@ public class MwTextField extends JTextField implements MouseListener,MouseMotion
 
     public void actionPerformed(ActionEvent ev) {
         this.setEditable(false);
-        try{
+        try {
             Double v = Double.valueOf(this.getText());
-            if (v<0){
-                v=(double) 0;
+            if (v < 0) {
+                v = (double) 0;
             }
 
-            this.setText(format.format(v ) );
-        }catch (Exception ex) {
+            this.setText(format.format(v));
+        } catch (Exception ex) {
             this.setText(previousValue);
-        }finally{
-            
+        } finally {
+
         }
 
     }
-    
+
 }

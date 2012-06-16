@@ -12,7 +12,7 @@
  along with this program;
  */
 
-package eu.kprod.utils;
+package eu.kprod.ds.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

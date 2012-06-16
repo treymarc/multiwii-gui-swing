@@ -10,7 +10,6 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
-import eu.kprod.MwGuiFrame;
 
 /**
  * A pojo implementation of a datasource for holding severals dataset of sensors
@@ -141,8 +140,6 @@ public class MwDataSourceImpl implements MwDataSource {
 
             s.put(sensorName, timeserie);
             ts.addSeries(s.get(sensorName));
-            // TODO use listener
-            MwGuiFrame.AddSensorCheckBox(sensorName);
 
         }
 
@@ -163,10 +160,7 @@ public class MwDataSourceImpl implements MwDataSource {
             List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
             for (MwDataSourceListener mwDataSourceListener : listenersl) {
                 mwDataSourceListener.readNewValue( name,  value);
-//                if (mwDataSourceListener instanceof JComponent){
-//                    JComponent p = (JComponent)mwDataSourceListener;
-//                   
-//                }
+
             }
 
         }

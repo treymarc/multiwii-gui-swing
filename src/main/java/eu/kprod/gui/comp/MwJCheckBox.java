@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.gui.comp;
 
 import javax.swing.JCheckBox;
 
@@ -9,11 +9,12 @@ public class MwJCheckBox extends JCheckBox {
      */
     private static final long serialVersionUID = 1L;
 
-    private String state = "l";
+    private String state = "";
 
     
     public MwJCheckBox(String name, int j, String string) {
         super();
+
         // TODO Auto-generated constructor stub
         switch (j) {
             case 0:
@@ -31,5 +32,8 @@ public class MwJCheckBox extends JCheckBox {
 
         setToolTipText(new StringBuffer().append(string).append(" ").append(state).append(" : ").append(name).toString());
     }
+
+
+  
 
 }

@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 
 import eu.kprod.ds.MwDataModel;
-import eu.kprod.gui.MwJLabel;
-import eu.kprod.gui.textfield.MwTextField;
+import eu.kprod.gui.comp.MwJLabel;
+import eu.kprod.gui.comp.MwJPanel;
+import eu.kprod.gui.comp.MwTextField;
 
 
 public class MwPIDPanel extends MwChangeablePanel  {
@@ -36,9 +36,9 @@ public class MwPIDPanel extends MwChangeablePanel  {
     }
 
     private Component build(Map<String, List<Double>> piDs, Map<Integer, String> index) {
-        JPanel mainPane = new JPanel();
+        MwJPanel mainPane = new MwJPanel();
         mainPane.setLayout(new GridLayout(1+(index == null ? 0 : index.size()),1));
-        JPanel pane = new JPanel();
+        MwJPanel pane = new MwJPanel();
        
         if ( piDs == null || index == null ){
             pane.setLayout(new GridLayout(1,1));
@@ -48,7 +48,7 @@ public class MwPIDPanel extends MwChangeablePanel  {
         }
         
         pane.setLayout(new GridLayout(1,4));
-        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
+//        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
         pane.add(new MwJLabel());
         pane.add(new MwJLabel("P"));
         pane.add(new MwJLabel("I"));
@@ -57,7 +57,7 @@ public class MwPIDPanel extends MwChangeablePanel  {
         
         for (int i = 0; i < index.size(); i++) {
             String name = index.get(i);
-            pane = new JPanel();
+            pane = new MwJPanel();
             pane.setLayout(new GridLayout(1,4));
             pane.setBorder(new EmptyBorder(1, 1, 1, 1));
             

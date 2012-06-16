@@ -24,7 +24,8 @@
 
 package eu.kprod.serial;
 
-import eu.kprod.I18n;
+//import eu.kprod.I18n;
+import eu.kprod.msg.I18n;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;

@@ -3,9 +3,10 @@ package eu.kprod.gui;
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class SensorStateJPanel extends JPanel {
+import eu.kprod.gui.comp.MwJPanel;
+
+public class SensorStateJPanel extends MwJPanel {
 
     /**
      *
