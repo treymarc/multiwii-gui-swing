@@ -27,29 +27,28 @@ public class MwGui {
     public static void main(String[] args) {
         // UIManager.LookAndFeelInfo[] info =
         // UIManager.getInstalledLookAndFeels();
-        try {
-            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (UnsupportedLookAndFeelException e) {
-            // handle exception
-        } catch (ClassNotFoundException e) {
-            // handle exception
-        } catch (InstantiationException e) {
-            // handle exception
-        } catch (IllegalAccessException e) {
-            // handle exception
-        }
-
+		
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
-//            Turn off metal's use of bold fonts
-            UIManager.put("swing.boldMetal", Boolean.FALSE);
-        }
-
+        
+		} else {		
+	        try {
+	            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+	                if ("Nimbus".equals(info.getName())) {
+	                    UIManager.setLookAndFeel(info.getClassName());
+	                    break;
+	                }
+	            }
+	        } catch (UnsupportedLookAndFeelException e) {
+	            // handle exception
+	        } catch (ClassNotFoundException e) {
+	            // handle exception
+	        } catch (InstantiationException e) {
+	            // handle exception
+	        } catch (IllegalAccessException e) {
+	            // handle exception
+	        }
+		}
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
