@@ -23,7 +23,7 @@ public final class MwChartFactory {
         final JFreeChart chart;
 
         chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
-                true, true, false);
+                false, true, true);
 
         chart.setBackgroundPaint(StyleColor.backGround);
 

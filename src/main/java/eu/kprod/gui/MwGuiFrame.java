@@ -247,7 +247,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         return realTimePanel;
     }
 
-    private static MwSensorCheckBoxJPanel getRealTimeCheckBowPanel() {
+    public static MwSensorCheckBoxJPanel getRealTimeCheckBowPanel() {
         if (realTimeCheckBoxPanel == null) {
             realTimeCheckBoxPanel = new MwSensorCheckBoxJPanel();
         }

@@ -2,7 +2,6 @@ package eu.kprod.gui.comp;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.UIManager;
@@ -31,7 +30,7 @@ public class StyleColor {
         m.add(new Color(250,100,200));
         m.add(new Color(250,200,200));
         
-        return Collections.unmodifiableList(m);
+        return m;
     }
 
     
@@ -62,6 +61,11 @@ public class StyleColor {
                 // continue
             }
         }
+        
+    }
+
+    public static void setColor(int index, Color color) {
+        colors.set(index, color);
         
     }
 }
