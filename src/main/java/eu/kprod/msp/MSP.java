@@ -8,6 +8,7 @@ import javax.swing.event.ChangeListener;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwSensorClassCompas;
 import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
@@ -86,6 +87,25 @@ public class MSP {
    EEPROM_WRITE         =250,
 
    DEBUG                =254;
+
+
+     public static final String IDangx = "angx";
+     public static final String IDangy = "angy";
+     public static final String IDhead = "head";
+     public static final String IDalt = "alt";
+     public static final String IDvbat = "vbat";
+     public static final String IDpowerMeterSum = "powerMeterSum";
+
+
+     public static final String IDax = "ax";
+     public static final String IDaz = "ay";
+     public static final String IDay = "az";
+     public static final String IDgx = "gx";
+     public static final String IDgy = "gy";
+     public static final String IDgz = "gz";
+     public static final String IDmagx = "magx";
+     public static final String IDmagy = "magy";
+     public static final String IDmagz = "magz";
 
     /**
      * position in the reception inputBuffer
@@ -192,17 +212,17 @@ public class MSP {
 //                }
                 break;
             case RAW_IMU:
-                model.getRealTimeData().put(d, "ax", Double.valueOf(read16()),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "ay", Double.valueOf(read16()),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "az", Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDax, Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDay, Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDaz, Double.valueOf(read16()),MwSensorClassIMU.class);
 
-                model.getRealTimeData().put(d, "gx", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "gy", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "gz", Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDgx, Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDgy, Double.valueOf(read16() / 8),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDgz, Double.valueOf(read16() / 8),MwSensorClassIMU.class);
 
-                model.getRealTimeData().put(d, "magx", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "magy", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, "magz", Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDmagx, Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDmagy, Double.valueOf(read16() / 3),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDmagz, Double.valueOf(read16() / 3),MwSensorClassIMU.class);
                 break;
             case SERVO:
                 for(int i=0;i<8;i++){
@@ -244,16 +264,16 @@ public class MSP {
                 // GPS_update = read8();
                 break;
             case ATTITUDE:
-                model.getRealTimeData().put(d, "angx", Double.valueOf(read16()/10),MwSensorClassHUD.class);
-                model.getRealTimeData().put(d, "angy", Double.valueOf(read16()/10),MwSensorClassHUD.class);
-                model.getRealTimeData().put(d, "head", Double.valueOf(read16()),MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDangx, Double.valueOf(read16()/10),MwSensorClassHUD.class);
+                model.getRealTimeData().put(d, IDangy, Double.valueOf(read16()/10),MwSensorClassHUD.class);
+                model.getRealTimeData().put(d, IDhead, Double.valueOf(read16()),MwSensorClassCompas.class);
                 break;
             case ALTITUDE:
-                model.getRealTimeData().put(d, "alt", Double.valueOf(read32())/100,MwSensorClassIMU.class);
+                model.getRealTimeData().put(d, IDalt, Double.valueOf(read32())/100,MwSensorClassCompas.class);
                 break;
             case BAT: //TODO SEND
-                model.getRealTimeData().put(d, "vbat",  Double.valueOf(read8()), MwSensorClassPower.class) ;         
-                model.getRealTimeData().put(d, "powerMeterSum",  Double.valueOf(read16()), MwSensorClassPower.class) ;         
+                model.getRealTimeData().put(d, IDvbat,  Double.valueOf(read8()), MwSensorClassPower.class) ;         
+                model.getRealTimeData().put(d, IDpowerMeterSum,  Double.valueOf(read16()), MwSensorClassPower.class) ;         
                 break;
             case RC_TUNING:
                 model.setRcRate((int) (read8() / 100.0));

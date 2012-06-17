@@ -2,6 +2,7 @@ package eu.kprod.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -34,6 +35,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.log4j.Logger;
 
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.ds.MwSensorClassCompas;
 import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
@@ -164,7 +166,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     private int sizeX = 700;
     private static JMenuBar menuBar;
     private static MwChartPanel realTimeChart;
-    private static MwHudPanel hudPanel;
+    private static MwJPanel instrumentPanel;
     private static MwSensorCheckBoxJPanel realTimeCheckBoxPanel;
 
     private MwJPanel getRawImuChartPanel() {
@@ -210,7 +212,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
 
             // Create a split pane with the two scroll panes in it.
             JSplitPane splitPane = new MwJSplitPane(
-                    JSplitPane.HORIZONTAL_SPLIT, getHudPanel(),
+                    JSplitPane.HORIZONTAL_SPLIT, getInstrumentPanel(),
                     getRealTimeChart());
             splitPane.setOneTouchExpandable(true);
             splitPane.setDividerLocation(0.8);
@@ -273,13 +275,22 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         }
     }
 
-    public static MwHudPanel getHudPanel() {
-        if (hudPanel == null) {
-            hudPanel = new MwHudPanel(StyleColor.backGround);
+    public static MwJPanel getInstrumentPanel() {
+        if (instrumentPanel == null) {
+            instrumentPanel = new MwJPanel(StyleColor.backGround);
+            instrumentPanel.setLayout(new GridLayout(2, 1));
+            MwHudPanel hud;
+            instrumentPanel.add(hud = new MwHudPanel(StyleColor.backGround) );
             MSP.getRealTimeData().addListener(MwSensorClassHUD.class,
-                    (MwDataSourceListener) hudPanel);
+                    (MwDataSourceListener) hud);
+            
+            MwCompasPanel compas;
+            instrumentPanel.add(compas =new MwCompasPanel(StyleColor.backGround) );
+            MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
+                    (MwDataSourceListener) compas);
+
         }
-        return hudPanel;
+        return instrumentPanel;
     }
 
     private MwGuiFrame() {
@@ -328,6 +339,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
                 BorderLayout.CENTER);
 
         pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private MwJPanel getSettingsPanel() {
