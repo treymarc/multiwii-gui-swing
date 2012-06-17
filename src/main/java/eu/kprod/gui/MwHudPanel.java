@@ -38,7 +38,6 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
     private static final Color blueSky= new Color(10, 112, 156);
     private static final Color orangeEarth = new Color(222, 132, 14);
 
-
     private Dimension dimPanel;
     private Arc2D upperArc; // Upper part of the Horizon
     private Arc2D lowerArc; // Bottom part of the Horizon
@@ -48,10 +47,8 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
     private int radius;
 
     private Line2D markerLine;
-//    private GeneralPath triangle;
     private GeneralPath centerShape;
     private GeneralPath bankMarkerLong;
-//    private GeneralPath bankMarkerShort;
 
     private Font writing = null;
 
@@ -62,9 +59,6 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
     private int pitchAngle;
     private int maxRadius= 220;
 
-    /************************************
-     * This constructor will create the initial panel for the Horizon
-     ************************************/
 
     public MwHudPanel(Color c) {
 
@@ -117,8 +111,9 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
+        drawValue(g2d);
         drawHorizon(g2d);
-
+        
         g2d.setStroke(new BasicStroke(2));
         g2d.setPaint(Color.white);
 
@@ -130,6 +125,22 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
         
+    }
+
+    private void drawValue(Graphics2D g2d) {
+        // TODO Auto-generated method stub
+
+        g2d.setFont(writing);
+        g2d.setPaint(Color.white);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.drawString(
+                "X " + (-rollAngle),10,10);
+        
+        g2d.setFont(writing);
+        g2d.setPaint(Color.white);
+        g2d.setStroke(new BasicStroke(1));
+        g2d.drawString(
+                "Y " + (-pitchAngle),10,20);
     }
 
     private void drawHorizon(Graphics2D g2d) {
@@ -155,9 +166,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         }
 
         if ((pitchAngle >= 90) && (pitchAngle < 180)) {
-            at = AffineTransform.getRotateInstance(Math.toRadians(180),
-                    centerPoint.getX(), centerPoint.getY());
-            g2d.transform(at);
+           
 
             angStartUpper = -(180 - pitchAngle); // Minus because of the reverse
                                                  // way of working of the
@@ -168,9 +177,6 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         }
 
         if ((pitchAngle <= -90) && (pitchAngle > -180)) {
-            at = AffineTransform.getRotateInstance(Math.toRadians(180),
-                    centerPoint.getX(), centerPoint.getY());
-            g2d.transform(at);
 
             angStartUpper = (180 + pitchAngle); // Minus because of the reverse
                                                 // way of working of the
@@ -181,8 +187,6 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         }
 
 
-       
-        
         // Draw the artificial horizon itself, composed by 2 half arcs
         lowerArc.setArcByCenter(centerPoint.getX(), centerPoint.getY(), radius,
                 angStartLower, angExtLower, Arc2D.CHORD);
@@ -199,24 +203,37 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         g2d.setPaint(Color.white);
         g2d.draw(upperArc);
 
-        
-        at = AffineTransform.getRotateInstance(Math.toRadians(-rollAngle),
-                centerPoint.getX(), centerPoint.getY());
-
-        g2d.transform(at);
-        drawMarkers(g2d);
+        drawLines(g2d);
   
     }
 
-    private void drawMarkers(Graphics2D g2d) {
-        // Draw the lines on the Horizon
-        drawLines(g2d);
-        // Draw the Bank roll display on the top
-        //drawBankRollTriangle(g2d);
-    }
-
     private void drawLines(Graphics2D g2d) {
+        AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(-rollAngle),
+                centerPoint.getX(), centerPoint.getY());
 
+        g2d.transform(at);
+        
+     // Draw the center shape
+        centerShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        centerShape.moveTo((centerPoint.getX() - radius / 2.5),
+                centerPoint.getY());
+        centerShape.lineTo((centerPoint.getX() - 15), centerPoint.getY());
+        centerShape.moveTo((centerPoint.getX() - 30), centerPoint.getY());
+        centerShape
+                .lineTo((centerPoint.getX() - 10), (centerPoint.getY() + 10));
+        centerShape.lineTo(centerPoint.getX(), centerPoint.getY());
+        centerShape
+                .lineTo((centerPoint.getX() + 10), (centerPoint.getY() + 10));
+        centerShape.lineTo((centerPoint.getX() + 30), centerPoint.getY());
+        centerShape.moveTo((centerPoint.getX() + radius / 2.5),
+                centerPoint.getY());
+        centerShape.lineTo((centerPoint.getX() + 15), centerPoint.getY());
+
+        g2d.setPaint(Color.white);
+        g2d.setStroke(new BasicStroke(2));
+        g2d.draw(centerShape);
+        
+      
         int angle;
         int distance;
         int angleCorrUp;
@@ -276,50 +293,8 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
 
         }
 
-        // Draw the center shape
-        centerShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        centerShape.moveTo((centerPoint.getX() - radius / 2.5),
-                centerPoint.getY());
-        centerShape.lineTo((centerPoint.getX() - 15), centerPoint.getY());
-        centerShape.moveTo((centerPoint.getX() - 30), centerPoint.getY());
-        centerShape
-                .lineTo((centerPoint.getX() - 10), (centerPoint.getY() + 10));
-        centerShape.lineTo(centerPoint.getX(), centerPoint.getY());
-        centerShape
-                .lineTo((centerPoint.getX() + 10), (centerPoint.getY() + 10));
-        centerShape.lineTo((centerPoint.getX() + 30), centerPoint.getY());
-        centerShape.moveTo((centerPoint.getX() + radius / 2.5),
-                centerPoint.getY());
-        centerShape.lineTo((centerPoint.getX() + 15), centerPoint.getY());
-
-        g2d.setPaint(Color.white);
-        g2d.setStroke(new BasicStroke(2));
-        g2d.draw(centerShape);
     }
 
-//    private void drawBankRollTriangle(Graphics2D g2d) {
-//
-//        // Draw the triangle on the upper position
-//        triangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-//        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() - radius + 5));
-//        triangle.lineTo((centerPoint.getX() - 7),
-//                (centerPoint.getY() - radius + 18));
-//        triangle.lineTo((centerPoint.getX() + 7),
-//                (centerPoint.getY() - radius + 18));
-//        triangle.closePath();
-//
-//        g2d.fill(triangle);
-//
-//        // Draw the triangle in the lower position
-//        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() + radius - 5));
-//        triangle.lineTo((centerPoint.getX() - 7),
-//                (centerPoint.getY() + radius - 18));
-//        triangle.lineTo((centerPoint.getX() + 7),
-//                (centerPoint.getY() + radius - 18));
-//        triangle.closePath();
-//
-//        g2d.draw(triangle);
-//    }
 
     private void drawBankRollMarker(Graphics2D g2d) {
 
@@ -329,12 +304,6 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
                 .moveTo((centerPoint.getX() - radius), centerPoint.getY());
         bankMarkerLong.lineTo((centerPoint.getX() - radius + 6),
                 centerPoint.getY());
-
-//        bankMarkerShort = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-//        bankMarkerShort.moveTo((centerPoint.getX() - radius),
-//                centerPoint.getY());
-//        bankMarkerShort.lineTo((centerPoint.getX() - radius + 5),
-//                centerPoint.getY());
 
         AffineTransform ata = AffineTransform.getRotateInstance(
                 Math.toRadians(150), centerPoint.getX(), centerPoint.getY());
@@ -362,23 +331,19 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
             g2d.draw(bankMarkerLong);
 
         }
-        
-     
        
     }
 
     @Override
     public void readNewValue(String name, Double value) {
-        // TODO Auto-generated method stub
         if ("angy".equals(name)) {
+           
             this.pitchAngle = -value.intValue();
         }
 
         if ("angx".equals(name)) {
-            this.rollAngle = -value.intValue();
+            this.rollAngle = value.intValue();
         }
-
         repaint();
-
     }
 }
