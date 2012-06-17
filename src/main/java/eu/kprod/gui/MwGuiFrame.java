@@ -201,8 +201,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
             setRealTimeChart(MwChartFactory.createChart(MSP
                     .getRealTimeData().getDataSet(MwSensorClassIMU.class)));
+            
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
                     (MwDataSourceListener) getRealTimeChart());
+
 
             getRealTimeChart()
                     .setPreferredSize(new java.awt.Dimension(sizeX, sizeY));
@@ -477,7 +479,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
-
+                    
                     if (motorFrame != null && motorFrame.isVisible()) {
                         send(MSP.request(MSP.MOTOR));
                     }
@@ -485,6 +487,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                         send(MSP.request(MSP.SERVO));
                     }
                     send(MSP.request(MSP.RAW_IMU));
+                    send(MSP.request(MSP.DEBUG));
                 } catch (Exception e) {
                     timer.cancel();
                     // timer.purge();

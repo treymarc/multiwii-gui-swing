@@ -25,6 +25,12 @@ public class StyleColor {
         m.add(Color.WHITE);
         m.add(Color.BLACK);
         m.add(Color.DARK_GRAY);
+        
+        m.add(new Color(250,100,100));
+        m.add(new Color(250,200,100));
+        m.add(new Color(250,100,200));
+        m.add(new Color(250,200,200));
+        
         return Collections.unmodifiableList(m);
     }
 
