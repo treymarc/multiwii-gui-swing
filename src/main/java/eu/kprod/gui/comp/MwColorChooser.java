@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JColorChooser;
+import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -26,7 +27,7 @@ public class MwColorChooser extends MwJFrame implements ChangeListener {
         
         chooser = new JColorChooser();
         chooser.getSelectionModel().addChangeListener(this);
-
+        chooser.setPreviewPanel(new JPanel());
         pane.add(chooser);
         getContentPane().add(pane);
         pack();
