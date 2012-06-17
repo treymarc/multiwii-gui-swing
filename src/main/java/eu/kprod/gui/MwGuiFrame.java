@@ -700,6 +700,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         serialMenuPort.addSeparator();
         serialMenuPort.add(getRescanSerialMenuIten());
         serialMenuPort.add(getDisconnectSerialMenuIten());
+        serialMenuPort.revalidate();
         return serialMenuPort;
     }
 
