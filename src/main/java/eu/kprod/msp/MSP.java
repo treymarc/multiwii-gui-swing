@@ -28,13 +28,6 @@ public class MSP {
      */
     private static  MwDataModel model=new MwDataModel();
 
-//    public static MwDataModel getModel() {
-//        return model;
-//    }
-
-//    public static void setModel(final MwDataModel model1) {
-//        MSP.model = model1;
-//    }
 
     private static final int MASK = 0xff;
     private static final int BUFFER_SIZE = 128;
@@ -320,61 +313,58 @@ public class MSP {
 
     }
 
-  //send msp without payload
+    // send msp without payload
     public static List<Byte> request(int msp) {
-        return  request( msp, null);
+        return request(msp, null);
     }
 
-    //send multiple msp without payload
-    public static List<Byte> request (int[] msps) {
-    List<Byte> s = new LinkedList<Byte>();
-    for (int m : msps) {
-     s.addAll(request(m, null));
-    }
-    return s;
-    }
-
-    //send msp with payload
-     public static List<Byte> request (int msp, Character[] payload) {
-    if(msp < 0) {
-     return null;
-    }
-    List<Byte> bf = new LinkedList<Byte>();
-    for (byte c : OUT.getBytes()) {
-     bf.add( c );
+    // send multiple msp without payload
+    public static List<Byte> request(int[] msps) {
+        List<Byte> s = new LinkedList<Byte>();
+        for (int m : msps) {
+            s.addAll(request(m, null));
+        }
+        return s;
     }
 
-    byte checksum=0;
-    byte pl_size = (byte)((payload != null ? (payload.length) : 0)&MASK);
-    bf.add(pl_size);
-    checksum ^= (pl_size&MASK);
+    // send msp with payload
+    public static List<Byte> request(int msp, Character[] payload) {
+        if (msp < 0) {
+            return null;
+        }
+        List<Byte> bf = new LinkedList<Byte>();
+        for (byte c : OUT.getBytes()) {
+            bf.add(c);
+        }
 
-    bf.add((byte)(msp & MASK));
-    checksum ^= (msp&MASK);
+        byte checksum = 0;
+        byte pl_size = (byte) ((payload != null ? (payload.length) : 0) & MASK);
+        bf.add(pl_size);
+        checksum ^= (pl_size & MASK);
 
-    if (payload != null) {
-     for (char c :payload){
-       bf.add((byte)(c&MASK));
-       checksum ^= (c&MASK);
-     }
-    }
+        bf.add((byte) (msp & MASK));
+        checksum ^= (msp & MASK);
 
-    bf.add(checksum);
-    return (bf);
+        if (payload != null) {
+            for (char c : payload) {
+                bf.add((byte) (c & MASK));
+                checksum ^= (c & MASK);
+            }
+        }
+
+        bf.add(checksum);
+        return (bf);
     }
    
     public static MwDataSource getRealTimeData() {
-        // TODO Auto-generated method stub
         return model.getRealTimeData();
     }
 
     public static void setPidChangeListener(final ChangeListener pidPane) {
-        // TODO Auto-generated method stub
         model.setPidChangeListener(pidPane);
     }
 
     public static void setBoxChangeListener(final ChangeListener boxPane) {
-        // TODO Auto-generated method stub
         model.setBoxChangeListener(boxPane);
         
     }
