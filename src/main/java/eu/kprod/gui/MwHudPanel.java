@@ -48,10 +48,10 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
     private int radius;
 
     private Line2D markerLine;
-    private GeneralPath triangle;
+//    private GeneralPath triangle;
     private GeneralPath centerShape;
     private GeneralPath bankMarkerLong;
-    private GeneralPath bankMarkerShort;
+//    private GeneralPath bankMarkerShort;
 
     private Font writing = null;
 
@@ -125,11 +125,11 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         // Draw the Bank roll lines on the top
         drawBankRollMarker(g2d);
 
-
         roundHorizon = new Ellipse2D.Float((maxRadius-radius*2)/2, (maxRadius-radius*2)/2, 2 * radius, 2 * radius);
 
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
+        
     }
 
     private void drawHorizon(Graphics2D g2d) {
@@ -180,6 +180,9 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
             angExtUpper = (180 - (2 * angStartUpper));
         }
 
+
+       
+        
         // Draw the artificial horizon itself, composed by 2 half arcs
         lowerArc.setArcByCenter(centerPoint.getX(), centerPoint.getY(), radius,
                 angStartLower, angExtLower, Arc2D.CHORD);
@@ -196,19 +199,20 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         g2d.setPaint(Color.white);
         g2d.draw(upperArc);
 
-        drawMarkers(g2d);
-
+        
         at = AffineTransform.getRotateInstance(Math.toRadians(-rollAngle),
                 centerPoint.getX(), centerPoint.getY());
 
         g2d.transform(at);
+        drawMarkers(g2d);
+  
     }
 
     private void drawMarkers(Graphics2D g2d) {
         // Draw the lines on the Horizon
         drawLines(g2d);
         // Draw the Bank roll display on the top
-        drawBankRollTriangle(g2d);
+        //drawBankRollTriangle(g2d);
     }
 
     private void drawLines(Graphics2D g2d) {
@@ -232,7 +236,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
             distance = Math.abs(i * 5); // Put the text and the lines length at
                                         // the right position
 
-            g2d.setPaint(Color.green);
+            g2d.setPaint(Color.white);
             g2d.setStroke(new BasicStroke(1));
             g2d.setFont(writing);
 
@@ -276,46 +280,46 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         centerShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         centerShape.moveTo((centerPoint.getX() - radius / 2.5),
                 centerPoint.getY());
-        centerShape.lineTo((centerPoint.getX() - 25), centerPoint.getY());
-        centerShape.moveTo((centerPoint.getX() - 40), centerPoint.getY());
+        centerShape.lineTo((centerPoint.getX() - 15), centerPoint.getY());
+        centerShape.moveTo((centerPoint.getX() - 30), centerPoint.getY());
         centerShape
-                .lineTo((centerPoint.getX() - 20), (centerPoint.getY() + 20));
+                .lineTo((centerPoint.getX() - 10), (centerPoint.getY() + 10));
         centerShape.lineTo(centerPoint.getX(), centerPoint.getY());
         centerShape
-                .lineTo((centerPoint.getX() + 20), (centerPoint.getY() + 20));
-        centerShape.lineTo((centerPoint.getX() + 40), centerPoint.getY());
+                .lineTo((centerPoint.getX() + 10), (centerPoint.getY() + 10));
+        centerShape.lineTo((centerPoint.getX() + 30), centerPoint.getY());
         centerShape.moveTo((centerPoint.getX() + radius / 2.5),
                 centerPoint.getY());
-        centerShape.lineTo((centerPoint.getX() + 25), centerPoint.getY());
+        centerShape.lineTo((centerPoint.getX() + 15), centerPoint.getY());
 
-        g2d.setPaint(Color.red);
+        g2d.setPaint(Color.white);
         g2d.setStroke(new BasicStroke(2));
         g2d.draw(centerShape);
     }
 
-    private void drawBankRollTriangle(Graphics2D g2d) {
-
-        // Draw the triangle on the upper position
-        triangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() - radius + 5));
-        triangle.lineTo((centerPoint.getX() - 7),
-                (centerPoint.getY() - radius + 18));
-        triangle.lineTo((centerPoint.getX() + 7),
-                (centerPoint.getY() - radius + 18));
-        triangle.closePath();
-
-        g2d.fill(triangle);
-
-        // Draw the triangle in the lower position
-        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() + radius - 5));
-        triangle.lineTo((centerPoint.getX() - 7),
-                (centerPoint.getY() + radius - 18));
-        triangle.lineTo((centerPoint.getX() + 7),
-                (centerPoint.getY() + radius - 18));
-        triangle.closePath();
-
-        g2d.draw(triangle);
-    }
+//    private void drawBankRollTriangle(Graphics2D g2d) {
+//
+//        // Draw the triangle on the upper position
+//        triangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+//        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() - radius + 5));
+//        triangle.lineTo((centerPoint.getX() - 7),
+//                (centerPoint.getY() - radius + 18));
+//        triangle.lineTo((centerPoint.getX() + 7),
+//                (centerPoint.getY() - radius + 18));
+//        triangle.closePath();
+//
+//        g2d.fill(triangle);
+//
+//        // Draw the triangle in the lower position
+//        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() + radius - 5));
+//        triangle.lineTo((centerPoint.getX() - 7),
+//                (centerPoint.getY() + radius - 18));
+//        triangle.lineTo((centerPoint.getX() + 7),
+//                (centerPoint.getY() + radius - 18));
+//        triangle.closePath();
+//
+//        g2d.draw(triangle);
+//    }
 
     private void drawBankRollMarker(Graphics2D g2d) {
 
@@ -323,47 +327,44 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         bankMarkerLong
                 .moveTo((centerPoint.getX() - radius), centerPoint.getY());
-        bankMarkerLong.lineTo((centerPoint.getX() - radius + 20),
+        bankMarkerLong.lineTo((centerPoint.getX() - radius + 6),
                 centerPoint.getY());
 
-        bankMarkerShort = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        bankMarkerShort.moveTo((centerPoint.getX() - radius),
-                centerPoint.getY());
-        bankMarkerShort.lineTo((centerPoint.getX() - radius + 10),
-                centerPoint.getY());
+//        bankMarkerShort = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+//        bankMarkerShort.moveTo((centerPoint.getX() - radius),
+//                centerPoint.getY());
+//        bankMarkerShort.lineTo((centerPoint.getX() - radius + 5),
+//                centerPoint.getY());
 
+        AffineTransform ata = AffineTransform.getRotateInstance(
+                Math.toRadians(150), centerPoint.getX(), centerPoint.getY());
+        g2d.transform(ata);
+        
         for (int i = 0; i < 5; i++) {
-            AffineTransform ata = AffineTransform.getRotateInstance(
-                    Math.toRadians(30), centerPoint.getX(), centerPoint.getY());
+            ata = AffineTransform.getRotateInstance(
+                    Math.toRadians(10), centerPoint.getX(), centerPoint.getY());
             g2d.transform(ata);
 
             g2d.draw(bankMarkerLong);
 
         }
 
-        AffineTransform ata = AffineTransform.getRotateInstance(
-                Math.toRadians(260), centerPoint.getX(), centerPoint.getY());
+        ata = AffineTransform.getRotateInstance(
+                Math.toRadians(130), centerPoint.getX(), centerPoint.getY());
         g2d.transform(ata);
 
-        for (int i = 0; i < 7; i++) {
-            AffineTransform atb = AffineTransform.getRotateInstance(
+        
+        for (int i = 0; i < 5; i++) {
+            ata = AffineTransform.getRotateInstance(
                     Math.toRadians(10), centerPoint.getX(), centerPoint.getY());
-            g2d.transform(atb);
+            g2d.transform(ata);
 
-            g2d.draw(bankMarkerShort);
+            g2d.draw(bankMarkerLong);
+
         }
-
-        ata = AffineTransform.getRotateInstance(Math.toRadians(110),
-                centerPoint.getX(), centerPoint.getY());
-        g2d.transform(ata);
-
-        for (int i = 0; i < 7; i++) {
-            AffineTransform atb = AffineTransform.getRotateInstance(
-                    Math.toRadians(10), centerPoint.getX(), centerPoint.getY());
-            g2d.transform(atb);
-
-            g2d.draw(bankMarkerShort);
-        }
+        
+     
+       
     }
 
     @Override
