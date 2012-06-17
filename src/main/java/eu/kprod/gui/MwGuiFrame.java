@@ -366,11 +366,11 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             pane.setLayout(new FlowLayout(FlowLayout.LEADING));
             pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
-            MwJPanel pidPane = new MwPIDPanel();
+            MwJPanel pidPane = new MwPIDPanel("PID");
             MSP.setPidChangeListener((ChangeListener) pidPane);
             pane.add(pidPane);
 
-            MwJPanel boxPane = new MwBOXPanel();
+            MwJPanel boxPane = new MwBOXPanel("AUX Box");
             MSP.setBoxChangeListener((ChangeListener) boxPane);
             pane.add(boxPane);
 

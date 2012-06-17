@@ -21,6 +21,10 @@ public class MwPIDPanel extends MwChangeablePanel  {
      * 
      */
     private static final long serialVersionUID = 1L;
+    
+    public MwPIDPanel(String name) {
+        super(name);
+    }
 
     @Override
     public void stateChanged(ChangeEvent e) {
