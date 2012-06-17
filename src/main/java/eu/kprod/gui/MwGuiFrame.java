@@ -163,6 +163,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     private String frameTitle;
     private int sizeY = 400;
     private int sizeX = 700;
+    private static JMenuBar menuBar;
     private static MwChartPanel realTimeChart;
     private static MwHudPanel hudPanel;
     private static MwSensorCheckBoxJPanel realTimeCheckBoxPanel;
@@ -304,7 +305,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.setJMenuBar(createMenuBar());
+        this.setJMenuBar(menuBar = createMenuBar());
 
         this.addWindowListener(new WindowAdapter() {
 
@@ -700,7 +701,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         serialMenuPort.addSeparator();
         serialMenuPort.add(getRescanSerialMenuIten());
         serialMenuPort.add(getDisconnectSerialMenuIten());
-        serialMenuPort.revalidate();
         return serialMenuPort;
     }
 
@@ -725,6 +725,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                 public void actionPerformed(ActionEvent e) {
                     closeSerialPort();
                     getSerialPortAsMenuItem();
+                    SwingUtilities.updateComponentTreeUI(menuBar);
                 }
             });
         }
