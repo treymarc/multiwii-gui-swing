@@ -201,8 +201,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
             setRealTimeChart(MwChartFactory.createChart(MSP
                     .getRealTimeData().getDataSet(MwSensorClassIMU.class)));
+            
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
                     (MwDataSourceListener) getRealTimeChart());
+
 
             getRealTimeChart()
                     .setPreferredSize(new java.awt.Dimension(sizeX, sizeY));
@@ -245,7 +247,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         return realTimePanel;
     }
 
-    private static MwSensorCheckBoxJPanel getRealTimeCheckBowPanel() {
+    public static MwSensorCheckBoxJPanel getRealTimeCheckBowPanel() {
         if (realTimeCheckBoxPanel == null) {
             realTimeCheckBoxPanel = new MwSensorCheckBoxJPanel();
         }
@@ -477,7 +479,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
-
+                    
                     if (motorFrame != null && motorFrame.isVisible()) {
                         send(MSP.request(MSP.MOTOR));
                     }
@@ -485,6 +487,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                         send(MSP.request(MSP.SERVO));
                     }
                     send(MSP.request(MSP.RAW_IMU));
+                    send(MSP.request(MSP.DEBUG));
                 } catch (Exception e) {
                     timer.cancel();
                     // timer.purge();
@@ -539,6 +542,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         JMenu menu2 = new MwJMenu("Edit");
         JMenu menu3 = new MwJMenu("View");
         JMenu menu4 = new MwJMenu("Serial");
+        JMenu menu5 = new MwJMenu("Help");
 
         /* differents choix de chaque menu */
         MwJMenuItem motor = new MwJMenuItem("Motor");
@@ -549,6 +553,9 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         MwJMenuItem annuler = new MwJMenuItem("Undo");
         MwJMenuItem copier = new MwJMenuItem("Copy");
         MwJMenuItem coller = new MwJMenuItem("Paste");
+        
+        MwJMenuItem helpContent = new MwJMenuItem("Help Contents");
+        MwJMenuItem about = new MwJMenuItem("About MwGui");
 
         // MwJMenuItem openLog = new MwJMenuItem("Open");
 
@@ -565,15 +572,34 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
         menu4.addSeparator();
-
         menu4.add(consoleSerial);
-
+        
+        menu5.add(helpContent);
+        menu5.add(about);
+        
         /* Ajouter les menus */
         menubar.add(menu1);
         menubar.add(menu2);
         menubar.add(menu3);
         menubar.add(menu4);
+        menubar.add(menu5);
 
+        about.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(), 
+                        "A Java Swing frontend for multiwii", "About MwGui",JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        
+        
+        helpContent.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(),
+                        "https://github.com/treymarc/mwi-swing/wiki", "MwGui Help Contents", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+       
+        
         consoleSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();

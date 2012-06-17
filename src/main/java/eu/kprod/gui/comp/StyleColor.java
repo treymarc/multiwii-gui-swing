@@ -2,8 +2,10 @@ package eu.kprod.gui.comp;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 public class StyleColor {
     
@@ -22,7 +24,13 @@ public class StyleColor {
         m.add(Color.WHITE);
         m.add(Color.BLACK);
         m.add(Color.DARK_GRAY);
-        return Collections.unmodifiableList(m);
+        
+        m.add(new Color(250,100,100));
+        m.add(new Color(250,200,100));
+        m.add(new Color(250,100,200));
+        m.add(new Color(250,200,200));
+        
+        return m;
     }
 
     
@@ -33,5 +41,31 @@ public class StyleColor {
     public static Color getColor(int l) {
         // TODO Auto-generated method stub
         return colors.get(l);
+    }
+
+    public static void setLookAndFeel() {
+        // TODO remember OS
+        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+
+        } else {
+            try {
+                for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+
+            } catch (Exception e) {
+                // continue
+            }
+        }
+        
+    }
+
+    public static void setColor(int index, Color color) {
+        colors.set(index, color);
+        
     }
 }

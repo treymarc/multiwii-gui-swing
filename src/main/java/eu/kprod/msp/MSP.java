@@ -8,7 +8,6 @@ import javax.swing.event.ChangeListener;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSource;
-import eu.kprod.ds.MwSensorClassDebug;
 import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
@@ -127,7 +126,8 @@ public class MSP {
     }
 
     
-    private static byte checksum = 0,cmd=0;
+    private static byte checksum = 0;
+    private static int cmd=0;
     
     private static int offset = 0, dataSize = 0, mspState = IDLE;
 
@@ -155,7 +155,7 @@ public class MSP {
             /* the command is to follow */
             mspState = HEADER_SIZE;
           } else if (mspState == HEADER_SIZE) {
-            cmd = (byte)(c & MASK);
+            cmd = (c & MASK);
             checksum ^= (c & MASK);
             mspState = HEADER_CMD;
           } else if (mspState == HEADER_CMD && offset < dataSize) {
@@ -298,7 +298,7 @@ public class MSP {
                 break;
             case DEBUG://TODO SEND
                 for (int i = 1; i <5; i++) {
-                    model.getRealTimeData().put(d, "debug"+i,  Double.valueOf(read16()), MwSensorClassDebug.class) ;         
+                    model.getRealTimeData().put(d, "debug"+i,  Double.valueOf(read16()), MwSensorClassIMU.class) ;         
                 }
 
                 break;
