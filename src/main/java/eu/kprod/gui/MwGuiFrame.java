@@ -68,7 +68,8 @@ import eu.kprod.serial.SerialNotFoundException;
  * @author treym
  * 
  */
-public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceListener {
+public class MwGuiFrame extends JFrame implements SerialListener,
+        MwDataSourceListener {
 
     /**
      * 
@@ -114,8 +115,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
         }
     }
-
-
 
     public static MwGuiFrame getInstance() {
         if (instance == null) {
@@ -186,10 +185,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                     (Integer[]) SerialRefreshRateStrings
                             .toArray(new Integer[SerialRefreshRateStrings
                                     .size()]));
-//            serialRefreshRate
-//                    .setMaximumSize(serialRefreshRate.getMinimumSize());
-//            serialRefreshRate
-//            .setMinimumSize(serialRefreshRate.getMinimumSize());
+            // serialRefreshRate
+            // .setMaximumSize(serialRefreshRate.getMinimumSize());
+            // serialRefreshRate
+            // .setMinimumSize(serialRefreshRate.getMinimumSize());
             serialRefreshRate.setSelectedIndex(3);
             serialRefreshRate.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
@@ -200,19 +199,19 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                 }
             });
 
-            setRealTimeChart(MwChartFactory.createChart(MSP
-                    .getRealTimeData().getDataSet(MwSensorClassIMU.class)));
-            
+            setRealTimeChart(MwChartFactory.createChart(MSP.getRealTimeData()
+                    .getDataSet(MwSensorClassIMU.class)));
+
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
                     (MwDataSourceListener) getRealTimeChart());
 
-
-            getRealTimeChart()
-                    .setPreferredSize(new java.awt.Dimension(sizeX, sizeY));
+            getRealTimeChart().setPreferredSize(
+                    new java.awt.Dimension(sizeX, sizeY));
 
             // Create a split pane with the two scroll panes in it.
             JSplitPane splitPane = new MwJSplitPane(
-                    JSplitPane.HORIZONTAL_SPLIT, getHudPanel(), getRealTimeChart());
+                    JSplitPane.HORIZONTAL_SPLIT, getHudPanel(),
+                    getRealTimeChart());
             splitPane.setOneTouchExpandable(true);
             splitPane.setDividerLocation(0.8);
 
@@ -275,7 +274,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     }
 
     public static MwHudPanel getHudPanel() {
-
         if (hudPanel == null) {
             hudPanel = new MwHudPanel(StyleColor.backGround);
             MSP.getRealTimeData().addListener(MwSensorClassHUD.class,
@@ -288,7 +286,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         super();
         MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
                 (MwDataSourceListener) this);
-       
+
         {
             try {
                 URL url = ClassLoader.getSystemResource("app.properties");
@@ -344,7 +342,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                 public void actionPerformed(ActionEvent e) {
                     logger.trace("actionPerformed "
                             + e.getSource().getClass().getName());
-                    // TODO
+                    // TODO Write to eeprom
                 }
             });
 
@@ -389,7 +387,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
             pane.add(calibMagButton);
 
             settingsPanel.add(pane, BorderLayout.SOUTH);
-
         }
         return settingsPanel;
     }
@@ -400,7 +397,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
             timer.purge();
         }
         timer = null;
-
     }
 
     protected static void openSerialPort() {
@@ -480,7 +476,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
-                    
+
                     if (motorFrame != null && motorFrame.isVisible()) {
                         send(MSP.request(MSP.MOTOR));
                     }
@@ -494,12 +490,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                     // timer.purge();
                 }
             }
-
         }
         if (timer != null) {
             timer.cancel();
             timer.purge();
-
         }
         timer = new Timer();
         timer.schedule(new SerialTimeOut(), 10, 1000 / rate);
@@ -516,7 +510,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     protected static void showDebugFrame() {
         getDebugFrame().setVisible(true);
         getDebugFrame().repaint();
-
     }
 
     public static void closeDebugFrame() {
@@ -528,7 +521,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     public static SerialCom getCom() throws SerialException {
         if (com == null) {
             openSerialPort();
-            if (com == null){
+            if (com == null) {
                 throw new SerialException("No Serial Com");
             }
         }
@@ -554,7 +547,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         MwJMenuItem annuler = new MwJMenuItem("Undo");
         MwJMenuItem copier = new MwJMenuItem("Copy");
         MwJMenuItem coller = new MwJMenuItem("Paste");
-        
+
         MwJMenuItem helpContent = new MwJMenuItem("Help Contents");
         MwJMenuItem about = new MwJMenuItem("About MwGui");
 
@@ -574,10 +567,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
         menu4.add(getSerialBaudAsMenuItem());
         menu4.addSeparator();
         menu4.add(consoleSerial);
-        
+
         menu5.add(helpContent);
         menu5.add(about);
-        
+
         /* Ajouter les menus */
         menubar.add(menu1);
         menubar.add(menu2);
@@ -587,20 +580,20 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
         about.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(), 
-                        "A Java Swing frontend for multiwii", "About MwGui",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(),
+                        "A Java Swing frontend for multiwii", "About MwGui",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        
-        
+
         helpContent.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(MwGuiFrame.getInstance(),
-                        "https://github.com/treymarc/mwi-swing/wiki", "MwGui Help Contents", JOptionPane.INFORMATION_MESSAGE);
+                        "https://github.com/treymarc/mwi-swing/wiki",
+                        "MwGui Help Contents", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-       
-        
+
         consoleSerial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MwGuiFrame.showDebugFrame();
@@ -620,7 +613,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
 
         motor.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 if (motorFrame == null) {
                     motorFrame = new LogViewerFrame("Motor", MSP
                             .getRealTimeData(), MwSensorClassMotor.class);
@@ -628,7 +620,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                 } else {
                     motorFrame.setVisible(true);
                 }
-
             }
         });
 
@@ -639,7 +630,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
             }
         });
 
-        // TODO about multiwii
         return menubar;
     }
 
@@ -651,10 +641,8 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
             sm.setActionCommand(p.toString());
             sm.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
-
                     logger.trace("actionPerformed "
                             + event.getSource().getClass().getName());
-
                     closeSerialPort();
                     try {
 
@@ -667,11 +655,9 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
                                 com.setListener(MwGuiFrame.getInstance());
                             }
                         }
-
                     } catch (SerialException e) {
                         e.printStackTrace();
                     }
-
                 }
             });
             m.add(sm);
@@ -707,7 +693,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     private static MwJMenuItem getDisconnectSerialMenuIten() {
         if (disconnectSerial == null) {
             disconnectSerial = new MwJMenuItem("Close");
-
             disconnectSerial.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     closeSerialPort();
@@ -746,7 +731,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
             for (byte b : msp) {
                 arr[i++] = b;
             }
-
             com.send(arr);
         }
     }
@@ -757,9 +741,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
      */
     synchronized public void readSerialByte(final byte input) {
-
-        
-
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MSP.decode(input);
@@ -782,21 +763,16 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     @Override
     public void reportSerial(Throwable e) {
         // we have an error
-
         stopTimer();
         closeSerialPort();
-
     }
 
     public static void AddSensorCheckBox(String sensorName) {
-
-            getRealTimeCheckBowPanel().addSensorBox(sensorName);
-
+        getRealTimeCheckBowPanel().addSensorBox(sensorName);
     }
 
     @Override
     public void readNewValue(String name, Double value) {
-        // TODO Auto-generated method stub
         MwGuiFrame.AddSensorCheckBox(name);
     }
 
@@ -807,7 +783,5 @@ public class MwGuiFrame extends JFrame implements SerialListener,MwDataSourceLis
     public void setRealTimeChart(MwChartPanel realTimeChart1) {
         realTimeChart = realTimeChart1;
     }
-
-
 
 }

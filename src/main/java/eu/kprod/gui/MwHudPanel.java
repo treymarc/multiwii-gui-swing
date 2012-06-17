@@ -238,8 +238,10 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         int distance;
         int angleCorrUp;
         int limitInf, limitMax;
-
-        limitInf = (int) ((this.pitchAngle / 10) - 5);
+        Integer ppitchangle = this.pitchAngle;
+        
+  
+        limitInf = (int) ((ppitchangle / 10) - 5);
         if (limitInf < -18)
             limitInf = -18;
         limitMax = limitInf + 11;
@@ -249,7 +251,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         for (int i = limitInf; i < limitMax; i++) {
 
             angle = i * 10; // Display the text at the right "height"
-            angleCorrUp = angle - this.pitchAngle;
+            angleCorrUp = angle - ppitchangle;
             distance = Math.abs(i * 5); // Put the text and the lines length at
                                         // the right position
 
@@ -342,7 +344,7 @@ public class MwHudPanel extends MwJPanel implements MwDataSourceListener {
         }
 
         if ("angx".equals(name)) {
-            this.rollAngle = value.intValue();
+            this.rollAngle = -value.intValue();
         }
         repaint();
     }
