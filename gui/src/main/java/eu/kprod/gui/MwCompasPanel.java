@@ -8,11 +8,16 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Ellipse2D.Float;
 import java.awt.geom.GeneralPath;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
+import java.net.URL;
 
 import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.msp.MSP;
@@ -36,9 +41,25 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
 
     private Double alt = 0.0;
 
+    private static Image imageCompas;
+
     public MwCompasPanel(Color c) {
         super();
         setBackground(c);
+
+        if (imageCompas == null) {
+
+            URL  url = this.getClass().getResource( "/compas.png");
+
+
+            try {
+                imageCompas = Toolkit.getDefaultToolkit().getImage(url);
+
+
+            } catch (Exception e) {
+                System.out.println("Fonts not found!!!");
+            }
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -148,8 +169,6 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
                         (centerPoint.getX() - radius +12),       centerPoint.getY()-25,
                         (centerPoint.getX() - radius +20),       centerPoint.getY()+5);
                         
-//                bankMarkerLong.lineTo((centerPoint.getX() - radius + 12),       centerPoint.getY()-5);
-//                bankMarkerLong.lineTo((centerPoint.getX() - radius +18),           centerPoint.getY()+5);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else {
@@ -172,15 +191,15 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
         g2d.setStroke(new BasicStroke(2));
         g2d.setPaint(Color.lightGray);
 
-        triangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() - radius + 5));
-        triangle.lineTo((centerPoint.getX() - 15),
-                (centerPoint.getY() - radius + 30));
-        triangle.lineTo((centerPoint.getX() + 15),
-                (centerPoint.getY() - radius + 30));
-        triangle.closePath();
-
-        g2d.fill(triangle);
+//        triangle = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+//        triangle.moveTo(centerPoint.getX(), (centerPoint.getY() - radius + 5));
+//        triangle.lineTo((centerPoint.getX() - 15),
+//                (centerPoint.getY() - radius + 30));
+//        triangle.lineTo((centerPoint.getX() + 15),
+//                (centerPoint.getY() - radius + 30));
+//        triangle.closePath();
+//
+//        g2d.fill(triangle);
 
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(Color.white);
@@ -188,8 +207,28 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
         String k =  head.toString();
         
             g2d.drawString(k, (float) (centerPoint.getX() - k.length() * 3),
-                    (float) (centerPoint.getY() - (radius - 40)));
-        
+                    (float) centerPoint.getY());
+            
+            int w = 200;
+
+            BufferedImage bi = new
+                BufferedImage(w, w, BufferedImage.TYPE_INT_ARGB);
+            Graphics g = bi.getGraphics();
+            g.drawImage(imageCompas, 0, 0, null);
+
+
+            float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
+            float[] offsets = new float[4];
+            RescaleOp rop = new RescaleOp(scales, offsets, null);
+
+            int c = (maxRadius-w )/ 2;
+            /* Draw the image, applying the filter */
+            g2d.drawImage(bi, rop, c ,  c);
+
+            
+          
+//            g2d.draw(triangle);
+            
     }
 
     @Override
