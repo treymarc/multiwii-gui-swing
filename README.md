@@ -11,7 +11,7 @@ BUILD
 After that just run:  
 `mvn clean install`
 
-do not commit any '.gitignore' file , create one in your directory with this content : 
+do not commit any '.gitignore' file , create one in your directory with this content (remove the "'" character) : 
 
 	'**/target'
 	'.*'
