@@ -1,0 +1,41 @@
+<project name="MultiWiiConf" default="bundle" basedir=".">
+
+  <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
+
+  <path id="class.path">
+    <fileset dir="lib">
+      <include name="**/*.jar"/>
+      <include name="**/*.zip"/>
+    </fileset>
+  </path>
+
+  <target name="bundle">
+    <!-- create a jar bundle for the mac -->
+    <jarbundler dir = "src/main/resources"
+                name = "MultiWiiConf"
+                shortname = "MWConf"
+                signature = "AT"
+                mainclass = "eu.kprod.MwGui" 
+				icon = " "
+                jvmversion = "1.6+"
+                version = "0.1"
+                infostring = "MultiWiiConf v0.1, June 2012"
+                build = "001"
+                bundleid = "eu.kprod.MultiWiiConf" >
+
+      <jarfileset dir="build">
+        <include name="**/*.jar" />
+		<include name="**/*.jnilib" />
+      </jarfileset>
+
+      <javaproperty name="javaroot" value="$JAVAROOT" />
+	  <javaproperty name="java.library.path" value="$JAVAROOT/lib" />
+      <javaproperty name="apple.laf.useScreenMenuBar" value="true" />
+      <javaproperty name="apple.awt.brushMetal" value="true" />
+      <javaproperty name="apple.awt.showGrowBox" value="false" />
+      <javaproperty name="apple.awt.textantialiasing" value="true" />
+	  <javaproperty name="apple.awt.graphics.UseQuartz" value="true" />
+
+    </jarbundler>
+  </target>
+</project>
