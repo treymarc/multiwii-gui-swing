@@ -107,41 +107,49 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
             if (i==0) {
                 // W
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius ),           centerPoint.getY()-10);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 16),       centerPoint.getY()-5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +3),           centerPoint.getY());
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 16),       centerPoint.getY()+5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius ),           centerPoint.getY()+10);
+                bankMarkerLong.moveTo((centerPoint.getX() - radius +4),           centerPoint.getY()-6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +8),       centerPoint.getY()+6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +12),           centerPoint.getY()-4);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +16 ),       centerPoint.getY()+6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +20 ),           centerPoint.getY()-6);
 
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else if (i==4) {
- // N
+                   // N
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius -3),           centerPoint.getY()-5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 14),       centerPoint.getY()-5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius ),           centerPoint.getY()+5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 15),       centerPoint.getY()+5);
+                bankMarkerLong.moveTo((centerPoint.getX() - radius + 4 ),           centerPoint.getY()-6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius + 19),       centerPoint.getY()-6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius + 4 ),           centerPoint.getY()+6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius + 20),       centerPoint.getY()+6);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else if (i==8) {
                 
                 // E
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius ),           centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 5),       centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +9),           centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 13),       centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +17),           centerPoint.getY()-6);
+                bankMarkerLong.moveTo((centerPoint.getX() - radius +6),        centerPoint.getY()+7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY()+7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY());
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +10),      centerPoint.getY());
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY());
+
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY()-7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radius +6),       centerPoint.getY()-7);
+
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else if (i==12) {
                 // S
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius ),           centerPoint.getY()-5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 6),       centerPoint.getY()+5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 12),       centerPoint.getY()-5);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +18),           centerPoint.getY()+5);
+                bankMarkerLong.moveTo((centerPoint.getX() - radius +3),           centerPoint.getY()-5);
+                bankMarkerLong.curveTo(
+                        (centerPoint.getX() - radius +12),       centerPoint.getY()+25, 
+                        (centerPoint.getX() - radius +12),       centerPoint.getY()-25,
+                        (centerPoint.getX() - radius +20),       centerPoint.getY()+5);
+                        
+//                bankMarkerLong.lineTo((centerPoint.getX() - radius + 12),       centerPoint.getY()-5);
+//                bankMarkerLong.lineTo((centerPoint.getX() - radius +18),           centerPoint.getY()+5);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else {
