@@ -2,6 +2,10 @@
 
   <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 
+  <path id="project.class.path">
+      <path path="${runtime-classpath}"/>
+  </path>
+
   <path id="class.path">
     <fileset dir="lib">
       <include name="**/*.jar"/>
@@ -11,12 +15,11 @@
 
   <target name="bundle">
     <!-- create a jar bundle for the mac -->
-    <jarbundler dir = "release"
+    <jarbundler dir = "target"
                 name = "MultiWiiConf"
                 shortname = "MWConf"
                 signature = "AT"
                 mainclass = "eu.kprod.MwGui" 
-				icon = " "
                 jvmversion = "1.6+"
                 version = "0.1"
                 infostring = "MultiWiiConf v0.1, June 2012"
