@@ -7,7 +7,7 @@ BUILD
 =====
 * You need the GNU Serial lib in your local maven repository, you can manualy install the provided jar:   
 
-		mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar `
+		mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar
 
 	* After that just run:  
 	
@@ -16,7 +16,7 @@ BUILD
 * To export a Mac OS X application bundle you need the JarBundler Ant task which can be installed via MacPorts.
 After the installation you again have to add it to your local Maven repository:   
 
-		mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar`
+		mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar
 
 	* After that run:  
 	
