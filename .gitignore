@@ -1,4 +1,2 @@
-target
-*.orig
-*~
-.DS_Store
+**/target
+.*
