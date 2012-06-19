@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.kprod</groupId>
 	<artifactId>agregator</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<description>Project agregator for MwGui</description>
 	<name>agregator</name>
 	<packaging>pom</packaging>
@@ -21,12 +21,5 @@
 			</modules>
 		</profile>
 	</profiles>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>fiendie-snapshots-repo</id>
-			<url>http://flexo.fiendie.net:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 </project>

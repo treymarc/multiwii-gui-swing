@@ -7,8 +7,6 @@
 	<description>A serial Java lib for swing</description>
 	<name>SerialLib</name>
 
-
-
 	<build>
 		<plugins>
 
