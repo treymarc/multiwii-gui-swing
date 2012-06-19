@@ -33,7 +33,7 @@ RUN
 	 
 			build/mwi-swing.sh
 
-* On Mac OS X just the MultiWiiConf.app in the mac-bundle/target folder
+* On Mac OS X just run the MultiWiiConf.app in the mac-bundle/target folder
  
 
 BLUETOOTH
