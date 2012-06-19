@@ -12,6 +12,7 @@
 		<module>serial</module>
 		<module>gui</module>
 	</modules>
+
 	<profiles>
 		<profile>
 			<id>mac</id>

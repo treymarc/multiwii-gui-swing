@@ -1,36 +1,37 @@
 MWI-SWING
 =========
-A small Java Swing frontend for multiwii
+A small Java Swing frontend for MultiWii
 
 
 BUILD
 =====
-* You need the GNU Serial lib in your local maven repository, you can manualy install the provided jar:  
-`mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar`
+* You need the GNU Serial lib in your local maven repository, you can manualy install the provided jar:   
 
-After that just run:  
-`mvn clean install`
+	`mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar`
+
+	* After that just run:  
+	`mvn clean install`
 
 * To export a Mac OS X application bundle you need the JarBundler Ant task which can be installed via MacPorts.
-After the installation you again have to add it to your local Maven repository:
-`mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar``
-do not commit any '.gitignore' file , create one in your directory with this content (remove the "'" character) : 
+After the installation you again have to add it to your local Maven repository:   
 
-After that run:  
-`mvn package`
-	'**/target'
-	'.*'
+	`mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar`
+
+	* After that run:  
+	`mvn package -P mac`
 
 
 RUN
 ===
-You can either use the "build" or "MultiWiiConf" as the INSTALL folder for mwi-swing
+* You can either use the "gui/build" or "MultiWiiConf" as the INSTALL folder for mwi-swing
 
-When the build process is finished 
-*copy the mwgui-Version-release-jar-with-dependencies.jar file to INSTALL/lib.
-*run the shell script in the INSTALL folder:  
- `build/mwi-swing.sh`
+* When the build process is finished: 
+	* copy the mwgui-Version-release-jar-with-dependencies.jar file to INSTALL/lib.
+	* run the shell script in the INSTALL folder:  
+		`build/mwi-swing.sh`
 
+* On Mac OS X just the MultiWiiConf.app in the mac-bundle/target folder
+ 
 
 BLUETOOTH
 =========

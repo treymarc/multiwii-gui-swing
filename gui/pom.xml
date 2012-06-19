@@ -28,10 +28,10 @@
 				</configuration>
 			</plugin>
 			<plugin>
-		       <groupId>org.codehaus.mojo</groupId>
-		       <artifactId>jdepend-maven-plugin</artifactId>
-		       <version>2.0-beta-2</version>
-     		</plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.0-beta-2</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -61,7 +61,7 @@
 			</plugin>
 			<plugin>
 				<!-- NOTE: We don't need a groupId specification because the group is 
-					org.apache.maven.plugins ...which is assumed by default. -->
+				org.apache.maven.plugins ...which is assumed by default. -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.2.2</version>
@@ -85,14 +85,14 @@
 					</execution>
 				</executions>
 			</plugin>
-			  <plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-site-plugin</artifactId>
-			    <version>2.3</version>
-			    <configuration>
-			      <outputEncoding>UTF-8</outputEncoding>
-			    </configuration>
-			  </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -125,11 +125,11 @@
 	<repositories>
 	
 	</repositories>
-	 <distributionManagement>
-  		<snapshotRepository>
-		    <id>fiendie-snapshots-repo</id>
-		    <url>http://flexo.fiendie.net:8081/nexus/content/repositories/snapshots</url>
-  		</snapshotRepository>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>fiendie-snapshots-repo</id>
+			<url>http://flexo.fiendie.net:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
 	</distributionManagement>
 	
 </project>
