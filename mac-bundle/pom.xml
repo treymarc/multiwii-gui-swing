@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>eu.kprod</groupId>
+	<artifactId>mwgui-bunble</artifactId>
+	<version>0.0.1a-SNAPSHOT</version>
+	<description>A Java Swing frontend for multiwii</description>
+	<name>Mac Bundle</name>
+	
+
+	<build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>osxappbundle-maven-plugin</artifactId>
+                <version>1.0-alpha-1</version>
+                <configuration>
+                    <mainClass>com.example.Main</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+               </executions>
+           </plugin>
+
+       </plugins>
+   </build>
+   
+
+	<dependencies>
+		
+		<dependency>
+			<groupId>eu.kprod</groupId>
+	<artifactId>mwgui</artifactId>
+	<version>0.0.1a-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.9.1</version>
+			</plugin>
+		</plugins>
+	</reporting>
+	<repositories>
+	
+	</repositories>
+	 <distributionManagement>
+  		<snapshotRepository>
+		    <id>fiendie-snapshots-repo</id>
+		    <url>http://flexo.fiendie.net:8081/nexus/content/repositories/snapshots</url>
+  		</snapshotRepository>
+	</distributionManagement>
+	
+</project>

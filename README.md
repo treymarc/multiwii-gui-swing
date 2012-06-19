@@ -14,9 +14,12 @@ After that just run:
 * To export a Mac OS X application bundle you need the JarBundler Ant task which can be installed via MacPorts.
 After the installation you again have to add it to your local Maven repository:
 `mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar``
+do not commit any '.gitignore' file , create one in your directory with this content (remove the "'" character) : 
 
 After that run:  
 `mvn package`
+	'**/target'
+	'.*'
 
 
 RUN
