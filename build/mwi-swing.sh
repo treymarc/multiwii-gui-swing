@@ -1,4 +1,6 @@
 #!/bin/sh
 
 APPDIR=$(dirname "$0")
-java  -Djava.library.path="$APPDIR/lib" -cp "$APPDIR/lib/mwgui-0.0.1a-SNAPSHOT-jar-with-dependencies.jar" eu.kprod.MwGui
+java  -Djava.library.path=/home/treym/application.linux64 -cp "$APPDIR/lib/mwgui-0.0.2-jar-with-dependencies.jar" eu.kprod.MwGui
+
+

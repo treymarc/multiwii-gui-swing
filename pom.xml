@@ -9,8 +9,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>mwi</module>
 		<module>serial</module>
 		<module>gui</module>
+		<module>script</module>
 	</modules>
 
 	<profiles>
@@ -21,5 +23,28 @@
 			</modules>
 		</profile>
 	</profiles>
+<build>
+<plugins>
+<plugin>
+     <artifactId>maven-antrun-plugin</artifactId>
+     <version>1.4</version>
+     <executions>
+      <execution>
+       <phase>process-resources</phase>
+       <configuration>
+        <tasks>
+         <copy todir="${basedir}/build/lib">
+          <fileset dir="${basedir}/gui/target/" includes="mwgui-${project.version}-jar-with-dependencies.jar" />
+         </copy>
+        </tasks>
+       </configuration>
+       <goals>
+        <goal>run</goal>
+       </goals>
+      </execution>
+     </executions>
+    </plugin>  
+    </plugins>
+ </build>
 
 </project>
