@@ -35,10 +35,18 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
                 .getSeriesCount(); i++) {
             super.getChart().getXYPlot().getSeriesCount();
         }
+        super.getChart().setAntiAlias(true);
 
         renderer.setSeriesVisible(l, b);
         if (b) {
             renderer.setSeriesPaint(l, StyleColor.getColor(l));
         }
+
+    }
+
+    @Override
+    public void resetAllValues() {
+        // TODO Auto-generated method stub
+        // nothing todo (replace this from this is not possible)
     }
 }

@@ -27,26 +27,26 @@ public class MwDataSourceImpl implements MwDataSource {
     private Hashtable<Class<? extends MwSensorClass>, Hashtable<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass>, Hashtable<String, TimeSeries>>();
     private Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection> dataset = new Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection>();
 
-    private long maxItemAge = 5000;
-    private int maxItemCount = 4000;
+    private long maxItemAge = 2000;
 
-    public int getMaxItemCount() {
-        return maxItemCount;
-    }
+
+//    public int getMaxItemCount() {
+//        return maxItemCount;
+//    }
 
     // TODO set max ages counts for each dataset not all
 
-    public void setMaxItemCount(final int maxItemCount1) {
-        if (maxItemCount1 > 0) {
-            this.maxItemCount = maxItemCount1;
-            for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
-                Hashtable<String, TimeSeries> series = sensors.get(sclass);
-                for (String sensorName : series.keySet()) {
-                    series.get(sensorName).setMaximumItemCount(maxItemCount);
-                }
-            }
-        }
-    }
+//    public void setMaxItemCount(final int maxItemCount1) {
+//        if (maxItemCount1 > 0) {
+//         //   this.maxItemCount = maxItemCount1;
+//            for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
+//                Hashtable<String, TimeSeries> series = sensors.get(sclass);
+//                for (String sensorName : series.keySet()) {
+//                    series.get(sensorName).setMaximumItemCount(maxItemCount);
+//                }
+//            }
+//        }
+//    }
 
     public long getMaxItemAge() {
         return maxItemAge;
@@ -135,7 +135,7 @@ public class MwDataSourceImpl implements MwDataSource {
 
         if (timeserie == null) {
             timeserie = new TimeSeries(sensorName);
-            timeserie.setMaximumItemCount(maxItemCount);
+//            timeserie.setMaximumItemCount(maxItemCount);
             timeserie.setMaximumItemAge(maxItemAge);
 
             s.put(sensorName, timeserie);
@@ -194,5 +194,6 @@ public class MwDataSourceImpl implements MwDataSource {
         }
         return false;
     }
+   
 
 }

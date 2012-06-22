@@ -1,15 +1,18 @@
-package eu.kprod.gui;
+package eu.kprod.gui.instrument;
 
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
 
+import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.gui.comp.MwJPanel;
 
-public abstract class MwInstrumentJPanel extends MwJPanel {
+public abstract class MwInstrumentJPanel extends MwJPanel implements
+MwDataSourceListener {
 
     /**
      * 
@@ -19,23 +22,33 @@ public abstract class MwInstrumentJPanel extends MwJPanel {
     static Font writing = null;
 
     Point2D centerPoint;
-    int radius;
-    int maxRadius = 220;
+    int radiusx;
+    int radiusy;
+    int maxRadiusX = 220;
+    int maxRadiusY = 220;
+
     Dimension dimPanel;
 
      int dimMarker5Deg;
      int dimMarker10Deg;
 
     
-    public MwInstrumentJPanel() {
-
+    public MwInstrumentJPanel(Dimension dimension) {
+if (dimension ==null){
         // Instance variables initialization
-        this.radius = ((Double) (0.45 * this.maxRadius)).intValue();
-        dimPanel = new Dimension(this.maxRadius, this.maxRadius);
-
+        
+}else {
+    dimPanel= dimension;
+    this.maxRadiusX = dimPanel.width;
+    this.maxRadiusY = dimPanel.height;
+}
+this.radiusx = ((Double) (0.45 * this.maxRadiusX)).intValue();
+this.radiusy = ((Double) (0.45 * this.maxRadiusY)).intValue();
+dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
+//        this.setMinimumSize(dimPanel);
         // Define a center point as a reference
-        this.centerPoint = new Point2D.Float(this.maxRadius / 2,
-                this.maxRadius / 2);
+        this.centerPoint = new Point2D.Float(this.maxRadiusX / 2,
+                this.maxRadiusY / 2);
 
         if (writing == null) {
 
@@ -60,4 +73,19 @@ public abstract class MwInstrumentJPanel extends MwJPanel {
         return dimPanel;
     }
 
+    @Override
+    public void resetAllValues() {
+       resetAllValuesImpl();
+       repaint();
+        
+    }
+
+     abstract void resetAllValuesImpl();
+     
+     @Override
+    protected void paintComponent(Graphics g) {
+        // TODO Auto-generated method stub
+        super.paintComponent(g);
+       
+    }
 }

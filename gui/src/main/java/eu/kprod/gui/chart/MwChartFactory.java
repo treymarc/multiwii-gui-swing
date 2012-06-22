@@ -1,6 +1,5 @@
 package eu.kprod.gui.chart;
 
-import java.awt.Color;
 import java.text.SimpleDateFormat;
 
 import org.jfree.chart.ChartFactory;
@@ -31,18 +30,25 @@ public final class MwChartFactory {
 
         plot.setBackgroundPaint(StyleColor.backGround);
 
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setRangeGridlinePaint(Color.white);
+        plot.setDomainGridlinePaint(StyleColor.forGround);
+        plot.setRangeGridlinePaint(StyleColor.forGround);
 
+        plot.setDomainCrosshairPaint(StyleColor.forGround);
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 
+
+        
         final DateAxis axis = (DateAxis) plot.getDomainAxis();
         axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
 
         // force integer display
         ValueAxis va = (ValueAxis) plot.getRangeAxis();
         va.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        va.setLabelPaint(StyleColor.forGround);
+        va.setAxisLinePaint(StyleColor.forGround);
+        va.setTickLabelPaint(StyleColor.forGround);
+
         MwChartPanel chartPanel = new MwChartPanel(chart);
         chartPanel.setMouseWheelEnabled(false);
         chartPanel.setDomainZoomable(false);

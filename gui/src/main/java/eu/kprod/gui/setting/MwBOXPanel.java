@@ -1,4 +1,4 @@
-package eu.kprod.gui.changepanel;
+package eu.kprod.gui.setting;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.gui.comp.MwJCheckBox;
@@ -27,27 +26,7 @@ public class MwBOXPanel extends MwChangeablePanel {
         super(name);
     }
 
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        // TODO Auto-generated method stub
-        final Object source = e.getSource();
-        if (source instanceof MwDataModel) {
-
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-
-                    MwDataModel m = (MwDataModel) source;
-                    removeAll();
-                    setLayout(new GridLayout(1, 1));
-                    add(build(m.getBOXs(), m.getBoxNameIndex()));
-                    revalidate();
-
-                }
-
-            });
-
-        }
-    }
+  
 
     private Component build(Map<String, List<Boolean>> map,
             Map<Integer, String> index) {
@@ -101,6 +80,23 @@ public class MwBOXPanel extends MwChangeablePanel {
             mainPane.add(pane);
         }
         return mainPane;
+    }
+
+
+    @Override
+    void newModel(final MwDataModel m) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+
+                removeAll();
+                setLayout(new GridLayout(1, 1));
+                add(build(m.getBOXs(), m.getBoxNameIndex()));
+                revalidate();
+
+            }
+
+        });
+        
     }
 
 }

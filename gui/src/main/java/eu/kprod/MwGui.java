@@ -29,6 +29,7 @@ public class MwGui {
             public void run() {
                 StyleColor.setLookAndFeel();
                 MwGuiFrame.getInstance().setVisible(true);
+                MwGuiFrame.getInstance().repaint();
 
             }
 

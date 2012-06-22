@@ -1,5 +1,6 @@
 package eu.kprod.gui.comp;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 
@@ -25,6 +26,11 @@ public class MwJPanel extends JPanel {
         // TODO Auto-generated constructor stub
         super();
         setBackground(background);
+    }
+
+    public MwJPanel(BorderLayout borderLayout) {
+        // TODO Auto-generated constructor stub
+        super(borderLayout);
     }
 
 }

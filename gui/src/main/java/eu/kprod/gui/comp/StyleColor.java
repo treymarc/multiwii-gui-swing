@@ -10,7 +10,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class StyleColor {
     
     public static final List<Color> colors = initializeMap();
-  
+   
     private static List<Color> initializeMap() {
         List<Color> m = new ArrayList<Color>();
         m.add(Color.BLUE);
@@ -21,7 +21,7 @@ public class StyleColor {
         m.add(Color.CYAN);
         m.add(Color.MAGENTA);
         m.add(Color.ORANGE);
-        m.add(Color.WHITE);
+        m.add(StyleColor.forGround);
         m.add(Color.BLACK);
         m.add(Color.DARK_GRAY);
         
@@ -34,9 +34,10 @@ public class StyleColor {
     }
 
     
-    public static final Color backGround = Color.gray;
-   
-    // public static Color forGround= Color.white;
+    public static final Color backGround = new Color(51,51,51);
+    public static final Color forGround = new Color(245,245,240);
+    
+    // public static Color forGround= StyleColor.forGround;
 
     public static Color getColor(int l) {
         // TODO Auto-generated method stub

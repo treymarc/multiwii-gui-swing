@@ -10,7 +10,7 @@
 
 	<artifactId>mwgui-script</artifactId>
 	<description>mwgui startup script</description>
-	<name>sStartup Script</name>
+	<name>Startup Script</name>
 
 	<build>
 		<plugins>

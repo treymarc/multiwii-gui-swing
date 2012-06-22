@@ -5,8 +5,14 @@
 	<artifactId>serial</artifactId>
 	<version>1.0.0</version>
 	<description>A serial Java lib for swing</description>
-	<name>SerialLib</name>
-
+	<name>Serial Lib</name>
+	<licenses></licenses>
+	<developers>
+		<developer>
+			<name>marc trey</name>
+			<email>trey.marc@gmail.com</email>
+			</developer>
+	</developers>
 	<build>
 		<plugins>
 

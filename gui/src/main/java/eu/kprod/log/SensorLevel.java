@@ -1,4 +1,4 @@
-package eu.kprod.gui;
+package eu.kprod.log;
 
 import org.apache.log4j.Level;
 

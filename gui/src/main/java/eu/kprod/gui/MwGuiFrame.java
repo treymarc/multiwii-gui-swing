@@ -2,7 +2,6 @@ package eu.kprod.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -27,7 +26,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
@@ -40,8 +38,6 @@ import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
-import eu.kprod.gui.changepanel.MwBOXPanel;
-import eu.kprod.gui.changepanel.MwPIDPanel;
 import eu.kprod.gui.chart.MwChartFactory;
 import eu.kprod.gui.chart.MwChartPanel;
 import eu.kprod.gui.comp.MwJButton;
@@ -51,8 +47,13 @@ import eu.kprod.gui.comp.MwJMenuBar;
 import eu.kprod.gui.comp.MwJMenuItem;
 import eu.kprod.gui.comp.MwJPanel;
 import eu.kprod.gui.comp.MwJRadioButton;
-import eu.kprod.gui.comp.MwJSplitPane;
 import eu.kprod.gui.comp.StyleColor;
+import eu.kprod.gui.instrument.MwCompasPanel;
+import eu.kprod.gui.instrument.MwHudPanel;
+import eu.kprod.gui.instrument.MwInstrumentJPanel;
+import eu.kprod.gui.instrument.MwUAVPanel;
+import eu.kprod.gui.setting.MwBOXPanel;
+import eu.kprod.gui.setting.MwPIDPanel;
 import eu.kprod.msp.MSP;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
@@ -164,12 +165,16 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     private String frameTitle;
     private int sizeY = 400;
     private int sizeX = 700;
+    private MwJPanel centerChartPanel;
+//    private MwJPanel instrumentPanelRight;
     private static JMenuBar menuBar;
     private static MwChartPanel realTimeChart;
-    private static MwJPanel instrumentPanel;
-    private static MwSensorCheckBoxJPanel realTimeCheckBoxPanel;
+    private static MwJPanel instrumentPanelLeft;
+    private static MwSensorCheckBoxJPanel chartCheckBoxsPanel;
+    private static MwInstrumentJPanel compasPanel;
+    private static MwInstrumentJPanel hudPanel;
 
-    private MwJPanel getRawImuChartPanel() {
+    private MwJPanel getRealTimePanel() {
 
         if (realTimePanel == null) {
 
@@ -205,22 +210,24 @@ public class MwGuiFrame extends JFrame implements SerialListener,
                     .getDataSet(MwSensorClassIMU.class)));
 
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
-                    (MwDataSourceListener) getRealTimeChart());
+                    (MwDataSourceListener) getChartPanel());
 
-            getRealTimeChart().setPreferredSize(
+            getChartPanel().setPreferredSize(
                     new java.awt.Dimension(sizeX, sizeY));
 
-            // Create a split pane with the two scroll panes in it.
-            JSplitPane splitPane = new MwJSplitPane(
-                    JSplitPane.HORIZONTAL_SPLIT, getInstrumentPanel(),
-                    getRealTimeChart());
-            splitPane.setOneTouchExpandable(true);
-            splitPane.setDividerLocation(0.8);
+
+             centerChartPanel = new MwJPanel(new BorderLayout());
+
+             centerChartPanel.add(getChartPanel(),BorderLayout.CENTER);
+             centerChartPanel.add(getChartCheckBoxPanel(), BorderLayout.EAST);
+
 
             realTimePanel = new MwJPanel();
 
             realTimePanel.setLayout(new BorderLayout());
-            realTimePanel.add(splitPane, BorderLayout.CENTER);
+            realTimePanel.add(getInstrumentPanelLeft(),BorderLayout.WEST);
+            
+            realTimePanel.add(centerChartPanel, BorderLayout.CENTER);
 
             JButton startButton = new MwJButton("Start", "Start monitoring");
             startButton.addActionListener(new ActionListener() {
@@ -230,7 +237,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
 
                     beginSerialCom();
                     restartTimer((Integer) serialRefreshRate.getSelectedItem());
-                    getRealTimeChart().restoreAutoBounds();
+                    getChartPanel().restoreAutoBounds();
                 }
             });
 
@@ -244,16 +251,16 @@ public class MwGuiFrame extends JFrame implements SerialListener,
 
             realTimePanel.add(pane, BorderLayout.SOUTH);
             // realTimePanel.add(getHudPanel() ,BorderLayout.EAST);
-            realTimePanel.add(getRealTimeCheckBowPanel(), BorderLayout.EAST);
         }
         return realTimePanel;
     }
 
-    public static MwSensorCheckBoxJPanel getRealTimeCheckBowPanel() {
-        if (realTimeCheckBoxPanel == null) {
-            realTimeCheckBoxPanel = new MwSensorCheckBoxJPanel();
+
+    public static MwSensorCheckBoxJPanel getChartCheckBoxPanel() {
+        if (chartCheckBoxsPanel == null) {
+            chartCheckBoxsPanel = new MwSensorCheckBoxJPanel();
         }
-        return realTimeCheckBoxPanel;
+        return chartCheckBoxsPanel;
     }
 
     protected static void beginSerialCom() {
@@ -275,22 +282,31 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         }
     }
 
-    public static MwJPanel getInstrumentPanel() {
-        if (instrumentPanel == null) {
-            instrumentPanel = new MwJPanel(StyleColor.backGround);
-            instrumentPanel.setLayout(new GridLayout(2, 1));
-            MwHudPanel hud;
-            instrumentPanel.add(hud = new MwHudPanel(StyleColor.backGround) );
-            MSP.getRealTimeData().addListener(MwSensorClassHUD.class,
-                    (MwDataSourceListener) hud);
+    public static MwJPanel getInstrumentPanelLeft() {
+        if (instrumentPanelLeft == null) {
             
-            MwCompasPanel compas;
-            instrumentPanel.add(compas =new MwCompasPanel(StyleColor.backGround) );
-            MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
-                    (MwDataSourceListener) compas);
+            instrumentPanelLeft = new MwJPanel(StyleColor.backGround);
+            instrumentPanelLeft.setLayout(new BorderLayout());
 
+            MwJPanel pane = new MwJPanel(StyleColor.backGround);
+            
+            pane.add(hudPanel = new MwHudPanel(StyleColor.backGround) );
+            MSP.getRealTimeData().addListener(MwSensorClassHUD.class,
+                    (MwDataSourceListener) hudPanel);
+            
+        
+            pane.add(compasPanel =new MwCompasPanel(StyleColor.backGround) );
+            MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
+                    (MwDataSourceListener) compasPanel);
+            
+            instrumentPanelLeft.add(pane,BorderLayout.NORTH);
+            
+            pane = new MwUAVPanel(StyleColor.backGround);
+            MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
+                    (MwDataSourceListener) compasPanel);
+            instrumentPanelLeft.add(pane,BorderLayout.CENTER);
         }
-        return instrumentPanel;
+        return instrumentPanelLeft;
     }
 
     private MwGuiFrame() {
@@ -335,7 +351,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         getContentPane().setLayout(new BorderLayout());
         // getContentPane().add(new MwJPanel(), BorderLayout.SOUTH);
         getContentPane().add(
-                new MwMainPanel(getRawImuChartPanel(), getSettingsPanel()),
+                new MwMainPanel(getRealTimePanel(), getSettingsPanel()),
                 BorderLayout.CENTER);
 
         pack();
@@ -764,12 +780,13 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     }
 
     static void closeSerialPort() {
+        MwGuiFrame.getInstance().resetAllValues();
         if (com != null) {
             com.closeSerialPort();
         }
         stopTimer();
         com = null;
-        MwGuiFrame.getInstance().setTitle(null);
+
     }
 
     @Override
@@ -780,7 +797,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     }
 
     public static void AddSensorCheckBox(String sensorName) {
-        getRealTimeCheckBowPanel().addSensorBox(sensorName);
+        getChartCheckBoxPanel().addSensorBox(sensorName);
     }
 
     @Override
@@ -788,12 +805,21 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         MwGuiFrame.AddSensorCheckBox(name);
     }
 
-    public static MwChartPanel getRealTimeChart() {
+    public static MwChartPanel getChartPanel() {
         return realTimeChart;
     }
 
     public void setRealTimeChart(MwChartPanel realTimeChart1) {
         realTimeChart = realTimeChart1;
+    }
+
+    @Override
+    public void resetAllValues() {
+        realTimeChart.resetAllValues();
+        hudPanel.resetAllValues();
+        compasPanel.resetAllValues();
+      
+        
     }
 
 }

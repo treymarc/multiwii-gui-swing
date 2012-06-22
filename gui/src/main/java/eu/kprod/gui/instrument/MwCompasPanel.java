@@ -2,7 +2,7 @@
  * @author treym (Trey Marc) Jun 16 2012
  *
  */
-package eu.kprod.gui;
+package eu.kprod.gui.instrument;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,34 +19,12 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.net.URL;
 
-import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
-public class MwCompasPanel extends MwInstrumentJPanel implements
-        MwDataSourceListener {
+public class MwCompasPanel extends MwInstrumentJPanel  {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-
-    private Ellipse2D roundHorizon;
-
-    private GeneralPath bankMarkerLong;
-    private GeneralPath bankMarkerShort;
-
-    private Integer head = 0;
-
-    private GeneralPath triangle;
-
-    private Double alt = 0.0;
-
-    private static Image imageCompas;
-
-    public MwCompasPanel(Color c) {
-        super();
-        setBackground(c);
-
+    {
         if (imageCompas == null) {
 
             URL  url = this.getClass().getResource( "/compas.png");
@@ -60,6 +38,29 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
                 System.out.println("Fonts not found!!!");
             }
         }
+    }
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    private Ellipse2D roundHorizon;
+
+    private GeneralPath bankMarkerLong;
+    private GeneralPath bankMarkerShort;
+
+//  private GeneralPath triangle;
+
+    private Integer head = 0;
+    private Double alt = 0.0;
+
+    private static Image imageCompas;
+
+    public MwCompasPanel(Color c) {
+        super(null);
+        setBackground(c);
+
+       
     }
 
     public void paintComponent(Graphics g) {
@@ -77,8 +78,8 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
 
         drawUAV(g2d);
 
-        roundHorizon = new Ellipse2D.Float((maxRadius - radius * 2) / 2,
-                (maxRadius - radius * 2) / 2, 2 * radius, 2 * radius);
+        roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
+                (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
 
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
@@ -87,8 +88,8 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
 
     private void drawBackground(Graphics2D g2d) {
 
-        Float background = new Ellipse2D.Float((maxRadius - radius * 2) / 2,
-                (maxRadius - radius * 2) / 2, 2 * radius, 2 * radius);
+        Float background = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
+                (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
 
         g2d.setPaint(Color.DARK_GRAY);
         g2d.fill(background);
@@ -98,7 +99,7 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
     void drawValue(Graphics2D g2d) {
 
         g2d.setFont(writing);
-        g2d.setPaint(Color.white);
+        g2d.setPaint(StyleColor.forGround);
         g2d.setStroke(new BasicStroke(1));
         g2d.drawString("Alt " + (alt), 10, 10);
 
@@ -111,13 +112,13 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
         g2d.transform(at);
 
         g2d.setStroke(new BasicStroke(2));
-        g2d.setPaint(Color.white);
+        g2d.setPaint(StyleColor.forGround);
 
 
         bankMarkerShort = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        bankMarkerShort.moveTo((centerPoint.getX() - radius),
+        bankMarkerShort.moveTo((centerPoint.getX() - radiusx),
                 centerPoint.getY());
-        bankMarkerShort.lineTo((centerPoint.getX() - radius + 6),
+        bankMarkerShort.lineTo((centerPoint.getX() - radiusx + 6),
                 centerPoint.getY());
 
         AffineTransform ata = AffineTransform.getRotateInstance(
@@ -128,46 +129,46 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
             if (i==0) {
                 // W
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius +4),           centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +8),       centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +12),           centerPoint.getY()-4);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +16 ),       centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +20 ),           centerPoint.getY()-6);
+                bankMarkerLong.moveTo((centerPoint.getX() - radiusx +4),           centerPoint.getY()-6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +8),       centerPoint.getY()+6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +12),           centerPoint.getY()-4);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16 ),       centerPoint.getY()+6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +20 ),           centerPoint.getY()-6);
 
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else if (i==4) {
                    // N
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius + 4 ),           centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 19),       centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 4 ),           centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius + 20),       centerPoint.getY()+6);
+                bankMarkerLong.moveTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()-6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 19),       centerPoint.getY()-6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()+6);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 20),       centerPoint.getY()+6);
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else if (i==8) {
                 
                 // E
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius +6),        centerPoint.getY()+7);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY()+7);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY());
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +10),      centerPoint.getY());
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY());
+                bankMarkerLong.moveTo((centerPoint.getX() - radiusx +6),        centerPoint.getY()+7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()+7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +10),      centerPoint.getY());
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
 
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +16),       centerPoint.getY()-7);
-                bankMarkerLong.lineTo((centerPoint.getX() - radius +6),       centerPoint.getY()-7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()-7);
+                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +6),       centerPoint.getY()-7);
 
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
             }else if (i==12) {
                 // S
                 bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radius +3),           centerPoint.getY()-5);
+                bankMarkerLong.moveTo((centerPoint.getX() - radiusx +3),           centerPoint.getY()-5);
                 bankMarkerLong.curveTo(
-                        (centerPoint.getX() - radius +12),       centerPoint.getY()+25, 
-                        (centerPoint.getX() - radius +12),       centerPoint.getY()-25,
-                        (centerPoint.getX() - radius +20),       centerPoint.getY()+5);
+                        (centerPoint.getX() - radiusx +12),       centerPoint.getY()+25, 
+                        (centerPoint.getX() - radiusx +12),       centerPoint.getY()-25,
+                        (centerPoint.getX() - radiusx +20),       centerPoint.getY()+5);
                         
                 g2d.setStroke(new BasicStroke(2));
                 g2d.draw(bankMarkerLong);
@@ -202,7 +203,7 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
 //        g2d.fill(triangle);
 
         g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(Color.white);
+        g2d.setPaint(StyleColor.forGround);
 
         String k =  head.toString();
         
@@ -212,7 +213,7 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
             int w = 200;
 
             BufferedImage bi = new
-                BufferedImage(w, w, BufferedImage.TYPE_INT_ARGB);
+                BufferedImage(maxRadiusY, maxRadiusY, BufferedImage.TYPE_INT_ARGB);
             Graphics g = bi.getGraphics();
             g.drawImage(imageCompas, 0, 0, null);
 
@@ -221,9 +222,8 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
             float[] offsets = new float[4];
             RescaleOp rop = new RescaleOp(scales, offsets, null);
 
-            int c = (maxRadius-w )/ 2;
-            /* Draw the image, applying the filter */
-            g2d.drawImage(bi, rop, c ,  c);
+
+            g2d.drawImage(bi, rop, (maxRadiusX-w )/ 2 ,  (maxRadiusY-w )/ 2);
 
             
           
@@ -241,4 +241,13 @@ public class MwCompasPanel extends MwInstrumentJPanel implements
 
         repaint();
     }
+
+    @Override
+    void resetAllValuesImpl() {
+        head = 0;
+        alt = 0.0;
+        
+    }
+
+   
 }

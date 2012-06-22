@@ -46,8 +46,8 @@ public class MwColorChooser extends MwJFrame implements ChangeListener {
     public void stateChanged(ChangeEvent e) {
         if (index>=0){
             StyleColor.setColor(index,chooser.getColor());
-            MwGuiFrame.getRealTimeChart().setVisible(index, true);
-            MwGuiFrame.getRealTimeCheckBowPanel().refreshBox(index, chooser.getColor());
+            MwGuiFrame.getChartPanel().setVisible(index, true);
+            MwGuiFrame.getChartCheckBoxPanel().refreshBox(index, chooser.getColor());
         }
         
     }

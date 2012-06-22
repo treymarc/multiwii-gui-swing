@@ -49,7 +49,7 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
             c.addChangeListener(new ChangeListener () {
                 public void stateChanged (ChangeEvent evt) {
                     
-                  MwGuiFrame.getRealTimeChart().setVisible(index, c.isSelected());
+                  MwGuiFrame.getChartPanel().setVisible(index, c.isSelected());
                  
                 }
              });

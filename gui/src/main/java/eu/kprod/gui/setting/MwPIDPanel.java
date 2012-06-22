@@ -1,4 +1,4 @@
-package eu.kprod.gui.changepanel;
+package eu.kprod.gui.setting;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.gui.comp.MwJLabel;
@@ -26,18 +25,7 @@ public class MwPIDPanel extends MwChangeablePanel  {
         super(name);
     }
 
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        // TODO Auto-generated method stub
-       Object source = e.getSource();
-       if (source instanceof MwDataModel){
-           MwDataModel m = (MwDataModel)source;
-           this.removeAll();
-           super.setLayout(new GridLayout(1,1));
-           this.add(this.build(m.getPIDs(),m.getPidNameIndex()));
-           this.revalidate();
-       }
-    }
+
 
     private Component build(Map<String, List<Double>> piDs, Map<Integer, String> index) {
         MwJPanel mainPane = new MwJPanel();
@@ -78,6 +66,17 @@ public class MwPIDPanel extends MwChangeablePanel  {
         }
 
         return mainPane;
+    }
+
+
+
+    @Override
+    void newModel(MwDataModel m) {
+        this.removeAll();
+        super.setLayout(new GridLayout(1,1));
+        this.add(this.build(m.getPIDs(),m.getPidNameIndex()));
+        this.revalidate();
+        
     }
 
 
