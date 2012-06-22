@@ -31,10 +31,10 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
 
     public void setVisible(int l, boolean b) {
         XYItemRenderer renderer = super.getChart().getXYPlot().getRenderer();
-        for (int i = 0; i < super.getChart().getXYPlot().getDataset()
-                .getSeriesCount(); i++) {
-            super.getChart().getXYPlot().getSeriesCount();
-        }
+//        for (int i = 0; i < super.getChart().getXYPlot().getDataset()
+//                .getSeriesCount(); i++) {
+//            super.getChart().getXYPlot().getSeriesCount();
+//        }
         super.getChart().setAntiAlias(true);
 
         renderer.setSeriesVisible(l, b);
