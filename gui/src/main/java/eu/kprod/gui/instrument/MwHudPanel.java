@@ -26,8 +26,7 @@ public class MwHudPanel extends MwInstrumentJPanel  {
      */
     private static final long serialVersionUID = 1L;
 
-    private static final Color blueSky = new Color(10, 112, 156);
-    private static final Color orangeEarth = new Color(222, 132, 14);
+
 
     private Arc2D upperArc; // Upper part of the Horizon
     private Arc2D lowerArc; // Bottom part of the Horizon
@@ -146,12 +145,12 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         // Draw the artificial horizon itself, composed by 2 half arcs
         lowerArc.setArcByCenter(centerPoint.getX(), centerPoint.getY(), radiusy,
                 angStartLower, angExtLower, Arc2D.CHORD);
-        g2d.setPaint(orangeEarth);
+        g2d.setPaint(StyleColor.orangeEarth);
         g2d.fill(lowerArc);
 
         upperArc.setArcByCenter(centerPoint.getX(), centerPoint.getY(), radiusy,
                 angStartUpper, angExtUpper, Arc2D.CHORD);
-        g2d.setPaint(blueSky);
+        g2d.setPaint(StyleColor.blueSky);
         g2d.fill(upperArc);
 
         // Draw the middle white line

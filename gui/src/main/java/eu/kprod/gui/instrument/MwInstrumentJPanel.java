@@ -12,7 +12,7 @@ import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.gui.comp.MwJPanel;
 
 public abstract class MwInstrumentJPanel extends MwJPanel implements
-MwDataSourceListener {
+        MwDataSourceListener {
 
     /**
      * 
@@ -29,23 +29,22 @@ MwDataSourceListener {
 
     Dimension dimPanel;
 
-     int dimMarker5Deg;
-     int dimMarker10Deg;
+    int dimMarker5Deg;
+    int dimMarker10Deg;
 
-    
     public MwInstrumentJPanel(Dimension dimension) {
-if (dimension ==null){
-        // Instance variables initialization
-        
-}else {
-    dimPanel= dimension;
-    this.maxRadiusX = dimPanel.width;
-    this.maxRadiusY = dimPanel.height;
-}
-this.radiusx = ((Double) (0.45 * this.maxRadiusX)).intValue();
-this.radiusy = ((Double) (0.45 * this.maxRadiusY)).intValue();
-dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
-//        this.setMinimumSize(dimPanel);
+        if (dimension == null) {
+            // Instance variables initialization
+
+        } else {
+            dimPanel = dimension;
+            this.maxRadiusX = dimPanel.width;
+            this.maxRadiusY = dimPanel.height;
+        }
+        this.radiusx = ((Double) (0.45 * this.maxRadiusX)).intValue();
+        this.radiusy = ((Double) (0.45 * this.maxRadiusY)).intValue();
+        dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
+        // this.setMinimumSize(dimPanel);
         // Define a center point as a reference
         this.centerPoint = new Point2D.Float(this.maxRadiusX / 2,
                 this.maxRadiusY / 2);
@@ -75,17 +74,17 @@ dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
 
     @Override
     public void resetAllValues() {
-       resetAllValuesImpl();
-       repaint();
-        
+        resetAllValuesImpl();
+        repaint();
+
     }
 
-     abstract void resetAllValuesImpl();
-     
-     @Override
+    abstract void resetAllValuesImpl();
+
+    @Override
     protected void paintComponent(Graphics g) {
         // TODO Auto-generated method stub
         super.paintComponent(g);
-       
+
     }
 }

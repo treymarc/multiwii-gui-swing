@@ -106,6 +106,14 @@ public class MSP {
      public static final String IDmagx = "magx";
      public static final String IDmagy = "magy";
      public static final String IDmagz = "magz";
+     public static String IDpitch="pitch";
+     public static String IDthrottle="throttle";
+     public static String IDroll="roll";
+     public static String IDyaw="yaw";
+     public static String IDaux1="aux1";
+     public static String IDaux2="aux2";
+     public static String IDaux3="aux3";
+     public static String IDaux4="aux4";
 
     /**
      * position in the reception inputBuffer
@@ -143,6 +151,8 @@ public class MSP {
     private static int cmd=0;
     
     private static int offset = 0, dataSize = 0, mspState = IDLE;
+
+
 
 
     /**
@@ -240,14 +250,14 @@ public class MSP {
                 break;
             case RC:
 
-                model.getRealTimeData().put(d, "roll",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "pitch",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "yaw",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "throttle",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "aux1",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "aux2",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "aux3",  Double.valueOf(read16()), MwSensorClassRC.class) ;
-                model.getRealTimeData().put(d, "aux4",  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDroll,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDpitch,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDyaw,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDthrottle,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDaux1,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDaux2,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDaux3,  Double.valueOf(read16()), MwSensorClassRC.class) ;
+                model.getRealTimeData().put(d, IDaux4,  Double.valueOf(read16()), MwSensorClassRC.class) ;
 
                 break;
             case RAW_GPS:

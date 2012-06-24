@@ -10,7 +10,12 @@ import javax.swing.UIManager.LookAndFeelInfo;
 public class StyleColor {
     
     public static final List<Color> colors = initializeMap();
+
+    public static final Color blueSky = new Color(10, 112, 156);
+    public static final Color orangeEarth = new Color(222, 132, 14);
    
+    public static final Color greenBar = new Color(96, 220, 113);
+    
     private static List<Color> initializeMap() {
         List<Color> m = new ArrayList<Color>();
         m.add(Color.BLUE);

@@ -12,7 +12,6 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.net.URL;
 
 public class MwUAVPanel extends MwInstrumentJPanel  {
@@ -67,7 +66,7 @@ public class MwUAVPanel extends MwInstrumentJPanel  {
 
     private void drawUAV(Graphics2D g2d) {
 
-            int w = 200;
+//            int w = 200;
 
             BufferedImage bi = new
                 BufferedImage(maxRadiusY, maxRadiusY, BufferedImage.TYPE_INT_ARGB);
@@ -75,9 +74,9 @@ public class MwUAVPanel extends MwInstrumentJPanel  {
             g.drawImage(imageUAV, 0, 0, null);
 
 
-            float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
-            float[] offsets = new float[4];
-            RescaleOp rop = new RescaleOp(scales, offsets, null);
+//            float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
+//            float[] offsets = new float[4];
+//            RescaleOp rop = new RescaleOp(scales, offsets, null);
 
             g2d.drawImage(bi, null, 0 ,  0);
          

@@ -37,6 +37,7 @@ import eu.kprod.ds.MwSensorClassCompas;
 import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
 import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassRC;
 import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.chart.MwChartFactory;
 import eu.kprod.gui.chart.MwChartPanel;
@@ -51,6 +52,7 @@ import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.gui.instrument.MwCompasPanel;
 import eu.kprod.gui.instrument.MwHudPanel;
 import eu.kprod.gui.instrument.MwInstrumentJPanel;
+import eu.kprod.gui.instrument.MwRCDataPanel;
 import eu.kprod.gui.instrument.MwUAVPanel;
 import eu.kprod.gui.setting.MwBOXPanel;
 import eu.kprod.gui.setting.MwPIDPanel;
@@ -173,6 +175,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     private static MwSensorCheckBoxJPanel chartCheckBoxsPanel;
     private static MwInstrumentJPanel compasPanel;
     private static MwInstrumentJPanel hudPanel;
+    private static MwInstrumentJPanel rcDataPanel;
 
     private MwJPanel getRealTimePanel() {
 
@@ -305,6 +308,14 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
                     (MwDataSourceListener) compasPanel);
             instrumentPanelLeft.add(pane,BorderLayout.CENTER);
+            
+            rcDataPanel = new MwRCDataPanel(StyleColor.backGround);
+            MSP.getRealTimeData().addListener(MwSensorClassRC.class,
+                    (MwDataSourceListener) rcDataPanel);
+            instrumentPanelLeft.add(rcDataPanel,BorderLayout.SOUTH);
+
+            
+            
         }
         return instrumentPanelLeft;
     }
@@ -513,6 +524,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
                     }
                     send(MSP.request(MSP.RAW_IMU));
                     send(MSP.request(MSP.DEBUG));
+                    send(MSP.request(MSP.RC));
                 } catch (Exception e) {
                     timer.cancel();
                     // timer.purge();
