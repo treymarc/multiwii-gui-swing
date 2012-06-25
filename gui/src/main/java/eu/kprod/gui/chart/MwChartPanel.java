@@ -49,4 +49,10 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
         // TODO Auto-generated method stub
         // nothing todo (replace this from this is not possible)
     }
+
+    @Override
+    public void readNewValue(Integer string, int i) {
+        // TODO Auto-generated method stub
+        
+    }
 }

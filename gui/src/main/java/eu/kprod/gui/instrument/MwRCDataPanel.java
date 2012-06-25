@@ -80,14 +80,23 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         g2d.setPaint(StyleColor.greenBar);
         for (int i = 0; i < RCdata.length; i++) {
 
-            int barvalue = new Double((RCdata[i]/2000)*xx).intValue();
+            int barvalue = new Double(((RCdata[i]-1000)/1000)*xx).intValue();
+            if (barvalue<0){
+                barvalue=0;
+            }
             bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
             bar.moveTo(startx, starty);
             bar.lineTo(startx + barvalue, starty);
             bar.lineTo(startx + barvalue, starty + yy);
             bar.lineTo(startx, starty + yy);
             bar.closePath();
+            if(barvalue>0){
+                g2d.setPaint(StyleColor.greenBar);
+            }else{
+                System.out.println(barvalue);
 
+                g2d.setPaint(StyleColor.yellow);
+            }
             g2d.fill(bar);
             starty+=yy+8;
 
@@ -138,6 +147,12 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     @Override
     void resetAllValuesImpl() {
 
+    }
+
+    @Override
+    public void readNewValue(Integer string, int i) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

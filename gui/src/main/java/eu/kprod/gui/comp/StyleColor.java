@@ -1,6 +1,7 @@
 package eu.kprod.gui.comp;
 
 import java.awt.Color;
+import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class StyleColor {
     public static final Color orangeEarth = new Color(222, 132, 14);
    
     public static final Color greenBar = new Color(96, 220, 113);
+
+    public static final Color yellow = new Color(220, 220, 113);
+
     
     private static List<Color> initializeMap() {
         List<Color> m = new ArrayList<Color>();

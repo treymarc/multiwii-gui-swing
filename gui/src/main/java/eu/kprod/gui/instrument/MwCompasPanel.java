@@ -250,5 +250,11 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
         
     }
 
+    @Override
+    public void readNewValue(Integer string, int i) {
+        // TODO Auto-generated method stub
+        
+    }
+
    
 }

@@ -28,6 +28,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
@@ -74,7 +75,7 @@ import eu.kprod.serial.SerialNotFoundException;
  * 
  */
 public class MwGuiFrame extends JFrame implements SerialListener,
-        MwDataSourceListener {
+MwDataSourceListener, ChangeListener {
 
     /**
      * 
@@ -124,6 +125,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     public static MwGuiFrame getInstance() {
         if (instance == null) {
             instance = new MwGuiFrame();
+            MSP.setUavChangeListener(instance);
         }
         return instance;
     }
@@ -152,7 +154,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     private static Timer timer;
 
     private static DebugFrame debugFrame;
-    private static LogViewerFrame motorFrame;
+//    private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
 
     private MwJPanel realTimePanel;
@@ -176,6 +178,8 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     private static MwInstrumentJPanel compasPanel;
     private static MwInstrumentJPanel hudPanel;
     private static MwInstrumentJPanel rcDataPanel;
+    private static boolean inited=false;
+    private static MwUAVPanel uavPanel;
 
     private MwJPanel getRealTimePanel() {
 
@@ -193,8 +197,8 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             final MwJComboBox serialRefreshRate = new MwJComboBox(
                     "Refresh rate (hz)",
                     (Integer[]) SerialRefreshRateStrings
-                            .toArray(new Integer[SerialRefreshRateStrings
-                                    .size()]));
+                    .toArray(new Integer[SerialRefreshRateStrings
+                                         .size()]));
             // serialRefreshRate
             // .setMaximumSize(serialRefreshRate.getMinimumSize());
             // serialRefreshRate
@@ -300,10 +304,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,
 
             instrumentPanelLeft.add(pane, BorderLayout.NORTH);
 
-            pane = new MwUAVPanel(StyleColor.backGround);
+            uavPanel = new MwUAVPanel(StyleColor.backGround);
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
-                    (MwDataSourceListener) pane);
-            instrumentPanelLeft.add(pane, BorderLayout.CENTER);
+                    (MwDataSourceListener) uavPanel);
+            instrumentPanelLeft.add(uavPanel, BorderLayout.CENTER);
 
             rcDataPanel = new MwRCDataPanel(StyleColor.backGround);
             MSP.getRealTimeData().addListener(MwSensorClassRC.class,
@@ -481,10 +485,10 @@ public class MwGuiFrame extends JFrame implements SerialListener,
 
             MwGuiFrame.getInstance().setTitle(
                     new StringBuffer()
-                            .append(portname)
-                            .append("@")
-                            .append(baudRateMenuGroup.getSelection()
-                                    .getActionCommand()).toString());
+                    .append(portname)
+                    .append("@")
+                    .append(baudRateMenuGroup.getSelection()
+                            .getActionCommand()).toString());
         } catch (SerialNotFoundException e) {
 
         } catch (SerialException e) {
@@ -510,9 +514,9 @@ public class MwGuiFrame extends JFrame implements SerialListener,
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
 
-                    if (motorFrame != null && motorFrame.isVisible()) {
+//                    if (motorFrame != null && motorFrame.isVisible()) {
                         send(MSP.request(MSP.MOTOR));
-                    }
+//                    }
                     if (servoFrame != null && servoFrame.isVisible()) {
                         send(MSP.request(MSP.SERVO));
                     }
@@ -573,7 +577,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         JMenu menu5 = new MwJMenu("Help");
 
         /* differents choix de chaque menu */
-        MwJMenuItem motor = new MwJMenuItem("Motor");
+//        MwJMenuItem motor = new MwJMenuItem("Motor");
         MwJMenuItem servo = new MwJMenuItem("Servo");
         MwJMenuItem consoleSerial = new MwJMenuItem("Console");
 
@@ -595,7 +599,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         menu2.add(coller);
 
         menu3.add(servo);
-        menu3.add(motor);
+//        menu3.add(motor);
 
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
@@ -645,17 +649,17 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             }
         });
 
-        motor.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (motorFrame == null) {
-                    motorFrame = new LogViewerFrame("Motor", MSP
-                            .getRealTimeData(), MwSensorClassMotor.class);
-
-                } else {
-                    motorFrame.setVisible(true);
-                }
-            }
-        });
+//        motor.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                if (motorFrame == null) {
+//                    motorFrame = new LogViewerFrame("Motor", MSP
+//                            .getRealTimeData(), MwSensorClassMotor.class);
+//
+//                } else {
+//                    motorFrame.setVisible(true);
+//                }
+//            }
+//        });
 
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -760,7 +764,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     synchronized private static void send(List<Byte> msp)
             throws SerialException {
         if (com != null) {
-            if (MSP.getVersion() < 0) {
+            if (!inited) {
                 List<Byte> m = MSP.request(MSP.IDENT);
                 byte[] first = new byte[m.size()];
                 int i = 0;
@@ -769,14 +773,14 @@ public class MwGuiFrame extends JFrame implements SerialListener,
                 }
                 com.send(first);
             }
-                byte[] arr = new byte[msp.size()];
-                int i = 0;
-                for (byte b : msp) {
-                    arr[i++] = b;
-                }
-                com.send(arr);
-            } 
-        
+            byte[] arr = new byte[msp.size()];
+            int i = 0;
+            for (byte b : msp) {
+                arr[i++] = b;
+            }
+            com.send(arr);
+        } 
+
     }
 
     /**
@@ -835,6 +839,28 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         hudPanel.resetAllValues();
         compasPanel.resetAllValues();
 
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void readNewValue(Integer string, int i) {
+        switch (string) {
+            case MSP.version:
+
+                inited =true;
+                break;
+
+            case MSP.uavType:
+                uavPanel.setUAVTYPE(i);
+                break;
+            default:
+                break;
+        }        
     }
 
 }

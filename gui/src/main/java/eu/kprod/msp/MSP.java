@@ -8,6 +8,7 @@ import javax.swing.event.ChangeListener;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSource;
+import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClassCompas;
 import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
@@ -153,6 +154,16 @@ public class MSP {
     private static int offset = 0, dataSize = 0, mspState = IDLE;
 
 
+    public final static int version=0;
+    public final static int uavType=1;
+    public final static int rcRate=2;
+    public final static int rcExpo=3;
+    public final static int rollPitchRate=4;
+    public final static int yawRate=5;
+    public final static int dynThrPID=6;
+    public final static int rcCurvethrMID=7;
+    public final static int rcCurvethrEXPO=8;
+    public final static int powerTrigger=9;
 
 
     /**
@@ -203,8 +214,8 @@ public class MSP {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
-                model.setVersion(read8());
-                model.setMultiType(read8());
+                model.put(MSP.version,read8());
+                model.put(MSP.uavType,read8());
                 break;
             case STATUS:
 
@@ -286,13 +297,13 @@ public class MSP {
                 model.getRealTimeData().put(d, IDpowerMeterSum,  Double.valueOf(read16()), MwSensorClassPower.class) ;         
                 break;
             case RC_TUNING:
-                model.setRcRate((int) (read8() / 100.0));
-                model.setRcExpo((int) (read8() / 100.0));
-                model.setRollPitchRate((int) (read8() / 100.0));
-                model.setYawRate((int) (read8() / 100.0));
-                model.setDynThrPID((int) (read8() / 100.0));
-                model.setThrottleMID((int) (read8() / 100.0));
-                model.setThrottleEXPO((int) (read8() / 100.0));
+                model.put(MSP.rcRate,(int) (read8() / 100.0));
+                model.put(MSP.rcExpo,(int) (read8() / 100.0));
+                model.put(MSP.rollPitchRate,(int) (read8() / 100.0));
+                model.put(MSP.yawRate,(int) (read8() / 100.0));
+                model.put(MSP.dynThrPID,(int) (read8() / 100.0));
+                model.put(MSP.rcCurvethrMID,(int) (read8() / 100.0));
+                model.put(MSP.rcCurvethrEXPO,(int) (read8() / 100.0));
                 break;
             case ACC_CALIBRATION:
                 break;
@@ -312,7 +323,7 @@ public class MSP {
                 model.boxChanged();
                 break;
             case MISC: //TODO SEND
-                model.setPowerTrigger(read16());
+                model.put(MSP.powerTrigger,read16());
                 break;
             case MOTOR_PINS://TODO SEND
                  for( int i=0;i<8;i++) {
@@ -398,12 +409,11 @@ public class MSP {
 
     public static void setBoxChangeListener(final ChangeListener boxPane) {
         model.setBoxChangeListener(boxPane);
-        
+   
     }
 
 
-    public static int getVersion() {
-        // TODO Auto-generated method stub
-        return model.getVersion();
+    public static void setUavChangeListener(final MwDataSourceListener uavChangeListener) {
+        model.setUavChangeListener(uavChangeListener);
     }
 }
