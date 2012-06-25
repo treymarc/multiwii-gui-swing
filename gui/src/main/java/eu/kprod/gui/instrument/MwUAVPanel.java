@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import eu.kprod.gui.comp.StyleColor;
-import eu.kprod.msp.MSP;
 
 public  class MwUAVPanel extends MwInstrumentJPanel  {
 
@@ -25,8 +24,12 @@ public  class MwUAVPanel extends MwInstrumentJPanel  {
 
     double[] RCmotor = new double[8];
     static Image [] images = new Image[14];
-
-    protected int UAVTYPE=10;
+    
+    // bar w/h
+    final int xx = 8;
+    final int yy = 67;
+    
+    protected int UAVTYPE=3;
 
     {
        
@@ -95,32 +98,47 @@ public  class MwUAVPanel extends MwInstrumentJPanel  {
 
 
     void drawBarValue(Graphics2D g2d) {
-        final int startx = 41;
-        int starty = 16;
+       
 
-        // bar w/h
-        final int xx = 118;
-        final int yy = 7;
+      
 
         g2d.setStroke(new BasicStroke(1));
         
+        switch (UAVTYPE) {
+            case 3:
+                drawType3(g2d);
+                break;
+
+            default:
+                break;
+        }
+        
+
+
+    }
+    private void drawType3(Graphics2D g2d) {
+        
+        int [] startx = {41,121, 41,121};
+        int [] starty = {79, 79,169,169};
+        
         g2d.setPaint(StyleColor.greenBar);
-        for (int i = 0; i < RCmotor.length; i++) {
+        for (int i = 0; i < 4; i++) {
 
             int barvalue = new Double((RCmotor[i]/2000)*xx).intValue();
             bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-            bar.moveTo(startx, starty);
-            bar.lineTo(startx + barvalue, starty);
-            bar.lineTo(startx + barvalue, starty + yy);
-            bar.lineTo(startx, starty + yy);
+            bar.moveTo(startx[i], starty[i]);
+            bar.lineTo(startx[i], starty[i] - barvalue);
+            bar.lineTo(startx[i] + xx, starty[i] - barvalue);
+            bar.lineTo(startx[i] +xx , starty[i] );
             bar.closePath();
 
             g2d.fill(bar);
-            starty+=yy+8;
+         
 
         }
-
+        
     }
+
     @Override
     public void readNewValue(String name, Double value) {     
         RCmotor[Integer.parseInt(name.charAt(name.length()-1)+"")]=value;
