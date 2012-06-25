@@ -119,10 +119,9 @@ public class SerialDevice implements SerialPortEventListener {
             while (portList.hasMoreElements()) {
                 CommPortIdentifier portId = portList.nextElement();
 
-                if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                    // logger.debug("found " + portId.getName());
-                    if (portId.getName().equals(device)) {
-                        // logger.debug("looking for "+iname);
+                if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL
+                        && portId.getName().equals(device)) {
+                   
                         port = (SerialPort) portId.open("open", 200);
                         input = port.getInputStream();
                         output = port.getOutputStream();
@@ -131,7 +130,7 @@ public class SerialDevice implements SerialPortEventListener {
                         port.addEventListener(this);
                         port.notifyOnDataAvailable(true);
                         // logger.debug("opening, ready to roll");
-                    }
+                   break;
                 }
             }
         } catch (PortInUseException e) {
@@ -500,7 +499,7 @@ public class SerialDevice implements SerialPortEventListener {
     public static List<String> getPortNameList() {
         List<String> portNames = new ArrayList<String>();
 
-        for (@SuppressWarnings("unchecked")
+        for (
         Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier
                 .getPortIdentifiers(); enumeration.hasMoreElements();) {
             CommPortIdentifier commportidentifier = enumeration.nextElement();

@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 
 import eu.kprod.gui.MwGuiFrame;
 import eu.kprod.gui.comp.StyleColor;
-import eu.kprod.serial.SerialException;
+//import eu.kprod.serial.SerialException;
 
 /**
  * Known issues

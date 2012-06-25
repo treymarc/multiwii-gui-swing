@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.MwJPanel;
 
 public abstract class MwInstrumentJPanel extends MwJPanel implements
@@ -35,7 +36,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     public MwInstrumentJPanel(Dimension dimension) {
         if (dimension == null) {
             // Instance variables initialization
-
+            dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
         } else {
             dimPanel = dimension;
             this.maxRadiusX = dimPanel.width;
@@ -43,7 +44,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         }
         this.radiusx = ((Double) (0.45 * this.maxRadiusX)).intValue();
         this.radiusy = ((Double) (0.45 * this.maxRadiusY)).intValue();
-        dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
+        
         // this.setMinimumSize(dimPanel);
         // Define a center point as a reference
         this.centerPoint = new Point2D.Float(this.maxRadiusX / 2,
@@ -52,7 +53,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         if (writing == null) {
 
             InputStream is = this.getClass().getResourceAsStream(
-                    "/01Digitall.ttf");
+                    Ress.font);
 
             try {
                 writing = Font.createFont(Font.TRUETYPE_FONT, is);

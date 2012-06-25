@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.net.URL;
 
+import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
@@ -27,7 +28,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
     {
         if (imageCompas == null) {
 
-            URL  url = this.getClass().getResource( "/compas.png");
+            URL  url = this.getClass().getResource(Ress.imgCompas);
 
 
             try {

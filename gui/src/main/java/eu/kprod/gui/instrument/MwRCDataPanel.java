@@ -16,6 +16,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
@@ -28,7 +29,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     {
         if (imageRCdataeBg == null) {
 
-            URL url = this.getClass().getResource("/rcdata.png");
+            URL url = this.getClass().getResource(Ress.imgRCData);
 
             try {
                 imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);

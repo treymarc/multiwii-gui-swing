@@ -168,7 +168,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     private int sizeY = 400;
     private int sizeX = 700;
     private MwJPanel centerChartPanel;
-//    private MwJPanel instrumentPanelRight;
+    // private MwJPanel instrumentPanelRight;
     private static JMenuBar menuBar;
     private static MwChartPanel realTimeChart;
     private static MwJPanel instrumentPanelLeft;
@@ -218,18 +218,16 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             getChartPanel().setPreferredSize(
                     new java.awt.Dimension(sizeX, sizeY));
 
+            centerChartPanel = new MwJPanel(new BorderLayout());
 
-             centerChartPanel = new MwJPanel(new BorderLayout());
-
-             centerChartPanel.add(getChartPanel(),BorderLayout.CENTER);
-             centerChartPanel.add(getChartCheckBoxPanel(), BorderLayout.EAST);
-
+            centerChartPanel.add(getChartPanel(), BorderLayout.CENTER);
+            centerChartPanel.add(getChartCheckBoxPanel(), BorderLayout.EAST);
 
             realTimePanel = new MwJPanel();
 
             realTimePanel.setLayout(new BorderLayout());
-            realTimePanel.add(getInstrumentPanelLeft(),BorderLayout.WEST);
-            
+            realTimePanel.add(getInstrumentPanelLeft(), BorderLayout.WEST);
+
             realTimePanel.add(centerChartPanel, BorderLayout.CENTER);
 
             JButton startButton = new MwJButton("Start", "Start monitoring");
@@ -257,7 +255,6 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         }
         return realTimePanel;
     }
-
 
     public static MwSensorCheckBoxJPanel getChartCheckBoxPanel() {
         if (chartCheckBoxsPanel == null) {
@@ -287,35 +284,32 @@ public class MwGuiFrame extends JFrame implements SerialListener,
 
     public static MwJPanel getInstrumentPanelLeft() {
         if (instrumentPanelLeft == null) {
-            
+
             instrumentPanelLeft = new MwJPanel(StyleColor.backGround);
             instrumentPanelLeft.setLayout(new BorderLayout());
 
             MwJPanel pane = new MwJPanel(StyleColor.backGround);
-            
-            pane.add(hudPanel = new MwHudPanel(StyleColor.backGround) );
+
+            pane.add(hudPanel = new MwHudPanel(StyleColor.backGround));
             MSP.getRealTimeData().addListener(MwSensorClassHUD.class,
                     (MwDataSourceListener) hudPanel);
-            
-        
-            pane.add(compasPanel =new MwCompasPanel(StyleColor.backGround) );
+
+            pane.add(compasPanel = new MwCompasPanel(StyleColor.backGround));
             MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
                     (MwDataSourceListener) compasPanel);
-            
-            instrumentPanelLeft.add(pane,BorderLayout.NORTH);
-            
+
+            instrumentPanelLeft.add(pane, BorderLayout.NORTH);
+
             pane = new MwUAVPanel(StyleColor.backGround);
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
-                    (MwDataSourceListener) compasPanel);
-            instrumentPanelLeft.add(pane,BorderLayout.CENTER);
-            
+                    (MwDataSourceListener) pane);
+            instrumentPanelLeft.add(pane, BorderLayout.CENTER);
+
             rcDataPanel = new MwRCDataPanel(StyleColor.backGround);
             MSP.getRealTimeData().addListener(MwSensorClassRC.class,
                     (MwDataSourceListener) rcDataPanel);
-            instrumentPanelLeft.add(rcDataPanel,BorderLayout.SOUTH);
+            instrumentPanelLeft.add(rcDataPanel, BorderLayout.SOUTH);
 
-            
-            
         }
         return instrumentPanelLeft;
     }
@@ -766,13 +760,23 @@ public class MwGuiFrame extends JFrame implements SerialListener,
     synchronized private static void send(List<Byte> msp)
             throws SerialException {
         if (com != null) {
-            byte[] arr = new byte[msp.size()];
-            int i = 0;
-            for (byte b : msp) {
-                arr[i++] = b;
+            if (MSP.getVersion() < 0) {
+                List<Byte> m = MSP.request(MSP.IDENT);
+                byte[] first = new byte[m.size()];
+                int i = 0;
+                for (byte b : m) {
+                    first[i++] = b;
+                }
+                com.send(first);
             }
-            com.send(arr);
-        }
+                byte[] arr = new byte[msp.size()];
+                int i = 0;
+                for (byte b : msp) {
+                    arr[i++] = b;
+                }
+                com.send(arr);
+            } 
+        
     }
 
     /**
@@ -830,8 +834,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         realTimeChart.resetAllValues();
         hudPanel.resetAllValues();
         compasPanel.resetAllValues();
-      
-        
+
     }
 
 }

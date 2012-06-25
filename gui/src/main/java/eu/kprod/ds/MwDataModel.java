@@ -19,12 +19,16 @@ public class MwDataModel {
     // TODO get impl
     private MwDataSource ds = new MwDataSourceImpl();
 
+    
+    //------ TODO 
     // global ident
-    int version, multiType;
+    int version=-1, multiType=-1;
 
     // rc conf
     int rcRate, rcExpo, rollPitchRate, yawRate, dynThrPID, throttleMID,
             throttleEXPO;
+       
+    //------
 
     private Map<Integer,String> boxNameIndex = new HashMap<Integer, String>();
     public Map<Integer, String> getBoxNameIndex() {

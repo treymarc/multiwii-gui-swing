@@ -1,0 +1,8 @@
+#elif defined(AIRPLANE)    
+  #define MULTITYPE 14    
+#elif defined (HELI_120_CCPM)   
+  #define MULTITYPE 15      
+#elif defined (HELI_90_DEG)   
+  #define MULTITYPE 16      
+#elif defined(VTAIL4)
+ #define MULTITYPE 17

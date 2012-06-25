@@ -359,6 +359,8 @@ public class MSP {
 
     // send msp with payload
     public static List<Byte> request(int msp, Character[] payload) {
+
+        
         if (msp < 0) {
             return null;
         }
@@ -397,5 +399,11 @@ public class MSP {
     public static void setBoxChangeListener(final ChangeListener boxPane) {
         model.setBoxChangeListener(boxPane);
         
+    }
+
+
+    public static int getVersion() {
+        // TODO Auto-generated method stub
+        return model.getVersion();
     }
 }
