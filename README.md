@@ -7,9 +7,12 @@ BUILD
 =====
 * You need the GNU Serial lib in your local maven repository, you can manualy install the provided jar:   
 
+http://flexo.fiendie.net:8081/nexus/content/repositories/thirdparty/gnu/serial/1.0/
+
 		mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar
 
-	* After that just run:  
+
+After that just run:  
 	
 			mvn clean install
 
@@ -18,7 +21,7 @@ After the installation you again have to add it to your local Maven repository:
 
 		mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar
 
-	* After that run:  
+After that run:  
 	
 			mvn package -P mac
 
