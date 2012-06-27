@@ -15,8 +15,6 @@ import eu.kprod.gui.comp.MwJLabel;
 import eu.kprod.gui.comp.MwJPanel;
 import eu.kprod.gui.comp.StyleColor;
 
-
-
 public class MwSensorCheckBoxJPanel extends MwJPanel {
 
     /**
@@ -24,47 +22,53 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
      */
     private static final long serialVersionUID = 1L;
 
-   Map<String,MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
-   Map<Integer,String> boxsIndex = new HashMap<Integer, String>();
+    Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
+    Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
 
-   
-   public void refreshBox(int index, Color c){
-       boxs.get(boxsIndex.get(index)).setColor(c);
-   }
+    public MwSensorCheckBoxJPanel(Color c) {
+        super(c);
+    }
 
+    public MwSensorCheckBoxJPanel() {
+        super(StyleColor.backGround);
+    }
+
+    public void refreshBox(int index, Color c) {
+        boxs.get(boxsIndex.get(index)).setColor(c);
+    }
 
     public void addSensorBox(String sensorName) {
         // TODO Auto-generated method stub
         MwJButtonColorChooser p = boxs.get(sensorName);
-        if (p != null  ){
+        if (p != null) {
             return;
-        }else{
-            final int index =boxs.size();
-            
-            
-            
-            MwJPanel pane = new MwJPanel();
+        } else {
+            final int index = boxs.size();
+
+            MwJPanel pane = new MwJPanel(StyleColor.backGround);
             pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
             final MwJCheckBox c = new MwJCheckBox(sensorName, -1, "sensors");
-            c.addChangeListener(new ChangeListener () {
-                public void stateChanged (ChangeEvent evt) {
-                    
-                  MwGuiFrame.getChartPanel().setVisible(index, c.isSelected());
-                 
+            c.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent evt) {
+
+                    MwGuiFrame.getChartPanel()
+                            .setVisible(index, c.isSelected());
+
                 }
-             });
+            });
 
             c.setSelected(true);
 
             pane.add(c);
-            MwJButtonColorChooser check = new MwJButtonColorChooser(index,sensorName,StyleColor.getColor(index));
+            MwJButtonColorChooser check = new MwJButtonColorChooser(index,
+                    sensorName, StyleColor.getColor(index));
             boxs.put(sensorName, check);
-            boxsIndex.put(index,sensorName);
+            boxsIndex.put(index, sensorName);
             pane.add(check);
-            
-            pane.add(new MwJLabel(sensorName));
-            
-            this.setLayout(new GridLayout(boxs.size(),1));
+
+            pane.add(new MwJLabel(StyleColor.forGround, sensorName));
+
+            this.setLayout(new GridLayout(boxs.size(), 1));
             this.add(pane);
             this.revalidate();
         }

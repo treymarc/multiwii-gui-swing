@@ -25,8 +25,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     Point2D centerPoint;
     int radiusx;
     int radiusy;
-    int maxRadiusX = 220;
-    int maxRadiusY = 220;
+    int maxRadiusX = 200;
+    int maxRadiusY = 200;
 
     Dimension dimPanel;
 
@@ -61,9 +61,9 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
                 writing = writing.deriveFont(12.0f);
 
             } catch (FontFormatException e) {
-                System.out.println("Format fonts not correct!!!");
+                System.err.println("Format fonts not correct!!!");
             } catch (IOException e) {
-                System.out.println("Fonts not found!!!");
+                System.err.println("Fonts not found!!!");
             }
         }
     }

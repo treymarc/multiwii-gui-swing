@@ -36,7 +36,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
 
             } catch (Exception e) {
-                System.out.println("Fonts not found!!!");
+                System.err.println("Fonts not found!!!");
             }
         }
     }

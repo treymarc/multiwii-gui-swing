@@ -22,7 +22,7 @@ public class MwGui {
      * @param args
      * @throws SerialException
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         
 
         SwingUtilities.invokeLater(new Runnable() {

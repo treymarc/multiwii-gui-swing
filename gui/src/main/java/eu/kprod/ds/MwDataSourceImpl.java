@@ -10,7 +10,6 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
-
 /**
  * A pojo implementation of a datasource for holding severals dataset of sensors
  * 
@@ -29,24 +28,23 @@ public class MwDataSourceImpl implements MwDataSource {
 
     private long maxItemAge = 2000;
 
-
-//    public int getMaxItemCount() {
-//        return maxItemCount;
-//    }
+    // public int getMaxItemCount() {
+    // return maxItemCount;
+    // }
 
     // TODO set max ages counts for each dataset not all
 
-//    public void setMaxItemCount(final int maxItemCount1) {
-//        if (maxItemCount1 > 0) {
-//         //   this.maxItemCount = maxItemCount1;
-//            for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
-//                Hashtable<String, TimeSeries> series = sensors.get(sclass);
-//                for (String sensorName : series.keySet()) {
-//                    series.get(sensorName).setMaximumItemCount(maxItemCount);
-//                }
-//            }
-//        }
-//    }
+    // public void setMaxItemCount(final int maxItemCount1) {
+    // if (maxItemCount1 > 0) {
+    // // this.maxItemCount = maxItemCount1;
+    // for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
+    // Hashtable<String, TimeSeries> series = sensors.get(sclass);
+    // for (String sensorName : series.keySet()) {
+    // series.get(sensorName).setMaximumItemCount(maxItemCount);
+    // }
+    // }
+    // }
+    // }
 
     public long getMaxItemAge() {
         return maxItemAge;
@@ -117,7 +115,7 @@ public class MwDataSourceImpl implements MwDataSource {
         }
 
         if (sensorClass != null) {
-            notifyListener(sensorClass,sensorName,value);
+            notifyListener(sensorClass, sensorName, value);
         }
         Hashtable<String, TimeSeries> s = sensors.get(sensorClass);
         if (s == null) {
@@ -135,7 +133,7 @@ public class MwDataSourceImpl implements MwDataSource {
 
         if (timeserie == null) {
             timeserie = new TimeSeries(sensorName);
-//            timeserie.setMaximumItemCount(maxItemCount);
+            // timeserie.setMaximumItemCount(maxItemCount);
             timeserie.setMaximumItemAge(maxItemAge);
 
             s.put(sensorName, timeserie);
@@ -155,11 +153,12 @@ public class MwDataSourceImpl implements MwDataSource {
     }
 
     @Override
-    public void notifyListener(Class<? extends MwSensorClass> sensorClass,String name, Double value) {
+    public void notifyListener(Class<? extends MwSensorClass> sensorClass,
+            String name, Double value) {
         if (sensorClass != null) {
             List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
             for (MwDataSourceListener mwDataSourceListener : listenersl) {
-                mwDataSourceListener.readNewValue( name,  value);
+                mwDataSourceListener.readNewValue(name, value);
 
             }
 
@@ -194,6 +193,5 @@ public class MwDataSourceImpl implements MwDataSource {
         }
         return false;
     }
-   
 
 }

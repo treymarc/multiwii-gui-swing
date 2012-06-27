@@ -74,7 +74,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     JCheckBox autoscrollBox;
     final MwJComboBox lineEndings;
 
-    public DebugFrame(final String title  ) {
+    public DebugFrame(final String title) {
         super(title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -133,7 +133,7 @@ public class DebugFrame extends JFrame implements SerialListener {
             }
         });
 
-        sendButton = new MwJButton("Send","Send serial commande");
+        sendButton = new MwJButton("Send", "Send serial commande");
         sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 logger.trace("actionPerformed "

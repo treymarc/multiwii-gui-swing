@@ -24,13 +24,11 @@ import eu.kprod.ds.DSLoadableException;
 import eu.kprod.ds.MwDataSource;
 import eu.kprod.ds.MwDataSourceImpl;
 
-
-
-
 /**
  * load a DataSource from a formated Log file.
+ * 
  * @author treym
- *
+ * 
  */
 public class LogLoader implements DSLoadable {
 
@@ -39,14 +37,15 @@ public class LogLoader implements DSLoadable {
 
     /**
      * charge un fichier ligne par ligne
-     *
+     * 
      * @param filePath
      *            le chemin du ficher à lire
      * @return le contenu du fichier,une liste vide pour une fichier vide, null
      *         en cas d'erreur
-     * @throws DSLoadableException 
+     * @throws DSLoadableException
      */
-    public final MwDataSource getDataSourceContent(final String filePath) throws DSLoadableException {
+    public final MwDataSource getDataSourceContent(final String filePath)
+            throws DSLoadableException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");
 
@@ -69,10 +68,10 @@ public class LogLoader implements DSLoadable {
                                 + line.substring(0, line.indexOf(":") + 6);
                         // System.err.println("date = "+date);
                         content.put(sdf.parse(date), content1[0],
-                                Double.valueOf(content1[1]),null);
+                                Double.valueOf(content1[1]), null);
                     } catch (Exception e) {
-                         e.printStackTrace();
-                         // failed to load
+                        e.printStackTrace();
+                        // failed to load
                     }
                 }
             } finally {
@@ -102,4 +101,3 @@ public class LogLoader implements DSLoadable {
         return content;
     }
 }
-

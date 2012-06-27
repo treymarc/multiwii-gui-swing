@@ -39,7 +39,7 @@ public class MwBOXPanel extends MwChangeablePanel {
 
         if (map == null || index == null) {
             pane.setLayout(new GridLayout(1, 1));
-            pane.add(new MwJLabel("AUX - EMPTY", Color.RED));
+            pane.add(new MwJLabel(Color.RED, "AUX - EMPTY"));
             mainPane.add(pane);
             return mainPane;
         }

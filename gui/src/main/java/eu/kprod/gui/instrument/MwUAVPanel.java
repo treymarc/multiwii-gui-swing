@@ -107,7 +107,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
                 int[] startx = { 76, 126, 76, 26 };
                 int[] starty = { 79, 129, 179, 129 };
                 drawMotorBar(g2d, startx, starty);
-            }break;
+            }
+                break;
             case 3: {
                 int[] startx = { 41, 121, 41, 121 };
                 int[] starty = { 79, 79, 169, 169 };
@@ -123,12 +124,13 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     private void drawMotorBar(Graphics2D g2d, int[] startx, int[] starty) {
         g2d.setPaint(StyleColor.greenBar);
-       
+
         for (int i = 0; i < startx.length; i++) {
 
-            int barvalue = new Double(((RCmotor[i]-1000 )/ 1000) * yy).intValue();
-            if (barvalue<0){
-                barvalue=0;
+            int barvalue = new Double(((RCmotor[i] - 1000) / 1000) * yy)
+                    .intValue();
+            if (barvalue < 0) {
+                barvalue = 0;
             }
             bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
             bar.moveTo(startx[i], starty[i]);
@@ -136,7 +138,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
             bar.lineTo(startx[i] + xx, starty[i] - barvalue);
             bar.lineTo(startx[i] + xx, starty[i]);
             bar.closePath();
-          
+
             g2d.fill(bar);
 
         }
@@ -157,7 +159,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     @Override
     public void readNewValue(Integer string, int i) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

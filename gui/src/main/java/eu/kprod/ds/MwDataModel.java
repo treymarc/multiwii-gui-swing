@@ -28,7 +28,8 @@ public class MwDataModel {
 
     // ------
 
-    private HashMap<Integer, Integer> uavSettings = new HashMap<Integer, Integer>();
+    // private HashMap<Integer, Integer> uavSettings = new HashMap<Integer,
+    // Integer>();
 
     private Map<Integer, String> boxNameIndex = new HashMap<Integer, String>();
 
@@ -71,8 +72,6 @@ public class MwDataModel {
     private int[] motorPins = new int[8];
 
     private MwDataSourceListener uavChangeListener;
-
-   
 
     public void setUavChangeListener(MwDataSourceListener uavChangeListener) {
         this.uavChangeListener = uavChangeListener;

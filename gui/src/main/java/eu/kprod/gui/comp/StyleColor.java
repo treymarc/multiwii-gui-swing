@@ -1,7 +1,6 @@
 package eu.kprod.gui.comp;
 
 import java.awt.Color;
-import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,16 +9,19 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 public class StyleColor {
     
+
+    public static final Color backGround = new Color(51,51,51);
+    public static final Color forGround = new Color(204,204,204);
+    
+    public static final Color blueSky = new Color(10, 112, 156);
+    public static final Color orangeEarth = new Color(202, 112, 14);
+    public static final Color greenBar = new Color(96, 220, 113);
+    public static final Color yellow = new Color(220, 220, 113);
+    public static final Color redBar = new Color(220, 113, 113);
+    
+    
     public static final List<Color> colors = initializeMap();
 
-    public static final Color blueSky = new Color(10, 112, 156);
-    public static final Color orangeEarth = new Color(222, 132, 14);
-   
-    public static final Color greenBar = new Color(96, 220, 113);
-
-    public static final Color yellow = new Color(220, 220, 113);
-
-    
     private static List<Color> initializeMap() {
         List<Color> m = new ArrayList<Color>();
         m.add(Color.BLUE);
@@ -43,13 +45,9 @@ public class StyleColor {
     }
 
     
-    public static final Color backGround = new Color(51,51,51);
-    public static final Color forGround = new Color(245,245,240);
-    
-    // public static Color forGround= StyleColor.forGround;
-
+   
     public static Color getColor(int l) {
-        // TODO Auto-generated method stub
+
         return colors.get(l);
     }
 

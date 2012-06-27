@@ -26,6 +26,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     double[] RCdata = new double[8];
 
+    private static int maxoffest = 2;
+
     {
         if (imageRCdataeBg == null) {
 
@@ -35,7 +37,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
                 imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
 
             } catch (Exception e) {
-                System.out.println("resources not found!!!");
+                System.err.println("resources not found!!!");
             }
         }
     }
@@ -47,8 +49,11 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     private static Image imageRCdataeBg;
 
     public MwRCDataPanel(Color c) {
-        super(new Dimension(200, 150));
 
+        super(new Dimension(200, 150));
+        for (int i = 0; i < RCdata.length; i++) {
+            RCdata[i] = 0;
+        }
         setBackground(c);
 
     }
@@ -77,12 +82,15 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         final int yy = 7;
 
         g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(StyleColor.greenBar);
+        // g2d.setPaint(StyleColor.greenBar);
         for (int i = 0; i < RCdata.length; i++) {
 
-            int barvalue = new Double(((RCdata[i]-1000)/1000)*xx).intValue();
-            if (barvalue<0){
-                barvalue=0;
+            int barvalue = new Double(((RCdata[i] - 1000) / 1000) * xx)
+                    .intValue();
+            if (barvalue < -maxoffest) {
+                barvalue = -maxoffest;
+            } else if (barvalue > xx + maxoffest) {
+                barvalue = xx + maxoffest;
             }
             bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
             bar.moveTo(startx, starty);
@@ -90,15 +98,15 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
             bar.lineTo(startx + barvalue, starty + yy);
             bar.lineTo(startx, starty + yy);
             bar.closePath();
-            if(barvalue>0){
-                g2d.setPaint(StyleColor.greenBar);
-            }else{
-                System.out.println(barvalue);
-
+            if (barvalue < 0) {
                 g2d.setPaint(StyleColor.yellow);
+            } else if (barvalue > xx) {
+                g2d.setPaint(StyleColor.redBar);
+            } else {
+                g2d.setPaint(StyleColor.greenBar);
             }
             g2d.fill(bar);
-            starty+=yy+8;
+            starty += yy + 8;
 
         }
 
@@ -152,7 +160,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     @Override
     public void readNewValue(Integer string, int i) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

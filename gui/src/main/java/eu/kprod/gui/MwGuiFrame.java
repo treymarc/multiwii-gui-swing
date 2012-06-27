@@ -1,7 +1,9 @@
 package eu.kprod.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -16,6 +18,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.AbstractButton;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.JButton;
@@ -75,7 +79,7 @@ import eu.kprod.serial.SerialNotFoundException;
  * 
  */
 public class MwGuiFrame extends JFrame implements SerialListener,
-MwDataSourceListener, ChangeListener {
+        MwDataSourceListener, ChangeListener {
 
     /**
      * 
@@ -149,12 +153,12 @@ MwDataSourceListener, ChangeListener {
         return Collections.unmodifiableList(m);
     }
 
+    private static boolean inited = false;
     private static SerialCom com;
-
     private static Timer timer;
 
     private static DebugFrame debugFrame;
-//    private static LogViewerFrame motorFrame;
+    // private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
 
     private MwJPanel realTimePanel;
@@ -170,15 +174,13 @@ MwDataSourceListener, ChangeListener {
     private int sizeY = 400;
     private int sizeX = 700;
     private MwJPanel centerChartPanel;
-    // private MwJPanel instrumentPanelRight;
     private static JMenuBar menuBar;
     private static MwChartPanel realTimeChart;
-    private static MwJPanel instrumentPanelLeft;
+    private static MwJPanel instrumentPanel;
     private static MwSensorCheckBoxJPanel chartCheckBoxsPanel;
     private static MwInstrumentJPanel compasPanel;
     private static MwInstrumentJPanel hudPanel;
     private static MwInstrumentJPanel rcDataPanel;
-    private static boolean inited=false;
     private static MwUAVPanel uavPanel;
 
     private MwJPanel getRealTimePanel() {
@@ -197,8 +199,8 @@ MwDataSourceListener, ChangeListener {
             final MwJComboBox serialRefreshRate = new MwJComboBox(
                     "Refresh rate (hz)",
                     (Integer[]) SerialRefreshRateStrings
-                    .toArray(new Integer[SerialRefreshRateStrings
-                                         .size()]));
+                            .toArray(new Integer[SerialRefreshRateStrings
+                                    .size()]));
             // serialRefreshRate
             // .setMaximumSize(serialRefreshRate.getMinimumSize());
             // serialRefreshRate
@@ -226,12 +228,10 @@ MwDataSourceListener, ChangeListener {
 
             centerChartPanel.add(getChartPanel(), BorderLayout.CENTER);
             centerChartPanel.add(getChartCheckBoxPanel(), BorderLayout.EAST);
+            centerChartPanel.add(getInstrumentPanel(), BorderLayout.SOUTH);
 
             realTimePanel = new MwJPanel();
-
             realTimePanel.setLayout(new BorderLayout());
-            realTimePanel.add(getInstrumentPanelLeft(), BorderLayout.WEST);
-
             realTimePanel.add(centerChartPanel, BorderLayout.CENTER);
 
             JButton startButton = new MwJButton("Start", "Start monitoring");
@@ -286,13 +286,11 @@ MwDataSourceListener, ChangeListener {
         }
     }
 
-    public static MwJPanel getInstrumentPanelLeft() {
-        if (instrumentPanelLeft == null) {
-
-            instrumentPanelLeft = new MwJPanel(StyleColor.backGround);
-            instrumentPanelLeft.setLayout(new BorderLayout());
+    public static MwJPanel getInstrumentPanel() {
+        if (instrumentPanel == null) {
 
             MwJPanel pane = new MwJPanel(StyleColor.backGround);
+            pane.setLayout(new GridLayout(1, 4));
 
             pane.add(hudPanel = new MwHudPanel(StyleColor.backGround));
             MSP.getRealTimeData().addListener(MwSensorClassHUD.class,
@@ -302,20 +300,25 @@ MwDataSourceListener, ChangeListener {
             MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
                     (MwDataSourceListener) compasPanel);
 
-            instrumentPanelLeft.add(pane, BorderLayout.NORTH);
-
-            uavPanel = new MwUAVPanel(StyleColor.backGround);
+            pane.add(uavPanel = new MwUAVPanel(StyleColor.backGround));
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
                     (MwDataSourceListener) uavPanel);
-            instrumentPanelLeft.add(uavPanel, BorderLayout.CENTER);
 
-            rcDataPanel = new MwRCDataPanel(StyleColor.backGround);
+            pane.add(rcDataPanel = new MwRCDataPanel(StyleColor.backGround));
             MSP.getRealTimeData().addListener(MwSensorClassRC.class,
                     (MwDataSourceListener) rcDataPanel);
-            instrumentPanelLeft.add(rcDataPanel, BorderLayout.SOUTH);
+            pane.setMinimumSize(new Dimension(770, 200));
+            pane.setMaximumSize(new Dimension(770, 200));
+
+            instrumentPanel = new MwJPanel(StyleColor.backGround);
+            instrumentPanel.add(Box.createHorizontalGlue());
+            instrumentPanel.setLayout(new BoxLayout(instrumentPanel,
+                    BoxLayout.LINE_AXIS));
+            instrumentPanel.add(pane);
+            instrumentPanel.add(Box.createHorizontalGlue());
 
         }
-        return instrumentPanelLeft;
+        return instrumentPanel;
     }
 
     private MwGuiFrame() {
@@ -485,10 +488,10 @@ MwDataSourceListener, ChangeListener {
 
             MwGuiFrame.getInstance().setTitle(
                     new StringBuffer()
-                    .append(portname)
-                    .append("@")
-                    .append(baudRateMenuGroup.getSelection()
-                            .getActionCommand()).toString());
+                            .append(portname)
+                            .append("@")
+                            .append(baudRateMenuGroup.getSelection()
+                                    .getActionCommand()).toString());
         } catch (SerialNotFoundException e) {
 
         } catch (SerialException e) {
@@ -514,9 +517,9 @@ MwDataSourceListener, ChangeListener {
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
 
-//                    if (motorFrame != null && motorFrame.isVisible()) {
-                        send(MSP.request(MSP.MOTOR));
-//                    }
+                    // if (motorFrame != null && motorFrame.isVisible()) {
+                    send(MSP.request(MSP.MOTOR));
+                    // }
                     if (servoFrame != null && servoFrame.isVisible()) {
                         send(MSP.request(MSP.SERVO));
                     }
@@ -577,7 +580,7 @@ MwDataSourceListener, ChangeListener {
         JMenu menu5 = new MwJMenu("Help");
 
         /* differents choix de chaque menu */
-//        MwJMenuItem motor = new MwJMenuItem("Motor");
+        // MwJMenuItem motor = new MwJMenuItem("Motor");
         MwJMenuItem servo = new MwJMenuItem("Servo");
         MwJMenuItem consoleSerial = new MwJMenuItem("Console");
 
@@ -599,7 +602,7 @@ MwDataSourceListener, ChangeListener {
         menu2.add(coller);
 
         menu3.add(servo);
-//        menu3.add(motor);
+        // menu3.add(motor);
 
         menu4.add(getSerialPortAsMenuItem());
         menu4.add(getSerialBaudAsMenuItem());
@@ -649,17 +652,17 @@ MwDataSourceListener, ChangeListener {
             }
         });
 
-//        motor.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                if (motorFrame == null) {
-//                    motorFrame = new LogViewerFrame("Motor", MSP
-//                            .getRealTimeData(), MwSensorClassMotor.class);
-//
-//                } else {
-//                    motorFrame.setVisible(true);
-//                }
-//            }
-//        });
+        // motor.addActionListener(new ActionListener() {
+        // public void actionPerformed(ActionEvent e) {
+        // if (motorFrame == null) {
+        // motorFrame = new LogViewerFrame("Motor", MSP
+        // .getRealTimeData(), MwSensorClassMotor.class);
+        //
+        // } else {
+        // motorFrame.setVisible(true);
+        // }
+        // }
+        // });
 
         quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -779,7 +782,7 @@ MwDataSourceListener, ChangeListener {
                 arr[i++] = b;
             }
             com.send(arr);
-        } 
+        }
 
     }
 
@@ -852,7 +855,7 @@ MwDataSourceListener, ChangeListener {
         switch (string) {
             case MSP.version:
 
-                inited =true;
+                inited = true;
                 break;
 
             case MSP.uavType:
@@ -860,7 +863,7 @@ MwDataSourceListener, ChangeListener {
                 break;
             default:
                 break;
-        }        
+        }
     }
 
 }
