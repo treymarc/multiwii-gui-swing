@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>eu.kprod</groupId>
 		<artifactId>mwi</artifactId>
-		<version>0.0.2</version>
+		<version>0.0.2-SNAPSHOT</version>
 		<relativePath>../mwi</relativePath>
 	</parent>
 
@@ -14,6 +14,8 @@
 
 	<build>
 		<plugins>
+		
+		
 			<plugin>
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>replacer</artifactId>
@@ -41,36 +43,8 @@
 					</replacements>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<executions>
-					<execution>
-						<id>copy-resources1</id>
-						<phase>install</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/../build</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/target/classes</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.3</version> 
-				<configuration> <descriptors> <descriptor>src/main/assembly/zip.xml</descriptor> 
-				</descriptors> </configuration> <executions> <execution> <id>make-assembly</id> 
-				<phase>package</phase> <goals> <goal>single</goal> </goals> </execution> 
-				</executions> </plugin> -->
-
+			
 		</plugins>
 	</build>
-
 
 </project>

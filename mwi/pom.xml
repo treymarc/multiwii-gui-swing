@@ -4,7 +4,7 @@
 
 	<groupId>eu.kprod</groupId>
 	<artifactId>mwi</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<name>parent pom</name>
 
@@ -37,8 +37,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 	<distributionManagement>
 		<snapshotRepository>
 			<id>fiendie-snapshots-repo</id>

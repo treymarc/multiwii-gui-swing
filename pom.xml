@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.kprod</groupId>
 	<artifactId>agregator</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<description>Project agregator for MwGui</description>
 	<name>agregator</name>
 	<packaging>pom</packaging>
@@ -33,6 +33,12 @@
        <phase>process-resources</phase>
        <configuration>
         <tasks>
+        <delete dir="${basedir}/build/" />
+         <mkdir dir="${basedir}/build/lib" />
+
+		 <copy todir="${basedir}/build">
+        	<fileset dir="${basedir}/script/target/classes/" includes="mwi-swing.*" />
+		 </copy>
          <copy todir="${basedir}/build/lib">
           <fileset dir="${basedir}/gui/target/" includes="mwgui-${project.version}-jar-with-dependencies.jar" />
          </copy>
