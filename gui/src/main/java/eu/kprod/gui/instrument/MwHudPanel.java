@@ -67,10 +67,10 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         // Draw the Bank roll lines on the top
         drawBankRollMarker(g2d);
 
-        radiusx = ((Double) (0.45 * maxRadiusX)).intValue();
-        radiusy = ((Double) (0.45 * maxRadiusY)).intValue();
-        Ellipse2D roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
-                (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
+        setRadiusx(((Double) (0.45 * getMaxRadiusX())).intValue());
+        setRadiusy(((Double) (0.45 * getMaxRadiusY())).intValue());
+        Ellipse2D roundHorizon = new Ellipse2D.Float((getMaxRadiusX() - getRadiusx() * 2) / 2,
+                (getMaxRadiusY() - getRadiusy() * 2) / 2, 2 * getRadiusx(), 2 * getRadiusy());
 
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
@@ -80,15 +80,15 @@ public class MwHudPanel extends MwInstrumentJPanel  {
     void drawValue(Graphics2D g2d) {
         // TODO Auto-generated method stub
 
-        g2d.setFont(writing);
+        g2d.setFont(getWriting());
         g2d.setPaint(StyleColor.forGround);
         g2d.setStroke(new BasicStroke(1));
-        g2d.drawString("X " + (-rollAngle), 10, maxRadiusY - 20);
+        g2d.drawString("X " + (-rollAngle), 10, getMaxRadiusY() - 20);
 
-        g2d.setFont(writing);
+        g2d.setFont(getWriting());
         g2d.setPaint(StyleColor.forGround);
         g2d.setStroke(new BasicStroke(1));
-        g2d.drawString("Y " + (-pitchAngle), 10, maxRadiusY - 10);
+        g2d.drawString("Y " + (-pitchAngle), 10, getMaxRadiusY() - 10);
     }
 
     private void drawHorizon(Graphics2D g2d) {
@@ -101,8 +101,8 @@ public class MwHudPanel extends MwInstrumentJPanel  {
 
         // First step is to determine the roll display position
         AffineTransform at = AffineTransform.getRotateInstance(
-                Math.toRadians(rollAngle), centerPoint.getX(),
-                centerPoint.getY());
+                Math.toRadians(rollAngle), getCenterPoint().getX(),
+                getCenterPoint().getY());
         g2d.transform(at);
 
         if ((pitchAngle < 90) && (pitchAngle > -90)) {
@@ -134,12 +134,12 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         }
 
         // Draw the artificial horizon itself, composed by 2 half arcs
-        lowerArc.setArcByCenter(centerPoint.getX(), centerPoint.getY(), radiusy,
+        lowerArc.setArcByCenter(getCenterPoint().getX(), getCenterPoint().getY(), getRadiusy(),
                 angStartLower, angExtLower, Arc2D.CHORD);
         g2d.setPaint(StyleColor.orangeEarth);
         g2d.fill(lowerArc);
 
-        upperArc.setArcByCenter(centerPoint.getX(), centerPoint.getY(), radiusy,
+        upperArc.setArcByCenter(getCenterPoint().getX(), getCenterPoint().getY(), getRadiusy(),
                 angStartUpper, angExtUpper, Arc2D.CHORD);
         g2d.setPaint(StyleColor.blueSky);
         g2d.fill(upperArc);
@@ -155,26 +155,26 @@ public class MwHudPanel extends MwInstrumentJPanel  {
 
     private void drawLines(Graphics2D g2d) {
         AffineTransform at = AffineTransform.getRotateInstance(
-                Math.toRadians(-rollAngle), centerPoint.getX(),
-                centerPoint.getY());
+                Math.toRadians(-rollAngle), getCenterPoint().getX(),
+                getCenterPoint().getY());
 
         g2d.transform(at);
 
         // Draw the center shape
         GeneralPath centerShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        centerShape.moveTo((centerPoint.getX() - radiusx / 2.5),
-                centerPoint.getY());
-        centerShape.lineTo((centerPoint.getX() - 15), centerPoint.getY());
-        centerShape.moveTo((centerPoint.getX() - 30), centerPoint.getY());
+        centerShape.moveTo((getCenterPoint().getX() - getRadiusx() / 2.5),
+                getCenterPoint().getY());
+        centerShape.lineTo((getCenterPoint().getX() - 15), getCenterPoint().getY());
+        centerShape.moveTo((getCenterPoint().getX() - 30), getCenterPoint().getY());
         centerShape
-                .lineTo((centerPoint.getX() - 10), (centerPoint.getY() + 10));
-        centerShape.lineTo(centerPoint.getX(), centerPoint.getY());
+                .lineTo((getCenterPoint().getX() - 10), (getCenterPoint().getY() + 10));
+        centerShape.lineTo(getCenterPoint().getX(), getCenterPoint().getY());
         centerShape
-                .lineTo((centerPoint.getX() + 10), (centerPoint.getY() + 10));
-        centerShape.lineTo((centerPoint.getX() + 30), centerPoint.getY());
-        centerShape.moveTo((centerPoint.getX() + radiusx / 2.5),
-                centerPoint.getY());
-        centerShape.lineTo((centerPoint.getX() + 15), centerPoint.getY());
+                .lineTo((getCenterPoint().getX() + 10), (getCenterPoint().getY() + 10));
+        centerShape.lineTo((getCenterPoint().getX() + 30), getCenterPoint().getY());
+        centerShape.moveTo((getCenterPoint().getX() + getRadiusx() / 2.5),
+                getCenterPoint().getY());
+        centerShape.lineTo((getCenterPoint().getX() + 15), getCenterPoint().getY());
 
         g2d.setPaint(StyleColor.forGround);
         g2d.setStroke(new BasicStroke(2));
@@ -203,26 +203,26 @@ public class MwHudPanel extends MwInstrumentJPanel  {
 
             g2d.setPaint(StyleColor.forGround);
             g2d.setStroke(new BasicStroke(1));
-            g2d.setFont(writing);
+            g2d.setFont(getWriting());
 
             // Longer markers
-            Line2D markerLine = new Line2D.Float((float) (centerPoint.getX()
-                    - dimMarker10Deg - distance),
-                    (float) (centerPoint.getY() - (radiusy * Math.sin(Math
+            Line2D markerLine = new Line2D.Float((float) (getCenterPoint().getX()
+                    - getDimMarker10Deg() - distance),
+                    (float) (getCenterPoint().getY() - (getRadiusy() * Math.sin(Math
                             .toRadians(angleCorrUp)))),
-                    (float) (centerPoint.getX() + dimMarker10Deg + distance),
-                    (float) (centerPoint.getY() - (radiusy * Math.sin(Math
+                    (float) (getCenterPoint().getX() + getDimMarker10Deg() + distance),
+                    (float) (getCenterPoint().getY() - (getRadiusy() * Math.sin(Math
                             .toRadians(angleCorrUp)))));
 
             g2d.draw(markerLine);
 
             // Short markers
             markerLine = new Line2D.Float(
-                    (float) (centerPoint.getX() - dimMarker5Deg),
-                    (float) (centerPoint.getY() - (radiusy * Math.sin(Math
+                    (float) (getCenterPoint().getX() - getDimMarker5Deg()),
+                    (float) (getCenterPoint().getY() - (getRadiusy() * Math.sin(Math
                             .toRadians(angleCorrUp + 5)))),
-                    (float) (centerPoint.getX() + dimMarker5Deg),
-                    (float) (centerPoint.getY() - (radiusy * Math.sin(Math
+                    (float) (getCenterPoint().getX() + getDimMarker5Deg()),
+                    (float) (getCenterPoint().getY() - (getRadiusy() * Math.sin(Math
                             .toRadians(angleCorrUp + 5)))));
 
             g2d.draw(markerLine);
@@ -230,13 +230,13 @@ public class MwHudPanel extends MwInstrumentJPanel  {
             // Writing routine
             g2d.drawString(
                     "" + (angle),
-                    (float) (centerPoint.getX() - dimMarker10Deg - distance - 25),
-                    (float) (centerPoint.getY() - (radiusy
+                    (float) (getCenterPoint().getX() - getDimMarker10Deg() - distance - 25),
+                    (float) (getCenterPoint().getY() - (getRadiusy()
                             * Math.sin(Math.toRadians(angleCorrUp)) - 5)));
             g2d.drawString(
                     "" + (angle),
-                    (float) (centerPoint.getX() + dimMarker10Deg + distance + 8),
-                    (float) (centerPoint.getY() - (radiusy
+                    (float) (getCenterPoint().getX() + getDimMarker10Deg() + distance + 8),
+                    (float) (getCenterPoint().getY() - (getRadiusy()
                             * Math.sin(Math.toRadians(angleCorrUp)) - 5)));
 
         }
@@ -248,17 +248,17 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         // Draw the line markers for bank angle
         GeneralPath bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         bankMarkerLong
-                .moveTo((centerPoint.getX() - radiusx), centerPoint.getY());
-        bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 6),
-                centerPoint.getY());
+                .moveTo((getCenterPoint().getX() - getRadiusx()), getCenterPoint().getY());
+        bankMarkerLong.lineTo((getCenterPoint().getX() - getRadiusx() + 6),
+                getCenterPoint().getY());
 
         AffineTransform ata = AffineTransform.getRotateInstance(
-                Math.toRadians(150), centerPoint.getX(), centerPoint.getY());
+                Math.toRadians(150), getCenterPoint().getX(), getCenterPoint().getY());
         g2d.transform(ata);
 
         for (int i = 0; i < 5; i++) {
             ata = AffineTransform.getRotateInstance(Math.toRadians(10),
-                    centerPoint.getX(), centerPoint.getY());
+                    getCenterPoint().getX(), getCenterPoint().getY());
             g2d.transform(ata);
 
             g2d.draw(bankMarkerLong);
@@ -266,12 +266,12 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         }
 
         ata = AffineTransform.getRotateInstance(Math.toRadians(130),
-                centerPoint.getX(), centerPoint.getY());
+                getCenterPoint().getX(), getCenterPoint().getY());
         g2d.transform(ata);
 
         for (int i = 0; i < 5; i++) {
             ata = AffineTransform.getRotateInstance(Math.toRadians(10),
-                    centerPoint.getX(), centerPoint.getY());
+                    getCenterPoint().getX(), getCenterPoint().getY());
             g2d.transform(ata);
 
             g2d.draw(bankMarkerLong);

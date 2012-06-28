@@ -85,7 +85,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
         // int w = 200;
 
-        BufferedImage bi = new BufferedImage(maxRadiusY, maxRadiusY,
+        BufferedImage bi = new BufferedImage(getMaxRadiusY(), getMaxRadiusY(),
                 BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.getGraphics();
         g.drawImage(images[uavType], 0, 0, null);

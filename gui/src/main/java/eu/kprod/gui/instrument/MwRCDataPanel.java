@@ -116,7 +116,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         // int w = 200;
 
-        BufferedImage bi = new BufferedImage(maxRadiusX, maxRadiusY,
+        BufferedImage bi = new BufferedImage(getMaxRadiusX(), getMaxRadiusY(),
                 BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.getGraphics();
         g.drawImage(imageRCdataeBg, 0, 0, null);

@@ -37,7 +37,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
 
             } catch (Exception e) {
-                throw new MwGuiRuntimeException("Fonts not found!!!");
+                throw new MwGuiRuntimeException("images not found!",e);
             }
         }
     }
@@ -80,8 +80,8 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
         drawUAV(g2d);
 
-        Float roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
-                (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
+        Float roundHorizon = new Ellipse2D.Float((getMaxRadiusX() - getRadiusx() * 2) / 2,
+                (getMaxRadiusY() - getRadiusy() * 2) / 2, 2 * getRadiusx(), 2 * getRadiusy());
 
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
@@ -90,8 +90,8 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
     private void drawBackground(Graphics2D g2d) {
 
-        Float background = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
-                (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
+        Float background = new Ellipse2D.Float((getMaxRadiusX() - getRadiusx() * 2) / 2,
+                (getMaxRadiusY() - getRadiusy() * 2) / 2, 2 * getRadiusx(), 2 * getRadiusy());
 
         g2d.setPaint(Color.DARK_GRAY);
         g2d.fill(background);
@@ -100,7 +100,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
     void drawValue(Graphics2D g2d) {
 
-        g2d.setFont(writing);
+        g2d.setFont(getWriting());
         g2d.setPaint(StyleColor.forGround);
         g2d.setStroke(new BasicStroke(1));
         g2d.drawString("Alt " + (alt), 10, 10);
@@ -110,7 +110,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
     private void drawCompas(Graphics2D g2d) {
         // rotate to heading
         AffineTransform at = AffineTransform.getRotateInstance(
-                Math.toRadians(-head), centerPoint.getX(), centerPoint.getY());
+                Math.toRadians(-head), getCenterPoint().getX(), getCenterPoint().getY());
         g2d.transform(at);
 
         g2d.setStroke(new BasicStroke(2));
@@ -118,74 +118,79 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
 
         GeneralPath bankMarker = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        bankMarker.moveTo((centerPoint.getX() - radiusx),
-                centerPoint.getY());
-        bankMarker.lineTo((centerPoint.getX() - radiusx + 6),
-                centerPoint.getY());
+        bankMarker.moveTo((getCenterPoint().getX() - getRadiusx()),
+                getCenterPoint().getY());
+        bankMarker.lineTo((getCenterPoint().getX() - getRadiusx() + 6),
+                getCenterPoint().getY());
 
         AffineTransform ata = AffineTransform.getRotateInstance(
-                Math.toRadians(22.5), centerPoint.getX(), centerPoint.getY());
+                Math.toRadians(22.5), getCenterPoint().getX(), getCenterPoint().getY());
 
         for (int i = 0; i < 16; i++) {
 
-            GeneralPath letterPath;
-            if (i==0) {
-                // W
-                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                letterPath.moveTo((centerPoint.getX() - radiusx +4),           centerPoint.getY()-6);
-                letterPath.lineTo((centerPoint.getX() - radiusx +8),       centerPoint.getY()+6);
-                letterPath.lineTo((centerPoint.getX() - radiusx +12),           centerPoint.getY()-4);
-                letterPath.lineTo((centerPoint.getX() - radiusx +16 ),       centerPoint.getY()+6);
-                letterPath.lineTo((centerPoint.getX() - radiusx +20 ),           centerPoint.getY()-6);
+//            GeneralPath path;
+            GeneralPath path;
+            switch (i) {
+                case 4:
+                    // N
+                    path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                    path.moveTo((getCenterPoint().getX() - getRadiusx() + 4 ),           getCenterPoint().getY()-6);
+                    path.lineTo((getCenterPoint().getX() - getRadiusx() + 19),       getCenterPoint().getY()-6);
+                    path.lineTo((getCenterPoint().getX() - getRadiusx() + 4 ),           getCenterPoint().getY()+6);
+                    path.lineTo((getCenterPoint().getX() - getRadiusx() + 20),       getCenterPoint().getY()+6);
+                    g2d.setStroke(new BasicStroke(2));
+                    g2d.draw(path);
+                    break;
+                    case 8:
+                     // E
+                        path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                        path.moveTo((getCenterPoint().getX() - getRadiusx() +6),        getCenterPoint().getY()+7);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +16),       getCenterPoint().getY()+7);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +16),       getCenterPoint().getY());
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +10),      getCenterPoint().getY());
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +16),       getCenterPoint().getY());
 
-                g2d.setStroke(new BasicStroke(2));
-                g2d.draw(letterPath);
-            }else if (i==4) {
-                   // N
-                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                letterPath.moveTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()-6);
-                letterPath.lineTo((centerPoint.getX() - radiusx + 19),       centerPoint.getY()-6);
-                letterPath.lineTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()+6);
-                letterPath.lineTo((centerPoint.getX() - radiusx + 20),       centerPoint.getY()+6);
-                g2d.setStroke(new BasicStroke(2));
-                g2d.draw(letterPath);
-            }else if (i==8) {
-                
-                // E
-                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                letterPath.moveTo((centerPoint.getX() - radiusx +6),        centerPoint.getY()+7);
-                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()+7);
-                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
-                letterPath.lineTo((centerPoint.getX() - radiusx +10),      centerPoint.getY());
-                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +16),       getCenterPoint().getY()-7);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +6),       getCenterPoint().getY()-7);
 
-                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()-7);
-                letterPath.lineTo((centerPoint.getX() - radiusx +6),       centerPoint.getY()-7);
-
-                g2d.setStroke(new BasicStroke(2));
-                g2d.draw(letterPath);
-            }else if (i==12) {
-                // S
-                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                letterPath.moveTo((centerPoint.getX() - radiusx +3),           centerPoint.getY()-5);
-                letterPath.curveTo(
-                        (centerPoint.getX() - radiusx +12),       centerPoint.getY()+25, 
-                        (centerPoint.getX() - radiusx +12),       centerPoint.getY()-25,
-                        (centerPoint.getX() - radiusx +20),       centerPoint.getY()+5);
+                        g2d.setStroke(new BasicStroke(2));
+                        break;
+                    case 12:
+                        // S
+                        path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                        path.moveTo((getCenterPoint().getX() - getRadiusx() +3),           getCenterPoint().getY()-5);
+                        path.curveTo(
+                                (getCenterPoint().getX() - getRadiusx() +12),       getCenterPoint().getY()+25, 
+                                (getCenterPoint().getX() - getRadiusx() +12),       getCenterPoint().getY()-25,
+                                (getCenterPoint().getX() - getRadiusx() +20),       getCenterPoint().getY()+5);
+                                
+                        g2d.setStroke(new BasicStroke(2));
+                        break;
                         
-                g2d.setStroke(new BasicStroke(2));
-                g2d.draw(letterPath);
-            }else {
-                g2d.setStroke(new BasicStroke(1));
-                g2d.draw(bankMarker);
-            }
+                    case 0:
+                        // W
+                        path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                        path.moveTo((getCenterPoint().getX() - getRadiusx() +4),           getCenterPoint().getY()-6);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +8),       getCenterPoint().getY()+6);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +12),           getCenterPoint().getY()-4);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +16 ),       getCenterPoint().getY()+6);
+                        path.lineTo((getCenterPoint().getX() - getRadiusx() +20 ),           getCenterPoint().getY()-6);
 
+                        g2d.setStroke(new BasicStroke(2));                   
+                        break;
+                default:
+                    g2d.setStroke(new BasicStroke(1));
+                    path = bankMarker;
+                    break;
+            }
+           
+            g2d.draw(path);
             g2d.transform(ata);
 
         }
 
         at = AffineTransform.getRotateInstance(Math.toRadians(head),
-                centerPoint.getX(), centerPoint.getY());
+                getCenterPoint().getX(), getCenterPoint().getY());
         g2d.transform(at);
 
     }
@@ -210,13 +215,13 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
         String k =  head.toString();
         
-            g2d.drawString(k, (float) (centerPoint.getX() - k.length() * 3),
-                    (float) centerPoint.getY());
+            g2d.drawString(k, (float) (getCenterPoint().getX() - k.length() * 3),
+                    (float) getCenterPoint().getY());
             
             int w = 200;
 
             BufferedImage bi = new
-                BufferedImage(maxRadiusY, maxRadiusY, BufferedImage.TYPE_INT_ARGB);
+                BufferedImage(getMaxRadiusY(), getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
             Graphics g = bi.getGraphics();
             g.drawImage(imageCompas, 0, 0, null);
 
@@ -226,7 +231,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
             RescaleOp rop = new RescaleOp(scales, offsets, null);
 
 
-            g2d.drawImage(bi, rop, (maxRadiusX-w )/ 2 ,  (maxRadiusY-w )/ 2);
+            g2d.drawImage(bi, rop, (getMaxRadiusX()-w )/ 2 ,  (getMaxRadiusY()-w )/ 2);
 
             
           
