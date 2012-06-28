@@ -24,7 +24,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
 //    private GeneralPath bar;
 
-    double[] RCdata = new double[8];
+ private double[] RCdata = new double[8];
 
     private static int maxoffest = 2;
 

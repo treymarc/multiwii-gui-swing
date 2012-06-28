@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.net.URL;
 
+import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
@@ -36,7 +37,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
 
             } catch (Exception e) {
-                System.err.println("Fonts not found!!!");
+                throw new MwGuiRuntimeException("Fonts not found!!!");
             }
         }
     }

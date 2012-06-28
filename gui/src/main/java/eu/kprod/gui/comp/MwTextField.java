@@ -13,9 +13,9 @@ import javax.swing.JTextField;
 public class MwTextField extends JTextField implements MouseListener,
         MouseMotionListener, ActionListener {
 
-    private static final NumberFormat formatP = new DecimalFormat("0.00");
-    private static final NumberFormat formatI = new DecimalFormat("0.0000");
-    private static final NumberFormat formatD = new DecimalFormat("0.00");
+    private static final NumberFormat PFORMAT = new DecimalFormat("0.00");
+    private static final NumberFormat IFORMAT = new DecimalFormat("0.0000");
+    private static final NumberFormat DFORMAT = new DecimalFormat("0.00");
 
     private NumberFormat format;
 
@@ -34,13 +34,13 @@ public class MwTextField extends JTextField implements MouseListener,
 
         switch (j) {
             case 0:
-                format = (formatP);
+                format = (PFORMAT);
                 break;
             case 1:
-                format = (formatI);
+                format = (IFORMAT);
                 break;
             case 2:
-                format = (formatD);
+                format = (DFORMAT);
                 break;
 
             default:

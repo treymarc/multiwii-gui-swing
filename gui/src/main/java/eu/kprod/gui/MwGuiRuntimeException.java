@@ -17,4 +17,8 @@ public class MwGuiRuntimeException extends RuntimeException {
         super(msg, e);
     }
 
+    public MwGuiRuntimeException(String msg) {
+        super(msg);
+    }
+
 }

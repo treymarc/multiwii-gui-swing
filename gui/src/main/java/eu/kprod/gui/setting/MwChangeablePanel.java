@@ -11,7 +11,7 @@ import eu.kprod.ds.MwDataModel;
 import eu.kprod.gui.comp.MwJLabel;
 import eu.kprod.gui.comp.MwJPanel;
 
-abstract public class MwChangeablePanel extends MwJPanel implements
+public abstract class MwChangeablePanel extends MwJPanel implements
         ChangeListener {
 
     /**

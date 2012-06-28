@@ -20,7 +20,7 @@ public class MwDataModel {
 
     // ------ TODO
     // global ident
-    int version = -1, multiType = -1;
+    private int version = -1, multiType = -1;
 
     // // rc conf
     // int rcRate, rcExpo, rollPitchRate, yawRate, dynThrPID, throttleMID,
@@ -81,7 +81,7 @@ public class MwDataModel {
         super();
     }
 
-    synchronized public MwDataSource getRealTimeData() {
+    public synchronized MwDataSource getRealTimeData() {
         return ds;
     }
 

@@ -858,7 +858,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 break;
 
             case MSP.UAVTYPEKEY:
-                uavPanel.setUAVTYPE(i);
+                uavPanel.setUavType(i);
                 break;
             default:
                 break;

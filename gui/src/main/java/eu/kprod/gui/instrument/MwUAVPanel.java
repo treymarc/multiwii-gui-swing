@@ -22,20 +22,20 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
 //    protected GeneralPath bar;
 
-    double[] RCmotor = new double[8];
-    static Image[] images = new Image[14];
+    private double[] motor = new double[8];
+    private static Image[] images = new Image[14];
 
     // bar w/h
-    final int xx = 8;
-    final int yy = 67;
+   private final int xx = 8;
+   private final int yy = 67;
 
     protected int uavType = 10;
 
-    public int getUAVTYPE() {
+    public int getUavType() {
         return uavType;
     }
 
-    public void setUAVTYPE(int uAVTYPE) {
+    public void setUavType(int uAVTYPE) {
         uavType = uAVTYPE;
         repaint();
     }
@@ -127,7 +127,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
         for (int i = 0; i < startx.length; i++) {
 
-            int barvalue = new Double(((RCmotor[i] - 1000) / 1000) * yy)
+            int barvalue = new Double(((motor[i] - 1000) / 1000) * yy)
                     .intValue();
             if (barvalue < 0) {
                 barvalue = 0;
@@ -147,7 +147,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     @Override
     public void readNewValue(String name, Double value) {
-        RCmotor[Integer.parseInt(name.charAt(name.length() - 1) + "")] = value;
+        motor[Integer.parseInt(name.charAt(name.length() - 1) + "")] = value;
         repaint();
     }
 

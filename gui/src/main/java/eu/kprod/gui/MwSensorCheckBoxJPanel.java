@@ -22,8 +22,8 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
-    Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
+    private Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
+    private Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
 
     public MwSensorCheckBoxJPanel(Color c) {
         super(c);

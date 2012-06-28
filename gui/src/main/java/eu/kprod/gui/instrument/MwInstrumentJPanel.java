@@ -19,18 +19,18 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
      */
     private static final long serialVersionUID = 1L;
 
-    static Font writing = null;
+    protected static Font writing = null;
 
-    Point2D centerPoint;
-    int radiusx;
-    int radiusy;
-    int maxRadiusX = 200;
-    int maxRadiusY = 200;
+    protected Point2D centerPoint;
+    protected int radiusx;
+    protected int radiusy;
+    protected int maxRadiusX = 200;
+    protected int maxRadiusY = 200;
 
-    Dimension dimPanel;
+    protected Dimension dimPanel;
 
-    int dimMarker5Deg=7;
-    int dimMarker10Deg=15;
+    protected int dimMarker5Deg=7;
+    protected int dimMarker10Deg=15;
 
     public MwInstrumentJPanel(Dimension dimension) {
         if (dimension == null) {
