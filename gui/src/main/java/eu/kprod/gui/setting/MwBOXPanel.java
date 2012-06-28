@@ -21,6 +21,7 @@ public class MwBOXPanel extends MwChangeablePanel {
      * 
      */
     private static final long serialVersionUID = 1L;
+    private int boxGroupCount = 3;
 
     public MwBOXPanel(String name) {
         super(name);
@@ -57,22 +58,22 @@ public class MwBOXPanel extends MwChangeablePanel {
 
             pane.add(new JLabel(name));
 
-            List<Boolean> BoxItem = map.get(name);
+//            List<Boolean> BoxItem = ;
             int j = 0;
             int auxCnt = 0;
             MwJPanel auxPane = new MwJPanel();
             auxPane.setLayout(new GridLayout(1, 3));
-            for (Boolean state : BoxItem) {
+            for (Boolean state : map.get(name)) {
 
                 // TODO get step and bound from msp
                 JCheckBox chck = new MwJCheckBox(name, j, "aux" + (auxCnt + 1));
                 chck.setSelected(state);
                 auxPane.add(chck);
                 j++;
-                if (j == 3) {
+                if (j == boxGroupCount ) {
                     pane.add(auxPane);
                     auxPane = new MwJPanel();
-                    auxPane.setLayout(new GridLayout(1, 3));
+                    auxPane.setLayout(new GridLayout(1, boxGroupCount));
                     j = 0;
                     auxCnt++;
                 }

@@ -91,6 +91,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     class actionMspSender implements ActionListener {
 
         private int[] requests;
+        static final private long serialDelay=14;
 
         public actionMspSender(final int[] requests1) {
             this.requests = requests1.clone();
@@ -111,9 +112,9 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             }
             for (int i : requests) {
                 try {
-                    Thread.sleep(14);
+                    Thread.sleep(serialDelay);
                     send(MSP.request(i));
-                    Thread.sleep(14);
+                    Thread.sleep(serialDelay);
 
                 } catch (Exception p) {
                     p.printStackTrace();
@@ -134,7 +135,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         return instance;
     }
 
-    public static final List<Integer> SerialRefreshRateStrings = initializeMap();
+    public static final List<Integer> serialRefreshRateStrings = initializeMap();
     private static final Integer DEFAULT_BAUDRATE = 115200;
 
     private static List<Integer> initializeMap() {
@@ -198,8 +199,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
             final MwJComboBox serialRefreshRate = new MwJComboBox(
                     "Refresh rate (hz)",
-                    (Integer[]) SerialRefreshRateStrings
-                            .toArray(new Integer[SerialRefreshRateStrings
+                    (Integer[]) serialRefreshRateStrings
+                            .toArray(new Integer[serialRefreshRateStrings
                                     .size()]));
             // serialRefreshRate
             // .setMaximumSize(serialRefreshRate.getMinimumSize());
@@ -762,7 +763,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
      * @param s
      * @throws SerialException
      */
-    synchronized private static void send(List<Byte> msp)
+    static private synchronized void send(List<Byte> msp)
             throws SerialException {
         if (com != null) {
             if (!inited) {
@@ -789,7 +790,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
      * 
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
      */
-    synchronized public void readSerialByte(final byte input) {
+    public synchronized void readSerialByte(final byte input) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MSP.decode(input);
