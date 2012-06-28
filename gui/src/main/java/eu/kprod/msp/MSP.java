@@ -23,7 +23,7 @@ import eu.kprod.ds.MwSensorClassServo;
  * @author treym
  *
  */
-public class MSP {
+public final class MSP {
 
     private MSP(){
         
@@ -46,6 +46,7 @@ public class MSP {
 
             /* processing does not accept enums? */
             public static final int
+                ERR = -1,
                IDLE = 0,
                HEADER_START = 1,
                HEADER_M = 2,
@@ -92,63 +93,63 @@ public class MSP {
 
    DEBUG                = 254;
 
-    public static final String IDangx = "angx";
-    public static final String IDangy = "angy";
-    public static final String IDhead = "head";
-    public static final String IDalt = "alt";
-    public static final String IDvbat = "vbat";
-    public static final String IDpowerMeterSum = "powerMeterSum";
+    public static final String IDANGX = "angx";
+    public static final String IDANGY = "angy";
+    public static final String IDHEAD = "head";
+    public static final String IDALT = "alt";
+    public static final String IDVBAT = "vbat";
+    public static final String IDPOWERMETERSUM = "powerMeterSum";
 
-    public static final String IDax = "ax";
-    public static final String IDaz = "ay";
-    public static final String IDay = "az";
-    public static final String IDgx = "gx";
-    public static final String IDgy = "gy";
-    public static final String IDgz = "gz";
-    public static final String IDmagx = "magx";
-    public static final String IDmagy = "magy";
-    public static final String IDmagz = "magz";
-    public static String IDpitch = "pitch";
-    public static String IDthrottle = "throttle";
-    public static String IDroll = "roll";
-    public static String IDyaw = "yaw";
-    public static String IDaux1 = "aux1";
-    public static String IDaux2 = "aux2";
-    public static String IDaux3 = "aux3";
-    public static String IDaux4 = "aux4";
+    public static final String IDAX = "ax";
+    public static final String IDAZ = "ay";
+    public static final String IDAY = "az";
+    public static final String IDGX = "gx";
+    public static final String IDGY = "gy";
+    public static final String IDGZ = "gz";
+    public static final String IDMAGX = "magx";
+    public static final String IDMAGY = "magy";
+    public static final String IDMAGZ = "magz";
+    public static final String IDRCPITCH = "pitch";
+    public static final String IDRCTHROTTLE = "throttle";
+    public static final String IDRCROLL = "roll";
+    public static final String IDRCYAW = "yaw";
+    public static final String IDRCAUX1 = "aux1";
+    public static final String IDRCAUX2 = "aux2";
+    public static final String IDRCAUX3 = "aux3";
+    public static final String IDRCAUX4 = "aux4";
 
     /**
      * position in the reception inputBuffer
      */
-    private static int p;
+    private static int bufferIndex;
 
     /**
      * reception buffer
      */
-    private static byte[] inBuf = new byte[BUFFER_SIZE];
+    private static byte[] serialBuffer = new byte[BUFFER_SIZE];
 
     /**
      * read 32byte from the inputBuffer
      */
 
     synchronized public static int read32() {
-        return (inBuf[p++] & MASK) + ((inBuf[p++] & MASK) << 8)
-                + (((int) (inBuf[p++] & MASK)) << 16)
-                + (((int) (inBuf[p++] & MASK)) << 24);
+        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++] & MASK) << 8)
+                + (((int) (serialBuffer[bufferIndex++] & MASK)) << 16)
+                + (((int) (serialBuffer[bufferIndex++] & MASK)) << 24);
     }
 
     /**
      * read 16byte from the inputBuffer
      */
-    synchronized public static int read16() {
-        return (inBuf[p++] & MASK) + ((inBuf[p++]) << 8);
+    public static synchronized int read16() {
+        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++]) << 8);
     }
 
     /**
      * read 8byte from the inputBuffer
      */
-    synchronized public static int read8() {
-        return inBuf[p++] & MASK;
+    public static synchronized int read8() {
+        return serialBuffer[bufferIndex++] & MASK;
     }
 
     private static byte checksum = 0;
@@ -156,16 +157,19 @@ public class MSP {
 
     private static int offset = 0, dataSize = 0, mspState = IDLE;
 
-    public final static int version = 0;
-    public final static int uavType = 1;
-    public final static int rcRate = 2;
-    public final static int rcExpo = 3;
-    public final static int rollPitchRate = 4;
-    public final static int yawRate = 5;
-    public final static int dynThrPID = 6;
-    public final static int rcCurvethrMID = 7;
-    public final static int rcCurvethrEXPO = 8;
-    public final static int powerTrigger = 9;
+    public final static int VERSIONKEY = 0;
+    public final static int UAVTYPEKEY = 1;
+    public final static int RCRATE_KEY = 2;
+    public final static int RCEXPO_KEY = 3;
+    public final static int ROLLPITCHRATE_KEY = 4;
+    public final static int YAWRATE_KEY = 5;
+    public final static int DYNTHRPID_KEY = 6;
+    public final static int RCCURV_THRMID_KEY = 7;
+    public final static int RCCURV_THREXPO_KEY = 8;
+    public final static int POEWERTRIG_KEY = 9;
+
+
+//    private static final int ERR = 0;
 
     /**
      * Decode the byte
@@ -184,7 +188,7 @@ public class MSP {
             /* now we are expecting the payload size */
             dataSize = (c & MASK);
             /* reset index variables */
-            p = 0;
+            bufferIndex = 0;
             offset = 0;
             checksum = 0;
             checksum ^= (c & MASK);
@@ -194,31 +198,35 @@ public class MSP {
             cmd = (c & MASK);
             checksum ^= (c & MASK);
             mspState = HEADER_CMD;
-        } else if (mspState == HEADER_CMD && offset < dataSize) {
-            checksum ^= (c & MASK);
-            inBuf[offset++] = (byte) (c & MASK);
-        } else if (mspState == HEADER_CMD && offset >= dataSize) {
-            /* compare calculated and transferred checksum */
-            if ((checksum & MASK) == (c & MASK)) {
-                /* we got a valid response packet, evaluate it */
-                decodeInBuf(cmd, (int) dataSize);
+        } else if (mspState == HEADER_CMD ) { 
+            
+            if (offset < dataSize) {
+                // we keep reading the payload
+                checksum ^= (c & MASK);
+                serialBuffer[offset++] = (byte) (c & MASK);
             } else {
-                System.out.println("invalid checksum for command "
+                if ((checksum & MASK) != (c & MASK)) { 
+                System.err.println("invalid checksum for command "
                         + ((int) (cmd & MASK)) + ": " + (checksum & MASK)
                         + " expected, got " + (int) (c & MASK));
+                cmd = ERR;
+                }
+                
+                decodeMSPCommande(cmd, (int) dataSize);
+                mspState = IDLE;
             }
-            mspState = IDLE;
-        }
+           
+        } 
 
     }
 
-    synchronized private static void decodeInBuf(final int stateMSP,
+    synchronized static private void decodeMSPCommande(final int stateMSP,
             final int dataSize2) {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
-                model.put(MSP.version, read8());
-                model.put(MSP.uavType, read8());
+                model.put(MSP.VERSIONKEY, read8());
+                model.put(MSP.UAVTYPEKEY, read8());
                 break;
             case STATUS:
 
@@ -249,25 +257,25 @@ public class MSP {
                 // }
                 break;
             case RAW_IMU:
-                model.getRealTimeData().put(d, IDax, Double.valueOf(read16()),
+                model.getRealTimeData().put(d, IDAX, Double.valueOf(read16()),
                         MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, IDay, Double.valueOf(read16()),
+                model.getRealTimeData().put(d, IDAY, Double.valueOf(read16()),
                         MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, IDaz, Double.valueOf(read16()),
+                model.getRealTimeData().put(d, IDAZ, Double.valueOf(read16()),
                         MwSensorClassIMU.class);
 
-                model.getRealTimeData().put(d, IDgx,
+                model.getRealTimeData().put(d, IDGX,
                         Double.valueOf(read16() / 8), MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, IDgy,
+                model.getRealTimeData().put(d, IDGY,
                         Double.valueOf(read16() / 8), MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, IDgz,
+                model.getRealTimeData().put(d, IDGZ,
                         Double.valueOf(read16() / 8), MwSensorClassIMU.class);
 
-                model.getRealTimeData().put(d, IDmagx,
+                model.getRealTimeData().put(d, IDMAGX,
                         Double.valueOf(read16() / 3), MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, IDmagy,
+                model.getRealTimeData().put(d, IDMAGY,
                         Double.valueOf(read16() / 3), MwSensorClassIMU.class);
-                model.getRealTimeData().put(d, IDmagz,
+                model.getRealTimeData().put(d, IDMAGZ,
                         Double.valueOf(read16() / 3), MwSensorClassIMU.class);
                 break;
             case SERVO:
@@ -290,21 +298,21 @@ public class MSP {
                 break;
             case RC:
 
-                model.getRealTimeData().put(d, IDroll,
+                model.getRealTimeData().put(d, IDRCROLL,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDpitch,
+                model.getRealTimeData().put(d, IDRCPITCH,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDyaw, Double.valueOf(read16()),
+                model.getRealTimeData().put(d, IDRCYAW, Double.valueOf(read16()),
                         MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDthrottle,
+                model.getRealTimeData().put(d, IDRCTHROTTLE,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDaux1,
+                model.getRealTimeData().put(d, IDRCAUX1,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDaux2,
+                model.getRealTimeData().put(d, IDRCAUX2,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDaux3,
+                model.getRealTimeData().put(d, IDRCAUX3,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDaux4,
+                model.getRealTimeData().put(d, IDRCAUX4,
                         Double.valueOf(read16()), MwSensorClassRC.class);
 
                 break;
@@ -322,32 +330,32 @@ public class MSP {
                 // GPS_update = read8();
                 break;
             case ATTITUDE:
-                model.getRealTimeData().put(d, IDangx,
+                model.getRealTimeData().put(d, IDANGX,
                         Double.valueOf(read16() / 10), MwSensorClassHUD.class);
-                model.getRealTimeData().put(d, IDangy,
+                model.getRealTimeData().put(d, IDANGY,
                         Double.valueOf(read16() / 10), MwSensorClassHUD.class);
-                model.getRealTimeData().put(d, IDhead,
+                model.getRealTimeData().put(d, IDHEAD,
                         Double.valueOf(read16()), MwSensorClassCompas.class);
                 break;
             case ALTITUDE:
-                model.getRealTimeData().put(d, IDalt,
+                model.getRealTimeData().put(d, IDALT,
                         Double.valueOf(read32()) / 100,
                         MwSensorClassCompas.class);
                 break;
             case BAT: // TODO SEND
-                model.getRealTimeData().put(d, IDvbat, Double.valueOf(read8()),
+                model.getRealTimeData().put(d, IDVBAT, Double.valueOf(read8()),
                         MwSensorClassPower.class);
-                model.getRealTimeData().put(d, IDpowerMeterSum,
+                model.getRealTimeData().put(d, IDPOWERMETERSUM,
                         Double.valueOf(read16()), MwSensorClassPower.class);
                 break;
             case RC_TUNING:
-                model.put(MSP.rcRate, (int) (read8() / 100.0));
-                model.put(MSP.rcExpo, (int) (read8() / 100.0));
-                model.put(MSP.rollPitchRate, (int) (read8() / 100.0));
-                model.put(MSP.yawRate, (int) (read8() / 100.0));
-                model.put(MSP.dynThrPID, (int) (read8() / 100.0));
-                model.put(MSP.rcCurvethrMID, (int) (read8() / 100.0));
-                model.put(MSP.rcCurvethrEXPO, (int) (read8() / 100.0));
+                model.put(MSP.RCRATE_KEY, (int) (read8() / 100.0));
+                model.put(MSP.RCEXPO_KEY, (int) (read8() / 100.0));
+                model.put(MSP.ROLLPITCHRATE_KEY, (int) (read8() / 100.0));
+                model.put(MSP.YAWRATE_KEY, (int) (read8() / 100.0));
+                model.put(MSP.DYNTHRPID_KEY, (int) (read8() / 100.0));
+                model.put(MSP.RCCURV_THRMID_KEY, (int) (read8() / 100.0));
+                model.put(MSP.RCCURV_THREXPO_KEY, (int) (read8() / 100.0));
                 break;
             case ACC_CALIBRATION:
                 break;
@@ -367,7 +375,7 @@ public class MSP {
                 model.boxChanged();
                 break;
             case MISC: // TODO SEND
-                model.put(MSP.powerTrigger, read16());
+                model.put(MSP.POEWERTRIG_KEY, read16());
                 break;
             case MOTOR_PINS:// TODO SEND
                 for (int i = 0; i < 8; i++) {
@@ -384,14 +392,14 @@ public class MSP {
             case BOXNAMES:
                 model.removeAllBoxName();
                 int i = 0;
-                for (String name : new String(inBuf, 0, dataSize).split(";")) {
+                for (String name : new String(serialBuffer, 0, dataSize).split(";")) {
                     model.addBoxName(name, i++);
                 }
                 break;
             case PIDNAMES:
                 model.removeAllPIDName();
                 i = 0;
-                for (String name : new String(inBuf, 0, dataSize).split(";")) {
+                for (String name : new String(serialBuffer, 0, dataSize).split(";")) {
                     model.addPIDName(name, i++);
                 }
                 break;

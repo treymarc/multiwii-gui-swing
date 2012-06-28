@@ -45,10 +45,10 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
      */
     private static final long serialVersionUID = 1L;
 
-    private Ellipse2D roundHorizon;
+//    private Ellipse2D roundHorizon;
 
-    private GeneralPath bankMarkerLong;
-    private GeneralPath bankMarkerShort;
+//    private GeneralPath bankMarkerLong;
+//    private GeneralPath bankMarkerShort;
 
 //  private GeneralPath triangle;
 
@@ -79,7 +79,7 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
         drawUAV(g2d);
 
-        roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
+        Float roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
                 (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
 
         g2d.setStroke(new BasicStroke(3));
@@ -116,10 +116,10 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
         g2d.setPaint(StyleColor.forGround);
 
 
-        bankMarkerShort = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-        bankMarkerShort.moveTo((centerPoint.getX() - radiusx),
+        GeneralPath bankMarker = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        bankMarker.moveTo((centerPoint.getX() - radiusx),
                 centerPoint.getY());
-        bankMarkerShort.lineTo((centerPoint.getX() - radiusx + 6),
+        bankMarker.lineTo((centerPoint.getX() - radiusx + 6),
                 centerPoint.getY());
 
         AffineTransform ata = AffineTransform.getRotateInstance(
@@ -127,55 +127,56 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
         for (int i = 0; i < 16; i++) {
 
+            GeneralPath letterPath;
             if (i==0) {
                 // W
-                bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radiusx +4),           centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +8),       centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +12),           centerPoint.getY()-4);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16 ),       centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +20 ),           centerPoint.getY()-6);
+                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                letterPath.moveTo((centerPoint.getX() - radiusx +4),           centerPoint.getY()-6);
+                letterPath.lineTo((centerPoint.getX() - radiusx +8),       centerPoint.getY()+6);
+                letterPath.lineTo((centerPoint.getX() - radiusx +12),           centerPoint.getY()-4);
+                letterPath.lineTo((centerPoint.getX() - radiusx +16 ),       centerPoint.getY()+6);
+                letterPath.lineTo((centerPoint.getX() - radiusx +20 ),           centerPoint.getY()-6);
 
                 g2d.setStroke(new BasicStroke(2));
-                g2d.draw(bankMarkerLong);
+                g2d.draw(letterPath);
             }else if (i==4) {
                    // N
-                bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 19),       centerPoint.getY()-6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()+6);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 20),       centerPoint.getY()+6);
+                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                letterPath.moveTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()-6);
+                letterPath.lineTo((centerPoint.getX() - radiusx + 19),       centerPoint.getY()-6);
+                letterPath.lineTo((centerPoint.getX() - radiusx + 4 ),           centerPoint.getY()+6);
+                letterPath.lineTo((centerPoint.getX() - radiusx + 20),       centerPoint.getY()+6);
                 g2d.setStroke(new BasicStroke(2));
-                g2d.draw(bankMarkerLong);
+                g2d.draw(letterPath);
             }else if (i==8) {
                 
                 // E
-                bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radiusx +6),        centerPoint.getY()+7);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()+7);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +10),      centerPoint.getY());
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
+                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                letterPath.moveTo((centerPoint.getX() - radiusx +6),        centerPoint.getY()+7);
+                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()+7);
+                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
+                letterPath.lineTo((centerPoint.getX() - radiusx +10),      centerPoint.getY());
+                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY());
 
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()-7);
-                bankMarkerLong.lineTo((centerPoint.getX() - radiusx +6),       centerPoint.getY()-7);
+                letterPath.lineTo((centerPoint.getX() - radiusx +16),       centerPoint.getY()-7);
+                letterPath.lineTo((centerPoint.getX() - radiusx +6),       centerPoint.getY()-7);
 
                 g2d.setStroke(new BasicStroke(2));
-                g2d.draw(bankMarkerLong);
+                g2d.draw(letterPath);
             }else if (i==12) {
                 // S
-                bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
-                bankMarkerLong.moveTo((centerPoint.getX() - radiusx +3),           centerPoint.getY()-5);
-                bankMarkerLong.curveTo(
+                letterPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+                letterPath.moveTo((centerPoint.getX() - radiusx +3),           centerPoint.getY()-5);
+                letterPath.curveTo(
                         (centerPoint.getX() - radiusx +12),       centerPoint.getY()+25, 
                         (centerPoint.getX() - radiusx +12),       centerPoint.getY()-25,
                         (centerPoint.getX() - radiusx +20),       centerPoint.getY()+5);
                         
                 g2d.setStroke(new BasicStroke(2));
-                g2d.draw(bankMarkerLong);
+                g2d.draw(letterPath);
             }else {
                 g2d.setStroke(new BasicStroke(1));
-                g2d.draw(bankMarkerShort);
+                g2d.draw(bankMarker);
             }
 
             g2d.transform(ata);
@@ -234,9 +235,9 @@ public class MwCompasPanel extends MwInstrumentJPanel  {
 
     @Override
     public void readNewValue(String name, Double value) {
-        if (MSP.IDhead.equals(name)) {
+        if (MSP.IDHEAD.equals(name)) {
             this.head = value.intValue();
-        } else if (MSP.IDalt.equals(name)) {
+        } else if (MSP.IDALT.equals(name)) {
             this.alt = value;
         }
 

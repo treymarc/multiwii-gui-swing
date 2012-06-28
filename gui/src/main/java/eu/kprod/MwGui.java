@@ -16,7 +16,7 @@ import eu.kprod.gui.comp.StyleColor;
  * @author treym
  * 
  */
-public class MwGui {
+public final class MwGui {
 
     private MwGui(){
         

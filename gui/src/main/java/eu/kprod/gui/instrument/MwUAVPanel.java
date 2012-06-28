@@ -20,7 +20,7 @@ import eu.kprod.gui.comp.StyleColor;
 
 public class MwUAVPanel extends MwInstrumentJPanel {
 
-    protected GeneralPath bar;
+//    protected GeneralPath bar;
 
     double[] RCmotor = new double[8];
     static Image[] images = new Image[14];
@@ -132,7 +132,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
             if (barvalue < 0) {
                 barvalue = 0;
             }
-            bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            GeneralPath bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
             bar.moveTo(startx[i], starty[i]);
             bar.lineTo(startx[i], starty[i] - barvalue);
             bar.lineTo(startx[i] + xx, starty[i] - barvalue);

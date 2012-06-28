@@ -22,7 +22,7 @@ import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-    private GeneralPath bar;
+//    private GeneralPath bar;
 
     double[] RCdata = new double[8];
 
@@ -92,7 +92,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
             } else if (barvalue > xx + maxoffest) {
                 barvalue = xx + maxoffest;
             }
-            bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            GeneralPath bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
             bar.moveTo(startx, starty);
             bar.lineTo(startx + barvalue, starty);
             bar.lineTo(startx + barvalue, starty + yy);
@@ -132,21 +132,21 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     @Override
     public void readNewValue(String name, Double value) {
 
-        if (MSP.IDthrottle.equals(name)) {
+        if (MSP.IDRCTHROTTLE.equals(name)) {
             RCdata[0] = value;
-        } else if (MSP.IDpitch.equals(name)) {
+        } else if (MSP.IDRCPITCH.equals(name)) {
             RCdata[1] = value;
-        } else if (MSP.IDroll.equals(name)) {
+        } else if (MSP.IDRCROLL.equals(name)) {
             RCdata[2] = value;
-        } else if (MSP.IDyaw.equals(name)) {
+        } else if (MSP.IDRCYAW.equals(name)) {
             RCdata[3] = value;
-        } else if (MSP.IDaux1.equals(name)) {
+        } else if (MSP.IDRCAUX1.equals(name)) {
             RCdata[4] = value;
-        } else if (MSP.IDaux2.equals(name)) {
+        } else if (MSP.IDRCAUX2.equals(name)) {
             RCdata[5] = value;
-        } else if (MSP.IDaux3.equals(name)) {
+        } else if (MSP.IDRCAUX3.equals(name)) {
             RCdata[6] = value;
-        } else if (MSP.IDaux4.equals(name)) {
+        } else if (MSP.IDRCAUX4.equals(name)) {
             RCdata[7] = value;
         }
         repaint();

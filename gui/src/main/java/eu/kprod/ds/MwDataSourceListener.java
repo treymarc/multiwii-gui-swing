@@ -8,9 +8,9 @@ package eu.kprod.ds;
  */
 public interface MwDataSourceListener {
 
-    public void readNewValue(final String name, final Double value);
+    void readNewValue(final String name, final Double value);
 
-    public void resetAllValues();
+    void resetAllValues();
 
-    public void readNewValue(final Integer string, final int i);
+    void readNewValue(final Integer string, final int i);
 }

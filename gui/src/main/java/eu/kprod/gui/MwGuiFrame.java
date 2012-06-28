@@ -851,12 +851,12 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     @Override
     public void readNewValue(Integer string, int i) {
         switch (string) {
-            case MSP.version:
+            case MSP.VERSIONKEY:
 
                 inited = true;
                 break;
 
-            case MSP.uavType:
+            case MSP.UAVTYPEKEY:
                 uavPanel.setUAVTYPE(i);
                 break;
             default:

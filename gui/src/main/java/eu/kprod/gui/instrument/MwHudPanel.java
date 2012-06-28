@@ -282,12 +282,12 @@ public class MwHudPanel extends MwInstrumentJPanel  {
 
     @Override
     public void readNewValue(String name, Double value) {
-        if (MSP.IDangy.equals(name)) {
+        if (MSP.IDANGY.equals(name)) {
 
             this.pitchAngle = -value.intValue();
         }
 
-        if (MSP.IDangx.equals(name)) {
+        if (MSP.IDANGX.equals(name)) {
             this.rollAngle = -value.intValue();
         }
         repaint();
