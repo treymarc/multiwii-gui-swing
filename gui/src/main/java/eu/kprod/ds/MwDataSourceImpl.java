@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
@@ -21,10 +22,10 @@ public class MwDataSourceImpl implements MwDataSource {
     // TODO impl factory
     // private MwDataSourceImpl(){}
 
-    private Hashtable<Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable<Class<? extends MwSensorClass>, List<MwDataSourceListener>>();
+    private Map<Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable<Class<? extends MwSensorClass>, List<MwDataSourceListener>>();
 
-    private Hashtable<Class<? extends MwSensorClass>, Hashtable<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass>, Hashtable<String, TimeSeries>>();
-    private Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection> dataset = new Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection>();
+    private Map<Class<? extends MwSensorClass>, Map<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass>, Map<String, TimeSeries>>();
+    private Map<Class<? extends MwSensorClass>, TimeSeriesCollection> dataset = new Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection>();
 
     private long maxItemAge = 2000;
 
@@ -54,7 +55,7 @@ public class MwDataSourceImpl implements MwDataSource {
         if (maxItemAge1 > 0) {
             this.maxItemAge = maxItemAge1;
             for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
-                Hashtable<String, TimeSeries> series = sensors.get(sclass);
+                Map<String, TimeSeries> series = sensors.get(sclass);
                 for (String sensorName : series.keySet()) {
                     series.get(sensorName).setMaximumItemAge(maxItemAge);
                 }
@@ -85,7 +86,7 @@ public class MwDataSourceImpl implements MwDataSource {
             dataset.put(sensorClass, ts);
         }
 
-        Hashtable<String, TimeSeries> s = sensors.get(sensorClass);
+        Map<String, TimeSeries> s = sensors.get(sensorClass);
         if (s == null) {
             s = new Hashtable<String, TimeSeries>();
             sensors.put(sensorClass, s);
@@ -117,7 +118,7 @@ public class MwDataSourceImpl implements MwDataSource {
         if (sensorClass != null) {
             notifyListener(sensorClass, sensorName, value);
         }
-        Hashtable<String, TimeSeries> s = sensors.get(sensorClass);
+        Map<String, TimeSeries> s = sensors.get(sensorClass);
         if (s == null) {
             s = new Hashtable<String, TimeSeries>();
             sensors.put(sensorClass, s);

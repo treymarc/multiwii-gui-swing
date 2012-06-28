@@ -65,7 +65,7 @@ public class LogLoader implements DSLoadable {
                         String date = filePath
                                 .substring(filePath.length() - 10)
                                 + " "
-                                + line.substring(0, line.indexOf(":") + 6);
+                                + line.substring(0, line.indexOf(':') + 6);
                         // System.err.println("date = "+date);
                         content.put(sdf.parse(date), content1[0],
                                 Double.valueOf(content1[1]), null);

@@ -137,7 +137,8 @@ public class SerialDevice implements SerialPortEventListener {
             throw new SerialException(
                     I18n.format(
                             "Serial port ''{0}'' already in use. Try quiting any programs that may be using it.",
-                            device)
+                            device),
+                            e
 
             );
         } catch (Exception e) {
@@ -464,22 +465,23 @@ public class SerialDevice implements SerialPortEventListener {
      */
     public final void write(final String what) throws SerialException {
 
-        try {
-            write(what.getBytes("ISO-8859-1"));
-        } catch (UnsupportedEncodingException a) {
+//        try {
+//            write(what.getBytes("ISO-8859-1"));
+//        } catch (UnsupportedEncodingException a) {
             // Everything from 0x0000 through 0x007F are exactly the same as
             // ASCII.
             // Everything from 0x0000 through 0x00FF is the same as ISO Latin 1.
+            
             try {
 
                 write(what.getBytes("ASCII"));
             } catch (UnsupportedEncodingException a1) {
 
-                throw new RuntimeException(
+                throw new SerialRuntimeException(
                         "ASCII encoding is required for serial communication",
                         a1);
             }
-        }
+//        }
     }
 
     /**

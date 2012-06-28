@@ -25,6 +25,9 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public class MSP {
 
+    private MSP(){
+        
+    }
     /**
      *  the model for holding the value decoded by the MSP
      */
@@ -421,22 +424,22 @@ public class MSP {
             bf.add(c);
         }
 
-        byte checksum = 0;
+        byte hash = 0;
         byte pl_size = (byte) ((payload != null ? (payload.length) : 0) & MASK);
         bf.add(pl_size);
-        checksum ^= (pl_size & MASK);
+        hash ^= (pl_size & MASK);
 
         bf.add((byte) (msp & MASK));
-        checksum ^= (msp & MASK);
+        hash ^= (msp & MASK);
 
         if (payload != null) {
             for (char c : payload) {
                 bf.add((byte) (c & MASK));
-                checksum ^= (c & MASK);
+                hash ^= (c & MASK);
             }
         }
 
-        bf.add(checksum);
+        bf.add(hash);
         return (bf);
     }
 

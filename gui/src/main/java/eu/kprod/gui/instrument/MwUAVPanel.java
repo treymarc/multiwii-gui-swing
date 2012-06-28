@@ -29,14 +29,14 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     final int xx = 8;
     final int yy = 67;
 
-    protected int UAVTYPE = 10;
+    protected int uavType = 10;
 
     public int getUAVTYPE() {
-        return UAVTYPE;
+        return uavType;
     }
 
     public void setUAVTYPE(int uAVTYPE) {
-        UAVTYPE = uAVTYPE;
+        uavType = uAVTYPE;
         repaint();
     }
 
@@ -88,7 +88,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         BufferedImage bi = new BufferedImage(maxRadiusY, maxRadiusY,
                 BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.getGraphics();
-        g.drawImage(images[UAVTYPE], 0, 0, null);
+        g.drawImage(images[uavType], 0, 0, null);
 
         // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
         // float[] offsets = new float[4];
@@ -102,7 +102,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
         g2d.setStroke(new BasicStroke(1));
 
-        switch (UAVTYPE) {
+        switch (uavType) {
             case 2: {
                 int[] startx = { 76, 126, 76, 26 };
                 int[] starty = { 79, 129, 179, 129 };

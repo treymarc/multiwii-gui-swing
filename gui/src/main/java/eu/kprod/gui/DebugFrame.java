@@ -40,7 +40,7 @@ public class DebugFrame extends JFrame implements SerialListener {
         /**
          * max length of the fifo document
          */
-        private static int MAX_LENGTH = 1000;
+        private static int maxTextLength = 1000;
         private JTextArea field;
 
         public RollingDocument(JTextArea textArea) {
@@ -50,10 +50,10 @@ public class DebugFrame extends JFrame implements SerialListener {
         public void insertString(int offs, String str, AttributeSet a)
                 throws BadLocationException {
 
-            if (str == null)
+            if (str == null) {
                 return;
-
-            if (field.getText().length() > MAX_LENGTH) {
+            }
+            if (field.getText().length() > maxTextLength) {
                 super.remove(0, str.length());
             }
             super.insertString(offs, str, a);

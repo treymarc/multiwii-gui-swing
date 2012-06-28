@@ -24,7 +24,7 @@ public class SerialCom {
 
     private int serialRate;
 
-    private int cr = 0;
+//    private int cr = 0;
 
     private String deviceName;
 
@@ -41,7 +41,7 @@ public class SerialCom {
     public SerialCom(final String device, final int serialRateIn) {
 
         this.deviceName = device;
-        this.setSerialRate(serialRateIn);
+        this.serialRate = serialRateIn;
 
     }
 
@@ -58,19 +58,12 @@ public class SerialCom {
     }
     
     public final void send(String s,final  Integer d) throws SerialException {
-        cr = d;
-        switch (cr) {
-            case 1:
-                s += "\n";
-                break;
-            case 2:
-                s += "\r";
-                break;
-            case 3:
-                s += "\r\n";
-                break;
-        }
-        send(s);
+//        cr = d;
+        String[] lineEnding={"\n","\r","\r\n"};
+
+        send(new StringBuffer().append(s).append(lineEnding[d]).toString());
+           
+       
     }
 
     public final void setListener(SerialListener l) {
@@ -81,9 +74,9 @@ public class SerialCom {
     }
 
     public final void openSerialPort() throws SerialException {
-        if (serial != null)
+        if (serial != null){
             return;
-
+        }
         serial = new SerialDevice(deviceName, getSerialRate());
         serial.addListener(listener);
     }

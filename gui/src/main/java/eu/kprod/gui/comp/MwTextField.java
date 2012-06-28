@@ -44,7 +44,7 @@ public class MwTextField extends JTextField implements MouseListener,
                 break;
 
             default:
-                throw new RuntimeException();
+                format = new DecimalFormat();
 
         }
         setText(format.format(double1));
@@ -133,9 +133,7 @@ public class MwTextField extends JTextField implements MouseListener,
             this.setText(format.format(v));
         } catch (Exception ex) {
             this.setText(previousValue);
-        } finally {
-
-        }
+        } 
 
     }
 

@@ -10,7 +10,7 @@ import javax.swing.event.ChangeListener;
 
 import eu.kprod.gui.MwGuiFrame;
 
-public class MwColorChooser extends MwJFrame implements ChangeListener {
+public final class MwColorChooser extends MwJFrame implements ChangeListener {
     /**
      * 
      */

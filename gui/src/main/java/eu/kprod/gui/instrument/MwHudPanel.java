@@ -26,17 +26,8 @@ public class MwHudPanel extends MwInstrumentJPanel  {
      */
     private static final long serialVersionUID = 1L;
 
-
-
     private Arc2D upperArc; // Upper part of the Horizon
     private Arc2D lowerArc; // Bottom part of the Horizon
-
-    private Ellipse2D roundHorizon;
-
-    private Line2D markerLine;
-    private GeneralPath centerShape;
-    private GeneralPath bankMarkerLong;
-
 
     private int rollAngle;
     private int pitchAngle;
@@ -49,8 +40,8 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         upperArc = new Arc2D.Float();
         lowerArc = new Arc2D.Float();
 
-        this.dimMarker10Deg = 15;
-        this.dimMarker5Deg = 7;
+//        super.dimMarker10Deg = 15;
+//        super.dimMarker5Deg = 7;
 
     }
 
@@ -78,7 +69,7 @@ public class MwHudPanel extends MwInstrumentJPanel  {
 
         radiusx = ((Double) (0.45 * maxRadiusX)).intValue();
         radiusy = ((Double) (0.45 * maxRadiusY)).intValue();
-        roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
+        Ellipse2D roundHorizon = new Ellipse2D.Float((maxRadiusX - radiusx * 2) / 2,
                 (maxRadiusY - radiusy * 2) / 2, 2 * radiusx, 2 * radiusy);
 
         g2d.setStroke(new BasicStroke(3));
@@ -170,7 +161,7 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         g2d.transform(at);
 
         // Draw the center shape
-        centerShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        GeneralPath centerShape = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         centerShape.moveTo((centerPoint.getX() - radiusx / 2.5),
                 centerPoint.getY());
         centerShape.lineTo((centerPoint.getX() - 15), centerPoint.getY());
@@ -196,12 +187,13 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         Integer ppitchangle = this.pitchAngle;
 
         limitInf = (int) ((ppitchangle / 10) - 5);
-        if (limitInf < -18)
+        if (limitInf < -18){
             limitInf = -18;
+        }
         limitMax = limitInf + 11;
-        if (limitMax > 18)
+        if (limitMax > 18){
             limitMax = 19;
-
+        }
         for (int i = limitInf; i < limitMax; i++) {
 
             angle = i * 10; // Display the text at the right "height"
@@ -214,7 +206,7 @@ public class MwHudPanel extends MwInstrumentJPanel  {
             g2d.setFont(writing);
 
             // Longer markers
-            markerLine = new Line2D.Float((float) (centerPoint.getX()
+            Line2D markerLine = new Line2D.Float((float) (centerPoint.getX()
                     - dimMarker10Deg - distance),
                     (float) (centerPoint.getY() - (radiusy * Math.sin(Math
                             .toRadians(angleCorrUp)))),
@@ -254,7 +246,7 @@ public class MwHudPanel extends MwInstrumentJPanel  {
     private void drawBankRollMarker(Graphics2D g2d) {
 
         // Draw the line markers for bank angle
-        bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+        GeneralPath bankMarkerLong = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
         bankMarkerLong
                 .moveTo((centerPoint.getX() - radiusx), centerPoint.getY());
         bankMarkerLong.lineTo((centerPoint.getX() - radiusx + 6),

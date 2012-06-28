@@ -8,18 +8,20 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 public class StyleColor {
-    
 
-    public static final Color backGround = new Color(51,51,51);
-    public static final Color forGround = new Color(204,204,204);
-    
+    private StyleColor() {
+
+    }
+
+    public static final Color backGround = new Color(51, 51, 51);
+    public static final Color forGround = new Color(204, 204, 204);
+
     public static final Color blueSky = new Color(10, 112, 156);
     public static final Color orangeEarth = new Color(202, 112, 14);
     public static final Color greenBar = new Color(96, 220, 113);
     public static final Color yellow = new Color(220, 220, 113);
     public static final Color redBar = new Color(220, 113, 113);
-    
-    
+
     public static final List<Color> colors = initializeMap();
 
     private static List<Color> initializeMap() {
@@ -35,17 +37,15 @@ public class StyleColor {
         m.add(StyleColor.forGround);
         m.add(Color.BLACK);
         m.add(Color.DARK_GRAY);
-        
-        m.add(new Color(250,100,100));
-        m.add(new Color(250,200,100));
-        m.add(new Color(250,100,200));
-        m.add(new Color(250,200,200));
-        
+
+        m.add(new Color(250, 100, 100));
+        m.add(new Color(250, 200, 100));
+        m.add(new Color(250, 100, 200));
+        m.add(new Color(250, 200, 200));
+
         return m;
     }
 
-    
-   
     public static Color getColor(int l) {
 
         return colors.get(l);
@@ -58,7 +58,8 @@ public class StyleColor {
 
         } else {
             try {
-                for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                for (LookAndFeelInfo info : UIManager
+                        .getInstalledLookAndFeels()) {
                     if ("Nimbus".equals(info.getName())) {
                         UIManager.setLookAndFeel(info.getClassName());
                         break;
@@ -69,11 +70,11 @@ public class StyleColor {
                 // continue
             }
         }
-        
+
     }
 
     public static void setColor(int index, Color color) {
         colors.set(index, color);
-        
+
     }
 }

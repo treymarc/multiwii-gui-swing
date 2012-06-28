@@ -18,6 +18,9 @@ import eu.kprod.gui.comp.StyleColor;
  */
 public class MwGui {
 
+    private MwGui(){
+        
+    }
     /**
      * @param args
      * @throws SerialException

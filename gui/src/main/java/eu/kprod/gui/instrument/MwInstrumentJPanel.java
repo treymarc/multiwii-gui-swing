@@ -3,7 +3,6 @@ package eu.kprod.gui.instrument;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,8 +29,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
     Dimension dimPanel;
 
-    int dimMarker5Deg;
-    int dimMarker10Deg;
+    int dimMarker5Deg=7;
+    int dimMarker10Deg=15;
 
     public MwInstrumentJPanel(Dimension dimension) {
         if (dimension == null) {
@@ -82,10 +81,5 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
     abstract void resetAllValuesImpl();
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
-        super.paintComponent(g);
 
-    }
 }

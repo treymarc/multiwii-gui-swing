@@ -78,30 +78,30 @@ import eu.kprod.serial.SerialNotFoundException;
  * @author treym
  * 
  */
-public class MwGuiFrame extends JFrame implements SerialListener,
+public final class MwGuiFrame extends JFrame implements SerialListener,
         MwDataSourceListener, ChangeListener {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(MwGuiFrame.class);
+    private static final Logger LOGGER = Logger.getLogger(MwGuiFrame.class);
     private static MwGuiFrame instance;
 
     class actionMspSender implements ActionListener {
 
         private int[] requests;
 
-        public actionMspSender(int[] requests1) {
-            this.requests = requests1;
+        public actionMspSender(final int[] requests1) {
+            this.requests = requests1.clone();
         }
 
-        public actionMspSender(int msp) {
+        public actionMspSender(final int msp) {
             this.requests = new int[1];
             this.requests[0] = msp;
         }
 
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(final ActionEvent e) {
 
             beginSerialCom();
             boolean restart = false;
@@ -190,7 +190,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             JButton stopButton = new MwJButton("Stop", "Stop monitoring");
             stopButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    logger.trace("actionPerformed "
+                    LOGGER.trace("actionPerformed "
                             + e.getSource().getClass().getName());
                     stopTimer();
                 }
@@ -237,7 +237,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             JButton startButton = new MwJButton("Start", "Start monitoring");
             startButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    logger.trace("actionPerformed "
+                    LOGGER.trace("actionPerformed "
                             + e.getSource().getClass().getName());
 
                     beginSerialCom();
@@ -347,7 +347,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         this.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
-                logger.trace("windowClosing "
+                LOGGER.trace("windowClosing "
                         + e.getSource().getClass().getName());
                 if (timer != null) {
                     timer.cancel();
@@ -380,7 +380,7 @@ public class MwGuiFrame extends JFrame implements SerialListener,
                     "Write to eeprom");
             writeToEepromButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    logger.trace("actionPerformed "
+                    LOGGER.trace("actionPerformed "
                             + e.getSource().getClass().getName());
                     // TODO Write to eeprom
                 }
@@ -682,11 +682,9 @@ public class MwGuiFrame extends JFrame implements SerialListener,
             sm.setActionCommand(p.toString());
             sm.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
-                    logger.trace("actionPerformed "
-                            + event.getSource().getClass().getName());
+//                    LOGGER.trace("actionPerformed "+ event.getSource().getClass().getName());
                     closeSerialPort();
                     try {
-
                         Object pp = event.getSource();
                         if (pp instanceof JRadioButtonMenuItem) {
                             JRadioButtonMenuItem va = (JRadioButtonMenuItem) pp;
@@ -819,13 +817,13 @@ public class MwGuiFrame extends JFrame implements SerialListener,
         closeSerialPort();
     }
 
-    public static void AddSensorCheckBox(String sensorName) {
+    public static void addSensorCheckBox(String sensorName) {
         getChartCheckBoxPanel().addSensorBox(sensorName);
     }
 
     @Override
     public void readNewValue(String name, Double value) {
-        MwGuiFrame.AddSensorCheckBox(name);
+        MwGuiFrame.addSensorCheckBox(name);
     }
 
     public static MwChartPanel getChartPanel() {

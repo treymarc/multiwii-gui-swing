@@ -35,10 +35,11 @@ abstract public class MwChangeablePanel extends MwJPanel implements
 
             newModel(m);
 
-        } else if (source instanceof MwDataModel) {
-
-            // save to file , etc ...
         }
+//        else if (source instanceof JMenu) {
+//
+//            // save to file , etc ...
+//        }
     }
 
     abstract void newModel(MwDataModel m);
