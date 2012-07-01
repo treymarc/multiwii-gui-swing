@@ -40,9 +40,6 @@ public class MwHudPanel extends MwInstrumentJPanel  {
         upperArc = new Arc2D.Float();
         lowerArc = new Arc2D.Float();
 
-//        super.dimMarker10Deg = 15;
-//        super.dimMarker5Deg = 7;
-
     }
 
 
@@ -78,7 +75,6 @@ public class MwHudPanel extends MwInstrumentJPanel  {
     }
 
     void drawValue(Graphics2D g2d) {
-        // TODO Auto-generated method stub
 
         g2d.setFont(getWriting());
         g2d.setPaint(StyleColor.forGround);

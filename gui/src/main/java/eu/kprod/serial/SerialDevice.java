@@ -166,7 +166,7 @@ public class SerialDevice implements SerialPortEventListener {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         input = null;
         output = null;
@@ -177,7 +177,7 @@ public class SerialDevice implements SerialPortEventListener {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         port = null;
         LOGGER.trace("close SerialDevice" + this);

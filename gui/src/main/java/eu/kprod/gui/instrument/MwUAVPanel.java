@@ -16,20 +16,21 @@ import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.comp.StyleColor;
 
 public class MwUAVPanel extends MwInstrumentJPanel {
 
-//    protected GeneralPath bar;
+    // protected GeneralPath bar;
 
     private double[] motor = new double[8];
     private static Image[] images = new Image[14];
 
     // bar w/h
-   private final int xx = 8;
-   private final int yy = 67;
+    private final int xx = 8;
+    private final int yy = 67;
 
-    protected int uavType = 10;
+    private int uavType = 10;
 
     public int getUavType() {
         return uavType;
@@ -51,7 +52,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
             }
 
         } catch (Exception e) {
-            System.out.println("resources not found!!!");
+            throw new MwGuiRuntimeException("Could not load images for "
+                    + this.getClass(), e);
         }
 
     }

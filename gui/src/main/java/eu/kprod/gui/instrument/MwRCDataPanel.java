@@ -16,6 +16,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
@@ -37,7 +38,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
                 imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
 
             } catch (Exception e) {
-                System.err.println("resources not found!!!");
+                throw new MwGuiRuntimeException("Could not load images for "+this.getClass(),e);
             }
         }
     }

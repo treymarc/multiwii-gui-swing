@@ -32,6 +32,7 @@ import eu.kprod.serial.SerialListener;
 
 public class DebugFrame extends JFrame implements SerialListener {
 
+    private static final Logger LOGGER = Logger.getLogger(DebugFrame.class);
     static class RollingDocument extends PlainDocument {
         /**
          * 
@@ -126,8 +127,7 @@ public class DebugFrame extends JFrame implements SerialListener {
                     MwGuiFrame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
                 } catch (SerialException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    LOGGER.error(e1.getMessage());
                 }
                 textField.setText("");
             }
@@ -143,8 +143,7 @@ public class DebugFrame extends JFrame implements SerialListener {
                     MwGuiFrame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
                 } catch (SerialException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    LOGGER.error(e1.getMessage());
                 }
                 textField.setText("");
             }

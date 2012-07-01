@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -18,7 +19,8 @@ import org.jfree.data.xy.XYDataset;
  * 
  */
 public class MwDataSourceImpl implements MwDataSource {
-
+    private static final Logger LOGGER = Logger.getLogger(MwDataSourceImpl.class);
+    
     // TODO impl factory
     // private MwDataSourceImpl(){}
 
@@ -147,7 +149,7 @@ public class MwDataSourceImpl implements MwDataSource {
             // the same millis
             timeserie.addOrUpdate(new Millisecond(date), value);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return true;
 

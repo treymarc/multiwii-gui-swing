@@ -117,7 +117,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     Thread.sleep(serialDelay);
 
                 } catch (Exception p) {
-                    p.printStackTrace();
+                    LOGGER.error(p.getMessage());
                 }
             }
             if (restart) {
@@ -281,7 +281,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 try {
                     openSerialPort();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error(e.getMessage());
                 }
             }
         }
@@ -463,7 +463,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                         model = abstractButton.getModel();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error(e.getMessage());
                 }
             }
             if (model != null) {
@@ -494,9 +494,9 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                             .append(baudRateMenuGroup.getSelection()
                                     .getActionCommand()).toString());
         } catch (SerialNotFoundException e) {
-
+            LOGGER.error(e.getMessage());
         } catch (SerialException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -696,7 +696,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                             }
                         }
                     } catch (SerialException e) {
-                        e.printStackTrace();
+                 
+                        LOGGER.error(e.getMessage());
                     }
                 }
             });

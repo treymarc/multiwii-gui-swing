@@ -54,8 +54,6 @@ public class LogViewerFrame extends JFrame {
             ds = new LogLoader().getDataSourceContent(name);
         } catch (DSLoadableException e) {
             LOGGER.error("Can not open log file : " + name);
-            e.printStackTrace();
-            // TODO get datasource impl
             ds = new MwDataSourceImpl();
         }
         refDs = ds;

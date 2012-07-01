@@ -20,7 +20,7 @@ package eu.kprod.serial;
 
 public class SerialCom {
 
-    private static String[] lineEnding={"\n","\r","\r\n"};
+    private static final String[] lineEnding={"\n","\r","\r\n"};
     private SerialDevice serial;
 
     private int serialRate;
