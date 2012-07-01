@@ -1,5 +1,6 @@
 package eu.kprod.msp;
 
+import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,8 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public final class MSP {
 
+    private static final Logger LOGGER = Logger.getLogger(MSP.class);
+
     private static final int BUFFER_SIZE = 128;
     /**
      * position in the reception inputBuffer
@@ -35,7 +38,7 @@ public final class MSP {
     private static byte checksum = 0;
     private static int cmd = 0;
 
-    public final static int DYNTHRPID_KEY = 6;
+    public static final  int DYNTHRPID_KEY = 6;
     /* processing does not accept enums? */
     public static final int
     ERR = -1,
@@ -127,22 +130,22 @@ public final class MSP {
     public static final String
     OUT   = "$M<";
 
-    public final static int POEWERTRIG_KEY = 9;
+    public static final  int POEWERTRIG_KEY = 9;
 
-    public final static int RCCURV_THREXPO_KEY = 8;
-    public final static int RCCURV_THRMID_KEY = 7;
+    public static final  int RCCURV_THREXPO_KEY = 8;
+    public static final  int RCCURV_THRMID_KEY = 7;
 
-    public final static int RCEXPO_KEY = 3;
+    public static final  int RCEXPO_KEY = 3;
 
-    public final static int RCRATE_KEY = 2;
-    public final static int ROLLPITCHRATE_KEY = 4;
+    public static final  int RCRATE_KEY = 2;
+    public static final  int ROLLPITCHRATE_KEY = 4;
     /**
      * reception buffer
      */
     private static byte[] serialBuffer = new byte[BUFFER_SIZE];
-    public final static int UAVTYPEKEY = 1;
-    public final static int VERSIONKEY = 0;
-    public final static int YAWRATE_KEY = 5;
+    public static final int UAVTYPEKEY = 1;
+    public static final int VERSIONKEY = 0;
+    public static final int YAWRATE_KEY = 5;
     /**
      * Decode the byte
      * 
@@ -178,7 +181,7 @@ public final class MSP {
                 serialBuffer[offset++] = (byte) (c & MASK);
             } else {
                 if ((checksum & MASK) != (c & MASK)) {
-                    System.err.println("invalid checksum for command "
+                    LOGGER.error("invalid checksum for command "
                             + (cmd & MASK) + ": " + (checksum & MASK)
                             + " expected, got " + (c & MASK));
                     cmd = ERR;
@@ -424,9 +427,9 @@ public final class MSP {
         }
 
         byte hash = 0;
-        final byte pl_size = (byte) ((payload != null ? (payload.length) : 0) & MASK);
-        bf.add(pl_size);
-        hash ^= (pl_size & MASK);
+        final byte payloadSize = (byte) ((payload != null ? (payload.length) : 0) & MASK);
+        bf.add(payloadSize);
+        hash ^= (payloadSize & MASK);
 
         bf.add((byte) (msp & MASK));
         hash ^= (msp & MASK);
