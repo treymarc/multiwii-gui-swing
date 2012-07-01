@@ -32,6 +32,24 @@ import eu.kprod.ds.MwDataSourceImpl;
  */
 public class LogLoader implements DSLoadable {
 
+    private static String[] parse(final String line) {
+        // System.err.println("line = "+line);
+        final String[] content = new String[3];
+        // TODO Auto-generated method stub
+        if (line.contains("SENSOR") && line.contains(":")) {
+            final String s = line.substring(line.lastIndexOf('R') + 1);
+            final int pos = s.lastIndexOf(':');
+            content[0] = s.substring(0, pos - 1);
+            content[1] = s.substring(pos + 1);
+
+            // System.err.println(" -> content[0] = "+content[0]);
+            // System.err.println(" -> content[1] = "+content[1]);
+            //
+        }
+
+        return content;
+    }
+
     public LogLoader() {
     }
 
@@ -44,32 +62,33 @@ public class LogLoader implements DSLoadable {
      *         en cas d'erreur
      * @throws DSLoadableException
      */
+    @Override
     public final MwDataSource getDataSourceContent(final String filePath)
             throws DSLoadableException {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");
 
-        MwDataSource content = new MwDataSourceImpl();
+        final MwDataSource content = new MwDataSourceImpl();
 
         try {
-            BufferedReader buff = new BufferedReader(new FileReader(filePath));
+            final BufferedReader buff = new BufferedReader(new FileReader(filePath));
 
             try {
                 String line;
                 while ((line = buff.readLine()) != null) {
                     try {
-                        String[] content1 = parse(line);
+                        final String[] content1 = parse(line);
 
                         // System.err.println("content1[0] = "+content1[0]);
                         // System.err.println("content1[1] = "+content1[1]);
-                        String date = filePath
+                        final String date = filePath
                                 .substring(filePath.length() - 10)
                                 + " "
                                 + line.substring(0, line.indexOf(':') + 6);
                         // System.err.println("date = "+date);
                         content.put(sdf.parse(date), content1[0],
                                 Double.valueOf(content1[1]), null);
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         e.printStackTrace();
                         // failed to load
                     }
@@ -77,27 +96,9 @@ public class LogLoader implements DSLoadable {
             } finally {
                 buff.close();
             }
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             throw new DSLoadableException(ioe);
         }
-        return content;
-    }
-
-    private static String[] parse(final String line) {
-        // System.err.println("line = "+line);
-        String[] content = new String[3];
-        // TODO Auto-generated method stub
-        if (line.contains("SENSOR") && line.contains(":")) {
-            String s = line.substring(line.lastIndexOf('R') + 1);
-            int pos = s.lastIndexOf(':');
-            content[0] = s.substring(0, pos - 1);
-            content[1] = s.substring(pos + 1);
-
-            // System.err.println(" -> content[0] = "+content[0]);
-            // System.err.println(" -> content[1] = "+content[1]);
-            //
-        }
-
         return content;
     }
 }

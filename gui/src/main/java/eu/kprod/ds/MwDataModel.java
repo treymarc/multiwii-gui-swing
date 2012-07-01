@@ -10,17 +10,13 @@ import javax.swing.event.ChangeListener;
 
 public class MwDataModel {
 
-    private static final int ITEM_PID_COUNT = 3;
-
     private static final int ITEM_BOX_COUNT = 12;
 
-    // for real time data
-    // TODO get impl
-    private MwDataSource ds = new MwDataSourceImpl();
+    private static final int ITEM_PID_COUNT = 3;
 
-    // ------ TODO
-    // global ident
-    private int version = -1, multiType = -1;
+    private ChangeListener boxChangeListener;
+
+    private final Map<Integer, String> boxNameIndex = new HashMap<Integer, String>();
 
     // // rc conf
     // int rcRate, rcExpo, rollPitchRate, yawRate, dynThrPID, throttleMID,
@@ -31,83 +27,55 @@ public class MwDataModel {
     // private HashMap<Integer, Integer> uavSettings = new HashMap<Integer,
     // Integer>();
 
-    private Map<Integer, String> boxNameIndex = new HashMap<Integer, String>();
+    private final Map<String, List<Boolean>> boxs = new HashMap<String, List<Boolean>>();
 
-    public Map<Integer, String> getBoxNameIndex() {
-        return boxNameIndex;
-    }
+    // for real time data
+    // TODO get impl
+    private final MwDataSource ds = new MwDataSourceImpl();
 
-    public Map<Integer, String> getPidNameIndex() {
-        return pidNameIndex;
-    }
-
-    private Map<Integer, String> pidNameIndex = new HashMap<Integer, String>();
-
-    private Map<String, List<Boolean>> boxs = new HashMap<String, List<Boolean>>();
-
-    private Map<String, List<Double>> pids = new HashMap<String, List<Double>>();
-
-    private ChangeListener boxChangeListener;
-
-    public ChangeListener getBoxChangeListener() {
-        return boxChangeListener;
-    }
-
-    public void setBoxChangeListener(ChangeListener boxChangeListener1) {
-        this.boxChangeListener = boxChangeListener1;
-    }
-
-    public ChangeListener getPidChangeListener() {
-        return pidChangeListener;
-    }
-
-    public void setPidChangeListener(ChangeListener pidChangeListener1) {
-        this.pidChangeListener = pidChangeListener1;
-    }
+    private final int[] motorPins = new int[8];
 
     private ChangeListener pidChangeListener;
 
-    // private int powerTrigger;
+    private final Map<Integer, String> pidNameIndex = new HashMap<Integer, String>();
 
-    private int[] motorPins = new int[8];
+    private final Map<String, List<Double>> pids = new HashMap<String, List<Double>>();
 
     private MwDataSourceListener uavChangeListener;
 
-    public void setUavChangeListener(MwDataSourceListener uavChangeListener) {
-        this.uavChangeListener = uavChangeListener;
-    }
+    // ------ TODO
+    // global ident
+    private final int version = -1, multiType = -1;
 
     public MwDataModel() {
         super();
     }
 
-    public synchronized MwDataSource getRealTimeData() {
-        return ds;
-    }
-
-    public void addBoxName(String name, int i) {
+    public final void addBoxName(final String name, final int i) {
         this.boxs.put(name, null);
         this.boxNameIndex.put(i, name);
     }
 
-    public void removeAllBoxName() {
-        this.boxs.clear();
-        this.boxNameIndex.clear();
-    }
-
-    public void removeAllPIDName() {
-        // TODO Auto-generated method stub
-        this.pids.clear();
-        this.pidNameIndex.clear();
-    }
-
-    public void addPIDName(String name, int i) {
+    public final void addPIDName(final String name, final int i) {
         // TODO Auto-generated method stub
         this.pids.put(name, null);
         this.pidNameIndex.put(i, name);
     }
 
-    public int getBoxNameCount() {
+    public final void boxChanged() {
+        // TODO Auto-generated method stub
+        if (boxChangeListener != null) {
+            boxChangeListener.stateChanged(new ChangeEvent(this));
+        }
+    }
+
+    // private int powerTrigger;
+
+    public final ChangeListener getBoxChangeListener() {
+        return boxChangeListener;
+    }
+
+    public final int getBoxNameCount() {
         if (boxNameIndex == null) {
             return 0;
         } else {
@@ -116,7 +84,20 @@ public class MwDataModel {
 
     }
 
-    public int getPidNameCount() {
+    public final Map<Integer, String> getBoxNameIndex() {
+        return boxNameIndex;
+    }
+
+    public final Map<String, List<Boolean>> getBOXs() {
+        // TODO Auto-generated method stub
+        return boxs;
+    }
+
+    public final ChangeListener getPidChangeListener() {
+        return pidChangeListener;
+    }
+
+    public final int getPidNameCount() {
         if (pidNameIndex == null) {
             return 0;
         } else {
@@ -124,9 +105,50 @@ public class MwDataModel {
         }
     }
 
-    public void setBoxNameValue(int index, int bytread) {
+    public final Map<Integer, String> getPidNameIndex() {
+        return pidNameIndex;
+    }
+
+    public final Map<String, List<Double>> getPIDs() {
         // TODO Auto-generated method stub
-        List<Boolean> boxItem = new ArrayList<Boolean>(ITEM_BOX_COUNT);
+        return pids;
+    }
+
+    public final synchronized MwDataSource getRealTimeData() {
+        return ds;
+    }
+
+    public final void pidChanged() {
+        // TODO Auto-generated method stub
+        if (pidChangeListener != null) {
+            pidChangeListener.stateChanged(new ChangeEvent(this));
+        }
+    }
+
+    public final void put(final Integer string, final int i) {
+        // TODO Auto-generated method stub
+        uavChangeListener.readNewValue(string, i);
+    }
+
+    public final void removeAllBoxName() {
+        this.boxs.clear();
+        this.boxNameIndex.clear();
+    }
+
+    public final void removeAllPIDName() {
+        // TODO Auto-generated method stub
+        this.pids.clear();
+        this.pidNameIndex.clear();
+    }
+
+    public final void setBoxChangeListener(
+            final ChangeListener boxChangeListener1) {
+        this.boxChangeListener = boxChangeListener1;
+    }
+
+    public final void setBoxNameValue(final int index, final int bytread) {
+        // TODO Auto-generated method stub
+        final List<Boolean> boxItem = new ArrayList<Boolean>(ITEM_BOX_COUNT);
         for (int i = 0; i < ITEM_BOX_COUNT; i++) {
 
             boxItem.add(i, ((bytread & (1 << i)) > 0));
@@ -136,9 +158,33 @@ public class MwDataModel {
 
     }
 
-    public void setPidValue(int index, int p, int i, int d) {
+    /**
+     * 
+     * @param i
+     *            the motor number
+     * @param read8
+     *            the number of the pin
+     */
+    public final void setMotorPin(final int i, final int read8) {
         // TODO Auto-generated method stub
-        List<Double> pidItem = new ArrayList<Double>(ITEM_PID_COUNT);
+        motorPins[i] = read8;
+
+    }
+
+    public final void setPidChangeListener(
+            final ChangeListener pidChangeListener1) {
+        this.pidChangeListener = pidChangeListener1;
+    }
+
+    // public void setPowerTrigger(int read16) {
+    // powerTrigger = read16;
+    //
+    // }
+
+    public final void setPidValue(final int index, final int p, final int i,
+            final int d) {
+        // TODO Auto-generated method stub
+        final List<Double> pidItem = new ArrayList<Double>(ITEM_PID_COUNT);
         for (int f = 0; f < ITEM_PID_COUNT; f++) {
             double fp = 0, fd = 0, fi = 0;
             switch (index) {
@@ -177,7 +223,7 @@ public class MwDataModel {
                     fi = i / 1000.0;
                     fd = d;
                     break;
-                // Different rates fot POS-4 POSR-5 NAVR-6
+                    // Different rates fot POS-4 POSR-5 NAVR-6
                 case 4:
                     fp = p / 100.0;
                     fi = i / 100.0;
@@ -203,50 +249,8 @@ public class MwDataModel {
         pids.put(pidNameIndex.get(index), pidItem);
     }
 
-    public void pidChanged() {
-        // TODO Auto-generated method stub
-        if (pidChangeListener != null) {
-            pidChangeListener.stateChanged(new ChangeEvent(this));
-        }
-    }
-
-    public void boxChanged() {
-        // TODO Auto-generated method stub
-        if (boxChangeListener != null) {
-            boxChangeListener.stateChanged(new ChangeEvent(this));
-        }
-    }
-
-    public Map<String, List<Double>> getPIDs() {
-        // TODO Auto-generated method stub
-        return pids;
-    }
-
-    public Map<String, List<Boolean>> getBOXs() {
-        // TODO Auto-generated method stub
-        return boxs;
-    }
-
-    // public void setPowerTrigger(int read16) {
-    // powerTrigger = read16;
-    //
-    // }
-
-    /**
-     * 
-     * @param i
-     *            the motor number
-     * @param read8
-     *            the number of the pin
-     */
-    public void setMotorPin(int i, int read8) {
-        // TODO Auto-generated method stub
-        motorPins[i] = read8;
-
-    }
-
-    public void put(Integer string, int i) {
-        // TODO Auto-generated method stub
-        uavChangeListener.readNewValue(string, i);
+    public final void setUavChangeListener(
+            MwDataSourceListener uavChangeListener1) {
+        this.uavChangeListener = uavChangeListener1;
     }
 }

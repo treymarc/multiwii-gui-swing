@@ -7,6 +7,10 @@ public class MwGuiRuntimeException extends RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
+    public MwGuiRuntimeException(String msg) {
+        super(msg);
+    }
+
     /**
      * create a new MwGuiExpception
      * @param msg message
@@ -15,10 +19,6 @@ public class MwGuiRuntimeException extends RuntimeException {
     public MwGuiRuntimeException(final String msg, final Exception e) {
         // TODO Auto-generated constructor stub
         super(msg, e);
-    }
-
-    public MwGuiRuntimeException(String msg) {
-        super(msg);
     }
 
 }

@@ -12,7 +12,7 @@ import eu.kprod.gui.comp.MwJLabel;
 import eu.kprod.gui.comp.MwJPanel;
 
 public abstract class MwChangeablePanel extends MwJPanel implements
-        ChangeListener {
+ChangeListener {
 
     /**
      * 
@@ -21,12 +21,15 @@ public abstract class MwChangeablePanel extends MwJPanel implements
 
     public MwChangeablePanel(String name) {
         setLayout(new GridLayout(1, 1));
-        Border title = BorderFactory.createTitledBorder((Border) null);
+        final Border title = BorderFactory.createTitledBorder((Border) null);
         // title.setTitleJustification(TitledBorder.CENTER);
         add(new MwJLabel(name));
         setBorder(title);
     }
 
+    abstract void newModel(MwDataModel m);
+
+    @Override
     public void stateChanged(ChangeEvent e) {
         // TODO Auto-generated method stub
         final Object source = e.getSource();
@@ -36,12 +39,10 @@ public abstract class MwChangeablePanel extends MwJPanel implements
             newModel(m);
 
         }
-//        else if (source instanceof JMenu) {
-//
-//            // save to file , etc ...
-//        }
+        //        else if (source instanceof JMenu) {
+        //
+        //            // save to file , etc ...
+        //        }
     }
-
-    abstract void newModel(MwDataModel m);
 
 }

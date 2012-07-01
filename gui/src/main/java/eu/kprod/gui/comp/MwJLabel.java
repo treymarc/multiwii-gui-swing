@@ -10,6 +10,10 @@ public class MwJLabel extends JLabel {
      */
     private static final long serialVersionUID = 1L;
 
+    public MwJLabel() {
+        super();
+    }
+
     public MwJLabel(Color color, String s) {
         super(s);
         setForeground(color);
@@ -21,9 +25,5 @@ public class MwJLabel extends JLabel {
         setHorizontalAlignment(CENTER);
     }
 
-    public MwJLabel() {
-        super();
-    }
 
-  
 }

@@ -25,159 +25,131 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public final class MSP {
 
-    private MSP(){
-        
-    }
-    /**
-     *  the model for holding the value decoded by the MSP
-     */
-    private static  MwDataModel model=new MwDataModel();
-
-
-    private static final int MASK = 0xff;
     private static final int BUFFER_SIZE = 128;
-    
-    private static final Character MSP_HEAD1 = new Character('$');
-    private static final Character MSP_HEAD2 = new Character('M');
-    private static final Character MSP_HEAD3 = new Character('>');
-    
-    public static final String
-    OUT   = "$M<";
-
-            /* processing does not accept enums? */
-            public static final int
-                ERR = -1,
-               IDLE = 0,
-               HEADER_START = 1,
-               HEADER_M = 2,
-               HEADER_ARROW = 3,
-               HEADER_SIZE = 4,
-               HEADER_CMD = 5,
-               HEADER_PAYLOAD = 6,
-               HEADER_CHK = 6
-            ;
-
-            
-
-    public static final int
-    IDENT               = 100,
-   STATUS               = 101,
-   RAW_IMU              = 102,
-   SERVO                = 103,
-   MOTOR                = 104,
-   RC                   = 105,
-   RAW_GPS              = 106,
-   COMP_GPS             = 107,
-   ATTITUDE             = 108,
-   ALTITUDE             = 109,
-   BAT                  = 110,
-   RC_TUNING            = 111,
-   PID                  = 112,
-   BOX                  = 113,
-   MISC                 = 114,
-   MOTOR_PINS           = 115,
-   BOXNAMES             = 116,
-   PIDNAMES             = 117,
-
-   SET_RAW_RC           = 200,
-   SET_RAW_GPS          = 201,
-   SET_PID              = 202,
-   SET_BOX              = 203,
-   SET_RC_TUNING        = 204,
-   ACC_CALIBRATION      = 205,
-   MAG_CALIBRATION      = 206,
-   SET_MISC             = 207,
-   RESET_CONF           = 208,
-
-   EEPROM_WRITE         = 250,
-
-   DEBUG                = 254;
-
-    public static final String IDANGX = "angx";
-    public static final String IDANGY = "angy";
-    public static final String IDHEAD = "head";
-    public static final String IDALT = "alt";
-    public static final String IDVBAT = "vbat";
-    public static final String IDPOWERMETERSUM = "powerMeterSum";
-
-    public static final String IDAX = "ax";
-    public static final String IDAZ = "ay";
-    public static final String IDAY = "az";
-    public static final String IDGX = "gx";
-    public static final String IDGY = "gy";
-    public static final String IDGZ = "gz";
-    public static final String IDMAGX = "magx";
-    public static final String IDMAGY = "magy";
-    public static final String IDMAGZ = "magz";
-    public static final String IDRCPITCH = "pitch";
-    public static final String IDRCTHROTTLE = "throttle";
-    public static final String IDRCROLL = "roll";
-    public static final String IDRCYAW = "yaw";
-    public static final String IDRCAUX1 = "aux1";
-    public static final String IDRCAUX2 = "aux2";
-    public static final String IDRCAUX3 = "aux3";
-    public static final String IDRCAUX4 = "aux4";
-
     /**
      * position in the reception inputBuffer
      */
     private static int bufferIndex;
 
-    /**
-     * reception buffer
-     */
-    private static byte[] serialBuffer = new byte[BUFFER_SIZE];
-
-    /**
-     * read 32byte from the inputBuffer
-     */
-
-    synchronized public static int read32() {
-        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++] & MASK) << 8)
-                + (((int) (serialBuffer[bufferIndex++] & MASK)) << 16)
-                + (((int) (serialBuffer[bufferIndex++] & MASK)) << 24);
-    }
-
-    /**
-     * read 16byte from the inputBuffer
-     */
-    public static synchronized int read16() {
-        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++]) << 8);
-    }
-
-    /**
-     * read 8byte from the inputBuffer
-     */
-    public static synchronized int read8() {
-        return serialBuffer[bufferIndex++] & MASK;
-    }
 
     private static byte checksum = 0;
     private static int cmd = 0;
 
+    public final static int DYNTHRPID_KEY = 6;
+    /* processing does not accept enums? */
+    public static final int
+    ERR = -1,
+    IDLE = 0,
+    HEADER_START = 1,
+    HEADER_M = 2,
+    HEADER_ARROW = 3,
+    HEADER_SIZE = 4,
+    HEADER_CMD = 5,
+    HEADER_PAYLOAD = 6,
+    HEADER_CHK = 6
+    ;
+    public static final String IDALT = "alt";
+
+    public static final String IDANGX = "angx";
+
+    public static final String IDANGY = "angy";
+
+
+
+    public static final String IDAX = "ax";
+
+    public static final String IDAY = "az";
+    public static final String IDAZ = "ay";
+    public static final int
+    IDENT               = 100,
+    STATUS               = 101,
+    RAW_IMU              = 102,
+    SERVO                = 103,
+    MOTOR                = 104,
+    RC                   = 105,
+    RAW_GPS              = 106,
+    COMP_GPS             = 107,
+    ATTITUDE             = 108,
+    ALTITUDE             = 109,
+    BAT                  = 110,
+    RC_TUNING            = 111,
+    PID                  = 112,
+    BOX                  = 113,
+    MISC                 = 114,
+    MOTOR_PINS           = 115,
+    BOXNAMES             = 116,
+    PIDNAMES             = 117,
+
+    SET_RAW_RC           = 200,
+    SET_RAW_GPS          = 201,
+    SET_PID              = 202,
+    SET_BOX              = 203,
+    SET_RC_TUNING        = 204,
+    ACC_CALIBRATION      = 205,
+    MAG_CALIBRATION      = 206,
+    SET_MISC             = 207,
+    RESET_CONF           = 208,
+
+    EEPROM_WRITE         = 250,
+
+    DEBUG                = 254;
+    public static final String IDGX = "gx";
+    public static final String IDGY = "gy";
+    public static final String IDGZ = "gz";
+
+    public static final String IDHEAD = "head";
+    public static final String IDMAGX = "magx";
+    public static final String IDMAGY = "magy";
+    public static final String IDMAGZ = "magz";
+    public static final String IDPOWERMETERSUM = "powerMeterSum";
+    public static final String IDRCAUX1 = "aux1";
+    public static final String IDRCAUX2 = "aux2";
+    public static final String IDRCAUX3 = "aux3";
+    public static final String IDRCAUX4 = "aux4";
+    public static final String IDRCPITCH = "pitch";
+    public static final String IDRCROLL = "roll";
+    public static final String IDRCTHROTTLE = "throttle";
+    public static final String IDRCYAW = "yaw";
+    public static final String IDVBAT = "vbat";
+    private static final int MASK = 0xff;
+    /**
+     *  the model for holding the value decoded by the MSP
+     */
+    private static  MwDataModel model=new MwDataModel();
+    private static final Character MSP_HEAD1 = new Character('$');
+
+    private static final Character MSP_HEAD2 = new Character('M');
+
+    private static final Character MSP_HEAD3 = new Character('>');
+
     private static int offset = 0, dataSize = 0, mspState = IDLE;
 
-    public final static int VERSIONKEY = 0;
-    public final static int UAVTYPEKEY = 1;
-    public final static int RCRATE_KEY = 2;
-    public final static int RCEXPO_KEY = 3;
-    public final static int ROLLPITCHRATE_KEY = 4;
-    public final static int YAWRATE_KEY = 5;
-    public final static int DYNTHRPID_KEY = 6;
-    public final static int RCCURV_THRMID_KEY = 7;
-    public final static int RCCURV_THREXPO_KEY = 8;
+    public static final String
+    OUT   = "$M<";
+
     public final static int POEWERTRIG_KEY = 9;
 
+    public final static int RCCURV_THREXPO_KEY = 8;
+    public final static int RCCURV_THRMID_KEY = 7;
 
-//    private static final int ERR = 0;
+    public final static int RCEXPO_KEY = 3;
 
+    public final static int RCRATE_KEY = 2;
+    public final static int ROLLPITCHRATE_KEY = 4;
+    /**
+     * reception buffer
+     */
+    private static byte[] serialBuffer = new byte[BUFFER_SIZE];
+    public final static int UAVTYPEKEY = 1;
+    public final static int VERSIONKEY = 0;
+    public final static int YAWRATE_KEY = 5;
     /**
      * Decode the byte
      * 
      * @param input
      */
     synchronized public static void decode(final byte input) {
-        char c = (char) input;
+        final char c = (char) input;
         if (mspState == IDLE) {
             mspState = (MSP_HEAD1.equals(c)) ? HEADER_START : IDLE;
         } else if (mspState == HEADER_START) {
@@ -198,28 +170,27 @@ public final class MSP {
             cmd = (c & MASK);
             checksum ^= (c & MASK);
             mspState = HEADER_CMD;
-        } else if (mspState == HEADER_CMD ) { 
-            
+        } else if (mspState == HEADER_CMD ) {
+
             if (offset < dataSize) {
                 // we keep reading the payload
                 checksum ^= (c & MASK);
                 serialBuffer[offset++] = (byte) (c & MASK);
             } else {
-                if ((checksum & MASK) != (c & MASK)) { 
-                System.err.println("invalid checksum for command "
-                        + ((int) (cmd & MASK)) + ": " + (checksum & MASK)
-                        + " expected, got " + (int) (c & MASK));
-                cmd = ERR;
+                if ((checksum & MASK) != (c & MASK)) {
+                    System.err.println("invalid checksum for command "
+                            + (cmd & MASK) + ": " + (checksum & MASK)
+                            + " expected, got " + (c & MASK));
+                    cmd = ERR;
                 }
-                
-                decodeMSPCommande(cmd, (int) dataSize);
+
+                decodeMSPCommande(cmd, dataSize);
                 mspState = IDLE;
             }
-           
-        } 
+
+        }
 
     }
-
     synchronized static private void decodeMSPCommande(final int stateMSP,
             final int dataSize2) {
         final Date d = new Date();
@@ -283,7 +254,7 @@ public final class MSP {
                     model.getRealTimeData().put(
                             d,
                             new StringBuffer().append("servo").append(i)
-                                    .toString(), Double.valueOf(read16()),
+                            .toString(), Double.valueOf(read16()),
                             MwSensorClassServo.class);
                 }
                 break;
@@ -292,7 +263,7 @@ public final class MSP {
                     model.getRealTimeData().put(
                             d,
                             new StringBuffer().append("mot").append(i)
-                                    .toString(), Double.valueOf(read16()),
+                            .toString(), Double.valueOf(read16()),
                             MwSensorClassMotor.class);
                 }
                 break;
@@ -369,7 +340,7 @@ public final class MSP {
                 break;
             case BOX:
                 for (int index = 0; index < model.getBoxNameCount(); index++) {
-                    int bytread = read16();
+                    final int bytread = read16();
                     model.setBoxNameValue(index, bytread);
                 }
                 model.boxChanged();
@@ -392,33 +363,53 @@ public final class MSP {
             case BOXNAMES:
                 model.removeAllBoxName();
                 int i = 0;
-                for (String name : new String(serialBuffer, 0, dataSize).split(";")) {
+                for (final String name : new String(serialBuffer, 0, dataSize).split(";")) {
                     model.addBoxName(name, i++);
                 }
                 break;
             case PIDNAMES:
                 model.removeAllPIDName();
                 i = 0;
-                for (String name : new String(serialBuffer, 0, dataSize).split(";")) {
+                for (final String name : new String(serialBuffer, 0, dataSize).split(";")) {
                     model.addPIDName(name, i++);
                 }
                 break;
         }
 
     }
+    public static MwDataSource getRealTimeData() {
+        return model.getRealTimeData();
+    }
+    /**
+     * read 16byte from the inputBuffer
+     */
+    public static synchronized int read16() {
+        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++]) << 8);
+    }
+
+
+    //    private static final int ERR = 0;
+
+    /**
+     * read 32byte from the inputBuffer
+     */
+
+    synchronized public static int read32() {
+        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++] & MASK) << 8)
+                + ((serialBuffer[bufferIndex++] & MASK) << 16)
+                + ((serialBuffer[bufferIndex++] & MASK) << 24);
+    }
+
+    /**
+     * read 8byte from the inputBuffer
+     */
+    public static synchronized int read8() {
+        return serialBuffer[bufferIndex++] & MASK;
+    }
 
     // send msp without payload
     public static List<Byte> request(int msp) {
         return request(msp, null);
-    }
-
-    // send multiple msp without payload
-    public static List<Byte> request(int[] msps) {
-        List<Byte> s = new LinkedList<Byte>();
-        for (int m : msps) {
-            s.addAll(request(m, null));
-        }
-        return s;
     }
 
     // send msp with payload
@@ -427,13 +418,13 @@ public final class MSP {
         if (msp < 0) {
             return null;
         }
-        List<Byte> bf = new LinkedList<Byte>();
-        for (byte c : OUT.getBytes()) {
+        final List<Byte> bf = new LinkedList<Byte>();
+        for (final byte c : OUT.getBytes()) {
             bf.add(c);
         }
 
         byte hash = 0;
-        byte pl_size = (byte) ((payload != null ? (payload.length) : 0) & MASK);
+        final byte pl_size = (byte) ((payload != null ? (payload.length) : 0) & MASK);
         bf.add(pl_size);
         hash ^= (pl_size & MASK);
 
@@ -441,7 +432,7 @@ public final class MSP {
         hash ^= (msp & MASK);
 
         if (payload != null) {
-            for (char c : payload) {
+            for (final char c : payload) {
                 bf.add((byte) (c & MASK));
                 hash ^= (c & MASK);
             }
@@ -451,12 +442,13 @@ public final class MSP {
         return (bf);
     }
 
-    public static MwDataSource getRealTimeData() {
-        return model.getRealTimeData();
-    }
-
-    public static void setPidChangeListener(final ChangeListener pidPane) {
-        model.setPidChangeListener(pidPane);
+    // send multiple msp without payload
+    public static List<Byte> request(int[] msps) {
+        final List<Byte> s = new LinkedList<Byte>();
+        for (final int m : msps) {
+            s.addAll(request(m, null));
+        }
+        return s;
     }
 
     public static void setBoxChangeListener(final ChangeListener boxPane) {
@@ -464,8 +456,16 @@ public final class MSP {
 
     }
 
+    public static void setPidChangeListener(final ChangeListener pidPane) {
+        model.setPidChangeListener(pidPane);
+    }
+
     public static void setUavChangeListener(
             final MwDataSourceListener uavChangeListener) {
         model.setUavChangeListener(uavChangeListener);
+    }
+
+    private MSP(){
+
     }
 }

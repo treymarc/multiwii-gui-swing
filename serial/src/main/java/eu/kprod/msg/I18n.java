@@ -10,12 +10,6 @@ import java.text.MessageFormat;
 public final class I18n {
 
     /**
-     * prevent direct instance
-     */
-    private I18n() {
-    }
-
-    /**
      * @see java.text.MessageFormat
      * @param fmt
      * @param args
@@ -23,5 +17,11 @@ public final class I18n {
      */
     public static String format(final String fmt, final Object... args) {
         return MessageFormat.format(fmt, args);
+    }
+
+    /**
+     * prevent direct instance
+     */
+    private I18n() {
     }
 }

@@ -12,10 +12,6 @@ import eu.kprod.gui.comp.StyleColor;
 
 public final class MwChartFactory {
 
-    private MwChartFactory() {
-
-    }
-
     public static MwChartPanel createChart(final XYDataset xyDataset) {
         final JFreeChart chart;
 
@@ -40,26 +36,30 @@ public final class MwChartFactory {
         axis.setAxisLineVisible(false);
         axis.setTickLabelsVisible(false);
         axis.setTickLabelPaint(StyleColor.forGround);
-        
+
         // force integer display
-        ValueAxis va = (ValueAxis) plot.getRangeAxis();
+        final ValueAxis va = plot.getRangeAxis();
         va.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         va.setLabelPaint(StyleColor.forGround);
         va.setAxisLinePaint(StyleColor.forGround);
         va.setTickLabelPaint(StyleColor.forGround);
-//        va.setRange(-280,280);
-//        va.setFixedAutoRange(560);
-//        va.setLowerBound(-280);
-//        va.setUpperBound(280);
-//        va.setAutoRange(false);
+        //        va.setRange(-280,280);
+        //        va.setFixedAutoRange(560);
+        //        va.setLowerBound(-280);
+        //        va.setUpperBound(280);
+        //        va.setAutoRange(false);
         va.setRangeWithMargins(-280, 280);
-        
-        MwChartPanel chartPanel = new MwChartPanel(chart);
+
+        final MwChartPanel chartPanel = new MwChartPanel(chart);
         chartPanel.setMouseWheelEnabled(false);
         chartPanel.setDomainZoomable(false);
         chartPanel.setRangeZoomable(false);
 
         return chartPanel;
+
+    }
+
+    private MwChartFactory() {
 
     }
 

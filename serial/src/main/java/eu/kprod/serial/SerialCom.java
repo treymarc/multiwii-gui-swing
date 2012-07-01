@@ -21,60 +21,19 @@ package eu.kprod.serial;
 public class SerialCom {
 
     private static final String[] lineEnding={"\n","\r","\r\n"};
-    private SerialDevice serial;
-
-    private int serialRate;
-
     private String deviceName;
 
     private SerialListener listener;
 
-    public final String getDeviceName() {
-        return deviceName;
-    }
+    private SerialDevice serial;
 
-    public final void setDeviceName(final String deviceName1) {
-        this.deviceName = deviceName1;
-    }
+    private int serialRate;
 
     public SerialCom(final String device, final int serialRateIn) {
 
         this.deviceName = device;
         this.serialRate = serialRateIn;
 
-    }
-
-    public final void send(final String s) throws SerialException {
-        if (serial != null) {
-            serial.write(s);
-        }
-    }
-
-    public final void send(byte []  s) throws SerialException {
-        if (serial != null) {
-            serial.write(s);
-        }
-    }
-    
-    public final void send(String s,final  Integer d) throws SerialException {
-
-        send(new StringBuffer().append(s).append(lineEnding[d]).toString());
-               
-    }
-
-    public final void setListener(SerialListener l) {
-        listener = l;
-        if (serial != null) {
-            serial.addListener(l);
-        }
-    }
-
-    public final void openSerialPort() throws SerialException {
-        if (serial != null){
-            return;
-        }
-        serial = new SerialDevice(deviceName, getSerialRate());
-        serial.addListener(listener);
     }
 
     public final void closeSerialPort() {
@@ -86,16 +45,57 @@ public class SerialCom {
 
     }
 
+    public final String getDeviceName() {
+        return deviceName;
+    }
+
     public int getSerialRate() {
         return serialRate;
     }
 
-    public void setSerialRate(final int serialRate1) {
-        this.serialRate = serialRate1;
-    }
-
     public boolean isOpen() {
         return (serial != null);
+    }
+
+    public final void openSerialPort() throws SerialException {
+        if (serial != null){
+            return;
+        }
+        serial = new SerialDevice(deviceName, getSerialRate());
+        serial.addListener(listener);
+    }
+
+    public final void send(byte []  s) throws SerialException {
+        if (serial != null) {
+            serial.write(s);
+        }
+    }
+
+    public final void send(final String s) throws SerialException {
+        if (serial != null) {
+            serial.write(s);
+        }
+    }
+
+    public final void send(String s,final  Integer d) throws SerialException {
+
+        send(new StringBuffer().append(s).append(lineEnding[d]).toString());
+
+    }
+
+    public final void setDeviceName(final String deviceName1) {
+        this.deviceName = deviceName1;
+    }
+
+    public final void setListener(SerialListener l) {
+        listener = l;
+        if (serial != null) {
+            serial.addListener(l);
+        }
+    }
+
+    public void setSerialRate(final int serialRate1) {
+        this.serialRate = serialRate1;
     }
 
 }

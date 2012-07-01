@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 
 import eu.kprod.gui.MwGuiFrame;
 import eu.kprod.gui.comp.StyleColor;
+
 //import eu.kprod.serial.SerialException;
 
 /**
@@ -18,17 +19,14 @@ import eu.kprod.gui.comp.StyleColor;
  */
 public final class MwGui {
 
-    private MwGui(){
-        
-    }
     /**
      * @param args
      * @throws SerialException
      */
     public static void main(final String[] args) {
-        
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 StyleColor.setLookAndFeel();
                 MwGuiFrame.getInstance().setVisible(true);
@@ -37,6 +35,10 @@ public final class MwGui {
             }
 
         });
+
+    }
+
+    private MwGui() {
 
     }
 

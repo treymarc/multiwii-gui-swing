@@ -11,23 +11,23 @@ import java.text.NumberFormat;
 import javax.swing.JTextField;
 
 public class MwTextField extends JTextField implements MouseListener,
-        MouseMotionListener, ActionListener {
+MouseMotionListener, ActionListener {
 
-    private static final NumberFormat PFORMAT = new DecimalFormat("0.00");
-    private static final NumberFormat IFORMAT = new DecimalFormat("0.0000");
     private static final NumberFormat DFORMAT = new DecimalFormat("0.00");
-
-    private NumberFormat format;
+    private static final NumberFormat IFORMAT = new DecimalFormat("0.0000");
+    private static final NumberFormat PFORMAT = new DecimalFormat("0.00");
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    private Double value;
-    private Double step;
-    private int previousX;
+    private NumberFormat format;
+
     private String previousValue;
+    private int previousX;
+    private final Double step;
+    private Double value;
 
     public MwTextField(Double double1, Double step1, int j) {
         super();
@@ -60,35 +60,35 @@ public class MwTextField extends JTextField implements MouseListener,
     }
 
     @Override
-    public void mouseDragged(MouseEvent ev) {
+    public void actionPerformed(ActionEvent ev) {
+        this.setEditable(false);
+        try {
+            Double v = Double.valueOf(this.getText());
+            if (v < 0) {
+                v = (double) 0;
+            }
 
-        int newX = ev.getX();
-
-        updateValue((newX - previousX));
-        previousX = newX;
-
-        ev.consume();
-    }
-
-    private void updateValue(int y) {
-
-        value = value + (y > 0 ? 1 : -1) * step;
-
-        if (value < 0) {
-            value = (double) 0;
+            this.setText(format.format(v));
+        } catch (final Exception ex) {
+            this.setText(previousValue);
         }
 
-        this.setText(format.format(value));
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent ev) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
 
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent ev) {
+
+        final int newX = ev.getX();
+
+        updateValue((newX - previousX));
+        previousX = newX;
+
+        ev.consume();
     }
 
     @Override
@@ -101,6 +101,11 @@ public class MwTextField extends JTextField implements MouseListener,
     public void mouseExited(MouseEvent arg0) {
         // TODO Auto-generated method stub
         this.setEditable(false);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent ev) {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -122,19 +127,15 @@ public class MwTextField extends JTextField implements MouseListener,
         e.consume();
     }
 
-    public void actionPerformed(ActionEvent ev) {
-        this.setEditable(false);
-        try {
-            Double v = Double.valueOf(this.getText());
-            if (v < 0) {
-                v = (double) 0;
-            }
+    private void updateValue(int y) {
 
-            this.setText(format.format(v));
-        } catch (Exception ex) {
-            this.setText(previousValue);
-        } 
+        value = value + (y > 0 ? 1 : -1) * step;
 
+        if (value < 0) {
+            value = (double) 0;
+        }
+
+        this.setText(format.format(value));
     }
 
 }

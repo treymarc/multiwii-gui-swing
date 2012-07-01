@@ -9,23 +9,24 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 public final class StyleColor {
 
-    private StyleColor() {
-
-    }
-
     public static final Color backGround = new Color(51, 51, 51);
-    public static final Color forGround = new Color(204, 204, 204);
 
     public static final Color blueSky = new Color(10, 112, 156);
-    public static final Color orangeEarth = new Color(202, 112, 14);
-    public static final Color greenBar = new Color(96, 220, 113);
-    public static final Color yellow = new Color(220, 220, 113);
-    public static final Color redBar = new Color(220, 113, 113);
-
     public static final List<Color> colors = initializeMap();
 
+    public static final Color forGround = new Color(204, 204, 204);
+    public static final Color greenBar = new Color(96, 220, 113);
+    public static final Color orangeEarth = new Color(202, 112, 14);
+    public static final Color redBar = new Color(220, 113, 113);
+    public static final Color yellow = new Color(220, 220, 113);
+
+    public static Color getColor(int l) {
+
+        return colors.get(l);
+    }
+
     private static List<Color> initializeMap() {
-        List<Color> m = new ArrayList<Color>();
+        final List<Color> m = new ArrayList<Color>();
         m.add(Color.BLUE);
         m.add(Color.GREEN);
         m.add(Color.YELLOW);
@@ -46,9 +47,9 @@ public final class StyleColor {
         return m;
     }
 
-    public static Color getColor(int l) {
+    public static void setColor(int index, Color color) {
+        colors.set(index, color);
 
-        return colors.get(l);
     }
 
     public static void setLookAndFeel() {
@@ -58,7 +59,7 @@ public final class StyleColor {
 
         } else {
             try {
-                for (LookAndFeelInfo info : UIManager
+                for (final LookAndFeelInfo info : UIManager
                         .getInstalledLookAndFeels()) {
                     if ("Nimbus".equals(info.getName())) {
                         UIManager.setLookAndFeel(info.getClassName());
@@ -66,15 +67,14 @@ public final class StyleColor {
                     }
                 }
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 // continue
             }
         }
 
     }
 
-    public static void setColor(int index, Color color) {
-        colors.set(index, color);
+    private StyleColor() {
 
     }
 }

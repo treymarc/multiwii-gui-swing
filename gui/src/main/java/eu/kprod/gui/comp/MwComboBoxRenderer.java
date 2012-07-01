@@ -11,12 +11,13 @@ class MwComboBoxRenderer extends BasicComboBoxRenderer {
      * 
      */
     private static final long serialVersionUID = 1L;
-    private String name;
+    private final String name;
 
     public MwComboBoxRenderer( final String comboBoxName) {
         name = comboBoxName;
     }
 
+    @Override
     public Component getListCellRendererComponent( final JList list, final Object value,
             final int index, final boolean isSelected, final boolean cellHasFocus) {
         if (isSelected) {

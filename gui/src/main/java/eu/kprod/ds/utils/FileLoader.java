@@ -36,9 +36,15 @@ public class FileLoader implements DSLoadable {
      *
      */
     public FileLoader() {
-        
+
     }
-    
+
+    @Override
+    public final MwDataSource getDataSourceContent(final String s) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     /**
      * charge un fichier ligne par ligne
      *
@@ -51,9 +57,9 @@ public class FileLoader implements DSLoadable {
     public final List<String> getFileContent(final String filePath)
             throws IOException {
 
-        List<String> content = new ArrayList<String>();
+        final List<String> content = new ArrayList<String>();
         try {
-            BufferedReader buff = new BufferedReader(new FileReader(filePath));
+            final BufferedReader buff = new BufferedReader(new FileReader(filePath));
 
             try {
                 String line;
@@ -63,14 +69,9 @@ public class FileLoader implements DSLoadable {
             } finally {
                 buff.close();
             }
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             throw ioe;
         }
         return content;
-    }
-
-    public final MwDataSource getDataSourceContent(final String s) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

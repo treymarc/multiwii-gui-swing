@@ -11,7 +11,7 @@ public class MwJCheckBox extends JCheckBox {
 
     private String state = "";
 
-    
+
     public MwJCheckBox(String name, int j, String string) {
         super();
 
@@ -34,6 +34,6 @@ public class MwJCheckBox extends JCheckBox {
     }
 
 
-  
+
 
 }

@@ -12,10 +12,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -32,23 +33,23 @@ import eu.kprod.serial.SerialListener;
 
 public class DebugFrame extends JFrame implements SerialListener {
 
-    private static final Logger LOGGER = Logger.getLogger(DebugFrame.class);
     static class RollingDocument extends PlainDocument {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 1L;
         /**
          * max length of the fifo document
          */
         private static int maxTextLength = 1000;
-        private JTextArea field;
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+        private final JTextArea field;
 
-        public RollingDocument(JTextArea textArea) {
+        public RollingDocument(final JTextArea textArea) {
             field = textArea;
         }
 
-        public void insertString(int offs, String str, AttributeSet a)
+        @Override
+        public void insertString(final int offs,final  String str, final AttributeSet a)
                 throws BadLocationException {
 
             if (str == null) {
@@ -61,29 +62,30 @@ public class DebugFrame extends JFrame implements SerialListener {
         }
     }
 
+    private static final Logger LOGGER = Logger.getLogger(DebugFrame.class);
+
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    private static final Logger logger = Logger.getLogger(DebugFrame.class);
-
-    JTextArea textArea;
-    JScrollPane scrollPane;
-    final JTextField textField;
-    JButton sendButton;
-    JCheckBox autoscrollBox;
-    final MwJComboBox lineEndings;
+    private final JCheckBox autoscrollBox;
+    private final MwJComboBox lineEndings;
+    private final JScrollPane scrollPane;
+    private final JButton sendButton;
+    private final JTextArea textArea;
+    private final JTextField textField;
 
     public DebugFrame(final String title) {
         super(title);
 
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
 
-            public void windowClosing(WindowEvent e) {
-                logger.trace("windowClosing "
+            @Override
+            public void windowClosing(final WindowEvent e) {
+                LOGGER.trace("windowClosing "
                         + e.getSource().getClass().getName());
                 MwGuiFrame.closeDebugFrame();
             }
@@ -99,7 +101,7 @@ public class DebugFrame extends JFrame implements SerialListener {
         // don't automatically update the caret. that way we can manually decide
         // whether or not to do so based on the autoscroll checkbox.
         ((DefaultCaret) textArea.getCaret())
-                .setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        .setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
         autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
@@ -119,14 +121,15 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         textField = new JTextField(40);
         textField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                logger.trace("actionPerformed "
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                LOGGER.trace("actionPerformed "
                         + e.getSource().getClass().getName());
 
                 try {
                     MwGuiFrame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
-                } catch (SerialException e1) {
+                } catch (final SerialException e1) {
                     LOGGER.error(e1.getMessage());
                 }
                 textField.setText("");
@@ -135,17 +138,21 @@ public class DebugFrame extends JFrame implements SerialListener {
 
         sendButton = new MwJButton("Send", "Send serial commande");
         sendButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                logger.trace("actionPerformed "
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                LOGGER.trace("actionPerformed "
                         + e.getSource().getClass().getName());
 
                 try {
                     MwGuiFrame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
-                } catch (SerialException e1) {
+                } catch (final SerialException e1) {
                     LOGGER.error(e1.getMessage());
                 }
                 textField.setText("");
+                if (autoscrollBox.isSelected()) {
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                }
             }
         });
 
@@ -172,16 +179,22 @@ public class DebugFrame extends JFrame implements SerialListener {
     /**
      * add to textArea
      */
+    @Override
     public void readSerialByte(final byte newMessage) {
-        textArea.append(String.valueOf((char) newMessage));
-        if (autoscrollBox.isSelected()) {
-            textArea.setCaretPosition(textArea.getDocument().getLength());
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                textArea.append(String.valueOf((char) newMessage));
+                if (autoscrollBox.isSelected()) {
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                }
+            }
+        });
 
     }
 
     @Override
-    public void reportSerial(Throwable e) {
+    public void reportSerial(final Throwable e) {
         // TODO Auto-generated method stub
 
     }

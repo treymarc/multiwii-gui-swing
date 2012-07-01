@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
@@ -23,31 +24,31 @@ import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-//    private GeneralPath bar;
+    //    private GeneralPath bar;
 
- private double[] RCdata = new double[8];
+    private static Image imageRCdataeBg;
 
     private static int maxoffest = 2;
 
-    {
-        if (imageRCdataeBg == null) {
-
-            URL url = this.getClass().getResource(Ress.imgRCData);
-
-            try {
-                imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
-
-            } catch (Exception e) {
-                throw new MwGuiRuntimeException("Could not load images for "+this.getClass(),e);
-            }
-        }
-    }
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+    private final double[] RCdata = new double[8];
 
-    private static Image imageRCdataeBg;
+    {
+        if (imageRCdataeBg == null) {
+
+            final URL url = this.getClass().getResource(Ress.imgRCData);
+
+            try {
+                imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
+
+            } catch (final Exception e) {
+                throw new MwGuiRuntimeException("Could not load images for "+this.getClass(),e);
+            }
+        }
+    }
 
     public MwRCDataPanel(Color c) {
 
@@ -59,18 +60,20 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     }
 
-    public void paintComponent(Graphics g) {
+    private void drawBackground(Graphics2D g2d) {
 
-        super.paintComponent(g);
+        // int w = 200;
 
-        Graphics2D g2d = (Graphics2D) g;
+        final BufferedImage bi = new BufferedImage(getMaxRadiusX(), getMaxRadiusY(),
+                BufferedImage.TYPE_INT_ARGB);
+        final Graphics g = bi.getGraphics();
+        g.drawImage(imageRCdataeBg, 0, 0, null);
 
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+        // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
+        // float[] offsets = new float[4];
+        // RescaleOp rop = new RescaleOp(scales, offsets, null);
 
-        drawBackground(g2d);
-
-        drawBarValue(g2d);
+        g2d.drawImage(bi, null, 0, 0);
 
     }
 
@@ -84,16 +87,16 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         g2d.setStroke(new BasicStroke(1));
         // g2d.setPaint(StyleColor.greenBar);
-        for (int i = 0; i < RCdata.length; i++) {
+        for (final double element : RCdata) {
 
-            int barvalue = new Double(((RCdata[i] - 1000) / 1000) * xx)
-                    .intValue();
+            int barvalue = new Double(((element - 1000) / 1000) * xx)
+            .intValue();
             if (barvalue < -maxoffest) {
                 barvalue = -maxoffest;
             } else if (barvalue > xx + maxoffest) {
                 barvalue = xx + maxoffest;
             }
-            GeneralPath bar = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
+            final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
             bar.moveTo(startx, starty);
             bar.lineTo(startx + barvalue, starty);
             bar.lineTo(startx + barvalue, starty + yy);
@@ -113,20 +116,25 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawBackground(Graphics2D g2d) {
+    @Override
+    public void paintComponent(Graphics g) {
 
-        // int w = 200;
+        super.paintComponent(g);
 
-        BufferedImage bi = new BufferedImage(getMaxRadiusX(), getMaxRadiusY(),
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics g = bi.getGraphics();
-        g.drawImage(imageRCdataeBg, 0, 0, null);
+        final Graphics2D g2d = (Graphics2D) g;
 
-        // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
-        // float[] offsets = new float[4];
-        // RescaleOp rop = new RescaleOp(scales, offsets, null);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.drawImage(bi, null, 0, 0);
+        drawBackground(g2d);
+
+        drawBarValue(g2d);
+
+    }
+
+    @Override
+    public void readNewValue(Integer string, int i) {
+        // TODO Auto-generated method stub
 
     }
 
@@ -155,12 +163,6 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     @Override
     void resetAllValuesImpl() {
-
-    }
-
-    @Override
-    public void readNewValue(Integer string, int i) {
-        // TODO Auto-generated method stub
 
     }
 

@@ -18,8 +18,9 @@ public class MwJPanel extends JPanel {
 
     }
 
-    public MwJPanel(GridLayout gridLayout) {
-        super(gridLayout);
+    public MwJPanel(BorderLayout borderLayout) {
+        // TODO Auto-generated constructor stub
+        super(borderLayout);
     }
 
     public MwJPanel(Color background) {
@@ -28,9 +29,8 @@ public class MwJPanel extends JPanel {
         setBackground(background);
     }
 
-    public MwJPanel(BorderLayout borderLayout) {
-        // TODO Auto-generated constructor stub
-        super(borderLayout);
+    public MwJPanel(GridLayout gridLayout) {
+        super(gridLayout);
     }
 
 }

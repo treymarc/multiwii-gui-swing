@@ -21,17 +21,17 @@ public class MwBOXPanel extends MwChangeablePanel {
      * 
      */
     private static final long serialVersionUID = 1L;
-    private int boxGroupCount = 3;
+    private final int boxGroupCount = 3;
 
     public MwBOXPanel(String name) {
         super(name);
     }
 
-  
+
 
     private Component build(Map<String, List<Boolean>> map,
             Map<Integer, String> index) {
-        MwJPanel mainPane = new MwJPanel();
+        final MwJPanel mainPane = new MwJPanel();
         mainPane.setLayout(new GridLayout(
                 1 + (index == null ? 0 : index.size()), 1));
         MwJPanel pane = new MwJPanel();
@@ -52,21 +52,21 @@ public class MwBOXPanel extends MwChangeablePanel {
         pane.add(new MwJLabel("aux3"));
         pane.add(new MwJLabel("aux4"));
         for (int i = 0; i < index.size(); i++) {
-            String name = index.get(i);
+            final String name = index.get(i);
             pane = new MwJPanel();
             pane.setLayout(new GridLayout(1, 5));
 
             pane.add(new JLabel(name));
 
-//            List<Boolean> BoxItem = ;
+            //            List<Boolean> BoxItem = ;
             int j = 0;
             int auxCnt = 0;
             MwJPanel auxPane = new MwJPanel();
             auxPane.setLayout(new GridLayout(1, 3));
-            for (Boolean state : map.get(name)) {
+            for (final Boolean state : map.get(name)) {
 
                 // TODO get step and bound from msp
-                JCheckBox chck = new MwJCheckBox(name, j, "aux" + (auxCnt + 1));
+                final JCheckBox chck = new MwJCheckBox(name, j, "aux" + (auxCnt + 1));
                 chck.setSelected(state);
                 auxPane.add(chck);
                 j++;
@@ -87,6 +87,7 @@ public class MwBOXPanel extends MwChangeablePanel {
     @Override
     void newModel(final MwDataModel m) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
 
                 removeAll();
@@ -97,7 +98,7 @@ public class MwBOXPanel extends MwChangeablePanel {
             }
 
         });
-        
+
     }
 
 }

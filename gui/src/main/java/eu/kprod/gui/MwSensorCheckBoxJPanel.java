@@ -22,37 +22,34 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    private Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
-    private Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
-
-    public MwSensorCheckBoxJPanel(Color c) {
-        super(c);
-    }
+    private final Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
+    private final Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
 
     public MwSensorCheckBoxJPanel() {
         super(StyleColor.backGround);
     }
 
-    public void refreshBox(int index, Color c) {
-        boxs.get(boxsIndex.get(index)).setColor(c);
+    public MwSensorCheckBoxJPanel(Color c) {
+        super(c);
     }
 
     public void addSensorBox(String sensorName) {
         // TODO Auto-generated method stub
-        MwJButtonColorChooser p = boxs.get(sensorName);
+        final MwJButtonColorChooser p = boxs.get(sensorName);
         if (p != null) {
             return;
         } else {
             final int index = boxs.size();
 
-            MwJPanel pane = new MwJPanel(StyleColor.backGround);
+            final MwJPanel pane = new MwJPanel(StyleColor.backGround);
             pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
             final MwJCheckBox c = new MwJCheckBox(sensorName, -1, "sensors");
             c.addChangeListener(new ChangeListener() {
+                @Override
                 public void stateChanged(ChangeEvent evt) {
 
                     MwGuiFrame.getChartPanel()
-                            .setVisible(index, c.isSelected());
+                    .setVisible(index, c.isSelected());
 
                 }
             });
@@ -60,7 +57,7 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
             c.setSelected(true);
 
             pane.add(c);
-            MwJButtonColorChooser check = new MwJButtonColorChooser(index,
+            final MwJButtonColorChooser check = new MwJButtonColorChooser(index,
                     sensorName, StyleColor.getColor(index));
             boxs.put(sensorName, check);
             boxsIndex.put(index, sensorName);
@@ -72,6 +69,10 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
             this.add(pane);
             this.revalidate();
         }
+    }
+
+    public void refreshBox(int index, Color c) {
+        boxs.get(boxsIndex.get(index)).setColor(c);
     }
 
 }

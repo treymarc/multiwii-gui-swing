@@ -19,12 +19,12 @@ public class MwMainPanel extends MwJPanel {
         // take all the place
         super(new GridLayout(1, 1));
 
-        JTabbedPane tabbedPane = new MwJTabbedPane();
+        final JTabbedPane tabbedPane = new MwJTabbedPane();
 
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPane.addTab("RealTime Data", null, realTimePanel, null);
         tabbedPane.addTab("Settings", null, settingsPanel, null);
-      
+
         this.add(tabbedPane);
 
     }

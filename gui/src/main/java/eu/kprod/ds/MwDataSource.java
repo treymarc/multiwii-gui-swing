@@ -12,6 +12,9 @@ import org.jfree.data.xy.XYDataset;
  */
 public interface MwDataSource {
 
+    void addListener(Class<? extends MwSensorClass> sensor,
+            MwDataSourceListener listener);
+
     /**
      * ask for a specific dataset of sensor
      * 
@@ -20,6 +23,16 @@ public interface MwDataSource {
      * @return the dataset
      */
     XYDataset getDataSet(Class<? extends MwSensorClass> sclass);
+
+    /**
+     * some overhead here ,worth extending
+     * http://www.jfree.org/jfreechart/api/gjdoc
+     * /org/jfree/data/general/DatasetChangeEvent.html
+     * 
+     * @param sensorClass
+     */
+    void notifyListener(Class<? extends MwSensorClass> sensorClass,
+            String name, Double value);
 
     /**
      * add a value to a dataset
@@ -37,20 +50,7 @@ public interface MwDataSource {
     boolean put(final Date d, final String sensorName,
             final Double value, Class<? extends MwSensorClass> sclass);
 
-    void addListener(Class<? extends MwSensorClass> sensor,
-            MwDataSourceListener listener);
-
     boolean removeListener(Class<? extends MwSensorClass> sensorClass,
             MwDataSourceListener newListener);
-
-    /**
-     * some overhead here ,worth extending
-     * http://www.jfree.org/jfreechart/api/gjdoc
-     * /org/jfree/data/general/DatasetChangeEvent.html
-     * 
-     * @param sensorClass
-     */
-    void notifyListener(Class<? extends MwSensorClass> sensorClass,
-            String name, Double value);
 
 }

@@ -20,16 +20,16 @@ import org.jfree.data.xy.XYDataset;
  */
 public class MwDataSourceImpl implements MwDataSource {
     private static final Logger LOGGER = Logger.getLogger(MwDataSourceImpl.class);
-    
+
     // TODO impl factory
     // private MwDataSourceImpl(){}
 
-    private Map<Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable<Class<? extends MwSensorClass>, List<MwDataSourceListener>>();
-
-    private Map<Class<? extends MwSensorClass>, Map<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass>, Map<String, TimeSeries>>();
     private Map<Class<? extends MwSensorClass>, TimeSeriesCollection> dataset = new Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection>();
 
+    private final Map<Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable<Class<? extends MwSensorClass>, List<MwDataSourceListener>>();
     private long maxItemAge = 2000;
+
+    private final Map<Class<? extends MwSensorClass>, Map<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass>, Map<String, TimeSeries>>();
 
     // public int getMaxItemCount() {
     // return maxItemCount;
@@ -49,21 +49,17 @@ public class MwDataSourceImpl implements MwDataSource {
     // }
     // }
 
-    public long getMaxItemAge() {
-        return maxItemAge;
-    }
-
-    public void setMaxItemAge(final int maxItemAge1) {
-        if (maxItemAge1 > 0) {
-            this.maxItemAge = maxItemAge1;
-            for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
-                Map<String, TimeSeries> series = sensors.get(sclass);
-                for (String sensorName : series.keySet()) {
-                    series.get(sensorName).setMaximumItemAge(maxItemAge);
-                }
+    @Override
+    public void addListener(Class<? extends MwSensorClass> sensorClass,
+            MwDataSourceListener newListener) {
+        if (sensorClass != null && newListener != null) {
+            List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
+            if (listenersl == null) {
+                listenersl = new ArrayList<MwDataSourceListener>();
+                listeners.put(sensorClass, listenersl);
             }
+            listenersl.add(newListener);
         }
-
     }
 
     /**
@@ -72,6 +68,7 @@ public class MwDataSourceImpl implements MwDataSource {
      * @return the dataset.
      */
 
+    @Override
     public final XYDataset getDataSet(Class<? extends MwSensorClass> sensorClass) {
 
         if (dataset == null) {
@@ -94,13 +91,17 @@ public class MwDataSourceImpl implements MwDataSource {
             sensors.put(sensorClass, s);
 
         }
-        for (String sensorName : s.keySet()) {
+        for (final String sensorName : s.keySet()) {
             ts.addSeries(s.get(sensorName));
 
         }
 
         return dataset.get(sensorClass);
 
+    }
+
+    public long getMaxItemAge() {
+        return maxItemAge;
     }
 
     // public final XYDataset getDataset() {
@@ -110,6 +111,20 @@ public class MwDataSourceImpl implements MwDataSource {
     // return dataset;
     // }
 
+    @Override
+    public void notifyListener(Class<? extends MwSensorClass> sensorClass,
+            String name, Double value) {
+        if (sensorClass != null) {
+            final List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
+            for (final MwDataSourceListener mwDataSourceListener : listenersl) {
+                mwDataSourceListener.readNewValue(name, value);
+
+            }
+
+        }
+    }
+
+    @Override
     public final boolean put(final Date date, final String sensorName,
             final Double value, Class<? extends MwSensorClass> sensorClass) {
 
@@ -148,7 +163,7 @@ public class MwDataSourceImpl implements MwDataSource {
             // if the refresh rate is high , we may have multiple answer within
             // the same millis
             timeserie.addOrUpdate(new Millisecond(date), value);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error(e.getMessage());
         }
         return true;
@@ -156,37 +171,11 @@ public class MwDataSourceImpl implements MwDataSource {
     }
 
     @Override
-    public void notifyListener(Class<? extends MwSensorClass> sensorClass,
-            String name, Double value) {
-        if (sensorClass != null) {
-            List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
-            for (MwDataSourceListener mwDataSourceListener : listenersl) {
-                mwDataSourceListener.readNewValue(name, value);
-
-            }
-
-        }
-    }
-
-    @Override
-    public void addListener(Class<? extends MwSensorClass> sensorClass,
-            MwDataSourceListener newListener) {
-        if (sensorClass != null && newListener != null) {
-            List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
-            if (listenersl == null) {
-                listenersl = new ArrayList<MwDataSourceListener>();
-                listeners.put(sensorClass, listenersl);
-            }
-            listenersl.add(newListener);
-        }
-    }
-
-    @Override
     public boolean removeListener(Class<? extends MwSensorClass> sensorClass,
             MwDataSourceListener deadListener) {
         if (sensorClass != null && deadListener != null) {
 
-            List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
+            final List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
             if (listenersl != null) {
 
                 return listenersl.remove(deadListener);
@@ -195,6 +184,19 @@ public class MwDataSourceImpl implements MwDataSource {
 
         }
         return false;
+    }
+
+    public void setMaxItemAge(final int maxItemAge1) {
+        if (maxItemAge1 > 0) {
+            this.maxItemAge = maxItemAge1;
+            for (final Class<? extends MwSensorClass> sclass : sensors.keySet()) {
+                final Map<String, TimeSeries> series = sensors.get(sclass);
+                for (final String sensorName : series.keySet()) {
+                    series.get(sensorName).setMaximumItemAge(maxItemAge);
+                }
+            }
+        }
+
     }
 
 }

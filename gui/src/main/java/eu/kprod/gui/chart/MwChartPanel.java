@@ -9,15 +9,21 @@ import eu.kprod.gui.comp.StyleColor;
 
 public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public MwChartPanel(JFreeChart chart) {
         super(chart);
         // TODO Auto-generated constructor stub
     }
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Override
+    public void readNewValue(Integer string, int i) {
+        // TODO Auto-generated method stub
+
+    }
 
     @Override
     public void readNewValue(String name, Double value) {
@@ -29,12 +35,18 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
 
     }
 
+    @Override
+    public void resetAllValues() {
+        // TODO Auto-generated method stub
+        // nothing todo (replace this from this is not possible)
+    }
+
     public void setVisible(int l, boolean b) {
-        XYItemRenderer renderer = super.getChart().getXYPlot().getRenderer();
-//        for (int i = 0; i < super.getChart().getXYPlot().getDataset()
-//                .getSeriesCount(); i++) {
-//            super.getChart().getXYPlot().getSeriesCount();
-//        }
+        final XYItemRenderer renderer = super.getChart().getXYPlot().getRenderer();
+        //        for (int i = 0; i < super.getChart().getXYPlot().getDataset()
+        //                .getSeriesCount(); i++) {
+        //            super.getChart().getXYPlot().getSeriesCount();
+        //        }
         super.getChart().setAntiAlias(true);
 
         renderer.setSeriesVisible(l, b);
@@ -42,17 +54,5 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
             renderer.setSeriesPaint(l, StyleColor.getColor(l));
         }
 
-    }
-
-    @Override
-    public void resetAllValues() {
-        // TODO Auto-generated method stub
-        // nothing todo (replace this from this is not possible)
-    }
-
-    @Override
-    public void readNewValue(Integer string, int i) {
-        // TODO Auto-generated method stub
-        
     }
 }
