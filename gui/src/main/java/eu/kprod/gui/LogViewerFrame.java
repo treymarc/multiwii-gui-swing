@@ -44,7 +44,7 @@ public class LogViewerFrame extends JFrame {
         frameSetDefaultPosition();
     }
 
-    public LogViewerFrame(final String name, final MwDataSource ds,final 
+    public LogViewerFrame(final String name, final MwDataSource ds,final
             Class<? extends MwSensorClass> sclass) {
         super(name);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

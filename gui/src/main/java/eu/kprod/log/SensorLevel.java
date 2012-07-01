@@ -4,13 +4,11 @@ import org.apache.log4j.Level;
 
 public class SensorLevel extends Level {
 
-   
     public static final int SENSOR_INT = INFO_INT + 100;
-    
     public static final Level SENSOR = new SensorLevel(SENSOR_INT, "SENSOR", 6);
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +20,6 @@ public class SensorLevel extends Level {
      * 
      * @see Level#toLevel(int)
      * @see Level#toLevel(int, org.apache.log4j.Level)
-     * 
      */
     public static Level toLevel(int val) {
         if (val == SENSOR_INT) {
@@ -53,7 +50,6 @@ public class SensorLevel extends Level {
      * 
      * @see Level#toLevel(java.lang.String)
      * @see Level#toLevel(java.lang.String, org.apache.log4j.Level)
-     * 
      */
     public static Level toLevel(String sArg) {
         if (sArg != null && sArg.toUpperCase().equals("MY_TRACE")) {
@@ -78,7 +74,6 @@ public class SensorLevel extends Level {
 
     protected SensorLevel(int level, String levelStr, int syslogEquivalent) {
         super(level, levelStr, syslogEquivalent);
-        // TODO Auto-generated constructor stub
     }
 
 }

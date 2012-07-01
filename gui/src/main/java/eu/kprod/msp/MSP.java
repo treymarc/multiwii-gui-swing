@@ -1,11 +1,12 @@
 package eu.kprod.msp;
 
-import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.event.ChangeListener;
+
+import org.apache.log4j.Logger;
 
 import eu.kprod.ds.MwDataModel;
 import eu.kprod.ds.MwDataSource;
@@ -26,19 +27,18 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public final class MSP {
 
-    private static final Logger LOGGER = Logger.getLogger(MSP.class);
-
     private static final int BUFFER_SIZE = 128;
+
     /**
      * position in the reception inputBuffer
      */
     private static int bufferIndex;
-
-
     private static byte checksum = 0;
-    private static int cmd = 0;
 
+
+    private static int cmd = 0;
     public static final  int DYNTHRPID_KEY = 6;
+
     /* processing does not accept enums? */
     public static final int
     ERR = -1,
@@ -52,16 +52,16 @@ public final class MSP {
     HEADER_CHK = 6
     ;
     public static final String IDALT = "alt";
-
     public static final String IDANGX = "angx";
 
     public static final String IDANGY = "angy";
 
-
-
     public static final String IDAX = "ax";
 
+
+
     public static final String IDAY = "az";
+
     public static final String IDAZ = "ay";
     public static final int
     IDENT               = 100,
@@ -99,8 +99,8 @@ public final class MSP {
     public static final String IDGX = "gx";
     public static final String IDGY = "gy";
     public static final String IDGZ = "gz";
-
     public static final String IDHEAD = "head";
+
     public static final String IDMAGX = "magx";
     public static final String IDMAGY = "magy";
     public static final String IDMAGZ = "magz";
@@ -114,6 +114,7 @@ public final class MSP {
     public static final String IDRCTHROTTLE = "throttle";
     public static final String IDRCYAW = "yaw";
     public static final String IDVBAT = "vbat";
+    private static final Logger LOGGER = Logger.getLogger(MSP.class);
     private static final int MASK = 0xff;
     /**
      *  the model for holding the value decoded by the MSP

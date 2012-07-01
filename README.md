@@ -1,6 +1,6 @@
 MWI-SWING
 =========
-A small Java Swing frontend for MultiWii
+A Java Swing frontend for MultiWii
 
 
 BUILD
@@ -9,21 +9,21 @@ BUILD
 
 http://flexo.fiendie.net:8081/nexus/content/repositories/thirdparty/gnu/serial/1.0/
 
-		mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar
+	mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar
 
 
 After that just run:  
 	
-			mvn clean install
+	mvn clean install
 
 * To export a Mac OS X application bundle you need the JarBundler Ant task which can be installed via MacPorts.
 After the installation you again have to add it to your local Maven repository:   
 
-		mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar
+	mvn install:install-file -Dfile=/path/to/jarbundler.jar -DgroupId=net.sourceforge.jarbundler -DartifactId=jarbundler -Dversion=2.2.0 -Dpackaging=jar
 
 After that run:  
-	
-			mvn package -P mac
+
+	mvn package -P mac
 
 Getting RTXT
 ============

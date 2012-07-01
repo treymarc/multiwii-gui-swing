@@ -79,7 +79,7 @@ import eu.kprod.serial.SerialNotFoundException;
  * 
  */
 public final class MwGuiFrame extends JFrame implements SerialListener,
-        MwDataSourceListener, ChangeListener {
+MwDataSourceListener, ChangeListener {
 
     class ActionMspSender implements ActionListener {
 
@@ -147,8 +147,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     private static MwInstrumentJPanel rcDataPanel;
     private static MwChartPanel realTimeChart;
     private static MwJMenuItem rescanSerial;
-    private static JMenu serialMenuPort;
     public static final List<Integer> SERIAL_REFRESHRATES = initializeMap();
+    private static JMenu serialMenuPort;
     /**
      * 
      */
@@ -381,10 +381,10 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
             MwGuiFrame.getInstance().setTitle(
                     new StringBuffer()
-                            .append(portname)
-                            .append("@")
-                            .append(baudRateMenuGroup.getSelection()
-                                    .getActionCommand()).toString());
+                    .append(portname)
+                    .append("@")
+                    .append(baudRateMenuGroup.getSelection()
+                            .getActionCommand()).toString());
         } catch (final SerialNotFoundException e) {
             LOGGER.error(e.getMessage());
         } catch (final SerialException e) {
@@ -656,8 +656,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             final MwJComboBox serialRefreshRate = new MwJComboBox(
                     "Refresh rate (hz)",
                     SERIAL_REFRESHRATES
-                            .toArray(new Integer[SERIAL_REFRESHRATES
-                                    .size()]));
+                    .toArray(new Integer[SERIAL_REFRESHRATES
+                                         .size()]));
             // serialRefreshRate
             // .setMaximumSize(serialRefreshRate.getMinimumSize());
             // serialRefreshRate
