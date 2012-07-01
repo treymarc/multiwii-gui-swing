@@ -20,11 +20,10 @@ package eu.kprod.serial;
 
 public class SerialCom {
 
+    private static String[] lineEnding={"\n","\r","\r\n"};
     private SerialDevice serial;
 
     private int serialRate;
-
-//    private int cr = 0;
 
     private String deviceName;
 
@@ -58,12 +57,9 @@ public class SerialCom {
     }
     
     public final void send(String s,final  Integer d) throws SerialException {
-//        cr = d;
-        String[] lineEnding={"\n","\r","\r\n"};
 
         send(new StringBuffer().append(s).append(lineEnding[d]).toString());
-           
-       
+               
     }
 
     public final void setListener(SerialListener l) {

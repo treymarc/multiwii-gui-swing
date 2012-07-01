@@ -18,6 +18,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
      */
     private static final long serialVersionUID = 1L;
 
+    private static final Float FONTSIZE = 12.0f;
+
     private static Font writing = null;
 
     private Point2D centerPoint;
@@ -34,29 +36,29 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     public MwInstrumentJPanel(Dimension dimension) {
         if (dimension == null) {
             // Instance variables initialization
-            dimPanel = new Dimension(this.getMaxRadiusX(), this.getMaxRadiusY());
+            dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
         } else {
             dimPanel = dimension;
-            this.setMaxRadiusX(dimPanel.width);
-            this.setMaxRadiusY(dimPanel.height);
+            maxRadiusX=dimPanel.width;
+            maxRadiusY=dimPanel.height;
         }
-        this.setRadiusx(((Double) (0.45 * this.getMaxRadiusX())).intValue());
-        this.setRadiusy(((Double) (0.45 * this.getMaxRadiusY())).intValue());
+        radiusx=((Double) (0.45 * this.maxRadiusX)).intValue();
+        radiusy=((Double) (0.45 * this.maxRadiusY)).intValue();
         
         // this.setMinimumSize(dimPanel);
         // Define a center point as a reference
-        this.setCenterPoint(new Point2D.Float(this.getMaxRadiusX() / 2,
-                this.getMaxRadiusY() / 2));
+        centerPoint=new Point2D.Float(this.maxRadiusX / 2,
+                this.maxRadiusY / 2);
 
-        if (getWriting() == null) {
+        if (writing == null) {
 
             InputStream is = this.getClass().getResourceAsStream(
                     Ress.font);
 
             try {
-                setWriting(Font.createFont(Font.TRUETYPE_FONT, is));
+                writing=Font.createFont(Font.TRUETYPE_FONT, is);
 
-                setWriting(getWriting().deriveFont(12.0f));
+                writing=writing.deriveFont(FONTSIZE);
 
             } catch (Exception e) {
                 throw new MwGuiRuntimeException("Fonts creation failed",e);
