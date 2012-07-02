@@ -1,6 +1,15 @@
 /**
- * @author treym (Trey Marc) Jun 22 2012
- *
+ * Copyright (C) 2012 @author treym (Trey Marc)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package eu.kprod.gui.instrument;
 
@@ -22,8 +31,6 @@ import eu.kprod.gui.comp.StyleColor;
 
 public class MwUAVPanel extends MwInstrumentJPanel {
 
-    // protected GeneralPath bar;
-
     private static Image[] images = new Image[14];
     /**
      * 
@@ -43,7 +50,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         try {
             for (int i = 1; i < images.length; i++) {
 
-                final URL urlfw = this.getClass().getResource("/uav/" + i + ".png");
+                final URL urlfw = this.getClass().getResource(
+                        "/uav/" + i + ".png");
 
                 images[i] = Toolkit.getDefaultToolkit().getImage(urlfw);
             }
@@ -61,23 +69,120 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         setBackground(c);
 
     }
+
+    /**************** main Mix Table ******************/
+    // #ifdef BI
+    // motor[0] = PIDMIX(+1, 0, 0); //LEFT
+    // motor[1] = PIDMIX(-1, 0, 0); //RIGHT
+    // servo[4] = constrain(1500 + YAW_DIRECTION * (axisPID[YAW] +
+    // axisPID[PITCH]), 1020, 2000); //LEFT
+    // servo[5] = constrain(1500 + YAW_DIRECTION * (axisPID[YAW] -
+    // axisPID[PITCH]), 1020, 2000); //RIGHT
+    // #endif
+    // #ifdef TRI
+    // motor[0] = PIDMIX( 0,+4/3, 0); //REAR
+    // motor[1] = PIDMIX(-1,-2/3, 0); //RIGHT
+    // motor[2] = PIDMIX(+1,-2/3, 0); //LEFT
+    // servo[5] = constrain(conf.tri_yaw_middle + YAW_DIRECTION * axisPID[YAW],
+    // TRI_YAW_CONSTRAINT_MIN, TRI_YAW_CONSTRAINT_MAX); //REAR
+    // #endif
+    //
+    // #endif
+    // #ifdef Y4
+    // motor[0] = PIDMIX(+0,+1,-1); //REAR_1 CW
+    // motor[1] = PIDMIX(-1,-1, 0); //FRONT_R CCW
+    // motor[2] = PIDMIX(+0,+1,+1); //REAR_2 CCW
+    // motor[3] = PIDMIX(+1,-1, 0); //FRONT_L CW
+    // #endif
+    // #ifdef Y6
+    // motor[0] = PIDMIX(+0,+4/3,+1); //REAR
+    // motor[1] = PIDMIX(-1,-2/3,-1); //RIGHT
+    // motor[2] = PIDMIX(+1,-2/3,-1); //LEFT
+    // motor[3] = PIDMIX(+0,+4/3,-1); //UNDER_REAR
+    // motor[4] = PIDMIX(-1,-2/3,+1); //UNDER_RIGHT
+    // motor[5] = PIDMIX(+1,-2/3,+1); //UNDER_LEFT
+    // #endif
+    // #ifdef HEX6
+    // motor[0] = PIDMIX(-1/2,+1/2,+1); //REAR_R
+    // motor[1] = PIDMIX(-1/2,-1/2,-1); //FRONT_R
+    // motor[2] = PIDMIX(+1/2,+1/2,+1); //REAR_L
+    // motor[3] = PIDMIX(+1/2,-1/2,-1); //FRONT_L
+    // motor[4] = PIDMIX(+0 ,-1 ,+1); //FRONT
+    // motor[5] = PIDMIX(+0 ,+1 ,-1); //REAR
+    // #endif
+    // #ifdef HEX6X
+    // motor[0] = PIDMIX(-1/2,+1/2,+1); //REAR_R
+    // motor[1] = PIDMIX(-1/2,-1/2,+1); //FRONT_R
+    // motor[2] = PIDMIX(+1/2,+1/2,-1); //REAR_L
+    // motor[3] = PIDMIX(+1/2,-1/2,-1); //FRONT_L
+    // motor[4] = PIDMIX(-1 ,+0 ,-1); //RIGHT
+    // motor[5] = PIDMIX(+1 ,+0 ,+1); //LEFT
+    // #endif
+    // #ifdef OCTOX8
+    // motor[0] = PIDMIX(-1,+1,-1); //REAR_R
+    // motor[1] = PIDMIX(-1,-1,+1); //FRONT_R
+    // motor[2] = PIDMIX(+1,+1,+1); //REAR_L
+    // motor[3] = PIDMIX(+1,-1,-1); //FRONT_L
+    // motor[4] = PIDMIX(-1,+1,+1); //UNDER_REAR_R
+    // motor[5] = PIDMIX(-1,-1,-1); //UNDER_FRONT_R
+    // motor[6] = PIDMIX(+1,+1,-1); //UNDER_REAR_L
+    // motor[7] = PIDMIX(+1,-1,+1); //UNDER_FRONT_L
+    // #endif
+    // #ifdef OCTOFLATP
+    // motor[0] = PIDMIX(+7/10,-7/10,+1); //FRONT_L
+    // motor[1] = PIDMIX(-7/10,-7/10,+1); //FRONT_R
+    // motor[2] = PIDMIX(-7/10,+7/10,+1); //REAR_R
+    // motor[3] = PIDMIX(+7/10,+7/10,+1); //REAR_L
+    // motor[4] = PIDMIX(+0 ,-1 ,-1); //FRONT
+    // motor[5] = PIDMIX(-1 ,+0 ,-1); //RIGHT
+    // motor[6] = PIDMIX(+0 ,+1 ,-1); //REAR
+    // motor[7] = PIDMIX(+1 ,+0 ,-1); //LEFT
+    // #endif
+    // #ifdef OCTOFLATX
+    // motor[0] = PIDMIX(+1 ,-1/2,+1); //MIDFRONT_L
+    // motor[1] = PIDMIX(-1/2,-1 ,+1); //FRONT_R
+    // motor[2] = PIDMIX(-1 ,+1/2,+1); //MIDREAR_R
+    // motor[3] = PIDMIX(+1/2,+1 ,+1); //REAR_L
+    // motor[4] = PIDMIX(+1/2,-1 ,-1); //FRONT_L
+    // motor[5] = PIDMIX(-1 ,-1/2,-1); //MIDFRONT_R
+    // motor[6] = PIDMIX(-1/2,+1 ,-1); //REAR_R
+    // motor[7] = PIDMIX(+1 ,+1/2,-1); //MIDREAR_L
+    // #endif
+    // #ifdef VTAIL4
+    // motor[0] = PIDMIX(+0,+1, -1/2); //REAR_R
+    // motor[1] = PIDMIX(-1, -1, +0); //FRONT_R
+    // motor[2] = PIDMIX(+0,+1, +1/2); //REAR_L
+    // motor[3] = PIDMIX(+1, -1, -0); //FRONT_L
+    // #endif
     void drawBarValue(Graphics2D g2d) {
 
         g2d.setStroke(new BasicStroke(1));
 
         switch (uavType) {
-            case 2: {
-                final int[] startx = { 76, 126, 76, 26 };
-                final int[] starty = { 79, 129, 179, 129 };
+            case 2:
+            // ifdef QUADP
+            // motor[0]//REAR
+            // motor[1]//RIGHT
+            // motor[2]//LEFT
+            // motor[3]//FRONT
+            {
+                final int[] startx = { 76, 126, 26, 76 };
+                final int[] starty = { 179, 129, 129, 79 };
                 drawMotorBar(g2d, startx, starty);
             }
-            break;
-            case 3: {
-                final int[] startx = { 41, 121, 41, 121 };
-                final int[] starty = { 79, 79, 169, 169 };
+                break;
+            case 3:
+            // #ifdef QUADX
+            // motor[0]//REAR_R
+            // motor[1]//FRONT_R
+            // motor[2]//REAR_L
+            // motor[3] //FRONT_L
+            {
+                final int[] startx = { 121, 121, 41, 41 };
+                final int[] starty = { 169, 79, 169, 79 };
                 drawMotorBar(g2d, startx, starty);
             }
-            break;
+                break;
 
             default:
                 break;
@@ -91,7 +196,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         for (int i = 0; i < startx.length; i++) {
 
             int barvalue = new Double(((motor[i] - 1000) / 1000) * yy)
-            .intValue();
+                    .intValue();
             if (barvalue < 0) {
                 barvalue = 0;
             }
@@ -112,8 +217,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
         // int w = 200;
 
-        final BufferedImage bi = new BufferedImage(getMaxRadiusY(), getMaxRadiusY(),
-                BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage bi = new BufferedImage(getMaxRadiusY(),
+                getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
         final Graphics g = bi.getGraphics();
         g.drawImage(images[uavType], 0, 0, null);
 

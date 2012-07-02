@@ -1,3 +1,16 @@
+/**
+ * Copyright (C) 2012 @author treym (Trey Marc)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package eu.kprod.gui;
 
 import java.awt.BorderLayout;
@@ -18,6 +31,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -30,6 +44,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -153,6 +169,10 @@ MwDataSourceListener, ChangeListener {
      * 
      */
     private static final long serialVersionUID = 1L;
+    private static final String TEXT_ABOUT = "MwGui A Java Swing frontend for multiwii\n\n" +
+                        "This program comes with ABSOLUTELY NO WARRANTY.\n"+
+                        "This is free software, and you are welcome to redistribute it\n"+
+                        "under certain conditions";
     // private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
     private static Timer timer;
@@ -582,9 +602,17 @@ MwDataSourceListener, ChangeListener {
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(),
-                        "A Java Swing frontend for multiwii", "About MwGui",
-                        JOptionPane.INFORMATION_MESSAGE);
+
+                JTextArea textArea = new JTextArea(10, 50);
+                textArea.setText(TEXT_ABOUT);
+                textArea.setEditable(false);
+                textArea.setFocusable(false);
+
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setBorder(BorderFactory.createTitledBorder((String) null ));
+
+                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(), scrollPane,"About MwGui", JOptionPane.PLAIN_MESSAGE);
+
             }
         });
 
