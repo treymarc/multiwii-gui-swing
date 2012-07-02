@@ -7,7 +7,7 @@ BUILD
 =====
 * You need the GNU Serial lib in your local maven repository, you can manualy install the provided jar:   
 
-http://flexo.fiendie.net:8081/nexus/content/repositories/thirdparty/gnu/serial/1.0/
+http://multiwii.fiendie.net:8081/nexus/content/repositories/thirdparty/gnu/serial/1.0/
 
 	mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar
 
