@@ -131,22 +131,28 @@ public final class MSP {
     public static final String
     OUT   = "$M<";
 
-    public static final  int POEWERTRIG_KEY = 9;
+    
+    private static final int MAXSERVO = 8;
+    private static final int MAXMOTOR = 8;
 
-    public static final  int RCCURV_THREXPO_KEY = 8;
-    public static final  int RCCURV_THRMID_KEY = 7;
 
-    public static final  int RCEXPO_KEY = 3;
-
-    public static final  int RCRATE_KEY = 2;
-    public static final  int ROLLPITCHRATE_KEY = 4;
     /**
      * reception buffer
      */
     private static byte[] serialBuffer = new byte[BUFFER_SIZE];
+
+    public static final int UAVVERSIONKEY = 0;
     public static final int UAVTYPEKEY = 1;
-    public static final int VERSIONKEY = 0;
+    public static final int RCRATE_KEY = 2;
+    public static final int RCEXPO_KEY = 3;
+    public static final int ROLLPITCHRATE_KEY = 4;
     public static final int YAWRATE_KEY = 5;
+    public static final int MSPVERSIONKEY = 6;
+    public static final int UAVCAPABILITYKEY = 7;
+    public static final int RCCURV_THRMID_KEY = 8;
+    public static final int RCCURV_THREXPO_KEY = 9;
+    public static final int POEWERTRIG_KEY = 10;
+
     /**
      * Decode the byte
      * 
@@ -188,48 +194,38 @@ public final class MSP {
                     cmd = ERR;
                 }
 
-                decodeMSPCommande(cmd, dataSize);
+//                decodeMSPCommande(cmd, dataSize);
+                decodeMSPCommande(cmd);
                 mspState = IDLE;
             }
 
         }
 
     }
-    synchronized static private void decodeMSPCommande(final int stateMSP,
-            final int dataSize2) {
+    synchronized static private void decodeMSPCommande(final int stateMSP) {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
-                model.put(MSP.VERSIONKEY, read8());
+                model.put(MSP.UAVVERSIONKEY, read8());
                 model.put(MSP.UAVTYPEKEY, read8());
+                model.put(MSP.MSPVERSIONKEY, read8());
+                model.put(MSP.UAVCAPABILITYKEY, read32());
                 break;
             case STATUS:
 
-                // cycleTime = read16();
-                // i2cError = read16();
-                // present = read16();
-                // mode = read16();
-                // if ((present&1) >0) {buttonAcc.setColorBackground(green_);}
-                // else
-                // {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false);
-                // tACC_PITCH.setState(false); tACC_Z.setState(false);}
-                // if ((present&2) >0) {buttonBaro.setColorBackground(green_);}
-                // else {buttonBaro.setColorBackground(red_);
-                // tBARO.setState(false); }
-                // if ((present&4) >0) {buttonMag.setColorBackground(green_);}
-                // else {buttonMag.setColorBackground(red_);
-                // tMAGX.setState(false); tMAGY.setState(false);
-                // tMAGZ.setState(false); }
-                // if ((present&8) >0) {buttonGPS.setColorBackground(green_);}
-                // else {buttonGPS.setColorBackground(red_);
-                // tHEAD.setState(false);}
-                // if ((present&16)>0) {buttonSonar.setColorBackground(green_);}
-                // else {buttonSonar.setColorBackground(red_);}
-                // for(i=0;i<CHECKBOXITEMS;i++) {
-                // if ((mode&(1<<i))>0)
-                // buttonCheckbox[i].setColorBackground(green_); else
-                // buttonCheckbox[i].setColorBackground(red_);
-                // }
+                int cycleTime = read16();
+                int i2cError = read16();
+                int present = read16();
+                int mode = read32();
+//                if ((present&1) >0) {buttonAcc.setColorBackground(green_);} else {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false); tACC_PITCH.setState(false); tACC_Z.setState(false);}
+//                if ((present&2) >0) {buttonBaro.setColorBackground(green_);} else {buttonBaro.setColorBackground(red_); tBARO.setState(false); }
+//                if ((present&4) >0) {buttonMag.setColorBackground(green_);} else {buttonMag.setColorBackground(red_); tMAGX.setState(false); tMAGY.setState(false); tMAGZ.setState(false); }
+//                if ((present&8) >0) {buttonGPS.setColorBackground(green_);} else {buttonGPS.setColorBackground(red_); tHEAD.setState(false);}
+//                if ((present&16)>0) {buttonSonar.setColorBackground(green_);} else {buttonSonar.setColorBackground(red_);}
+                for(int i=0;i<model.getBoxNameCount();i++) {
+//                  if ((mode&(1<<i))>0) buttonCheckbox[i].setColorBackground(green_); else buttonCheckbox[i].setColorBackground(red_);
+                } 
+
                 break;
             case RAW_IMU:
                 model.getRealTimeData().put(d, IDAX, Double.valueOf(read16()),
@@ -254,7 +250,7 @@ public final class MSP {
                         Double.valueOf(read16() / 3), MwSensorClassIMU.class);
                 break;
             case SERVO:
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAXSERVO; i++) {
                     model.getRealTimeData().put(
                             d,
                             new StringBuffer().append("servo").append(i)
@@ -263,7 +259,7 @@ public final class MSP {
                 }
                 break;
             case MOTOR:
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < MAXMOTOR; i++) {
                     model.getRealTimeData().put(
                             d,
                             new StringBuffer().append("mot").append(i)
@@ -292,17 +288,17 @@ public final class MSP {
 
                 break;
             case RAW_GPS:
-                // GPS_fix = read8();
-                // GPS_numSat = read8();
-                // GPS_latitude = read32();
-                // GPS_longitude = read32();
-                // GPS_altitude = read16();
-                // GPS_speed = read16();
+//                GPS_fix = read8();
+//                GPS_numSat = read8();
+//                GPS_latitude = read32();
+//                GPS_longitude = read32();
+//                GPS_altitude = read16();
+//                GPS_speed = read16(); 
                 break;
             case COMP_GPS:
-                // GPS_distanceToHome = read16();
-                // GPS_directionToHome = read16();
-                // GPS_update = read8();
+//                GPS_distanceToHome = read16();
+//                GPS_directionToHome = read16();
+//                GPS_update = read8(); 
                 break;
             case ATTITUDE:
                 model.getRealTimeData().put(d, IDANGX,

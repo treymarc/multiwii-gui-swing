@@ -826,7 +826,7 @@ MwDataSourceListener, ChangeListener {
     @Override
     public void readNewValue(Integer string, int i) {
         switch (string) {
-            case MSP.VERSIONKEY:
+            case MSP.UAVVERSIONKEY:
 
                 inited = true;
                 break;
