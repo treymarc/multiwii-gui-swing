@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,13 +87,13 @@ import eu.kprod.serial.SerialNotFoundException;
 
 /**
  * Known issues
- * 
+ *
  * - when zooming the chart : news values are still recorded so due to the
  * dataSource maxItemcounts and AgeLimite , the chart gets emptied at the zoomed
  * date
- * 
+ *
  * @author treym
- * 
+ *
  */
 public final class MwGuiFrame extends JFrame implements SerialListener,
 MwDataSourceListener, ChangeListener {
@@ -166,7 +167,7 @@ MwDataSourceListener, ChangeListener {
     public static final List<Integer> SERIAL_REFRESHRATES = initializeMap();
     private static JMenu serialMenuPort;
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     private static final String TEXT_ABOUT = "MwGui A Java Swing frontend for multiwii\n\n" +
@@ -389,13 +390,14 @@ MwDataSourceListener, ChangeListener {
             }
         }
         try {
-            final String portname = (portNameMenuGroup.getSelection()
-                    .getActionCommand());
+            final String portname = portNameMenuGroup.getSelection().getActionCommand();
+
             if (portname == null) {
                 return; // this should not happen, unless a bug
             }
             com = new SerialCom(portname, Integer.valueOf(baudRateMenuGroup
                     .getSelection().getActionCommand()));
+
             com.openSerialPort();
             com.setListener(MwGuiFrame.getInstance());
 
@@ -418,8 +420,7 @@ MwDataSourceListener, ChangeListener {
             @Override
             public void run() {
                 try {
-                    // TODO do no send all requests at the same time
-
+                    // TODO do not send all requests at the same time
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
 
@@ -438,6 +439,7 @@ MwDataSourceListener, ChangeListener {
                 }
             }
         }
+
         if (timer != null) {
             timer.cancel();
             timer.purge();
@@ -449,30 +451,18 @@ MwDataSourceListener, ChangeListener {
 
     /**
      * send a string to the serial com
-     * 
-     * @param s
+     *
+     * @param command is the packet to send
      * @throws SerialException
      */
-    static private synchronized void send(final List<Byte> msp)
+    static private synchronized void send( ByteArrayOutputStream cmd )
             throws SerialException {
         if (com != null) {
             if (!inited) {
-                final List<Byte> m = MSP.request(MSP.IDENT);
-                final byte[] first = new byte[m.size()];
-                int i = 0;
-                for (final byte b : m) {
-                    first[i++] = b;
-                }
-                com.send(first);
+                com.send( MSP.request(MSP.IDENT) );
             }
-            final byte[] arr = new byte[msp.size()];
-            int i = 0;
-            for (final byte b : msp) {
-                arr[i++] = b;
-            }
-            com.send(arr);
+            com.send( cmd );
         }
-
     }
 
     protected static void showDebugFrame() {
@@ -874,11 +864,11 @@ MwDataSourceListener, ChangeListener {
 
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
      */
     @Override
-    public synchronized void readSerialByte(final byte input) {
+    public synchronized void readSerialByte(final int input) {
         MSP.decode(input);
         if (getDebugFrame().isVisible()) {
             SwingUtilities.invokeLater(new Runnable() {

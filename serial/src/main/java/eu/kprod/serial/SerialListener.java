@@ -25,7 +25,7 @@ public interface SerialListener {
      * @param s
      *            recieved byte
      */
-    void readSerialByte(byte s);
+    void readSerialByte(int aByte);
 
     /**
      * Report an error
