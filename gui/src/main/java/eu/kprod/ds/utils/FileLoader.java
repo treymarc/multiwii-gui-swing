@@ -39,7 +39,7 @@ public class FileLoader implements DSLoadable {
     }
 
     @Override
-    public final MwDataSource getDataSourceContent(final String s) {
+    public final MwDataSource getDataSourceContent(String s) {
         // TODO Auto-generated method stub
         return null;
     }

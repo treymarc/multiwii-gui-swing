@@ -1,20 +1,20 @@
 /* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 
 /*
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software Foundation,
- Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software Foundation,
+Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+*/
 
 package eu.kprod.serial;
 
@@ -71,14 +71,16 @@ public class SerialCom {
         send( bos.toByteArray() );
     }
 
-    public final void send( byte[] s ) throws SerialException {
+    public final void send( byte[] array ) throws SerialException {
         if (serial != null) {
 
-//            for( int i=0; i<s.length;  ++i )
-//                System.out.printf( " %02x", s[i] );
-//            System.out.println();
+            System.out.print( "cmd:" );
+            // skip first 4 header bytes and trailing checksum
+            for( int i=4; i<array.length-1; ++i )
+                System.out.printf( " %02x", array[i] );
+            System.out.println();
 
-            serial.write(s);
+            serial.write( array );
         }
     }
 
@@ -88,7 +90,7 @@ public class SerialCom {
         }
     }
 
-    public final void send(String s,final  Integer d) throws SerialException {
+    public final void send(String s,final Integer d) throws SerialException {
 
         send(new StringBuffer().append(s).append(lineEnding[d]).toString());
 
