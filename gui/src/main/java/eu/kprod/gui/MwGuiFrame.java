@@ -95,25 +95,25 @@ import eu.kprod.serial.SerialNotFoundException;
  * @author treym
  *
  */
-public final class MwGuiFrame extends JFrame implements SerialListener,
-MwDataSourceListener, ChangeListener {
+public final class MwGuiFrame extends JFrame
+    implements SerialListener, MwDataSourceListener, ChangeListener {
 
     class ActionMspSender implements ActionListener {
 
         static final private long SERIALDELAY = 14;
         private final int[] requests;
 
-        public ActionMspSender(final int msp) {
+        public ActionMspSender(int msp) {
             this.requests = new int[1];
             this.requests[0] = msp;
         }
 
-        public ActionMspSender(final int[] requests1) {
+        public ActionMspSender(int[] requests1) {
             this.requests = requests1.clone();
         }
 
         @Override
-        public void actionPerformed(final ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
 
             beginSerialCom();
             boolean restart = false;
@@ -121,7 +121,7 @@ MwDataSourceListener, ChangeListener {
                 stopTimer();
                 restart = true;
             }
-            for (final int i : requests) {
+            for (int i : requests) {
                 try {
                     Thread.sleep(SERIALDELAY);
                     send(MSP.request(i));
@@ -134,7 +134,6 @@ MwDataSourceListener, ChangeListener {
             if (restart) {
                 restartTimer(defaultRefreshRate);
             }
-
         }
     }
 
@@ -170,10 +169,12 @@ MwDataSourceListener, ChangeListener {
      *
      */
     private static final long serialVersionUID = 1L;
+
     private static final String TEXT_ABOUT = "MwGui A Java Swing frontend for multiwii\n\n" +
                         "This program comes with ABSOLUTELY NO WARRANTY.\n"+
                         "This is free software, and you are welcome to redistribute it\n"+
                         "under certain conditions";
+
     // private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
     private static Timer timer;
@@ -710,8 +711,7 @@ MwDataSourceListener, ChangeListener {
             realTimePanel.setLayout(new BorderLayout());
             realTimePanel.add(centerChartPanel, BorderLayout.CENTER);
 
-            final JButton startButton = new MwJButton("Start",
-                    "Start monitoring");
+            final JButton startButton = new MwJButton("Start", "Start monitoring");
             startButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -881,7 +881,7 @@ MwDataSourceListener, ChangeListener {
     }
 
     @Override
-    public void reportSerial(final Throwable e) {
+    public void reportSerial(Throwable e) {
         // we have an error
         LOGGER.error(e.getMessage());
         LOGGER.error(e.getCause());
@@ -897,7 +897,7 @@ MwDataSourceListener, ChangeListener {
 
     }
 
-    public void setRealTimeChart(final MwChartPanel realTimeChart1) {
+    public void setRealTimeChart(MwChartPanel realTimeChart1) {
         realTimeChart = realTimeChart1;
     }
 
@@ -913,7 +913,5 @@ MwDataSourceListener, ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         // TODO Auto-generated method stub
-
     }
-
 }

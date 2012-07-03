@@ -22,8 +22,7 @@ package eu.kprod.serial;
 public interface SerialListener {
 
     /**
-     * @param s
-     *            recieved byte
+     * @param aByte holds the received byte in the least significant 8 bits.
      */
     void readSerialByte(int aByte);
 
@@ -32,5 +31,4 @@ public interface SerialListener {
      * @param e the error
      */
     void reportSerial(Throwable e);
-
 }

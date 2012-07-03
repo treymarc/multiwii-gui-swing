@@ -71,14 +71,16 @@ public class SerialCom {
         send( bos.toByteArray() );
     }
 
-    public final void send( byte[] s ) throws SerialException {
+    public final void send( byte[] array ) throws SerialException {
         if (serial != null) {
 
-            for( int i=0; i<s.length;  ++i )
-                System.out.printf( " %02x", s[i] );
+            System.out.print( "cmd:" );
+            // skip first 4 header bytes and trailing checksum
+            for( int i=4; i<array.length-1;  ++i )
+                System.out.printf( " %02x", array[i] );
             System.out.println();
 
-            serial.write(s);
+            serial.write( array );
         }
     }
 

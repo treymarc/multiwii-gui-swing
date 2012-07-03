@@ -51,13 +51,12 @@ public class SerialDevice implements SerialPortEventListener {
         final List<String> portNames = new ArrayList<String>();
 
         for (@SuppressWarnings("unchecked")
-        final
-        Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier
-        .getPortIdentifiers(); enumeration.hasMoreElements();) {
-            final CommPortIdentifier commportidentifier = enumeration.nextElement();
+            Enumeration<CommPortIdentifier> enumeration = CommPortIdentifier.getPortIdentifiers();
+            enumeration.hasMoreElements();) {
+                CommPortIdentifier commportidentifier = enumeration.nextElement();
 
             if (commportidentifier.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                final String curr_port = commportidentifier.getName();
+                String curr_port = commportidentifier.getName();
                 portNames.add(curr_port);
             }
         }
@@ -90,18 +89,18 @@ public class SerialDevice implements SerialPortEventListener {
 
     private int stopbits;
 
-    public SerialDevice(final String device) throws SerialException {
+    public SerialDevice(String device) throws SerialException {
         this(device, SerialDevice.SERIAL_BAUD_RATE.get(115200), 'N', 8, 1.0f );
     }
 
-    public SerialDevice(final String device, final int rate1)
+    public SerialDevice(String device, int rate1)
             throws SerialException {
         this(device, rate1, 'N', 8, 1.0f );
 
     }
 
-    public SerialDevice(final String device, final int irate,
-            final char iparity, final int idatabits, final float istopbits)
+    public SerialDevice(String device, int irate,
+            char iparity, int idatabits, float istopbits)
                     throws SerialException {
 
         LOGGER.trace("new SerialDevice(String " + device + ", int " + irate
@@ -128,12 +127,12 @@ public class SerialDevice implements SerialPortEventListener {
 
         try {
             port = null;
+
             @SuppressWarnings("unchecked")
-            final
-            Enumeration<CommPortIdentifier> portList = CommPortIdentifier
-            .getPortIdentifiers();
+            Enumeration<CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
+
             while (portList.hasMoreElements()) {
-                final CommPortIdentifier portId = portList.nextElement();
+                CommPortIdentifier portId = portList.nextElement();
 
                 if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
                     // LOGGER.debug("serial possibly " + portId.getName());
@@ -154,28 +153,25 @@ public class SerialDevice implements SerialPortEventListener {
                     }
                 }
             }
-        } catch (final PortInUseException e) {
+        } catch (PortInUseException e) {
             throw new SerialException(
                     I18n.format(
                             "Serial port ''{0}'' already in use. Try quiting any programs that may be using it.",
                             device)
-
                     );
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throw new SerialException(I18n.format(
                     "Error opening serial port ''{0}''.", device), e);
-
         }
 
         if (port == null) {
             throw new SerialNotFoundException(I18n.format(
                     "Serial port ''{0}'' not found.", device)
-
                     );
         }
     }
 
-    public final void addListener(final SerialListener consumer) {
+    public final void addListener(SerialListener consumer) {
         this.listener = consumer;
     }
 
@@ -200,12 +196,11 @@ public class SerialDevice implements SerialPortEventListener {
                 port.close(); // close the port
             }
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         port = null;
         LOGGER.trace("close SerialDevice" + this);
-
     }
 
     public final SerialListener getListener() {
@@ -394,25 +389,25 @@ public class SerialDevice implements SerialPortEventListener {
      * @param msg
      * @throws SerialException
      */
-    public final void reportErrorMessage(final String where, String msg,
-            final Throwable e) {
+    public final void reportErrorMessage(String where, String msg,
+            Throwable e) {
         LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
 
         listener.reportSerial(e);
     }
 
     @Override
-    public final synchronized void serialEvent(final SerialPortEvent serialEvent) {
-        LOGGER.debug("serial port event");
+    public final synchronized void serialEvent(SerialPortEvent serialEvent) {
+        // LOGGER.debug("serial port event");
 
         if (serialEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
-
                 while (input.available() > 0) {
-                    listener.readSerialByte(input.read());
+                    int cc = input.read();
+                    //System.out.printf( " I:%02x", cc );
+                    listener.readSerialByte( cc );
                 }
-
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 listener.reportSerial(e);
             }
         }
@@ -426,8 +421,9 @@ public class SerialDevice implements SerialPortEventListener {
             }
 
             output.write(bytes);
+            output.flush();
 
-        } catch (final Exception e) {
+        } catch (Exception e) {
             // close();
             reportErrorMessage("write", "failed to write to output stream ", e);
         }
@@ -446,8 +442,8 @@ public class SerialDevice implements SerialPortEventListener {
                         new SerialException());
             }
             output.write(what);
-
-        } catch (final Exception e) {
+            output.flush();
+        } catch (Exception e) {
             // close();
             reportErrorMessage("write", "failed to write to output stream ", e);
         }
@@ -470,14 +466,14 @@ public class SerialDevice implements SerialPortEventListener {
 
         try {
             write(what.getBytes("ISO-8859-1"));
-        } catch (final UnsupportedEncodingException a) {
+        } catch (UnsupportedEncodingException a) {
             // Everything from 0x0000 through 0x007F are exactly the same as
             // ASCII.
             // Everything from 0x0000 through 0x00FF is the same as ISO Latin 1.
             try {
 
                 write(what.getBytes("ASCII"));
-            } catch (final UnsupportedEncodingException a1) {
+            } catch (UnsupportedEncodingException a1) {
 
                 throw new RuntimeException(
                         "ASCII encoding is required for serial communication",

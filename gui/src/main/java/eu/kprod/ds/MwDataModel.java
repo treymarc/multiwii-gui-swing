@@ -127,7 +127,7 @@ public class MwDataModel {
         return pids;
     }
 
-    public final synchronized MwDataSource getRealTimeData() {
+    public final MwDataSource getRealTimeData() {
         return ds;
     }
 
@@ -168,11 +168,10 @@ public class MwDataModel {
 
         }
         boxs.put(boxNameIndex.get(index), boxItem);
-
     }
 
     /**
-     * 
+     *
      * @param i
      *            the motor number
      * @param read8
