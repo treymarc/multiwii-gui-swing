@@ -74,9 +74,9 @@ public class SerialCom {
     public final void send( byte[] s ) throws SerialException {
         if (serial != null) {
 
-            for( int i=0; i<s.length;  ++i )
-                System.out.printf( " %02x", s[i] );
-            System.out.println();
+//            for( int i=0; i<s.length;  ++i )
+//                System.out.printf( " %02x", s[i] );
+//            System.out.println();
 
             serial.write(s);
         }
