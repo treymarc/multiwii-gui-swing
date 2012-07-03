@@ -15,8 +15,6 @@ package eu.kprod.msp;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.event.ChangeListener;
 
