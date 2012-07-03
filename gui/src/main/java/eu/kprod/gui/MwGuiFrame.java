@@ -840,12 +840,12 @@ MwDataSourceListener, ChangeListener {
     @Override
     public void readNewValue(Integer string, int i) {
         switch (string) {
-            case MSP.UAVVERSIONKEY:
+            case MSP.UAVVERSION_KEY:
 
                 inited = true;
                 break;
 
-            case MSP.UAVTYPEKEY:
+            case MSP.UAVTYPE_KEY:
                 uavPanel.setUavType(i);
                 break;
             default:

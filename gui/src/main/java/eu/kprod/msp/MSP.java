@@ -39,42 +39,48 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public final class MSP {
 
-    private static final int BUFFER_SIZE = 128;
 
-    /**
-     * position in the reception inputBuffer
-     */
-    private static int bufferIndex;
-    private static byte checksum = 0;
-
-
-    private static int cmd = 0;
-    public static final  int DYNTHRPID_KEY = 6;
-
-    /* processing does not accept enums? */
-    public static final int
-    ERR = -1,
-    IDLE = 0,
-    HEADER_START = 1,
-    HEADER_M = 2,
-    HEADER_ARROW = 3,
-    HEADER_SIZE = 4,
-    HEADER_CMD = 5,
-    HEADER_PAYLOAD = 6,
-    HEADER_CHK = 6
-    ;
+    public static final int UAVVERSION_KEY = 0;
+    public static final int UAVTYPE_KEY = 1;
+    public static final int RCRATE_KEY = 2;
+    public static final int RCEXPO_KEY = 3;
+    public static final int ROLLPITCHRATE_KEY = 4;
+    public static final int YAWRATE_KEY = 5;
+    public static final int MSPVERSION_KEY = 6;
+    public static final int UAVCAPABILITY_KEY = 7;
+    public static final int RCCURV_THRMID_KEY = 8;
+    public static final int RCCURV_THREXPO_KEY = 9;
+    public static final int POEWERTRIG_KEY = 10;
+    public static final int DYNTHRPID_KEY = 11;
+    
     public static final String IDALT = "alt";
     public static final String IDANGX = "angx";
-
     public static final String IDANGY = "angy";
-
     public static final String IDAX = "ax";
-
-
-
     public static final String IDAY = "az";
-
     public static final String IDAZ = "ay";
+    public static final String IDGX = "gx";
+    public static final String IDGY = "gy";
+    public static final String IDGZ = "gz";
+    public static final String IDHEAD = "head";
+    public static final String IDMAGX = "magx";
+    public static final String IDMAGY = "magy";
+    public static final String IDMAGZ = "magz";
+    public static final String IDPOWERMETERSUM = "powerMeterSum";
+    public static final String IDRCAUX1 = "aux1";
+    public static final String IDRCAUX2 = "aux2";
+    public static final String IDRCAUX3 = "aux3";
+    public static final String IDRCAUX4 = "aux4";
+    public static final String IDRCPITCH = "pitch";
+    public static final String IDRCROLL = "roll";
+    public static final String IDRCTHROTTLE = "throttle";
+    public static final String IDRCYAW = "yaw";
+    public static final String IDVBAT = "vbat";
+    
+    private static final int MAXSERVO = 8;
+    private static final int MAXMOTOR = 8;
+
+    
     public static final int
     IDENT               = 100,
     STATUS               = 101,
@@ -108,24 +114,9 @@ public final class MSP {
     EEPROM_WRITE         = 250,
 
     DEBUG                = 254;
-    public static final String IDGX = "gx";
-    public static final String IDGY = "gy";
-    public static final String IDGZ = "gz";
-    public static final String IDHEAD = "head";
-
-    public static final String IDMAGX = "magx";
-    public static final String IDMAGY = "magy";
-    public static final String IDMAGZ = "magz";
-    public static final String IDPOWERMETERSUM = "powerMeterSum";
-    public static final String IDRCAUX1 = "aux1";
-    public static final String IDRCAUX2 = "aux2";
-    public static final String IDRCAUX3 = "aux3";
-    public static final String IDRCAUX4 = "aux4";
-    public static final String IDRCPITCH = "pitch";
-    public static final String IDRCROLL = "roll";
-    public static final String IDRCTHROTTLE = "throttle";
-    public static final String IDRCYAW = "yaw";
-    public static final String IDVBAT = "vbat";
+    
+   
+    
     private static final Logger LOGGER = Logger.getLogger(MSP.class);
     private static final int MASK = 0xff;
     /**
@@ -137,33 +128,45 @@ public final class MSP {
     private static final Character MSP_HEAD2 = new Character('M');
 
     private static final Character MSP_HEAD3 = new Character('>');
-
-    private static int offset = 0, dataSize = 0, mspState = IDLE;
-
-    public static final byte[] OUT   = { '$', 'M', '<' };
+ 
+    private static final byte[] OUT   = { '$', 'M', '<' };
 
 
-    private static final int MAXSERVO = 8;
-    private static final int MAXMOTOR = 8;
+    private static final int BUFFER_SIZE = 128;
 
+    /**
+     * position in the reception inputBuffer
+     */
+    private static int bufferIndex;
+    private static byte checksum = 0;
+    private static int cmd = 0;
+
+
+    /**
+     * MSP decoder state
+     * 
+     */
+    private static final int
+    
+    STATE_ERR = -1,
+    STATE_IDLE = 0,
+    STATE_START = 1,
+    STATE_HEADER_BEGIN = 2,
+    STATE_HEADER_END = 3,
+    STATE_SIZE = 4,
+    STATE_CMD = 5;
+//    STATE_PAYLOAD = 6,
+//    STATE_CHECKSUM = 6;
+    
+    private static int offset = 0, dataSize = 0, mspState = STATE_IDLE;
 
     /**
      * reception buffer
      */
     private static byte[] serialBuffer = new byte[BUFFER_SIZE];
+   
 
-    public static final int UAVVERSIONKEY = 0;
-    public static final int UAVTYPEKEY = 1;
-    public static final int RCRATE_KEY = 2;
-    public static final int RCEXPO_KEY = 3;
-    public static final int ROLLPITCHRATE_KEY = 4;
-    public static final int YAWRATE_KEY = 5;
-    public static final int MSPVERSIONKEY = 6;
-    public static final int UAVCAPABILITYKEY = 7;
-    public static final int RCCURV_THRMID_KEY = 8;
-    public static final int RCCURV_THREXPO_KEY = 9;
-    public static final int POEWERTRIG_KEY = 10;
-
+  
     /**
      * Decode the byte
      *
@@ -171,13 +174,13 @@ public final class MSP {
      *   this contains only 8 bits of information.
      */
     synchronized public static void decode(int input) {
-        if (mspState == IDLE) {
-            mspState = (MSP_HEAD1 == input) ? HEADER_START : IDLE;
-        } else if (mspState == HEADER_START) {
-            mspState = (MSP_HEAD2 == input) ? HEADER_M : IDLE;
-        } else if (mspState == HEADER_M) {
-            mspState = (MSP_HEAD3 == input) ? HEADER_ARROW : IDLE;
-        } else if (mspState == HEADER_ARROW) {
+        if (mspState == STATE_IDLE) {
+            mspState = (MSP_HEAD1 == input) ? STATE_START : STATE_IDLE;
+        } else if (mspState == STATE_START) {
+            mspState = (MSP_HEAD2 == input) ? STATE_HEADER_BEGIN : STATE_IDLE;
+        } else if (mspState == STATE_HEADER_BEGIN) {
+            mspState = (MSP_HEAD3 == input) ? STATE_HEADER_END : STATE_IDLE;
+        } else if (mspState == STATE_HEADER_END) {
             /* now we are expecting the payload size */
             dataSize = input;
             /* reset index variables */
@@ -186,12 +189,12 @@ public final class MSP {
             checksum = 0;
             checksum ^= input;
             /* the command is to follow */
-            mspState = HEADER_SIZE;
-        } else if (mspState == HEADER_SIZE) {
+            mspState = STATE_SIZE;
+        } else if (mspState == STATE_SIZE) {
             cmd = input;
             checksum ^= input;
-            mspState = HEADER_CMD;
-        } else if (mspState == HEADER_CMD ) {
+            mspState = STATE_CMD;
+        } else if (mspState == STATE_CMD ) {
 
             if (offset < dataSize) {
                 // we keep reading the payload
@@ -202,12 +205,12 @@ public final class MSP {
                     LOGGER.error("invalid checksum for command "
                             + cmd + ": " + (checksum & MASK)
                             + " expected, got " + input);
-                    cmd = ERR;
+                    cmd = STATE_ERR;
                 }
 
 //                decodeMSPCommande(cmd, dataSize);
                 decodeMSPCommande(cmd);
-                mspState = IDLE;
+                mspState = STATE_IDLE;
             }
         }
     }
@@ -216,10 +219,10 @@ public final class MSP {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
-                model.put(MSP.UAVVERSIONKEY, read8());
-                model.put(MSP.UAVTYPEKEY, read8());
-                model.put(MSP.MSPVERSIONKEY, read8());
-                model.put(MSP.UAVCAPABILITYKEY, read32());
+                model.put(MSP.UAVVERSION_KEY, read8());
+                model.put(MSP.UAVTYPE_KEY, read8());
+                model.put(MSP.MSPVERSION_KEY, read8());
+                model.put(MSP.UAVCAPABILITY_KEY, read32());
                 break;
             case STATUS:
 
