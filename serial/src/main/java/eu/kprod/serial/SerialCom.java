@@ -18,6 +18,8 @@
 
 package eu.kprod.serial;
 
+import java.io.ByteArrayOutputStream;
+
 public class SerialCom {
 
     private static final String[] lineEnding={"\n","\r","\r\n"};
@@ -65,8 +67,17 @@ public class SerialCom {
         serial.addListener(listener);
     }
 
-    public final void send(byte []  s) throws SerialException {
+    public final void send( ByteArrayOutputStream bos ) throws SerialException {
+        send( bos.toByteArray() );
+    }
+
+    public final void send( byte[] s ) throws SerialException {
         if (serial != null) {
+
+            for( int i=0; i<s.length;  ++i )
+                System.out.printf( " %02x", s[i] );
+            System.out.println();
+
             serial.write(s);
         }
     }

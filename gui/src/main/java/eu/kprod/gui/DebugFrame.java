@@ -52,7 +52,7 @@ public class DebugFrame extends JFrame implements SerialListener {
          */
         private static int maxTextLength = 1000;
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
         private final JTextArea field;
@@ -78,7 +78,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     private static final Logger LOGGER = Logger.getLogger(DebugFrame.class);
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -193,11 +193,11 @@ public class DebugFrame extends JFrame implements SerialListener {
      * add to textArea
      */
     @Override
-    public void readSerialByte(final byte newMessage) {
+    public void readSerialByte(final int aByte) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                textArea.append(String.valueOf((char) newMessage));
+                textArea.append(String.valueOf( aByte ) );
                 if (autoscrollBox.isSelected()) {
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                 }

@@ -13,6 +13,7 @@
  */
 package eu.kprod.msp;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +35,7 @@ import eu.kprod.ds.MwSensorClassServo;
 
 /**
  * Multiwii Serial Protocol
- * 
+ *
  * @author treym
  *
  */
@@ -141,10 +142,9 @@ public final class MSP {
 
     private static int offset = 0, dataSize = 0, mspState = IDLE;
 
-    public static final String
-    OUT   = "$M<";
+    public static final byte[] OUT   = { '$', 'M', '<' };
 
-    
+
     private static final int MAXSERVO = 8;
     private static final int MAXMOTOR = 8;
 
@@ -168,42 +168,42 @@ public final class MSP {
 
     /**
      * Decode the byte
-     * 
-     * @param input
+     *
+     * @param input is a an int with the upper 24 bits set to zero and thusly
+     *   this contains only 8 bits of information.
      */
-    synchronized public static void decode(final byte input) {
-        final char c = (char) input;
+    synchronized public static void decode(int input) {
         if (mspState == IDLE) {
-            mspState = (MSP_HEAD1.equals(c)) ? HEADER_START : IDLE;
+            mspState = (MSP_HEAD1 == input) ? HEADER_START : IDLE;
         } else if (mspState == HEADER_START) {
-            mspState = (MSP_HEAD2.equals(c)) ? HEADER_M : IDLE;
+            mspState = (MSP_HEAD2 == input) ? HEADER_M : IDLE;
         } else if (mspState == HEADER_M) {
-            mspState = (MSP_HEAD3.equals(c)) ? HEADER_ARROW : IDLE;
+            mspState = (MSP_HEAD3 == input) ? HEADER_ARROW : IDLE;
         } else if (mspState == HEADER_ARROW) {
             /* now we are expecting the payload size */
-            dataSize = (c & MASK);
+            dataSize = input;
             /* reset index variables */
             bufferIndex = 0;
             offset = 0;
             checksum = 0;
-            checksum ^= (c & MASK);
+            checksum ^= input;
             /* the command is to follow */
             mspState = HEADER_SIZE;
         } else if (mspState == HEADER_SIZE) {
-            cmd = (c & MASK);
-            checksum ^= (c & MASK);
+            cmd = input;
+            checksum ^= input;
             mspState = HEADER_CMD;
         } else if (mspState == HEADER_CMD ) {
 
             if (offset < dataSize) {
                 // we keep reading the payload
-                checksum ^= (c & MASK);
-                serialBuffer[offset++] = (byte) (c & MASK);
+                checksum ^= input;
+                serialBuffer[offset++] = (byte) input;
             } else {
-                if ((checksum & MASK) != (c & MASK)) {
+                if ((checksum & MASK) != input) {
                     LOGGER.error("invalid checksum for command "
-                            + (cmd & MASK) + ": " + (checksum & MASK)
-                            + " expected, got " + (c & MASK));
+                            + cmd + ": " + (checksum & MASK)
+                            + " expected, got " + input);
                     cmd = ERR;
                 }
 
@@ -211,10 +211,9 @@ public final class MSP {
                 decodeMSPCommande(cmd);
                 mspState = IDLE;
             }
-
         }
-
     }
+
     synchronized static private void decodeMSPCommande(final int stateMSP) {
         final Date d = new Date();
         switch (stateMSP) {
@@ -237,7 +236,7 @@ public final class MSP {
 //                if ((present&16)>0) {buttonSonar.setColorBackground(green_);} else {buttonSonar.setColorBackground(red_);}
                 for(int i=0;i<model.getBoxNameCount();i++) {
 //                  if ((mode&(1<<i))>0) buttonCheckbox[i].setColorBackground(green_); else buttonCheckbox[i].setColorBackground(red_);
-                } 
+                }
 
                 break;
             case RAW_IMU:
@@ -306,12 +305,12 @@ public final class MSP {
 //                GPS_latitude = read32();
 //                GPS_longitude = read32();
 //                GPS_altitude = read16();
-//                GPS_speed = read16(); 
+//                GPS_speed = read16();
                 break;
             case COMP_GPS:
 //                GPS_distanceToHome = read16();
 //                GPS_directionToHome = read16();
-//                GPS_update = read8(); 
+//                GPS_update = read8();
                 break;
             case ATTITUDE:
                 model.getRealTimeData().put(d, IDANGX,
@@ -421,48 +420,49 @@ public final class MSP {
     }
 
     // send msp without payload
-    public static List<Byte> request(int msp) {
+    public static ByteArrayOutputStream request(int msp) {
         return request(msp, null);
     }
 
     // send msp with payload
-    public static List<Byte> request(int msp, Character[] payload) {
+    public static ByteArrayOutputStream request(int msp, byte[] payload)
+    {
+        ByteArrayOutputStream bf = new ByteArrayOutputStream();
 
-        if (msp < 0) {
-            return null;
-        }
-        final List<Byte> bf = new LinkedList<Byte>();
-        for (final byte c : OUT.getBytes()) {
-            bf.add(c);
-        }
+        bf.write( OUT, 0, OUT.length );
 
-        byte hash = 0;
-        final byte payloadSize = (byte) ((payload != null ? (payload.length) : 0) & MASK);
-        bf.add(payloadSize);
-        hash ^= (payloadSize & MASK);
+        int hash = 0;           // upper 24 bits will be ignored.
+        int payloadz = 0;       // siZe
 
-        bf.add((byte) (msp & MASK));
-        hash ^= (msp & MASK);
+        if( payload != null )
+            payloadz = payload.length;
+
+        bf.write( payloadz );
+        hash ^= payloadz;
+
+        bf.write( msp );
+        hash ^= msp;
 
         if (payload != null) {
-            for (final char c : payload) {
-                bf.add((byte) (c & MASK));
-                hash ^= (c & MASK);
+            for ( byte b : payload) {
+                bf.write( b );
+                hash ^= b;
             }
         }
 
-        bf.add(hash);
-        return (bf);
+        bf.write( hash );
+        return bf;
     }
 
-    // send multiple msp without payload
-    public static List<Byte> request(int[] msps) {
-        final List<Byte> s = new LinkedList<Byte>();
+    /** send multiple msp commands without payload
+    public static ByteArrayOutputStream request(int[] msps) {
+        ByteArrayOutputStream ret = new ByteArrayOutputStream();
         for (final int m : msps) {
-            s.addAll(request(m, null));
+            ret.write( request( m, null).toByteArray() );
         }
-        return s;
+        return ret;
     }
+    */
 
     public static void setBoxChangeListener(final ChangeListener boxPane) {
         model.setBoxChangeListener(boxPane);
