@@ -105,7 +105,7 @@ public class SerialDevice implements SerialPortEventListener {
                     throws SerialException {
 
         LOGGER.trace("new SerialDevice(String " + device + ", int " + irate
-                + ")");
+                + ")\n");
 
         this.rate = irate;
 
@@ -136,9 +136,9 @@ public class SerialDevice implements SerialPortEventListener {
                 final CommPortIdentifier portId = portList.nextElement();
 
                 if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                    // LOGGER.debug("serial possibly " + portId.getName());
+                    // LOGGER.debug("serial possibly " + portId.getName()+"\n");
                     if (portId.getName().equals(device)) {
-                        // LOGGER.debug("found "+device);
+                        // LOGGER.debug("found "+device+"\n");
                         port = (SerialPort) portId.open("open", 200);
                         input = port.getInputStream();
                         output = port.getOutputStream();
@@ -149,7 +149,7 @@ public class SerialDevice implements SerialPortEventListener {
 
                         port.addEventListener(this);
                         port.notifyOnDataAvailable(true);
-                        // LOGGER.debug("opening, ready to roll");
+                        // LOGGER.debug("opening, ready to roll\n");
                         break;
                     }
                 }
@@ -204,7 +204,7 @@ public class SerialDevice implements SerialPortEventListener {
             e.printStackTrace();
         }
         port = null;
-        LOGGER.trace("close SerialDevice" + this);
+        LOGGER.trace("close SerialDevice :" + this+"\n");
 
     }
 
@@ -396,14 +396,14 @@ public class SerialDevice implements SerialPortEventListener {
      */
     public final void reportErrorMessage(final String where, String msg,
             final Throwable e) {
-        LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
+        LOGGER.trace(I18n.format("Error inside Serial.{0}()\n", where));
 
         listener.reportSerial(e);
     }
 
     @Override
     public final synchronized void serialEvent(final SerialPortEvent serialEvent) {
-        LOGGER.debug("serial port event");
+        LOGGER.trace("serial port event\n");
 
         if (serialEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {

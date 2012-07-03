@@ -24,9 +24,9 @@ public class MwJSplitPane extends JSplitPane {
      */
     private static final long serialVersionUID = 1L;
 
-    public MwJSplitPane(int horizontalSplit, Component hudPanel,
-            Component realTimeChart) {
-        super(horizontalSplit, hudPanel, realTimeChart);
+    public MwJSplitPane(final int horizontalSplit, final Component left,
+            final Component right) {
+        super(horizontalSplit, left, right);
 
     }
 

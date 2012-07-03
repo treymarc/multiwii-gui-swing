@@ -62,8 +62,8 @@ public class DebugFrame extends JFrame implements SerialListener {
         }
 
         @Override
-        public void insertString(final int offs,final  String str, final AttributeSet a)
-                throws BadLocationException {
+        public void insertString(final int offs, final String str,
+                final AttributeSet a) throws BadLocationException {
 
             if (str == null) {
                 return;
@@ -99,7 +99,7 @@ public class DebugFrame extends JFrame implements SerialListener {
             @Override
             public void windowClosing(final WindowEvent e) {
                 LOGGER.trace("windowClosing "
-                        + e.getSource().getClass().getName());
+                        + e.getSource().getClass().getName()+"\n");
                 MwGuiFrame.closeDebugFrame();
             }
         });
@@ -114,7 +114,7 @@ public class DebugFrame extends JFrame implements SerialListener {
         // don't automatically update the caret. that way we can manually decide
         // whether or not to do so based on the autoscroll checkbox.
         ((DefaultCaret) textArea.getCaret())
-        .setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+                .setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
         autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
@@ -137,13 +137,13 @@ public class DebugFrame extends JFrame implements SerialListener {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 LOGGER.trace("actionPerformed "
-                        + e.getSource().getClass().getName());
+                        + e.getSource().getClass().getName()+"\n");
 
                 try {
                     MwGuiFrame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
                 } catch (final SerialException e1) {
-                    LOGGER.error(e1.getMessage());
+                    LOGGER.error(e1.getMessage()+"\n");
                 }
                 textField.setText("");
             }
@@ -154,17 +154,18 @@ public class DebugFrame extends JFrame implements SerialListener {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 LOGGER.trace("actionPerformed "
-                        + e.getSource().getClass().getName());
+                        + e.getSource().getClass().getName()+"\n");
 
                 try {
                     MwGuiFrame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
                 } catch (final SerialException e1) {
-                    LOGGER.error(e1.getMessage());
+                    LOGGER.error(e1.getMessage()+"\n");
                 }
                 textField.setText("");
                 if (autoscrollBox.isSelected()) {
-                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                    textArea.setCaretPosition(textArea.getDocument()
+                            .getLength());
                 }
             }
         });
@@ -193,13 +194,14 @@ public class DebugFrame extends JFrame implements SerialListener {
      * add to textArea
      */
     @Override
-    public void readSerialByte(final int aByte) {
+    public final void readSerialByte(final int aByte) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                textArea.append(String.valueOf( aByte ) );
+                textArea.append(String.valueOf(aByte));
                 if (autoscrollBox.isSelected()) {
-                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                    textArea.setCaretPosition(textArea.getDocument()
+                            .getLength());
                 }
             }
         });

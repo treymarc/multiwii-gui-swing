@@ -24,8 +24,7 @@ public class MwJCheckBox extends JCheckBox {
 
     private String state = "";
 
-
-    public MwJCheckBox(String name, int j, String string) {
+    public MwJCheckBox(final String name, final int j, final String string) {
         super();
 
         // TODO Auto-generated constructor stub
@@ -43,10 +42,8 @@ public class MwJCheckBox extends JCheckBox {
                 break;
         }
 
-        setToolTipText(new StringBuffer().append(string).append(" ").append(state).append(" : ").append(name).toString());
+        setToolTipText(new StringBuffer().append(string).append(" ")
+                .append(state).append(" : ").append(name).toString());
     }
-
-
-
 
 }

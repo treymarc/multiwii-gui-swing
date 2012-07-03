@@ -29,10 +29,10 @@ import org.jfree.data.xy.XYDataset;
  * A pojo implementation of a datasource for holding severals dataset of sensors
  * 
  * @author treym
- * 
  */
 public class MwDataSourceImpl implements MwDataSource {
-    private static final Logger LOGGER = Logger.getLogger(MwDataSourceImpl.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(MwDataSourceImpl.class);
 
     // TODO impl factory
     // private MwDataSourceImpl(){}
@@ -63,8 +63,8 @@ public class MwDataSourceImpl implements MwDataSource {
     // }
 
     @Override
-    public void addListener(Class<? extends MwSensorClass> sensorClass,
-            MwDataSourceListener newListener) {
+    public void addListener(final Class<? extends MwSensorClass>  sensorClass,
+            final MwDataSourceListener  newListener) {
         if (sensorClass != null && newListener != null) {
             List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
             if (listenersl == null) {
@@ -82,7 +82,7 @@ public class MwDataSourceImpl implements MwDataSource {
      */
 
     @Override
-    public final XYDataset getDataSet(Class<? extends MwSensorClass> sensorClass) {
+    public final XYDataset getDataSet(final Class<? extends MwSensorClass>  sensorClass) {
 
         if (dataset == null) {
             dataset = new Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection>();
@@ -113,7 +113,7 @@ public class MwDataSourceImpl implements MwDataSource {
 
     }
 
-    public long getMaxItemAge() {
+    public final long getMaxItemAge() {
         return maxItemAge;
     }
 
@@ -125,10 +125,11 @@ public class MwDataSourceImpl implements MwDataSource {
     // }
 
     @Override
-    public void notifyListener(Class<? extends MwSensorClass> sensorClass,
-            String name, Double value) {
+    public final void notifyListener(final Class<? extends MwSensorClass>  sensorClass,
+            final String name, final Double value) {
         if (sensorClass != null) {
-            final List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
+            final List<MwDataSourceListener> listenersl = listeners
+                    .get(sensorClass);
             for (final MwDataSourceListener mwDataSourceListener : listenersl) {
                 mwDataSourceListener.readNewValue(name, value);
 
@@ -139,7 +140,7 @@ public class MwDataSourceImpl implements MwDataSource {
 
     @Override
     public final boolean put(final Date date, final String sensorName,
-            final Double value, Class<? extends MwSensorClass> sensorClass) {
+            final Double value, final Class<? extends MwSensorClass> sensorClass) {
 
         if (sensorName == null || sensorName.length() == 0) {
             return false;
@@ -184,11 +185,12 @@ public class MwDataSourceImpl implements MwDataSource {
     }
 
     @Override
-    public boolean removeListener(Class<? extends MwSensorClass> sensorClass,
-            MwDataSourceListener deadListener) {
+    public final boolean removeListener(final Class<? extends MwSensorClass> sensorClass,
+            final MwDataSourceListener deadListener) {
         if (sensorClass != null && deadListener != null) {
 
-            final List<MwDataSourceListener> listenersl = listeners.get(sensorClass);
+            final List<MwDataSourceListener> listenersl = listeners
+                    .get(sensorClass);
             if (listenersl != null) {
 
                 return listenersl.remove(deadListener);
@@ -199,7 +201,7 @@ public class MwDataSourceImpl implements MwDataSource {
         return false;
     }
 
-    public void setMaxItemAge(final int maxItemAge1) {
+    public final void setMaxItemAge(final int maxItemAge1) {
         if (maxItemAge1 > 0) {
             this.maxItemAge = maxItemAge1;
             for (final Class<? extends MwSensorClass> sclass : sensors.keySet()) {

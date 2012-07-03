@@ -24,7 +24,7 @@ import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.MwJPanel;
 
 public abstract class MwInstrumentJPanel extends MwJPanel implements
-MwDataSourceListener {
+        MwDataSourceListener {
 
     private static final Float FONTSIZE = 12.0f;
 
@@ -38,12 +38,14 @@ MwDataSourceListener {
     public static Font getWriting() {
         return writing;
     }
-    public static void setWriting(Font writing) {
-        MwInstrumentJPanel.writing = writing;
+
+    public static void setWriting(final Font writing1) {
+        MwInstrumentJPanel.writing = writing1;
     }
+
     private Point2D centerPoint;
-    private int dimMarker10Deg=15;
-    private int dimMarker5Deg=7;
+    private int dimMarker10Deg = 15;
+    private int dimMarker5Deg = 7;
 
     private Dimension dimPanel;
 
@@ -54,35 +56,35 @@ MwDataSourceListener {
 
     private int radiusy;
 
-    public MwInstrumentJPanel(Dimension dimension) {
+    public MwInstrumentJPanel(final Dimension dimension) {
         if (dimension == null) {
             // Instance variables initialization
             dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
         } else {
             dimPanel = dimension;
-            maxRadiusX=dimPanel.width;
-            maxRadiusY=dimPanel.height;
+            maxRadiusX = dimPanel.width;
+            maxRadiusY = dimPanel.height;
         }
-        radiusx=((Double) (0.45 * this.maxRadiusX)).intValue();
-        radiusy=((Double) (0.45 * this.maxRadiusY)).intValue();
+        radiusx = ((Double) (0.45 * this.maxRadiusX)).intValue();
+        radiusy = ((Double) (0.45 * this.maxRadiusY)).intValue();
 
         // this.setMinimumSize(dimPanel);
         // Define a center point as a reference
-        centerPoint=new Point2D.Float(this.maxRadiusX / 2,
+        centerPoint = new Point2D.Float(this.maxRadiusX / 2,
                 this.maxRadiusY / 2);
 
         if (writing == null) {
 
             final InputStream is = this.getClass().getResourceAsStream(
-                    Ress.font);
+                    Ress.FONT);
 
             try {
-                writing=Font.createFont(Font.TRUETYPE_FONT, is);
+                writing = Font.createFont(Font.TRUETYPE_FONT, is);
 
-                writing=writing.deriveFont(FONTSIZE);
+                writing = writing.deriveFont(FONTSIZE);
 
             } catch (final Exception e) {
-                throw new MwGuiRuntimeException("Fonts creation failed",e);
+                throw new MwGuiRuntimeException("Fonts creation failed", e);
             }
         }
     }
@@ -133,29 +135,28 @@ MwDataSourceListener {
         this.centerPoint = centerPoint;
     }
 
-    public void setDimMarker10Deg(int dimMarker10Deg) {
-        this.dimMarker10Deg = dimMarker10Deg;
+    public void setDimMarker10Deg(final int dimMarker10Deg1) {
+        this.dimMarker10Deg = dimMarker10Deg1;
     }
 
-    public void setDimMarker5Deg(int dimMarker5Deg) {
-        this.dimMarker5Deg = dimMarker5Deg;
+    public void setDimMarker5Deg(final int dimMarker5Deg1) {
+        this.dimMarker5Deg = dimMarker5Deg1;
     }
 
-    public void setMaxRadiusX(int maxRadiusX) {
-        this.maxRadiusX = maxRadiusX;
+    public void setMaxRadiusX(final int maxRadiusX1) {
+        this.maxRadiusX = maxRadiusX1;
     }
 
-    public void setMaxRadiusY(int maxRadiusY) {
-        this.maxRadiusY = maxRadiusY;
+    public void setMaxRadiusY(final int maxRadiusY1) {
+        this.maxRadiusY = maxRadiusY1;
     }
 
-    public void setRadiusx(int radiusx) {
-        this.radiusx = radiusx;
+    public void setRadiusx(final int radiusx1) {
+        this.radiusx = radiusx1;
     }
 
-    public void setRadiusy(int radiusy) {
-        this.radiusy = radiusy;
+    public void setRadiusy(final int radiusy1) {
+        this.radiusy = radiusy1;
     }
-
 
 }

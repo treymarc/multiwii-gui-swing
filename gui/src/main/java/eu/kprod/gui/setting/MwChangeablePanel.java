@@ -25,14 +25,14 @@ import eu.kprod.gui.comp.MwJLabel;
 import eu.kprod.gui.comp.MwJPanel;
 
 public abstract class MwChangeablePanel extends MwJPanel implements
-ChangeListener {
+        ChangeListener {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
-    public MwChangeablePanel(String name) {
+    public MwChangeablePanel(final String name) {
         setLayout(new GridLayout(1, 1));
         final Border title = BorderFactory.createTitledBorder((Border) null);
         // title.setTitleJustification(TitledBorder.CENTER);
@@ -43,8 +43,7 @@ ChangeListener {
     abstract void newModel(MwDataModel m);
 
     @Override
-    public void stateChanged(ChangeEvent e) {
-        // TODO Auto-generated method stub
+    public void stateChanged(final ChangeEvent e) {
         final Object source = e.getSource();
         if (source instanceof MwDataModel) {
             final MwDataModel m = (MwDataModel) source;
@@ -52,10 +51,10 @@ ChangeListener {
             newModel(m);
 
         }
-        //        else if (source instanceof JMenu) {
+        // else if (source instanceof JMenu) {
         //
-        //            // save to file , etc ...
-        //        }
+        // // save to file , etc ...
+        // }
     }
 
 }

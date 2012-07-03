@@ -34,7 +34,7 @@ import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-    //    private GeneralPath bar;
+    // private GeneralPath bar;
 
     private static Image imageRCdataeBg;
 
@@ -44,38 +44,39 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
      * 
      */
     private static final long serialVersionUID = 1L;
-    private final double[] RCdata = new double[8];
+    private final double[] dataRC = new double[8];
 
     {
         if (imageRCdataeBg == null) {
 
-            final URL url = this.getClass().getResource(Ress.imgRCData);
+            final URL url = this.getClass().getResource(Ress.IMG_RCDATA);
 
             try {
                 imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
 
             } catch (final Exception e) {
-                throw new MwGuiRuntimeException("Could not load images for "+this.getClass(),e);
+                throw new MwGuiRuntimeException("Could not load images for "
+                        + this.getClass(), e);
             }
         }
     }
 
-    public MwRCDataPanel(Color c) {
+    public MwRCDataPanel(final Color c) {
 
         super(new Dimension(200, 150));
-        for (int i = 0; i < RCdata.length; i++) {
-            RCdata[i] = 0;
+        for (int i = 0; i < dataRC.length; i++) {
+            dataRC[i] = 0;
         }
         setBackground(c);
 
     }
 
-    private void drawBackground(Graphics2D g2d) {
+    private void drawBackground(final Graphics2D g2d) {
 
         // int w = 200;
 
-        final BufferedImage bi = new BufferedImage(getMaxRadiusX(), getMaxRadiusY(),
-                BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage bi = new BufferedImage(getMaxRadiusX(),
+                getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
         final Graphics g = bi.getGraphics();
         g.drawImage(imageRCdataeBg, 0, 0, null);
 
@@ -87,7 +88,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawBarValue(Graphics2D g2d) {
+    private void drawBarValue(final Graphics2D g2d) {
         final int startx = 41;
         int starty = 16;
 
@@ -97,10 +98,10 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         g2d.setStroke(new BasicStroke(1));
         // g2d.setPaint(StyleColor.greenBar);
-        for (final double element : RCdata) {
+        for (final double element : dataRC) {
 
             int barvalue = new Double(((element - 1000) / 1000) * xx)
-            .intValue();
+                    .intValue();
             if (barvalue < -maxoffest) {
                 barvalue = -maxoffest;
             } else if (barvalue > xx + maxoffest) {
@@ -113,11 +114,11 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
             bar.lineTo(startx, starty + yy);
             bar.closePath();
             if (barvalue < 0) {
-                g2d.setPaint(StyleColor.yellow);
+                g2d.setPaint(StyleColor.INSTR_BAR_YELLOW);
             } else if (barvalue > xx) {
-                g2d.setPaint(StyleColor.redBar);
+                g2d.setPaint(StyleColor.INSTR_BAR_RED);
             } else {
-                g2d.setPaint(StyleColor.greenBar);
+                g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
             }
             g2d.fill(bar);
             starty += yy + 8;
@@ -127,7 +128,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(final Graphics g) {
 
         super.paintComponent(g);
 
@@ -143,30 +144,30 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(Integer string, int i) {
+    public void readNewValue(final Integer string, final int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void readNewValue(String name, Double value) {
+    public void readNewValue(final String name, final Double value) {
 
         if (MSP.IDRCTHROTTLE.equals(name)) {
-            RCdata[0] = value;
+            dataRC[0] = value;
         } else if (MSP.IDRCPITCH.equals(name)) {
-            RCdata[1] = value;
+            dataRC[1] = value;
         } else if (MSP.IDRCROLL.equals(name)) {
-            RCdata[2] = value;
+            dataRC[2] = value;
         } else if (MSP.IDRCYAW.equals(name)) {
-            RCdata[3] = value;
+            dataRC[3] = value;
         } else if (MSP.IDRCAUX1.equals(name)) {
-            RCdata[4] = value;
+            dataRC[4] = value;
         } else if (MSP.IDRCAUX2.equals(name)) {
-            RCdata[5] = value;
+            dataRC[5] = value;
         } else if (MSP.IDRCAUX3.equals(name)) {
-            RCdata[6] = value;
+            dataRC[6] = value;
         } else if (MSP.IDRCAUX4.equals(name)) {
-            RCdata[7] = value;
+            dataRC[7] = value;
         }
         repaint();
     }

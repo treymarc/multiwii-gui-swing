@@ -27,19 +27,19 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
      */
     private static final long serialVersionUID = 1L;
 
-    public MwChartPanel(JFreeChart chart) {
+    public MwChartPanel(final JFreeChart chart) {
         super(chart);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void readNewValue(Integer string, int i) {
+    public final void readNewValue(final Integer string, final int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void readNewValue(String name, Double value) {
+    public final void readNewValue(final String name, final Double value) {
         if (!isMouseWheelEnabled()) {
             super.setMouseWheelEnabled(true);
             super.setDomainZoomable(true);
@@ -54,12 +54,13 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
         // nothing todo (replace this from this is not possible)
     }
 
-    public void setVisible(int l, boolean b) {
-        final XYItemRenderer renderer = super.getChart().getXYPlot().getRenderer();
-        //        for (int i = 0; i < super.getChart().getXYPlot().getDataset()
-        //                .getSeriesCount(); i++) {
-        //            super.getChart().getXYPlot().getSeriesCount();
-        //        }
+    public void setVisible(final int l, final boolean b) {
+        final XYItemRenderer renderer = super.getChart().getXYPlot()
+                .getRenderer();
+        // for (int i = 0; i < super.getChart().getXYPlot().getDataset()
+        // .getSeriesCount(); i++) {
+        // super.getChart().getXYPlot().getSeriesCount();
+        // }
         super.getChart().setAntiAlias(true);
 
         renderer.setSeriesVisible(l, b);

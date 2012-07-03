@@ -22,7 +22,7 @@ public class MwJMenu extends JMenu {
      */
     private static final long serialVersionUID = 1L;
 
-    public MwJMenu(String string) {
+    public MwJMenu(final String string) {
         super(string);
     }
 

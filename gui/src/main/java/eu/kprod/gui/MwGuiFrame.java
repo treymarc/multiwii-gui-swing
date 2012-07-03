@@ -87,20 +87,18 @@ import eu.kprod.serial.SerialNotFoundException;
 
 /**
  * Known issues
- *
  * - when zooming the chart : news values are still recorded so due to the
  * dataSource maxItemcounts and AgeLimite , the chart gets emptied at the zoomed
  * date
- *
+ * 
  * @author treym
- *
  */
 public final class MwGuiFrame extends JFrame implements SerialListener,
-MwDataSourceListener, ChangeListener {
+        MwDataSourceListener, ChangeListener {
 
     class ActionMspSender implements ActionListener {
 
-        static final private long SERIALDELAY = 14;
+        private static final long SERIALDELAY = 14;
         private final int[] requests;
 
         public ActionMspSender(final int msp) {
@@ -128,7 +126,7 @@ MwDataSourceListener, ChangeListener {
                     Thread.sleep(SERIALDELAY);
 
                 } catch (final Exception p) {
-                    LOGGER.error(p.getMessage());
+                    LOGGER.error(p.getMessage()+"\n");
                 }
             }
             if (restart) {
@@ -170,16 +168,16 @@ MwDataSourceListener, ChangeListener {
      *
      */
     private static final long serialVersionUID = 1L;
-    private static final String TEXT_ABOUT = "MwGui A Java Swing frontend for multiwii\n\n" +
-                        "This program comes with ABSOLUTELY NO WARRANTY.\n"+
-                        "This is free software, and you are welcome to redistribute it\n"+
-                        "under certain conditions";
+    private static final String TEXT_ABOUT = "MwGui A Java Swing frontend for multiwii\n\n"
+            + "This program comes with ABSOLUTELY NO WARRANTY.\n"
+            + "This is free software, and you are welcome to redistribute it\n"
+            + "under certain conditions";
     // private static LogViewerFrame motorFrame;
     private static LogViewerFrame servoFrame;
     private static Timer timer;
     private static MwUAVPanel uavPanel;
 
-    public static void addSensorCheckBox(String sensorName) {
+    public static void addSensorCheckBox(final String sensorName) {
         getChartCheckBoxPanel().addSensorBox(sensorName);
     }
 
@@ -196,7 +194,7 @@ MwDataSourceListener, ChangeListener {
                 try {
                     openSerialPort();
                 } catch (final Exception e) {
-                    LOGGER.error(e.getMessage());
+                    LOGGER.error(e.getMessage()+"\n");
                 }
             }
         }
@@ -271,27 +269,29 @@ MwDataSourceListener, ChangeListener {
     public static MwJPanel getInstrumentPanel() {
         if (instrumentPanel == null) {
 
-            final MwJPanel pane = new MwJPanel(StyleColor.backGround);
+            final MwJPanel pane = new MwJPanel(StyleColor.BACKGROUND_COLOR);
             pane.setLayout(new GridLayout(1, 4));
 
-            pane.add(hudPanel = new MwHudPanel(StyleColor.backGround));
+            pane.add(hudPanel = new MwHudPanel(StyleColor.BACKGROUND_COLOR));
             MSP.getRealTimeData().addListener(MwSensorClassHUD.class, hudPanel);
 
-            pane.add(compasPanel = new MwCompasPanel(StyleColor.backGround));
+            pane.add(compasPanel = new MwCompasPanel(
+                    StyleColor.BACKGROUND_COLOR));
             MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
                     compasPanel);
 
-            pane.add(uavPanel = new MwUAVPanel(StyleColor.backGround));
+            pane.add(uavPanel = new MwUAVPanel(StyleColor.BACKGROUND_COLOR));
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
                     uavPanel);
 
-            pane.add(rcDataPanel = new MwRCDataPanel(StyleColor.backGround));
+            pane.add(rcDataPanel = new MwRCDataPanel(
+                    StyleColor.BACKGROUND_COLOR));
             MSP.getRealTimeData().addListener(MwSensorClassRC.class,
                     rcDataPanel);
             pane.setMinimumSize(new Dimension(770, 200));
             pane.setMaximumSize(new Dimension(770, 200));
 
-            instrumentPanel = new MwJPanel(StyleColor.backGround);
+            instrumentPanel = new MwJPanel(StyleColor.BACKGROUND_COLOR);
             instrumentPanel.add(Box.createHorizontalGlue());
             instrumentPanel.setLayout(new BoxLayout(instrumentPanel,
                     BoxLayout.LINE_AXIS));
@@ -307,7 +307,7 @@ MwDataSourceListener, ChangeListener {
             rescanSerial = new MwJMenuItem("Rescan");
             rescanSerial.addActionListener(new ActionListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void actionPerformed(final ActionEvent e) {
                     closeSerialPort();
                     getSerialPortAsMenuItem();
                     SwingUtilities.updateComponentTreeUI(menuBar);
@@ -377,7 +377,7 @@ MwDataSourceListener, ChangeListener {
                         model = abstractButton.getModel();
                     }
                 } catch (final Exception e) {
-                    LOGGER.error(e.getMessage());
+                    LOGGER.error(e.getMessage()+"\n");
                 }
             }
             if (model != null) {
@@ -390,7 +390,8 @@ MwDataSourceListener, ChangeListener {
             }
         }
         try {
-            final String portname = portNameMenuGroup.getSelection().getActionCommand();
+            final String portname = portNameMenuGroup.getSelection()
+                    .getActionCommand();
 
             if (portname == null) {
                 return; // this should not happen, unless a bug
@@ -403,18 +404,18 @@ MwDataSourceListener, ChangeListener {
 
             MwGuiFrame.getInstance().setTitle(
                     new StringBuffer()
-                    .append(portname)
-                    .append("@")
-                    .append(baudRateMenuGroup.getSelection()
-                            .getActionCommand()).toString());
+                            .append(portname)
+                            .append("@")
+                            .append(baudRateMenuGroup.getSelection()
+                                    .getActionCommand()).toString());
         } catch (final SerialNotFoundException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage()+"\n");
         } catch (final SerialException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage()+"\n");
         }
     }
 
-    protected static void restartTimer(Integer rate) {
+    protected static void restartTimer(final Integer rate) {
         final class SerialTimeOut extends TimerTask {
 
             @Override
@@ -451,17 +452,18 @@ MwDataSourceListener, ChangeListener {
 
     /**
      * send a string to the serial com
-     *
-     * @param command is the packet to send
+     * 
+     * @param command
+     *            is the packet to send
      * @throws SerialException
      */
-    static private synchronized void send( ByteArrayOutputStream cmd )
+    private static synchronized void send(final ByteArrayOutputStream cmd)
             throws SerialException {
         if (com != null) {
             if (!inited) {
-                com.send( MSP.request(MSP.IDENT) );
+                com.send(MSP.request(MSP.IDENT));
             }
-            com.send( cmd );
+            com.send(cmd);
         }
     }
 
@@ -517,7 +519,7 @@ MwDataSourceListener, ChangeListener {
             @Override
             public void windowClosing(final WindowEvent e) {
                 LOGGER.trace("windowClosing "
-                        + e.getSource().getClass().getName());
+                        + e.getSource().getClass().getName()+"\n");
                 if (timer != null) {
                     timer.cancel();
                     timer.purge();
@@ -528,7 +530,7 @@ MwDataSourceListener, ChangeListener {
             }
         });
 
-        setBackground(StyleColor.backGround);
+        setBackground(StyleColor.BACKGROUND_COLOR);
         getContentPane().setLayout(new BorderLayout());
         // getContentPane().add(new MwJPanel(), BorderLayout.SOUTH);
         getContentPane().add(
@@ -597,8 +599,10 @@ MwDataSourceListener, ChangeListener {
                 textArea.setEditable(false);
                 textArea.setFocusable(false);
                 JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setBorder(BorderFactory.createTitledBorder((String) null ));
-                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(), scrollPane,"About MwGui", JOptionPane.PLAIN_MESSAGE);
+                scrollPane.setBorder(BorderFactory
+                        .createTitledBorder((String) null));
+                JOptionPane.showMessageDialog(MwGuiFrame.getInstance(),
+                        scrollPane, "About MwGui", JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -662,16 +666,15 @@ MwDataSourceListener, ChangeListener {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     LOGGER.trace("actionPerformed "
-                            + e.getSource().getClass().getName());
+                            + e.getSource().getClass().getName()+"\n");
                     stopTimer();
                 }
             });
 
             final MwJComboBox serialRefreshRate = new MwJComboBox(
                     "Refresh rate (hz)",
-                    SERIAL_REFRESHRATES
-                    .toArray(new Integer[SERIAL_REFRESHRATES
-                                         .size()]));
+                    SERIAL_REFRESHRATES.toArray(new Integer[SERIAL_REFRESHRATES
+                            .size()]));
             // serialRefreshRate
             // .setMaximumSize(serialRefreshRate.getMinimumSize());
             // serialRefreshRate
@@ -712,7 +715,7 @@ MwDataSourceListener, ChangeListener {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     LOGGER.trace("actionPerformed "
-                            + e.getSource().getClass().getName());
+                            + e.getSource().getClass().getName()+"\n");
 
                     beginSerialCom();
                     restartTimer((Integer) serialRefreshRate.getSelectedItem());
@@ -744,7 +747,7 @@ MwDataSourceListener, ChangeListener {
                 @Override
                 public void actionPerformed(final ActionEvent event) {
                     // LOGGER.trace("actionPerformed "+
-                    // event.getSource().getClass().getName());
+                    // event.getSource().getClass().getName()+"\n");
                     closeSerialPort();
                     try {
                         final Object pp = event.getSource();
@@ -758,7 +761,7 @@ MwDataSourceListener, ChangeListener {
                         }
                     } catch (final SerialException e) {
 
-                        LOGGER.error(e.getMessage());
+                        LOGGER.error(e.getMessage()+"\n");
                     }
                 }
             });
@@ -783,7 +786,7 @@ MwDataSourceListener, ChangeListener {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     LOGGER.trace("actionPerformed "
-                            + e.getSource().getClass().getName());
+                            + e.getSource().getClass().getName()+"\n");
                     // TODO Write to eeprom
                 }
             });
@@ -838,7 +841,7 @@ MwDataSourceListener, ChangeListener {
     }
 
     @Override
-    public void readNewValue(Integer string, int i) {
+    public void readNewValue(final Integer string, final int i) {
         switch (string) {
             case MSP.UAVVERSION_KEY:
 
@@ -854,13 +857,13 @@ MwDataSourceListener, ChangeListener {
     }
 
     @Override
-    public void readNewValue(String name, Double value) {
+    public void readNewValue(final String name, final Double value) {
         MwGuiFrame.addSensorCheckBox(name);
     }
 
     /**
      * (non-Javadoc)
-     *
+     * 
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
      */
     @Override
@@ -879,8 +882,8 @@ MwDataSourceListener, ChangeListener {
     @Override
     public void reportSerial(final Throwable e) {
         // we have an error
-        LOGGER.error(e.getMessage());
-        LOGGER.error(e.getCause());
+        LOGGER.error(e.getMessage()+"\n");
+        LOGGER.error(e.getCause()+"\n");
         stopTimer();
         closeSerialPort();
     }
@@ -898,16 +901,16 @@ MwDataSourceListener, ChangeListener {
     }
 
     @Override
-    public void setTitle(String s) {
+    public void setTitle(final String name) {
         final StringBuffer title = new StringBuffer().append(frameTitle);
-        if (s != null && s.length() > 0) {
-            title.append(" - ").append(s);
+        if (name != null && name.length() > 0) {
+            title.append(" - ").append(name);
         }
         super.setTitle(title.toString());
     }
 
     @Override
-    public void stateChanged(ChangeEvent e) {
+    public void stateChanged(final ChangeEvent e) {
         // TODO Auto-generated method stub
 
     }

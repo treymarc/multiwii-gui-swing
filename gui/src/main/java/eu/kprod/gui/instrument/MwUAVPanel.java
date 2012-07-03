@@ -63,7 +63,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     }
 
-    public MwUAVPanel(Color c) {
+    public MwUAVPanel(final Color c) {
         super(new Dimension(170, 200));
 
         setBackground(c);
@@ -154,7 +154,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     // motor[2] = PIDMIX(+0,+1, +1/2); //REAR_L
     // motor[3] = PIDMIX(+1, -1, -0); //FRONT_L
     // #endif
-    void drawBarValue(Graphics2D g2d) {
+    void drawBarValue(final Graphics2D g2d) {
 
         g2d.setStroke(new BasicStroke(1));
 
@@ -190,8 +190,9 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawMotorBar(Graphics2D g2d, int[] startx, int[] starty) {
-        g2d.setPaint(StyleColor.greenBar);
+    private void drawMotorBar(final Graphics2D g2d, final int[] startx,
+            final int[] starty) {
+        g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
 
         for (int i = 0; i < startx.length; i++) {
 
@@ -213,7 +214,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawUAV(Graphics2D g2d) {
+    private void drawUAV(final Graphics2D g2d) {
 
         // int w = 200;
 
@@ -235,7 +236,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(final Graphics g) {
 
         super.paintComponent(g);
 
@@ -250,13 +251,13 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(Integer string, int i) {
+    public void readNewValue(final Integer string, final int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void readNewValue(String name, Double value) {
+    public void readNewValue(final String name, final Double value) {
         motor[Integer.parseInt(name.charAt(name.length() - 1) + "")] = value;
         repaint();
     }
@@ -266,7 +267,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     }
 
-    public void setUavType(int uAVTYPE) {
+    public void setUavType(final int uAVTYPE) {
         uavType = uAVTYPE;
         repaint();
     }

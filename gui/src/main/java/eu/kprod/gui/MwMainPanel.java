@@ -28,7 +28,8 @@ public class MwMainPanel extends MwJPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    public MwMainPanel(Component realTimePanel, Component settingsPanel) {
+    public MwMainPanel(final Component realTimePanel,
+            final Component settingsPanel) {
         // take all the place
         super(new GridLayout(1, 1));
 

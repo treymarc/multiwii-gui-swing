@@ -48,7 +48,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     {
         if (imageCompas == null) {
 
-            final URL url = this.getClass().getResource(Ress.imgCompas);
+            final URL url = this.getClass().getResource(Ress.IMG_COMPAS);
 
             try {
                 imageCompas = Toolkit.getDefaultToolkit().getImage(url);
@@ -61,13 +61,13 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         }
     }
 
-    public MwCompasPanel(Color c) {
+    public MwCompasPanel(final Color c) {
         super(null);
         setBackground(c);
 
     }
 
-    private void drawBackground(Graphics2D g2d) {
+    private void drawBackground(final Graphics2D g2d) {
 
         final Float background = new Ellipse2D.Float(
                 (getMaxRadiusX() - getRadiusx() * 2) / 2,
@@ -79,7 +79,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawCompas(Graphics2D g2d) {
+    private void drawCompas(final Graphics2D g2d) {
         // rotate to heading
         AffineTransform at = AffineTransform.getRotateInstance(
                 Math.toRadians(-head), getCenterPoint().getX(),
@@ -87,7 +87,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         g2d.transform(at);
 
         g2d.setStroke(new BasicStroke(2));
-        g2d.setPaint(StyleColor.forGround);
+        g2d.setPaint(StyleColor.FORGROUND_COLOR);
 
         final GeneralPath bankMarker = new GeneralPath(Path2D.WIND_EVEN_ODD);
         bankMarker.moveTo((getCenterPoint().getX() - getRadiusx()),
@@ -187,7 +187,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawUAV(Graphics2D g2d) {
+    private void drawUAV(final Graphics2D g2d) {
 
         g2d.setStroke(new BasicStroke(2));
         g2d.setPaint(Color.lightGray);
@@ -204,7 +204,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         // g2d.fill(triangle);
 
         g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(StyleColor.forGround);
+        g2d.setPaint(StyleColor.FORGROUND_COLOR);
 
         final String k = head.toString();
 
@@ -229,17 +229,17 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    void drawValue(Graphics2D g2d) {
+    void drawValue(final Graphics2D g2d) {
 
         g2d.setFont(getWriting());
-        g2d.setPaint(StyleColor.forGround);
+        g2d.setPaint(StyleColor.FORGROUND_COLOR);
         g2d.setStroke(new BasicStroke(1));
         g2d.drawString("Alt " + (alt), 10, 10);
 
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(final Graphics g) {
 
         super.paintComponent(g);
 
@@ -265,13 +265,13 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(Integer string, int i) {
+    public void readNewValue(final Integer string, final int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void readNewValue(String name, Double value) {
+    public void readNewValue(final String name, final Double value) {
         if (MSP.IDHEAD.equals(name)) {
             this.head = value.intValue();
         } else if (MSP.IDALT.equals(name)) {

@@ -20,7 +20,7 @@ public class MwGuiRuntimeException extends RuntimeException {
      */
     private static final long serialVersionUID = 1L;
 
-    public MwGuiRuntimeException(String msg) {
+    public MwGuiRuntimeException(final String msg) {
         super(msg);
     }
 

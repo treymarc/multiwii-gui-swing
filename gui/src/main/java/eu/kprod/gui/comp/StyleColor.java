@@ -22,20 +22,18 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 public final class StyleColor {
 
-    public static final Color backGround = new Color(51, 51, 51);
+    public static final Color BACKGROUND_COLOR = new Color(51, 51, 51);
+    public static final Color FORGROUND_COLOR = new Color(204, 204, 204);
+    public static final Color INSTR_SKY_BLUE = new Color(10, 112, 156);
+    public static final Color INSTR_BAR_GREEN = new Color(96, 220, 113);
+    public static final Color INSTR_EARTH_ORANGE = new Color(202, 112, 14);
+    public static final Color INSTR_BAR_RED = new Color(220, 113, 113);
+    public static final Color INSTR_BAR_YELLOW = new Color(220, 220, 113);
 
-    public static final Color blueSky = new Color(10, 112, 156);
-    public static final List<Color> colors = initializeMap();
+    public static final List<Color> COLOR_GRAPH = initializeMap();
 
-    public static final Color forGround = new Color(204, 204, 204);
-    public static final Color greenBar = new Color(96, 220, 113);
-    public static final Color orangeEarth = new Color(202, 112, 14);
-    public static final Color redBar = new Color(220, 113, 113);
-    public static final Color yellow = new Color(220, 220, 113);
-
-    public static Color getColor(int l) {
-
-        return colors.get(l);
+    public static Color getColor(final int l) {
+        return COLOR_GRAPH.get(l);
     }
 
     private static List<Color> initializeMap() {
@@ -48,7 +46,7 @@ public final class StyleColor {
         m.add(Color.CYAN);
         m.add(Color.MAGENTA);
         m.add(Color.ORANGE);
-        m.add(StyleColor.forGround);
+        m.add(StyleColor.FORGROUND_COLOR);
         m.add(Color.BLACK);
         m.add(Color.DARK_GRAY);
 
@@ -60,8 +58,8 @@ public final class StyleColor {
         return m;
     }
 
-    public static void setColor(int index, Color color) {
-        colors.set(index, color);
+    public static void setColor(final int index, final Color color) {
+        COLOR_GRAPH.set(index, color);
 
     }
 

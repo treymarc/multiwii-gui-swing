@@ -42,7 +42,7 @@ MouseMotionListener, ActionListener {
     private final Double step;
     private Double value;
 
-    public MwTextField(Double double1, Double step1, int j) {
+    public MwTextField(final Double double1, final Double step1, final int j) {
         super();
 
         switch (j) {
@@ -73,7 +73,7 @@ MouseMotionListener, ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent ev) {
+    public final void actionPerformed(final ActionEvent ev) {
         this.setEditable(false);
         try {
             Double v = Double.valueOf(this.getText());
@@ -89,12 +89,12 @@ MouseMotionListener, ActionListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public final void mouseClicked(final MouseEvent e) {
 
     }
 
     @Override
-    public void mouseDragged(MouseEvent ev) {
+    public final void mouseDragged(final MouseEvent ev) {
 
         final int newX = ev.getX();
 
@@ -105,30 +105,30 @@ MouseMotionListener, ActionListener {
     }
 
     @Override
-    public void mouseEntered(MouseEvent arg0) {
+    public final void mouseEntered(final MouseEvent arg0) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void mouseExited(MouseEvent arg0) {
+    public final void mouseExited(final MouseEvent arg0) {
         // TODO Auto-generated method stub
         this.setEditable(false);
     }
 
     @Override
-    public void mouseMoved(MouseEvent ev) {
+    public final void mouseMoved(final MouseEvent ev) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public final void mousePressed(final MouseEvent e) {
         previousX = e.getX();
         e.consume();
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public final void mouseReleased(final MouseEvent e) {
 
         previousValue = this.getText();
         if (e.getClickCount() == 2) {
@@ -140,7 +140,7 @@ MouseMotionListener, ActionListener {
         e.consume();
     }
 
-    private void updateValue(int y) {
+    private void updateValue(final int y) {
 
         value = value + (y > 0 ? 1 : -1) * step;
 

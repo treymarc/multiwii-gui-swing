@@ -39,7 +39,6 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public final class MSP {
 
-
     public static final int UAVVERSION_KEY = 0;
     public static final int UAVTYPE_KEY = 1;
     public static final int RCRATE_KEY = 2;
@@ -52,7 +51,7 @@ public final class MSP {
     public static final int RCCURV_THREXPO_KEY = 9;
     public static final int POEWERTRIG_KEY = 10;
     public static final int DYNTHRPID_KEY = 11;
-    
+
     public static final String IDALT = "alt";
     public static final String IDANGX = "angx";
     public static final String IDANGY = "angy";
@@ -76,10 +75,9 @@ public final class MSP {
     public static final String IDRCTHROTTLE = "throttle";
     public static final String IDRCYAW = "yaw";
     public static final String IDVBAT = "vbat";
-    
+
     private static final int MAXSERVO = 8;
     private static final int MAXMOTOR = 8;
-
     
     public static final int
     IDENT               = 100,
@@ -115,22 +113,19 @@ public final class MSP {
 
     DEBUG                = 254;
     
-   
-    
     private static final Logger LOGGER = Logger.getLogger(MSP.class);
     private static final int MASK = 0xff;
     /**
-     *  the model for holding the value decoded by the MSP
+     * the model for holding the value decoded by the MSP
      */
-    private static  MwDataModel model=new MwDataModel();
+    private static MwDataModel model = new MwDataModel();
     private static final Character MSP_HEAD1 = new Character('$');
 
     private static final Character MSP_HEAD2 = new Character('M');
 
     private static final Character MSP_HEAD3 = new Character('>');
- 
-    private static final byte[] OUT   = { '$', 'M', '<' };
 
+    private static final byte[] OUT = { '$', 'M', '<' };
 
     private static final int BUFFER_SIZE = 128;
 
@@ -141,39 +136,31 @@ public final class MSP {
     private static byte checksum = 0;
     private static int cmd = 0;
 
-
     /**
      * MSP decoder state
-     * 
      */
     private static final int
-    
-    STATE_ERR = -1,
-    STATE_IDLE = 0,
-    STATE_START = 1,
-    STATE_HEADER_BEGIN = 2,
-    STATE_HEADER_END = 3,
-    STATE_SIZE = 4,
-    STATE_CMD = 5;
-//    STATE_PAYLOAD = 6,
-//    STATE_CHECKSUM = 6;
-    
+
+    STATE_ERR = -1, STATE_IDLE = 0, STATE_START = 1, STATE_HEADER_BEGIN = 2,
+            STATE_HEADER_END = 3, STATE_SIZE = 4, STATE_CMD = 5;
+    // STATE_PAYLOAD = 6,
+    // STATE_CHECKSUM = 6;
+
     private static int offset = 0, dataSize = 0, mspState = STATE_IDLE;
 
     /**
      * reception buffer
      */
     private static byte[] serialBuffer = new byte[BUFFER_SIZE];
-   
 
-  
     /**
      * Decode the byte
-     *
-     * @param input is a an int with the upper 24 bits set to zero and thusly
-     *   this contains only 8 bits of information.
+     * 
+     * @param input
+     *            is a an int with the upper 24 bits set to zero and thusly
+     *            this contains only 8 bits of information.
      */
-    synchronized public static void decode(int input) {
+    public static synchronized void decode(int input) {
         if (mspState == STATE_IDLE) {
             mspState = (MSP_HEAD1 == input) ? STATE_START : STATE_IDLE;
         } else if (mspState == STATE_START) {
@@ -194,7 +181,7 @@ public final class MSP {
             cmd = input;
             checksum ^= input;
             mspState = STATE_CMD;
-        } else if (mspState == STATE_CMD ) {
+        } else if (mspState == STATE_CMD) {
 
             if (offset < dataSize) {
                 // we keep reading the payload
@@ -202,20 +189,19 @@ public final class MSP {
                 serialBuffer[offset++] = (byte) input;
             } else {
                 if ((checksum & MASK) != input) {
-                    LOGGER.error("invalid checksum for command "
-                            + cmd + ": " + (checksum & MASK)
-                            + " expected, got " + input);
+                    LOGGER.error("invalid checksum for command " + cmd + ": "
+                            + (checksum & MASK) + " expected, got " + input+"\n");
                     cmd = STATE_ERR;
                 }
 
-//                decodeMSPCommande(cmd, dataSize);
+                // decodeMSPCommande(cmd, dataSize);
                 decodeMSPCommande(cmd);
                 mspState = STATE_IDLE;
             }
         }
     }
 
-    synchronized static private void decodeMSPCommande(final int stateMSP) {
+    private static synchronized void decodeMSPCommande(final int stateMSP) {
         final Date d = new Date();
         switch (stateMSP) {
             case IDENT:
@@ -230,13 +216,26 @@ public final class MSP {
                 int i2cError = read16();
                 int present = read16();
                 int mode = read32();
-//                if ((present&1) >0) {buttonAcc.setColorBackground(green_);} else {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false); tACC_PITCH.setState(false); tACC_Z.setState(false);}
-//                if ((present&2) >0) {buttonBaro.setColorBackground(green_);} else {buttonBaro.setColorBackground(red_); tBARO.setState(false); }
-//                if ((present&4) >0) {buttonMag.setColorBackground(green_);} else {buttonMag.setColorBackground(red_); tMAGX.setState(false); tMAGY.setState(false); tMAGZ.setState(false); }
-//                if ((present&8) >0) {buttonGPS.setColorBackground(green_);} else {buttonGPS.setColorBackground(red_); tHEAD.setState(false);}
-//                if ((present&16)>0) {buttonSonar.setColorBackground(green_);} else {buttonSonar.setColorBackground(red_);}
-                for(int i=0;i<model.getBoxNameCount();i++) {
-//                  if ((mode&(1<<i))>0) buttonCheckbox[i].setColorBackground(green_); else buttonCheckbox[i].setColorBackground(red_);
+                // if ((present&1) >0) {buttonAcc.setColorBackground(green_);}
+                // else
+                // {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false);
+                // tACC_PITCH.setState(false); tACC_Z.setState(false);}
+                // if ((present&2) >0) {buttonBaro.setColorBackground(green_);}
+                // else {buttonBaro.setColorBackground(red_);
+                // tBARO.setState(false); }
+                // if ((present&4) >0) {buttonMag.setColorBackground(green_);}
+                // else {buttonMag.setColorBackground(red_);
+                // tMAGX.setState(false); tMAGY.setState(false);
+                // tMAGZ.setState(false); }
+                // if ((present&8) >0) {buttonGPS.setColorBackground(green_);}
+                // else {buttonGPS.setColorBackground(red_);
+                // tHEAD.setState(false);}
+                // if ((present&16)>0) {buttonSonar.setColorBackground(green_);}
+                // else {buttonSonar.setColorBackground(red_);}
+                for (int i = 0; i < model.getBoxNameCount(); i++) {
+                    // if ((mode&(1<<i))>0)
+                    // buttonCheckbox[i].setColorBackground(green_); else
+                    // buttonCheckbox[i].setColorBackground(red_);
                 }
 
                 break;
@@ -267,7 +266,7 @@ public final class MSP {
                     model.getRealTimeData().put(
                             d,
                             new StringBuffer().append("servo").append(i)
-                            .toString(), Double.valueOf(read16()),
+                                    .toString(), Double.valueOf(read16()),
                             MwSensorClassServo.class);
                 }
                 break;
@@ -276,7 +275,7 @@ public final class MSP {
                     model.getRealTimeData().put(
                             d,
                             new StringBuffer().append("mot").append(i)
-                            .toString(), Double.valueOf(read16()),
+                                    .toString(), Double.valueOf(read16()),
                             MwSensorClassMotor.class);
                 }
                 break;
@@ -286,8 +285,8 @@ public final class MSP {
                         Double.valueOf(read16()), MwSensorClassRC.class);
                 model.getRealTimeData().put(d, IDRCPITCH,
                         Double.valueOf(read16()), MwSensorClassRC.class);
-                model.getRealTimeData().put(d, IDRCYAW, Double.valueOf(read16()),
-                        MwSensorClassRC.class);
+                model.getRealTimeData().put(d, IDRCYAW,
+                        Double.valueOf(read16()), MwSensorClassRC.class);
                 model.getRealTimeData().put(d, IDRCTHROTTLE,
                         Double.valueOf(read16()), MwSensorClassRC.class);
                 model.getRealTimeData().put(d, IDRCAUX1,
@@ -301,17 +300,17 @@ public final class MSP {
 
                 break;
             case RAW_GPS:
-//                GPS_fix = read8();
-//                GPS_numSat = read8();
-//                GPS_latitude = read32();
-//                GPS_longitude = read32();
-//                GPS_altitude = read16();
-//                GPS_speed = read16();
+                // GPS_fix = read8();
+                // GPS_numSat = read8();
+                // GPS_latitude = read32();
+                // GPS_longitude = read32();
+                // GPS_altitude = read16();
+                // GPS_speed = read16();
                 break;
             case COMP_GPS:
-//                GPS_distanceToHome = read16();
-//                GPS_directionToHome = read16();
-//                GPS_update = read8();
+                // GPS_distanceToHome = read16();
+                // GPS_directionToHome = read16();
+                // GPS_update = read8();
                 break;
             case ATTITUDE:
                 model.getRealTimeData().put(d, IDANGX,
@@ -376,39 +375,44 @@ public final class MSP {
             case BOXNAMES:
                 model.removeAllBoxName();
                 int i = 0;
-                for (final String name : new String(serialBuffer, 0, dataSize).split(";")) {
+                for (final String name : new String(serialBuffer, 0, dataSize)
+                        .split(";")) {
                     model.addBoxName(name, i++);
                 }
                 break;
             case PIDNAMES:
                 model.removeAllPIDName();
                 i = 0;
-                for (final String name : new String(serialBuffer, 0, dataSize).split(";")) {
+                for (final String name : new String(serialBuffer, 0, dataSize)
+                        .split(";")) {
                     model.addPIDName(name, i++);
                 }
                 break;
         }
 
     }
+
     public static MwDataSource getRealTimeData() {
         return model.getRealTimeData();
     }
+
     /**
      * read 16byte from the inputBuffer
      */
     public static synchronized int read16() {
-        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++]) << 8);
+        return (serialBuffer[bufferIndex++] & MASK)
+                + ((serialBuffer[bufferIndex++]) << 8);
     }
 
-
-    //    private static final int ERR = 0;
+    // private static final int ERR = 0;
 
     /**
      * read 32byte from the inputBuffer
      */
 
-    synchronized public static int read32() {
-        return (serialBuffer[bufferIndex++] & MASK) + ((serialBuffer[bufferIndex++] & MASK) << 8)
+    public static synchronized int read32() {
+        return (serialBuffer[bufferIndex++] & MASK)
+                + ((serialBuffer[bufferIndex++] & MASK) << 8)
                 + ((serialBuffer[bufferIndex++] & MASK) << 16)
                 + ((serialBuffer[bufferIndex++] & MASK) << 24);
     }
@@ -426,44 +430,45 @@ public final class MSP {
     }
 
     // send msp with payload
-    public static ByteArrayOutputStream request(int msp, byte[] payload)
-    {
+    public static ByteArrayOutputStream request(int msp, byte[] payload) {
         ByteArrayOutputStream bf = new ByteArrayOutputStream();
 
-        bf.write( OUT, 0, OUT.length );
+        bf.write(OUT, 0, OUT.length);
 
-        int hash = 0;           // upper 24 bits will be ignored.
-        int payloadz = 0;       // siZe
+        int hash = 0; // upper 24 bits will be ignored.
+        int payloadz = 0; // siZe
 
-        if( payload != null )
+        if (payload != null){
             payloadz = payload.length;
-
-        bf.write( payloadz );
+        }
+        
+        bf.write(payloadz);
         hash ^= payloadz;
 
-        bf.write( msp );
+        bf.write(msp);
         hash ^= msp;
 
         if (payload != null) {
-            for ( byte b : payload) {
-                bf.write( b );
+            for (byte b : payload) {
+                bf.write(b);
                 hash ^= b;
             }
         }
 
-        bf.write( hash );
+        bf.write(hash);
         return bf;
     }
 
-    /** send multiple msp commands without payload
-    public static ByteArrayOutputStream request(int[] msps) {
-        ByteArrayOutputStream ret = new ByteArrayOutputStream();
-        for (final int m : msps) {
-            ret.write( request( m, null).toByteArray() );
-        }
-        return ret;
-    }
-    */
+    /**
+     * send multiple msp commands without payload
+     * public static ByteArrayOutputStream request(int[] msps) {
+     * ByteArrayOutputStream ret = new ByteArrayOutputStream();
+     * for (final int m : msps) {
+     * ret.write( request( m, null).toByteArray() );
+     * }
+     * return ret;
+     * }
+     */
 
     public static void setBoxChangeListener(final ChangeListener boxPane) {
         model.setBoxChangeListener(boxPane);
@@ -479,7 +484,7 @@ public final class MSP {
         model.setUavChangeListener(uavChangeListener);
     }
 
-    private MSP(){
+    private MSP() {
 
     }
 }

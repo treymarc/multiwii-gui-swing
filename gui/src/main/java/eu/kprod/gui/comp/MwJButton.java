@@ -22,10 +22,9 @@ public class MwJButton extends JButton {
      */
     private static final long serialVersionUID = 1L;
 
-    public MwJButton(String name, String ttips) {
-        // TODO Auto-generated constructor stub
+    public MwJButton(final String name,final String tooltips) {
         super(name);
-        super.setToolTipText(ttips);
+        super.setToolTipText(tooltips);
     }
 
 }

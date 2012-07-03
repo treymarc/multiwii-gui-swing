@@ -34,7 +34,7 @@ public class SensorLevel extends Level {
      * @see Level#toLevel(int)
      * @see Level#toLevel(int, org.apache.log4j.Level)
      */
-    public static Level toLevel(int val) {
+    public static Level toLevel(final int val) {
         if (val == SENSOR_INT) {
             return SENSOR;
         }
@@ -48,7 +48,7 @@ public class SensorLevel extends Level {
      * 
      * @see Level#toLevel(int, org.apache.log4j.Level)
      */
-    public static Level toLevel(int val, Level defaultLevel) {
+    public static Level toLevel(final int val, final Level defaultLevel) {
         if (val == SENSOR_INT) {
             return SENSOR;
         }
@@ -64,7 +64,7 @@ public class SensorLevel extends Level {
      * @see Level#toLevel(java.lang.String)
      * @see Level#toLevel(java.lang.String, org.apache.log4j.Level)
      */
-    public static Level toLevel(String sArg) {
+    public static Level toLevel(final String sArg) {
         if (sArg != null && sArg.toUpperCase().equals("MY_TRACE")) {
             return SENSOR;
         }
@@ -78,14 +78,15 @@ public class SensorLevel extends Level {
      * 
      * @see Level#toLevel(java.lang.String, org.apache.log4j.Level)
      */
-    public static Level toLevel(String sArg, Level defaultLevel) {
+    public static Level toLevel(final String sArg, final Level defaultLevel) {
         if (sArg != null && sArg.toUpperCase().equals("MY_TRACE")) {
             return SENSOR;
         }
         return Level.toLevel(sArg, defaultLevel);
     }
 
-    protected SensorLevel(int level, String levelStr, int syslogEquivalent) {
+    protected SensorLevel(final int level, final String levelStr,
+            final int syslogEquivalent) {
         super(level, levelStr, syslogEquivalent);
     }
 

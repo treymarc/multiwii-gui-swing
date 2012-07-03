@@ -46,7 +46,7 @@ public class LogViewerFrame extends JFrame {
         try {
             ds = new LogLoader().getDataSourceContent(name);
         } catch (final DSLoadableException e) {
-            LOGGER.error("Can not open log file : " + name);
+            LOGGER.error("Can not open log file : " + name+"\n");
             ds = new MwDataSourceImpl();
         }
         refDs = ds;
@@ -57,8 +57,8 @@ public class LogViewerFrame extends JFrame {
         frameSetDefaultPosition();
     }
 
-    public LogViewerFrame(final String name, final MwDataSource ds,final
-            Class<? extends MwSensorClass> sclass) {
+    public LogViewerFrame(final String name, final MwDataSource ds,
+            final Class<? extends MwSensorClass> sclass) {
         super(name);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -71,7 +71,7 @@ public class LogViewerFrame extends JFrame {
     }
 
     @Override
-    public void dispose() {
+    public final void dispose() {
         if (refDs != null) {
             refDs.removeListener(refsclass, chartTrendPanel);
         }

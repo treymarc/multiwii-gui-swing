@@ -31,16 +31,16 @@ public final class MwChartFactory {
         chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
                 false, true, true);
 
-        chart.setBackgroundPaint(StyleColor.backGround);
+        chart.setBackgroundPaint(StyleColor.BACKGROUND_COLOR);
         chart.setBorderVisible(false);
         final XYPlot plot = chart.getXYPlot();
 
-        plot.setBackgroundPaint(StyleColor.backGround);
+        plot.setBackgroundPaint(StyleColor.BACKGROUND_COLOR);
 
-        plot.setDomainGridlinePaint(StyleColor.forGround);
-        plot.setRangeGridlinePaint(StyleColor.forGround);
+        plot.setDomainGridlinePaint(StyleColor.FORGROUND_COLOR);
+        plot.setRangeGridlinePaint(StyleColor.FORGROUND_COLOR);
         plot.setDomainGridlinesVisible(false);
-        plot.setDomainCrosshairPaint(StyleColor.forGround);
+        plot.setDomainCrosshairPaint(StyleColor.FORGROUND_COLOR);
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 
@@ -48,14 +48,14 @@ public final class MwChartFactory {
         // axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
         axis.setAxisLineVisible(false);
         axis.setTickLabelsVisible(false);
-        axis.setTickLabelPaint(StyleColor.forGround);
+        axis.setTickLabelPaint(StyleColor.FORGROUND_COLOR);
 
         // force integer display
         final ValueAxis va = plot.getRangeAxis();
         va.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        va.setLabelPaint(StyleColor.forGround);
-        va.setAxisLinePaint(StyleColor.forGround);
-        va.setTickLabelPaint(StyleColor.forGround);
+        va.setLabelPaint(StyleColor.FORGROUND_COLOR);
+        va.setAxisLinePaint(StyleColor.FORGROUND_COLOR);
+        va.setTickLabelPaint(StyleColor.FORGROUND_COLOR);
         //        va.setRange(-280,280);
         //        va.setFixedAutoRange(560);
         //        va.setLowerBound(-280);

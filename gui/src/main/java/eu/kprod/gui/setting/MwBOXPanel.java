@@ -36,14 +36,12 @@ public class MwBOXPanel extends MwChangeablePanel {
     private static final long serialVersionUID = 1L;
     private final int boxGroupCount = 3;
 
-    public MwBOXPanel(String name) {
+    public MwBOXPanel(final String name) {
         super(name);
     }
 
-
-
-    private Component build(Map<String, List<Boolean>> map,
-            Map<Integer, String> index) {
+    private Component build(final Map<String, List<Boolean>> map,
+            final Map<Integer, String> index) {
         final MwJPanel mainPane = new MwJPanel();
         mainPane.setLayout(new GridLayout(
                 1 + (index == null ? 0 : index.size()), 1));
@@ -71,7 +69,7 @@ public class MwBOXPanel extends MwChangeablePanel {
 
             pane.add(new JLabel(name));
 
-            //            List<Boolean> BoxItem = ;
+            // List<Boolean> BoxItem = ;
             int j = 0;
             int auxCnt = 0;
             MwJPanel auxPane = new MwJPanel();
@@ -79,11 +77,12 @@ public class MwBOXPanel extends MwChangeablePanel {
             for (final Boolean state : map.get(name)) {
 
                 // TODO get step and bound from msp
-                final JCheckBox chck = new MwJCheckBox(name, j, "aux" + (auxCnt + 1));
+                final JCheckBox chck = new MwJCheckBox(name, j, "aux"
+                        + (auxCnt + 1));
                 chck.setSelected(state);
                 auxPane.add(chck);
                 j++;
-                if (j == boxGroupCount ) {
+                if (j == boxGroupCount) {
                     pane.add(auxPane);
                     auxPane = new MwJPanel();
                     auxPane.setLayout(new GridLayout(1, boxGroupCount));
@@ -96,9 +95,8 @@ public class MwBOXPanel extends MwChangeablePanel {
         return mainPane;
     }
 
-
     @Override
-    void newModel(final MwDataModel m) {
+    final void newModel(final MwDataModel m) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

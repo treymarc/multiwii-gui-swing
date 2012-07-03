@@ -25,18 +25,18 @@ import eu.kprod.gui.MwGuiFrame;
 
 public final class MwColorChooser extends MwJFrame implements ChangeListener {
     private static JColorChooser chooser;
-    private static int index=-1;
+    private static int index = -1;
     private static MwColorChooser instance;
     /**
      * 
      */
     private static final long serialVersionUID = 6206134450489506329L;
 
-    static void getInstance(int index1, Color c) {
+    static void getInstance(final int index1, final Color c) {
         if (instance == null) {
             instance = new MwColorChooser();
         }
-        index = index1 ;
+        index = index1;
         chooser.setColor(c);
         instance.setVisible(true);
     }
@@ -56,11 +56,12 @@ public final class MwColorChooser extends MwJFrame implements ChangeListener {
     }
 
     @Override
-    public void stateChanged(ChangeEvent e) {
-        if (index>=0){
-            StyleColor.setColor(index,chooser.getColor());
+    public void stateChanged(final ChangeEvent e) {
+        if (index >= 0) {
+            StyleColor.setColor(index, chooser.getColor());
             MwGuiFrame.getChartPanel().setVisible(index, true);
-            MwGuiFrame.getChartCheckBoxPanel().refreshBox(index, chooser.getColor());
+            MwGuiFrame.getChartCheckBoxPanel().refreshBox(index,
+                    chooser.getColor());
         }
 
     }

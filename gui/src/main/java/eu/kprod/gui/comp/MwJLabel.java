@@ -27,16 +27,15 @@ public class MwJLabel extends JLabel {
         super();
     }
 
-    public MwJLabel(Color color, String s) {
+    public MwJLabel(final Color color, final String s) {
         super(s);
         setForeground(color);
         setHorizontalAlignment(CENTER);
     }
 
-    public MwJLabel(String s) {
+    public MwJLabel(final String s) {
         super(s);
         setHorizontalAlignment(CENTER);
     }
-
 
 }

@@ -172,7 +172,6 @@ public class MwDataModel {
     }
 
     /**
-     * 
      * @param i
      *            the motor number
      * @param read8
@@ -236,7 +235,7 @@ public class MwDataModel {
                     fi = i / 1000.0;
                     fd = d;
                     break;
-                    // Different rates fot POS-4 POSR-5 NAVR-6
+                // Different rates fot POS-4 POSR-5 NAVR-6
                 case 4:
                     fp = p / 100.0;
                     fi = i / 100.0;
@@ -252,6 +251,8 @@ public class MwDataModel {
                     fi = i / 100.0;
                     fd = d / 1000.0;
                     break;
+                default: 
+                    break;
             }
 
             pidItem.add(f++, fp);
@@ -263,7 +264,7 @@ public class MwDataModel {
     }
 
     public final void setUavChangeListener(
-            MwDataSourceListener uavChangeListener1) {
+            final MwDataSourceListener uavChangeListener1) {
         this.uavChangeListener = uavChangeListener1;
     }
 }

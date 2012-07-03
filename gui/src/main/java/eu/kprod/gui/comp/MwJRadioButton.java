@@ -23,12 +23,11 @@ public class MwJRadioButton extends JRadioButton {
     private static final long serialVersionUID = 1L;
 
     public MwJRadioButton() {
-
         super();
 
     }
 
-    public MwJRadioButton(String p) {
-        super(p);
+    public MwJRadioButton(final String name) {
+        super(name);
     }
 }
