@@ -481,7 +481,7 @@ public final class MSP {
      *            this contains only 8 bits of information.
      */
     public static void decode(final int input) {
-        LOGGER.trace("MSP=" + mspState + "\n");
+//        LOGGER.trace("mspState = " + mspState + "\n");
         if (mspState == IDLE) {
             mspState = (MSP_IN_HEAD1 == input) ? HEADER_START : IDLE;
         } else if (mspState == HEADER_START) {
