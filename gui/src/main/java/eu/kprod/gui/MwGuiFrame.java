@@ -602,17 +602,13 @@ MwDataSourceListener, ChangeListener {
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-
                 JTextArea textArea = new JTextArea(10, 50);
                 textArea.setText(TEXT_ABOUT);
                 textArea.setEditable(false);
                 textArea.setFocusable(false);
-
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setBorder(BorderFactory.createTitledBorder((String) null ));
-
                 JOptionPane.showMessageDialog(MwGuiFrame.getInstance(), scrollPane,"About MwGui", JOptionPane.PLAIN_MESSAGE);
-
             }
         });
 
