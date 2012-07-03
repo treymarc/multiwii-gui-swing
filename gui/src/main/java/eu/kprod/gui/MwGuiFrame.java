@@ -126,7 +126,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     Thread.sleep(SERIALDELAY);
 
                 } catch (final Exception p) {
-                    LOGGER.error(p.getMessage()+"\n");
+                    LOGGER.error(p.getMessage() + "\n");
                 }
             }
             if (restart) {
@@ -194,7 +194,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 try {
                     openSerialPort();
                 } catch (final Exception e) {
-                    LOGGER.error(e.getMessage()+"\n");
+                    LOGGER.error(e.getMessage() + "\n");
                 }
             }
         }
@@ -377,7 +377,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                         model = abstractButton.getModel();
                     }
                 } catch (final Exception e) {
-                    LOGGER.error(e.getMessage()+"\n");
+                    LOGGER.error(e.getMessage() + "\n");
                 }
             }
             if (model != null) {
@@ -409,9 +409,9 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                             .append(baudRateMenuGroup.getSelection()
                                     .getActionCommand()).toString());
         } catch (final SerialNotFoundException e) {
-            LOGGER.error(e.getMessage()+"\n");
+            LOGGER.error(e.getMessage() + "\n");
         } catch (final SerialException e) {
-            LOGGER.error(e.getMessage()+"\n");
+            LOGGER.error(e.getMessage() + "\n");
         }
     }
 
@@ -519,7 +519,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             @Override
             public void windowClosing(final WindowEvent e) {
                 LOGGER.trace("windowClosing "
-                        + e.getSource().getClass().getName()+"\n");
+                        + e.getSource().getClass().getName() + "\n");
                 if (timer != null) {
                     timer.cancel();
                     timer.purge();
@@ -666,7 +666,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     LOGGER.trace("actionPerformed "
-                            + e.getSource().getClass().getName()+"\n");
+                            + e.getSource().getClass().getName() + "\n");
                     stopTimer();
                 }
             });
@@ -715,7 +715,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     LOGGER.trace("actionPerformed "
-                            + e.getSource().getClass().getName()+"\n");
+                            + e.getSource().getClass().getName() + "\n");
 
                     beginSerialCom();
                     restartTimer((Integer) serialRefreshRate.getSelectedItem());
@@ -761,7 +761,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                         }
                     } catch (final SerialException e) {
 
-                        LOGGER.error(e.getMessage()+"\n");
+                        LOGGER.error(e.getMessage() + "\n");
                     }
                 }
             });
@@ -786,7 +786,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     LOGGER.trace("actionPerformed "
-                            + e.getSource().getClass().getName()+"\n");
+                            + e.getSource().getClass().getName() + "\n");
                     // TODO Write to eeprom
                 }
             });
@@ -882,8 +882,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     @Override
     public void reportSerial(final Throwable e) {
         // we have an error
-        LOGGER.error(e.getMessage()+"\n");
-        LOGGER.error(e.getCause()+"\n");
+        LOGGER.error(e.getMessage() + "\n");
+        LOGGER.error(e.getCause() + "\n");
         stopTimer();
         closeSerialPort();
     }

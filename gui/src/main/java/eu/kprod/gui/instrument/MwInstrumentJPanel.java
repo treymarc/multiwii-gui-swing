@@ -131,8 +131,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
     abstract void resetAllValuesImpl();
 
-    public void setCenterPoint(Point2D centerPoint) {
-        this.centerPoint = centerPoint;
+    public void setCenterPoint(final Point2D centerPoint1) {
+        this.centerPoint = centerPoint1;
     }
 
     public void setDimMarker10Deg(final int dimMarker10Deg1) {
