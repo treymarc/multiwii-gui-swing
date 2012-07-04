@@ -14,7 +14,6 @@
 
 package eu.kprod.gui.instrument;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -22,30 +21,56 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import eu.kprod.ds.MwSensorClass;
 import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.Ress;
-import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-    // private GeneralPath bar;
 
     private static Image imageRCdataeBg;
 
-    private static int maxoffest = 2;
+    private static final int rcDatabarWidth = 7;
+    
+    private int[] startx=initializePositionX();
 
+    private int[] starty=initializePositionY();
+
+
+    private static int[] initializePositionY() {
+        final int[] m = new int[8];
+        int starty = 16;
+
+        for (int i = 0; i < m.length; i++) {
+            
+            m[i]=starty;
+              starty += rcDatabarWidth + 8;
+        }
+
+        return m;
+    }
+    
+    private static int[] initializePositionX() {
+        final int[] m = new int[8];
+       
+        
+        for (int i = 0; i < m.length; i++) {
+            m[i]=41;
+        }
+
+        return m;
+    }
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+
     private final double[] dataRC = new double[8];
+
 
     {
         if (imageRCdataeBg == null) {
@@ -63,11 +88,14 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     }
 
     public MwRCDataPanel(final Color c) {
-
         super(new Dimension(200, 150));
+        super.setBarMax(118);
+        super.setBarWidth(rcDatabarWidth);
+
         for (int i = 0; i < dataRC.length; i++) {
             dataRC[i] = 0;
         }
+        
         setBackground(c);
 
     }
@@ -89,50 +117,12 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawBarValue(final Graphics2D g2d) {
-        final int startx = 41;
-        int starty = 16;
-
-        // bar w/h
-        final int xx = 118;
-        final int yy = 7;
-
-        g2d.setStroke(new BasicStroke(1));
-        // g2d.setPaint(StyleColor.greenBar);
-        for (final double element : dataRC) {
-
-            int barvalue = new Double(((element - 1000) / 1000) * xx)
-                    .intValue();
-            if (barvalue < -maxoffest) {
-                barvalue = -maxoffest;
-            } else if (barvalue > xx + maxoffest) {
-                barvalue = xx + maxoffest;
-            }
-            final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
-            bar.moveTo(startx, starty);
-            bar.lineTo(startx + barvalue, starty);
-            bar.lineTo(startx + barvalue, starty + yy);
-            bar.lineTo(startx, starty + yy);
-            bar.closePath();
-            if (barvalue < 0) {
-                g2d.setPaint(StyleColor.INSTR_BAR_YELLOW);
-            } else if (barvalue > xx) {
-                g2d.setPaint(StyleColor.INSTR_BAR_RED);
-            } else {
-                g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
-            }
-            g2d.fill(bar);
-            starty += yy + 8;
-
-        }
-
-    }
+    
+    
 
     @Override
     public void paintComponent(final Graphics g) {
-
         super.paintComponent(g);
-
         final Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -140,7 +130,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         drawBackground(g2d);
 
-        drawBarValue(g2d);
+        drawBar(g2d, 2, dataRC, null, startx, starty, XAXIS);
 
     }
 

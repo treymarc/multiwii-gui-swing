@@ -13,7 +13,6 @@
  */
 package eu.kprod.gui.instrument;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -21,8 +20,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
@@ -30,35 +27,54 @@ import eu.kprod.ds.MwSensorClass;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.MwGuiRuntimeException;
-import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
+/**
+ * resources : /uav/*.png
+ * 
+ */
 public class MwUAVPanel extends MwInstrumentJPanel {
 
-    private static Image[] images = new Image[14];
+
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+   
+    
+    private static Image[] uavImages = new Image[14];
+    
 
+    
+    // position for drawing in the png uavImages
+    private static final int[] UAV_TRI_MOTOR_X = {  71, 121, 21 };
+    private static final int[] UAV_TRI_MOTOR_Y = { 129,  79, 79 };
+    
+    private static final int[] UAV_TRI_SERVO_INDEX = { 5 };
+    private static final int[] UAV_TRI_SERVO_X = { 41 };
+    private static final int[] UAV_TRI_SERVO_Y = { 151 };
+    
+    private static final int[] UAV_QUADP_MOTOR_Y = { 179, 129, 129, 79 };
+    private static final int[] UAV_QUADP_MOTOR_X = {  76, 126,  26, 76 };
+    
+    private static final int[] UAV_QUADX_MOTOR_X = { 121, 121,  41, 41 };
+    private static final int[] UAV_QUADX_MOTOR_Y = { 169,  79, 169, 79 };
+    
+    
     private final double[] motor = new double[8];
     private final double[] servo = new double[8];
-    private int uavType = 10;
+    
+    private int uavType = MSP.UAV_TRI;
 
-    // bar w/h
-    private final int barWidth = 8;
-
-    private final int yy = 67;
 
     {
-
         try {
-            for (int i = 1; i < images.length; i++) {
+            for (int i = 1; i < uavImages.length; i++) {
 
                 final URL urlfw = this.getClass().getResource(
                         "/uav/" + i + ".png");
 
-                images[i] = Toolkit.getDefaultToolkit().getImage(urlfw);
+                uavImages[i] = Toolkit.getDefaultToolkit().getImage(urlfw);
             }
 
         } catch (final Exception e) {
@@ -70,6 +86,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     public MwUAVPanel(final Color c) {
         super(new Dimension(170, 200));
+        super.setBarMax(67);
+        super.setBarWidth(8);
 
         setBackground(c);
 
@@ -153,102 +171,36 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     // #endif
     void drawBarValue(final Graphics2D g2d) {
 
-        g2d.setStroke(new BasicStroke(1));
-
         switch (uavType) {
             case MSP.UAV_TRI:
-            {
-                // REAR; RIGHT; LEFT
-                final int[] startx = {  71, 121, 21 };
-                final int[] starty = { 129,  79, 79 };
-                drawMotorBar(g2d, startx, starty);
-                
-                // servo[5] = constrain(conf.tri_yaw_middle + YAW_DIRECTION * axisPID[YAW],
-                final int[] startxSrv =         {  41};
-                final int[] startySrv =         { 151};
-                final int[] servoIndex =        {   5};
-                drawServoBar(g2d, startxSrv, startySrv, servoIndex);
-                
-            }
-            break;
+                drawBar(g2d, 0, motor, null, UAV_TRI_MOTOR_X,  UAV_TRI_MOTOR_Y, YAXIS);
+                drawBar(g2d, 0, servo, UAV_TRI_SERVO_INDEX, UAV_TRI_SERVO_X, UAV_TRI_SERVO_Y, XAXIS);
+
+                break;
             case MSP.UAV_QUADP:
-            {
-           //   REAR; RIGHT; LEFT; FRONT
-                final int[] startx = { 76, 126, 26, 76 };
-                final int[] starty = { 179, 129, 129, 79 };
-                drawMotorBar(g2d, startx, starty);
-            }
+                drawBar(g2d, 0, motor, null, UAV_QUADP_MOTOR_X, UAV_QUADP_MOTOR_Y, YAXIS);
+
                 break;
             case MSP.UAV_QUADX:
-            {
-              //REAR_R; FRONT_R; REAR_L; FRONT_L
-                final int[] startx = { 121, 121, 41, 41 };
-                final int[] starty = { 169, 79, 169, 79 };
-                drawMotorBar(g2d, startx, starty);
-            }
-                break;
+                drawBar(g2d, 0, motor, null, UAV_QUADX_MOTOR_X, UAV_QUADX_MOTOR_Y, YAXIS);
 
+                break;
             default:
                 break;
         }
+        ;
 
     }
 
-    private void drawMotorBar(final Graphics2D g2d, final int[] startx,
-            final int[] starty) {
-        g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
 
-        for (int i = 0; i < startx.length; i++) {
 
-            int barvalue = new Double(((motor[i] - 1000) / 1000) * yy)
-                    .intValue();
-            if (barvalue < 0) {
-                barvalue = 0;
-            }
-            final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
-            bar.moveTo(startx[i], starty[i]);
-            bar.lineTo(startx[i], starty[i] - barvalue);
-            bar.lineTo(startx[i] + barWidth, starty[i] - barvalue);
-            bar.lineTo(startx[i] + barWidth, starty[i]);
-            bar.closePath();
-
-            g2d.fill(bar);
-
-        }
-
-    }
-    
-    // TODO merge all instrument drawBar
-    private void drawServoBar(final Graphics2D g2d, final int[] startx,
-            final int[] starty,final int[] indexes) {
-        g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
-
-        for (int i = 0; i < indexes.length; i++) {
-
-            int barValue = new Double(((servo[indexes[i]] - 1000) / 1000) * yy)
-                    .intValue();
-            if (barValue < 0) {
-                barValue = 0;
-            }
-            final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
-            bar.moveTo(startx[i], starty[i]);
-            bar.lineTo(startx[i]+barValue, starty[i]);
-            bar.lineTo(startx[i]+barValue, starty[i]+barWidth);
-            bar.lineTo(startx[i], starty[i]+barWidth);
-            bar.closePath();
-
-            g2d.fill(bar);
-
-        }
-
-    }
 
     private void drawUAV(final Graphics2D g2d) {
 
         final BufferedImage bi = new BufferedImage(getMaxRadiusY(),
                 getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
         final Graphics g = bi.getGraphics();
-        g.drawImage(images[uavType], 0, 0, null);
+        g.drawImage(uavImages[uavType], 0, 0, null);
 
         // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
         // float[] offsets = new float[4];

@@ -13,8 +13,12 @@
  */
 package eu.kprod.gui.instrument;
 
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.io.InputStream;
 
@@ -22,6 +26,7 @@ import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.MwJPanel;
+import eu.kprod.gui.comp.StyleColor;
 
 public abstract class MwInstrumentJPanel extends MwJPanel implements
         MwDataSourceListener {
@@ -33,6 +38,9 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
      */
     private static final long serialVersionUID = 1L;
 
+    static final int XAXIS = 0;
+    static final int YAXIS = 1;
+    
     private static Font writing = null;
 
     public static Font getWriting() {
@@ -159,4 +167,85 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         this.radiusy = radiusy1;
     }
 
+
+    public int getBarWidth() {
+        return barWidth;
+    }
+
+    public void setBarWidth(int barWidth) {
+        this.barWidth = barWidth;
+    }
+
+    public int getBarMax() {
+        return barMax;
+    }
+
+    public void setBarMax(int barMax) {
+        this.barMax = barMax;
+    }
+
+
+    // bar w/h
+    private int barWidth = 8;
+    private int barMax = 67;
+    
+    /**
+     *  will draw an array of value 
+     *  
+     * @param g2d the graphic (were we draw) 
+     * @param allow the bar to reach barMax + offset and -offest value  
+     * @param All the values to draw
+     * @param indexes of the value to draw , use null to draw all value
+     * @param startx, the x position for each bar to draw
+     * @param starty, the y position for each bar to draw
+     * @param orientation , can be YAXIS or XAXIS
+     */
+    protected void drawBar(final Graphics2D g2d, int offset, double[] value,int[] indexes, final int[] xpoint, final int[] ypoint , final int orientation) {
+        g2d.setStroke(new BasicStroke(1));
+        
+        final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
+        for (int i = 0; i < xpoint.length; i++) {
+
+            int barValue = new Double(((value[i] - 1000) / 1000) * barMax)
+                    .intValue();
+
+            if (barValue < -offset) {
+                barValue = -offset;
+            } else if (barValue > barMax + offset) {
+                barValue = barMax + offset;
+            }
+
+            if (barValue < 0) {
+                g2d.setPaint(StyleColor.INSTR_BAR_YELLOW);
+            } else if (barValue > barMax) {
+                g2d.setPaint(StyleColor.INSTR_BAR_RED);
+            } else {
+                g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
+            }
+
+            bar.moveTo(xpoint[i], ypoint[i]);
+
+            switch (orientation) {
+                case YAXIS:
+                    bar.lineTo(xpoint[i], ypoint[i] - barValue); 
+                    bar.lineTo(xpoint[i] + barWidth, ypoint[i] - barValue);
+                    bar.lineTo(xpoint[i] + barWidth, ypoint[i]);
+                    break;
+
+                case XAXIS:
+                    bar.lineTo(xpoint[i]+barValue, ypoint[i]);
+                    bar.lineTo(xpoint[i]+barValue, ypoint[i]+barWidth);
+                    bar.lineTo(xpoint[i], ypoint[i]+barWidth);
+                    
+                    break;
+                default:
+                    throw new MwGuiRuntimeException("coding bug, please report");    
+            }
+            
+            bar.closePath();
+            g2d.fill(bar);
+
+        }
+    }
+    
 }

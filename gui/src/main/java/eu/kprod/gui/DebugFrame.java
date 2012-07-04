@@ -99,7 +99,7 @@ public class DebugFrame extends JFrame implements SerialListener {
             @Override
             public void windowClosing(final WindowEvent e) {
                 LOGGER.trace("windowClosing "
-                        + e.getSource().getClass().getName()+"\n");
+                        + e.getSource().getClass().getName() + "\n");
                 MwGuiFrame.closeDebugFrame();
             }
         });
