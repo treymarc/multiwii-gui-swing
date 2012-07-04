@@ -400,7 +400,7 @@ public class SerialDevice implements SerialPortEventListener {
 
     @Override
     public final synchronized void serialEvent(final SerialPortEvent serialEvent) {
-        LOGGER.debug("serial port event");
+        // LOGGER.debug("serial port event");
 
         if (serialEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {

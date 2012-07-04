@@ -82,7 +82,6 @@ public class SerialCom {
                 for (int i = 4; i < array.length - 1; ++i)
                     System.out.printf(" %02x", array[i]);
                 System.out.println();
-
             }
             serial.write(array);
         }

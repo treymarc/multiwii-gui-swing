@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012
- * 
+ *
  * @author treym (Trey Marc)
  * @author dick@softplc.com
  *         This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ import eu.kprod.ds.MwSensorClassServo;
 
 /**
  * Multiwii Serial Protocol
- * 
+ *
  * @author treym
  */
 public final class MSP {
@@ -78,7 +78,7 @@ public final class MSP {
      * This holds a portion of the command packet so method run() can process it
      * on the event dispatching (Swing GUI) thread.
      */
-    static class ByteBuffer extends ByteArrayInputStream implements Runnable {
+    final static class ByteBuffer extends ByteArrayInputStream implements Runnable {
         final MwDataModel model;
 
         public ByteBuffer(final byte[] input, final int count) {
@@ -90,21 +90,21 @@ public final class MSP {
         // read from "this" ByteArrayInputStream, 8 lower bits only, uppers are
         // zero
         final int read8() {
-            return 0xff & read();
+            return read();
         }
 
         final int read16() {
-            int ret = read8();
+            int ret = read();
             // sign extend this byte
-            ret |= ((byte) read8()) << 8;
+            ret |= ((byte) read()) << 8;
             return ret;
         }
 
         final int read32() {
-            int ret = read8();
-            ret |= read8() << 8;
-            ret |= read8() << 16;
-            ret |= read8() << 24;
+            int ret = read();
+            ret |= read() << 8;
+            ret |= read() << 16;
+            ret |= read() << 24;
             return ret;
         }
 
@@ -410,11 +410,13 @@ public final class MSP {
     private static final Logger LOGGER = Logger.getLogger(MSP.class);
 
     private static final int MASK = 0xff;
+
     /**
      * reception buffer, don't make bigger than needed, we Object.clone() it
      * frequently.
      */
-    private static byte[] buffer = new byte[100];
+    private static final int BUFZ = 100;
+    private static byte[] buffer = new byte[BUFZ];  // not final, replaced below
 
     /**
      * position in the reception inputBuffer
@@ -422,45 +424,47 @@ public final class MSP {
     private static int offset;
 
     // Multiwii serial commande definition : 8bit
-    public static final int 
-    IDENT = 100, 
-    STATUS = 101, 
-    RAW_IMU = 102,  
-    SERVO = 103, 
-    MOTOR = 104, 
-    RC = 105, 
-    RAW_GPS = 106, 
-    COMP_GPS = 107,   
-    ATTITUDE = 108, 
-    ALTITUDE = 109, 
-    BAT = 110, 
-    RC_TUNING = 111,   
-    PID = 112, 
-    BOX = 113, 
-    MISC = 114, 
-    MOTOR_PINS = 115, 
-    BOXNAMES = 116,
-    PIDNAMES = 117, 
-    SET_RAW_RC = 200, 
-    SET_RAW_GPS = 201,
-    SET_PID = 202, 
-    SET_BOX = 203,
-    SET_RC_TUNING = 204, 
-    ACC_CALIBRATION = 205, 
-    MAG_CALIBRATION = 206,   
-    SET_MISC = 207,    
-    RESET_CONF = 208, 
-    EEPROM_WRITE = 250,
-    DEBUG = 254;
+    public static final int
+        IDENT = 100,
+        STATUS = 101,
+        RAW_IMU = 102,
+        SERVO = 103,
+        MOTOR = 104,
+        RC = 105,
+        RAW_GPS = 106,
+        COMP_GPS = 107,
+        ATTITUDE = 108,
+        ALTITUDE = 109,
+        BAT = 110,
+        RC_TUNING = 111,
+        PID = 112,
+        BOX = 113,
+        MISC = 114,
+        MOTOR_PINS = 115,
+        BOXNAMES = 116,
+        PIDNAMES = 117,
+        SET_RAW_RC = 200,
+        SET_RAW_GPS = 201,
+        SET_PID = 202,
+        SET_BOX = 203,
+        SET_RC_TUNING = 204,
+        ACC_CALIBRATION = 205,
+        MAG_CALIBRATION = 206,
+        SET_MISC = 207,
+        RESET_CONF = 208,
+        EEPROM_WRITE = 250,
+        DEBUG = 254;
+
     // protocol header in
     private static final int MSP_IN_HEAD1 = '$';
     private static final int MSP_IN_HEAD2 = 'M';
     private static final int MSP_IN_HEAD3 = '>';
+
     // protocol header out
     private static final byte[] MSP_OUT = { '$', 'M', '<' };
 
     /* status for the serial decoder */
-    public static final int IDLE = 0, HEADER_START = 1, HEADER_M = 2,
+    private static final int IDLE = 0, HEADER_START = 1, HEADER_M = 2,
             HEADER_ARROW = 3, HEADER_SIZE = 4, HEADER_CMD = 5,
             HEADER_PAYLOAD = 6, HEADER_CHK = 6;
 
@@ -475,13 +479,13 @@ public final class MSP {
      * other
      * thread. It decodes the most recent input byte in an MSP reply. It manages
      * state information so it knows where it is in a reply packet.
-     * 
+     *
      * @param input
      *            is a an int with the upper 24 bits set to zero and thusly
      *            this contains only 8 bits of information.
      */
     public static void decode(final int input) {
-//        LOGGER.trace("mspState = " + mspState + "\n");
+        // LOGGER.trace("mspState = " + mspState + "\n");
         if (mspState == IDLE) {
             mspState = (MSP_IN_HEAD1 == input) ? HEADER_START : IDLE;
         } else if (mspState == HEADER_START) {
@@ -525,9 +529,11 @@ public final class MSP {
             } else {
 
                 // Process the verified command on the event dispatching thread.
-                // The checksum is omitted from count
-                SwingUtilities.invokeLater(new ByteBuffer((byte[]) buffer
-                        .clone(), offset));
+                // The checksum is omitted from count.  Give up buffer, replace below
+                SwingUtilities.invokeLater(new ByteBuffer( buffer, offset));
+
+                // replace the buffer which we gave up to ByteBuffer
+                buffer = new byte[BUFZ];
 
                 mspState = IDLE;
             }
@@ -535,25 +541,24 @@ public final class MSP {
     }
 
     // assemble a byte of the reply packet into "buffer"
-    private static final void save(final int aByte) {
+    private static final void save(int aByte) {
         if (offset < buffer.length)
             buffer[offset++] = (byte) aByte;
     }
 
     // send msp without payload
-    public static ByteArrayOutputStream request(final int msp) {
+    public static ByteArrayOutputStream request(int msp) {
         return request(msp, null);
     }
 
     // send msp with payload
-    public static ByteArrayOutputStream request(final int msp,
-            final byte[] payload) {
+    public static ByteArrayOutputStream request(int msp, byte[] payload) {
         ByteArrayOutputStream bf = new ByteArrayOutputStream();
 
         bf.write(MSP_OUT, 0, MSP_OUT.length);
 
-        int hash = 0; // upper 24 bits will be ignored.
-        int payloadz = 0; // siZe
+        int hash = 0;       // upper 24 bits will be ignored.
+        int payloadz = 0;   // siZe
 
         if (payload != null)
             payloadz = payload.length;
