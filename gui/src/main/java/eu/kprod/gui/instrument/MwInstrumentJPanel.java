@@ -190,24 +190,36 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     private int barMax = 67;
     
     /**
-     *  will draw an array of value 
+     *  will draw bar value for each position defined in xpoint,ypoint ; there must enough value to draw in values
      *  
-     * @param g2d the graphic (were we draw) 
-     * @param allow the bar to reach barMax + offset and -offest value  
-     * @param All the values to draw
-     * @param indexes of the value to draw , use null to draw all value
-     * @param startx, the x position for each bar to draw
-     * @param starty, the y position for each bar to draw
+     * @param g2d is the graphic (where we draw) 
+     * @param offset the bar limit , allow the bar to reach barMax + offset and -offest value  
+     * @param values , All the values to draw
+     * @param indexes of the value to draw , use null to draw all value defined by xpoint,ypoint
+     * @param xpoint, the x position for each bar to draw
+     * @param ypoint, the y position for each bar to draw
      * @param orientation , can be YAXIS or XAXIS
      */
-    protected void drawBar(final Graphics2D g2d, int offset, double[] value,int[] indexes, final int[] xpoint, final int[] ypoint , final int orientation) {
-        g2d.setStroke(new BasicStroke(1));
+    protected void drawBar(final Graphics2D g2d, int offset, double[] values,int[] indexes, final int[] xpoint, final int[] ypoint , final int orientation) {
+       
+        GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
+        int barValue;
+        int barMaxNumber;
         
-        final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
-        for (int i = 0; i < xpoint.length; i++) {
+        if (indexes == null){
+             barMaxNumber = xpoint.length;
+        }else{
+            barMaxNumber = indexes.length;
+        }
+        
+        for (int i = 0; i < barMaxNumber; i++) {
 
-            int barValue = new Double(((value[i] - 1000) / 1000) * barMax)
-                    .intValue();
+            if (indexes == null){
+                barValue = new Double(((values[i] - 1000) / 1000) * barMax).intValue();
+            }else{
+                barValue = new Double(((values[indexes[i]] - 1000) / 1000) * barMax).intValue();
+            }
+            
 
             if (barValue < -offset) {
                 barValue = -offset;
@@ -222,7 +234,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
             } else {
                 g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
             }
-
+            g2d.setStroke(new BasicStroke(1));
+            bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
             bar.moveTo(xpoint[i], ypoint[i]);
 
             switch (orientation) {
