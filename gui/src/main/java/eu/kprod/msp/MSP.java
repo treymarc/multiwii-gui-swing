@@ -48,6 +48,13 @@ public final class MSP {
     private static final int MAXSERVO = 8;
     private static final int MAXMOTOR = 8;
 
+    public static final int UAV_TRI = 1;
+    public static final int UAV_BI = 0;
+    public static final int UAV_QUADP = 2;
+    public static final int UAV_QUADX = 3;
+
+    
+    
     /**
      * the model for holding the value decoded by the MSP
      */

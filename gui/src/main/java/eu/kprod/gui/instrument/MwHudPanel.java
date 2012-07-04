@@ -29,6 +29,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 
+import eu.kprod.ds.MwSensorClass;
 import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
@@ -303,7 +304,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
         if (MSP.IDANGY.equals(name)) {
 
             this.pitchAngle = -value.intValue();

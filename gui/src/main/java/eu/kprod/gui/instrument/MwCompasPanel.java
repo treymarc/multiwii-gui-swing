@@ -29,6 +29,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.net.URL;
 
+import eu.kprod.ds.MwSensorClass;
 import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
@@ -271,7 +272,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
         if (MSP.IDHEAD.equals(name)) {
             this.head = value.intValue();
         } else if (MSP.IDALT.equals(name)) {

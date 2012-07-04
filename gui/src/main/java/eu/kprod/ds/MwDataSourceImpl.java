@@ -131,7 +131,7 @@ public class MwDataSourceImpl implements MwDataSource {
             final List<MwDataSourceListener> listenersl = listeners
                     .get(sensorClass);
             for (final MwDataSourceListener mwDataSourceListener : listenersl) {
-                mwDataSourceListener.readNewValue(name, value);
+                mwDataSourceListener.readNewValue(sensorClass,name, value);
 
             }
 

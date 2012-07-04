@@ -26,8 +26,12 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+import eu.kprod.ds.MwSensorClass;
+import eu.kprod.ds.MwSensorClassMotor;
+import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.comp.StyleColor;
+import eu.kprod.msp.MSP;
 
 public class MwUAVPanel extends MwInstrumentJPanel {
 
@@ -38,10 +42,11 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     private static final long serialVersionUID = 1L;
 
     private final double[] motor = new double[8];
+    private final double[] servo = new double[8];
     private int uavType = 10;
 
     // bar w/h
-    private final int xx = 8;
+    private final int barWidth = 8;
 
     private final int yy = 67;
 
@@ -79,15 +84,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     // servo[5] = constrain(1500 + YAW_DIRECTION * (axisPID[YAW] -
     // axisPID[PITCH]), 1020, 2000); //RIGHT
     // #endif
-    // #ifdef TRI
-    // motor[0] = PIDMIX( 0,+4/3, 0); //REAR
-    // motor[1] = PIDMIX(-1,-2/3, 0); //RIGHT
-    // motor[2] = PIDMIX(+1,-2/3, 0); //LEFT
-    // servo[5] = constrain(conf.tri_yaw_middle + YAW_DIRECTION * axisPID[YAW],
-    // TRI_YAW_CONSTRAINT_MIN, TRI_YAW_CONSTRAINT_MAX); //REAR
-    // #endif
-    //
-    // #endif
+
     // #ifdef Y4
     // motor[0] = PIDMIX(+0,+1,-1); //REAR_1 CW
     // motor[1] = PIDMIX(-1,-1, 0); //FRONT_R CCW
@@ -159,25 +156,32 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         g2d.setStroke(new BasicStroke(1));
 
         switch (uavType) {
-            case 2:
-            // ifdef QUADP
-            // motor[0]//REAR
-            // motor[1]//RIGHT
-            // motor[2]//LEFT
-            // motor[3]//FRONT
+            case MSP.UAV_TRI:
             {
+                // REAR; RIGHT; LEFT
+                final int[] startx = {  71, 121, 21 };
+                final int[] starty = { 129,  79, 79 };
+                drawMotorBar(g2d, startx, starty);
+                
+                // servo[5] = constrain(conf.tri_yaw_middle + YAW_DIRECTION * axisPID[YAW],
+                final int[] startxSrv =         {  41};
+                final int[] startySrv =         { 151};
+                final int[] servoIndex =        {   5};
+                drawServoBar(g2d, startxSrv, startySrv, servoIndex);
+                
+            }
+            break;
+            case MSP.UAV_QUADP:
+            {
+           //   REAR; RIGHT; LEFT; FRONT
                 final int[] startx = { 76, 126, 26, 76 };
                 final int[] starty = { 179, 129, 129, 79 };
                 drawMotorBar(g2d, startx, starty);
             }
                 break;
-            case 3:
-            // #ifdef QUADX
-            // motor[0]//REAR_R
-            // motor[1]//FRONT_R
-            // motor[2]//REAR_L
-            // motor[3] //FRONT_L
+            case MSP.UAV_QUADX:
             {
+              //REAR_R; FRONT_R; REAR_L; FRONT_L
                 final int[] startx = { 121, 121, 41, 41 };
                 final int[] starty = { 169, 79, 169, 79 };
                 drawMotorBar(g2d, startx, starty);
@@ -204,8 +208,33 @@ public class MwUAVPanel extends MwInstrumentJPanel {
             final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
             bar.moveTo(startx[i], starty[i]);
             bar.lineTo(startx[i], starty[i] - barvalue);
-            bar.lineTo(startx[i] + xx, starty[i] - barvalue);
-            bar.lineTo(startx[i] + xx, starty[i]);
+            bar.lineTo(startx[i] + barWidth, starty[i] - barvalue);
+            bar.lineTo(startx[i] + barWidth, starty[i]);
+            bar.closePath();
+
+            g2d.fill(bar);
+
+        }
+
+    }
+    
+    // TODO merge all instrument drawBar
+    private void drawServoBar(final Graphics2D g2d, final int[] startx,
+            final int[] starty,final int[] indexes) {
+        g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
+
+        for (int i = 0; i < indexes.length; i++) {
+
+            int barValue = new Double(((servo[indexes[i]] - 1000) / 1000) * yy)
+                    .intValue();
+            if (barValue < 0) {
+                barValue = 0;
+            }
+            final GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
+            bar.moveTo(startx[i], starty[i]);
+            bar.lineTo(startx[i]+barValue, starty[i]);
+            bar.lineTo(startx[i]+barValue, starty[i]+barWidth);
+            bar.lineTo(startx[i], starty[i]+barWidth);
             bar.closePath();
 
             g2d.fill(bar);
@@ -215,8 +244,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     private void drawUAV(final Graphics2D g2d) {
-
-        // int w = 200;
 
         final BufferedImage bi = new BufferedImage(getMaxRadiusY(),
                 getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
@@ -257,8 +284,19 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final String name, final Double value) {
-        motor[Integer.parseInt(name.charAt(name.length() - 1) + "")] = value;
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
+       
+        final int index = Integer.parseInt(name.charAt(name.length() - 1) + "");
+
+
+        String sensor = sensorClass.getName();
+        
+        if (sensor.equals(MwSensorClassMotor.class.getName())) {
+            motor[index] = value;
+        }else if (sensor.equals(MwSensorClassServo.class.getName())){
+            servo[index] = value;
+        }
+
         repaint();
     }
 

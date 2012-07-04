@@ -18,6 +18,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.ds.MwSensorClass;
 import eu.kprod.gui.comp.StyleColor;
 
 public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
@@ -39,7 +40,7 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
     }
 
     @Override
-    public final void readNewValue(final String name, final Double value) {
+    public final void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
         if (!isMouseWheelEnabled()) {
             super.setMouseWheelEnabled(true);
             super.setDomainZoomable(true);

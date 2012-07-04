@@ -27,6 +27,7 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+import eu.kprod.ds.MwSensorClass;
 import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
@@ -150,7 +151,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
 
         if (MSP.IDRCTHROTTLE.equals(name)) {
             dataRC[0] = value;

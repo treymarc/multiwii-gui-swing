@@ -55,6 +55,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.log4j.Logger;
 
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.ds.MwSensorClass;
 import eu.kprod.ds.MwSensorClassCompas;
 import eu.kprod.ds.MwSensorClassHUD;
 import eu.kprod.ds.MwSensorClassIMU;
@@ -173,7 +174,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             + "This is free software, and you are welcome to redistribute it\n"
             + "under certain conditions";
     // private static LogViewerFrame motorFrame;
-    private static LogViewerFrame servoFrame;
+//    private static LogViewerFrame servoFrame;
     private static Timer timer;
     private static MwUAVPanel uavPanel;
 
@@ -283,7 +284,9 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             pane.add(uavPanel = new MwUAVPanel(StyleColor.BACKGROUND_COLOR));
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
                     uavPanel);
-
+            MSP.getRealTimeData().addListener(MwSensorClassServo.class,
+                    uavPanel);
+            
             pane.add(rcDataPanel = new MwRCDataPanel(
                     StyleColor.BACKGROUND_COLOR));
             MSP.getRealTimeData().addListener(MwSensorClassRC.class,
@@ -428,9 +431,9 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     // if (motorFrame != null && motorFrame.isVisible()) {
                     send(MSP.request(MSP.MOTOR));
                     // }
-                    if (servoFrame != null && servoFrame.isVisible()) {
-                        send(MSP.request(MSP.SERVO));
-                    }
+//                    if (servoFrame != null && servoFrame.isVisible()) {
+                    send(MSP.request(MSP.SERVO));
+//                    }
                     send(MSP.request(MSP.RAW_IMU));
                     send(MSP.request(MSP.DEBUG));
                     send(MSP.request(MSP.RC));
@@ -547,13 +550,13 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         /* différents menus */
         final JMenu menu1 = new MwJMenu("File");
         final JMenu menu2 = new MwJMenu("Edit");
-        final JMenu menu3 = new MwJMenu("View");
+        final JMenu menu3 = new MwJMenu("Upload");
         final JMenu menu4 = new MwJMenu("Serial");
         final JMenu menu5 = new MwJMenu("Help");
 
         /* differents choix de chaque menu */
         // MwJMenuItem motor = new MwJMenuItem("Motor");
-        final MwJMenuItem servo = new MwJMenuItem("Servo");
+//        final MwJMenuItem servo = new MwJMenuItem("Servo");
         final MwJMenuItem consoleSerial = new MwJMenuItem("Console");
 
         final MwJMenuItem quit = new MwJMenuItem("Quit");
@@ -573,7 +576,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         menu2.add(copier);
         menu2.add(coller);
 
-        menu3.add(servo);
+//        menu3.add(servo);
         // menu3.add(motor);
 
         menu4.add(getSerialPortAsMenuItem());
@@ -622,17 +625,17 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             }
         });
 
-        servo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (servoFrame == null) {
-                    servoFrame = new LogViewerFrame("Servo", MSP
-                            .getRealTimeData(), MwSensorClassServo.class);
-                } else {
-                    servoFrame.setVisible(true);
-                }
-            }
-        });
+//        servo.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(final ActionEvent e) {
+//                if (servoFrame == null) {
+//                    servoFrame = new LogViewerFrame("Servo", MSP
+//                            .getRealTimeData(), MwSensorClassServo.class);
+//                } else {
+//                    servoFrame.setVisible(true);
+//                }
+//            }
+//        });
 
         // motor.addActionListener(new ActionListener() {
         // public void actionPerformed(ActionEvent e) {
@@ -857,7 +860,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     }
 
     @Override
-    public void readNewValue(final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
         MwGuiFrame.addSensorCheckBox(name);
     }
 
