@@ -81,10 +81,13 @@ public final class MSP {
     final static class ByteBuffer extends ByteArrayInputStream implements Runnable {
         final MwDataModel model;
 
-        public ByteBuffer(final byte[] input, final int count) {
+        final int payloadz;
+        
+        public ByteBuffer(final byte[] input, final int count,final int dataSize) {
             super(input, 0, count);
 
             model = MSP.model;
+            this.payloadz= dataSize;
         }
 
         // read from "this" ByteArrayInputStream, 8 lower bits only, uppers are
@@ -322,7 +325,7 @@ public final class MSP {
                     }
                     break;
 
-                case DEBUG:// TODO SEND
+                case DEBUG:
                     for (int i = 1; i < 5; i++) {
                         model.getRealTimeData().put(d, "debug" + i,
                                 Double.valueOf(read16()),
@@ -331,33 +334,19 @@ public final class MSP {
                     break;
 
                 case BOXNAMES:
-                    /*
-                     * {
-                     * int count = available();
-                     * String names =
-                     * model.removeAllBoxName();
-                     * int i = 0;
-                     * for (final String name : new String(buffer, 0,
-                     * dataSize).split(";")) {
-                     * model.addBoxName(name, i++);
-                     * }
-                     * }
-                     */
+                    model.removeAllBoxName();
+                    int i = 0;
+                    for (final String name : new String(buf, 0, payloadz).split(";")) {
+                        model.addBoxName(name, i++);
+                    }
                     break;
 
                 case PIDNAMES:
-                    /*
-                     * {
-                     * int count = available();
-                     * String names =
-                     * model.removeAllPIDName();
-                     * i = 0;
-                     * for (String name : new String(buffer, 0,
-                     * dataSize).split(";")) {
-                     * model.addPIDName(name, i++);
-                     * }
-                     * }
-                     */
+                    model.removeAllPIDName();
+                    i = 0;
+                    for (final String name : new String(buf, 0, payloadz).split(";")) {
+                        model.addPIDName(name, i++);
+                    }
                     break;
             }
         }
@@ -464,9 +453,15 @@ public final class MSP {
     private static final byte[] MSP_OUT = { '$', 'M', '<' };
 
     /* status for the serial decoder */
-    private static final int IDLE = 0, HEADER_START = 1, HEADER_M = 2,
-            HEADER_ARROW = 3, HEADER_SIZE = 4, HEADER_CMD = 5,
-            HEADER_PAYLOAD = 6, HEADER_CHK = 6;
+    private static final int 
+    IDLE = 0, 
+    HEADER_START = 1, 
+    HEADER_M = 2, 
+    HEADER_ARROW = 3, 
+    HEADER_SIZE = 4, 
+    HEADER_CMD = 5,
+    HEADER_PAYLOAD = 6, 
+    HEADER_CHK = 6;
 
     private static int mspState = IDLE; // initial decoder state
     private static int cmd; // incoming commande
@@ -520,22 +515,30 @@ public final class MSP {
                 // we keep reading the payload in this state
                 checksum ^= input;
                 save(input);
-            } else if ((checksum & MASK) != input) {
-                LOGGER.error("invalid checksum for command " + cmd + ": "
-                        + (checksum & MASK) + " expected, got " + input + "\n");
-                if (LOGGER.isTraceEnabled()) {
-                    System.err.println("checksum error");
-                }
-            } else {
-
-                // Process the verified command on the event dispatching thread.
-                // The checksum is omitted from count.  Give up buffer, replace below
-                SwingUtilities.invokeLater(new ByteBuffer( buffer, offset));
-
-                // replace the buffer which we gave up to ByteBuffer
-                buffer = new byte[BUFZ];
-
+            } else  {
+                // we have done reading ,reset the decoder 
                 mspState = IDLE;
+                
+                if ((checksum & MASK) != input) {
+                    
+                    if (LOGGER.isTraceEnabled()) {
+                        System.err.println("checksum error");
+                    }else{
+                        LOGGER.error("invalid checksum for command " + cmd + ": "
+                                + (checksum & MASK) + " expected, got " + input + "\n");
+                    }
+                   
+                } else {
+
+                    // Process the verified command on the event dispatching thread.
+                    // The checksum is omitted from count.  Give up buffer, replace below
+                    SwingUtilities.invokeLater(new ByteBuffer( buffer, offset,dataSize));
+
+                    // replace the buffer which we gave up to ByteBuffer
+                    buffer = new byte[BUFZ];
+
+                }
+
             }
         }
     }
