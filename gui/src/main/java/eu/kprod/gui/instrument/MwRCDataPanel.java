@@ -25,14 +25,15 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import eu.kprod.ds.MwSensorClass;
+import eu.kprod.gui.MwConfiguration;
 import eu.kprod.gui.MwGuiRuntimeException;
-import eu.kprod.gui.Ress;
 import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-
-    private static Image imageRCdataeBg;
+    private Image imageRCdataeBg= super.getImage("rcdata.png");
+    
+    
 
     private static final int rcDatabarWidth = 7;
     
@@ -75,8 +76,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     {
         if (imageRCdataeBg == null) {
 
-            final URL url = this.getClass().getResource(Ress.IMG_RCDATA);
-
+            final URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.IMAGE)+"/"+"rcdata.png");
+            
             try {
                 imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
 

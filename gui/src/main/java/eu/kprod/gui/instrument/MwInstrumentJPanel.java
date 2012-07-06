@@ -17,14 +17,17 @@ import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.io.InputStream;
+import java.net.URL;
 
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.gui.MwConfiguration;
 import eu.kprod.gui.MwGuiRuntimeException;
-import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.MwJPanel;
 import eu.kprod.gui.comp.StyleColor;
 
@@ -84,7 +87,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         if (writing == null) {
 
             final InputStream is = this.getClass().getResourceAsStream(
-                    Ress.FONT);
+                    MwConfiguration.getPath(MwConfiguration.FONT));
 
             try {
                 writing = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -257,6 +260,19 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
             
             bar.closePath();
             g2d.fill(bar);
+
+        }
+    }
+
+    Image getImage(String image) {
+        URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.IMAGE)+"/"+image);
+        
+        try {
+            return  Toolkit.getDefaultToolkit().getImage(url);
+
+        } catch (final Exception e) {
+            throw new MwGuiRuntimeException("Could not load images for "
+                    + this.getClass(), e);
 
         }
     }

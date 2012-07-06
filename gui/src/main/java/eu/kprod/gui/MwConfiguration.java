@@ -13,15 +13,28 @@
  */
 package eu.kprod.gui;
 
-public final class Ress {
 
-    public static final String FONT = "/01Digitall.ttf";
+public class MwConfiguration {
 
-    public static final String IMG_COMPAS = "/compas.png";
-    public static final String IMG_RCDATA = "/rcdata.png";
+    public static final int FONT = 0;
+    public static final int IMAGE = 1;
+    
+    private static MwResources pathManager;
 
-    private Ress() {
+    public static String getPath(int path) {
 
+        return getPathManager().get(path);
+ 
     }
+
+    private static MwResources getPathManager() {
+        if (pathManager == null){
+            pathManager = new MwResources();
+        }
+        return pathManager;
+    }
+
+    
+  
 
 }
