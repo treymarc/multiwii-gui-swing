@@ -20,13 +20,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 
 import eu.kprod.ds.MwSensorClass;
-import eu.kprod.gui.MwConfiguration;
-import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
@@ -58,7 +54,6 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     private static int[] initializePositionX() {
         final int[] m = new int[8];
        
-        
         for (int i = 0; i < m.length; i++) {
             m[i]=41;
         }
@@ -72,21 +67,6 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     private final double[] dataRC = new double[8];
 
-
-    {
-        if (imageRCdataeBg == null) {
-
-            final URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.IMAGE)+"/"+"rcdata.png");
-            
-            try {
-                imageRCdataeBg = Toolkit.getDefaultToolkit().getImage(url);
-
-            } catch (final Exception e) {
-                throw new MwGuiRuntimeException("Could not load images for "
-                        + this.getClass(), e);
-            }
-        }
-    }
 
     public MwRCDataPanel(final Color c) {
         super(new Dimension(200, 150));
