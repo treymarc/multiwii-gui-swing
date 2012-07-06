@@ -13,11 +13,15 @@
  */
 package eu.kprod.gui;
 
-
+/**
+ * Entry point for the gui configuration
+ * @author treym
+ *
+ */
 public class MwConfiguration {
 
     public static final int FONT = 0;
-    public static final int IMAGE = 1;
+    public static final int THEME = 1;
     
     private static MwResources pathManager;
 

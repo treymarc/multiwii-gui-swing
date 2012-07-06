@@ -265,7 +265,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     Image getImage(String image) {
-        URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.IMAGE)+"/"+image);
+        URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.THEME)+"/"+image);
         
         try {
             return  Toolkit.getDefaultToolkit().getImage(url);

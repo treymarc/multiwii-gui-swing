@@ -15,12 +15,24 @@ package eu.kprod.gui;
 
 import java.util.HashMap;
 
+/**
+ * for everythings related to resources path
+ * @author treym
+ *
+ */
 public class MwResources {
 
-    HashMap<Integer, String> ressources ;
+    private final String FONT_PREFIX = "/fonts/";
+    private final String THEME_PREFIXE = "/images/";
+
+    private final String DEFAULT_FONT = FONT_PREFIX + "Liberation/LiberationMono-Regular.ttf";
+    private final String DEFAULT_THEME = THEME_PREFIXE + "default/";
     
+    HashMap<Integer, String> ressources;
+
     MwResources() {
         ressources = initDefaultMap();
+        
     }
 
     MwResources(HashMap<Integer, String>  r) {
@@ -40,8 +52,8 @@ public class MwResources {
    private HashMap<Integer, String> initDefaultMap() {
 
        HashMap<Integer, String> ress =  new  HashMap<Integer, String>();
-       ress.put(MwConfiguration.FONT, "/fonts/Liberation/LiberationMono-Regular.ttf");
-
+       ress.put(MwConfiguration.FONT, DEFAULT_FONT);
+       ress.put(MwConfiguration.THEME, DEFAULT_THEME);
        return ress;
        
     }
