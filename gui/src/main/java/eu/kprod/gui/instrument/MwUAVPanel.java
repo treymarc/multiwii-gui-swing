@@ -19,14 +19,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 
 import eu.kprod.ds.MwSensorClass;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
-import eu.kprod.gui.MwGuiRuntimeException;
 import eu.kprod.msp.MSP;
 
 /**
@@ -42,10 +39,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     private static final long serialVersionUID = 1L;
    
     
-    private static Image[] uavImages = new Image[14];
-    
+    private Image[] uavImages = new Image[14];
 
-    
     // position for drawing in the png uavImages
     private static final int[] UAV_TRI_MOTOR_X = {  71, 121, 21 };
     private static final int[] UAV_TRI_MOTOR_Y = { 129,  79, 79 };
@@ -66,30 +61,16 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     
     private int uavType = MSP.UAV_TRI;
 
-
-    {
-        try {
-            for (int i = 1; i < uavImages.length; i++) {
-
-                final URL urlfw = this.getClass().getResource(
-                        "/uav/" + i + ".png");
-
-                uavImages[i] = Toolkit.getDefaultToolkit().getImage(urlfw);
-            }
-
-        } catch (final Exception e) {
-            throw new MwGuiRuntimeException("Could not load images for "
-                    + this.getClass(), e);
-        }
-
-    }
-
     public MwUAVPanel(final Color c) {
         super(new Dimension(170, 200));
         super.setBarMax(67);
         super.setBarWidth(8);
 
         setBackground(c);
+        
+        for (int i = 1; i < uavImages.length; i++) {
+            uavImages[i] = super.getImage("uav/" + i + ".png");
+        }
 
     }
 

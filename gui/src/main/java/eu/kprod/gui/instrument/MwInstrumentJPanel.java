@@ -17,14 +17,17 @@ import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.io.InputStream;
+import java.net.URL;
 
 import eu.kprod.ds.MwDataSourceListener;
+import eu.kprod.gui.MwConfiguration;
 import eu.kprod.gui.MwGuiRuntimeException;
-import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.MwJPanel;
 import eu.kprod.gui.comp.StyleColor;
 
@@ -57,34 +60,33 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
     private Dimension dimPanel;
 
-    private int maxRadiusX = 200;
-    private int maxRadiusY = 200;
+    private int maxSizeX = 200;
+    private int maxSizeY = 200;
 
-    private int radiusx;
-
-    private int radiusy;
+    private int sizeX;
+    private int sizey;
 
     public MwInstrumentJPanel(final Dimension dimension) {
         if (dimension == null) {
             // Instance variables initialization
-            dimPanel = new Dimension(this.maxRadiusX, this.maxRadiusY);
+            dimPanel = new Dimension(this.maxSizeX, this.maxSizeY);
         } else {
             dimPanel = dimension;
-            maxRadiusX = dimPanel.width;
-            maxRadiusY = dimPanel.height;
+            maxSizeX = dimPanel.width;
+            maxSizeY = dimPanel.height;
         }
-        radiusx = ((Double) (0.45 * this.maxRadiusX)).intValue();
-        radiusy = ((Double) (0.45 * this.maxRadiusY)).intValue();
+        sizeX = ((Double) (0.45 * this.maxSizeX)).intValue();
+        sizey = ((Double) (0.45 * this.maxSizeY)).intValue();
 
         // this.setMinimumSize(dimPanel);
         // Define a center point as a reference
-        centerPoint = new Point2D.Float(this.maxRadiusX / 2,
-                this.maxRadiusY / 2);
+        centerPoint = new Point2D.Float(this.maxSizeX / 2,
+                this.maxSizeY / 2);
 
         if (writing == null) {
 
             final InputStream is = this.getClass().getResourceAsStream(
-                    Ress.FONT);
+                    MwConfiguration.getPath(MwConfiguration.FONT));
 
             try {
                 writing = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -110,11 +112,11 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     public int getMaxRadiusX() {
-        return maxRadiusX;
+        return maxSizeX;
     }
 
     public int getMaxRadiusY() {
-        return maxRadiusY;
+        return maxSizeY;
     }
 
     @Override
@@ -123,11 +125,11 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     public int getRadiusx() {
-        return radiusx;
+        return sizeX;
     }
 
     public int getRadiusy() {
-        return radiusy;
+        return sizey;
     }
 
     @Override
@@ -152,19 +154,19 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     public void setMaxRadiusX(final int maxRadiusX1) {
-        this.maxRadiusX = maxRadiusX1;
+        this.maxSizeX = maxRadiusX1;
     }
 
     public void setMaxRadiusY(final int maxRadiusY1) {
-        this.maxRadiusY = maxRadiusY1;
+        this.maxSizeY = maxRadiusY1;
     }
 
     public void setRadiusx(final int radiusx1) {
-        this.radiusx = radiusx1;
+        this.sizeX = radiusx1;
     }
 
     public void setRadiusy(final int radiusy1) {
-        this.radiusy = radiusy1;
+        this.sizey = radiusy1;
     }
 
 
@@ -257,6 +259,19 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
             
             bar.closePath();
             g2d.fill(bar);
+
+        }
+    }
+
+    Image getImage(String image) {
+        URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.THEME)+"/"+image);
+        
+        try {
+            return  Toolkit.getDefaultToolkit().getImage(url);
+
+        } catch (final Exception e) {
+            throw new MwGuiRuntimeException("Could not load images for "
+                    + this.getClass(), e);
 
         }
     }

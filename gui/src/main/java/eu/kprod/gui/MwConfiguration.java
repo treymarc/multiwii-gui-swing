@@ -13,15 +13,32 @@
  */
 package eu.kprod.gui;
 
-public final class Ress {
+/**
+ * Entry point for the gui configuration
+ * @author treym
+ *
+ */
+public class MwConfiguration {
 
-    public static final String FONT = "/01Digitall.ttf";
+    public static final int FONT = 0;
+    public static final int THEME = 1;
+    
+    private static MwResources pathManager;
 
-    public static final String IMG_COMPAS = "/compas.png";
-    public static final String IMG_RCDATA = "/rcdata.png";
+    public static String getPath(int path) {
 
-    private Ress() {
-
+        return getPathManager().get(path);
+ 
     }
+
+    private static MwResources getPathManager() {
+        if (pathManager == null){
+            pathManager = new MwResources();
+        }
+        return pathManager;
+    }
+
+    
+  
 
 }

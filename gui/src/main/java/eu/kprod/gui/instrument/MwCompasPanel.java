@@ -19,7 +19,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Ellipse2D.Float;
@@ -27,17 +26,14 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.net.URL;
 
 import eu.kprod.ds.MwSensorClass;
-import eu.kprod.gui.MwGuiRuntimeException;
-import eu.kprod.gui.Ress;
 import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.msp.MSP;
 
 public class MwCompasPanel extends MwInstrumentJPanel {
 
-    private static Image imageCompas;
+    private Image imageCompas= super.getImage("compas.png");
     /**
      * 
      */
@@ -46,27 +42,13 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     private Double alt = 0.0;
     private Integer head = 0;
 
-    {
-        if (imageCompas == null) {
-
-            final URL url = this.getClass().getResource(Ress.IMG_COMPAS);
-
-            try {
-                imageCompas = Toolkit.getDefaultToolkit().getImage(url);
-
-            } catch (final Exception e) {
-                throw new MwGuiRuntimeException("Could not load images for "
-                        + this.getClass(), e);
-
-            }
-        }
-    }
-
+   
     public MwCompasPanel(final Color c) {
         super(null);
         setBackground(c);
 
     }
+
 
     private void drawBackground(final Graphics2D g2d) {
 
