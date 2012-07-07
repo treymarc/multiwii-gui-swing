@@ -372,8 +372,8 @@ public final class MSP {
     public static final String IDALT = "alt";
 
     public static final String IDAX = "ax";
-    public static final String IDAY = "az";
-    public static final String IDAZ = "ay";
+    public static final String IDAY = "ay";
+    public static final String IDAZ = "az";
     public static final String IDGX = "gx";
     public static final String IDGY = "gy";
     public static final String IDGZ = "gz";

@@ -87,7 +87,7 @@ public class SerialDevice implements SerialPortEventListener {
 
     private String deviceName;
 
-    public SerialDevice(final String device) throws SerialException {
+    public SerialDevice(String device) throws SerialException {
         this(device, SerialDevice.SERIAL_BAUD_RATE.get(115200), 'N', 8, 1.0f);
     }
 
@@ -384,7 +384,7 @@ public class SerialDevice implements SerialPortEventListener {
     /**
      * General error reporting, all corraled here just in case I think of
      * something slightly more intelligent to do.
-     * 
+     *
      * @param msg
      * @throws SerialException
      */
@@ -420,7 +420,7 @@ public class SerialDevice implements SerialPortEventListener {
         try {
             if (output == null) {
                 reportErrorMessage("write", "output stream is null ",
-                        new SerialClosedException());
+                        new SerialException());
             }
 
             output.write(bytes);
@@ -433,7 +433,7 @@ public class SerialDevice implements SerialPortEventListener {
 
     /**
      * Output a byte.
-     * 
+     *
      * @throws SerialException
      */
     public final void write(int what) throws SerialException {
@@ -441,7 +441,7 @@ public class SerialDevice implements SerialPortEventListener {
             if (output == null) {
                 reportErrorMessage("write",
                         "failed to write to output stream ",
-                        new SerialClosedException());
+                        new SerialException());
             }
             output.write(what);
             output.flush();
@@ -460,7 +460,7 @@ public class SerialDevice implements SerialPortEventListener {
      * If you want to move Unicode data, you can first convert the String to a
      * byte stream in the representation of your choice (i.e. UTF8 or two-byte
      * Unicode data), and send it as a byte array.
-     * 
+     *
      * @throws SerialException
      */
     public final void write(String what) throws SerialException {
@@ -476,7 +476,7 @@ public class SerialDevice implements SerialPortEventListener {
                 write(what.getBytes("ASCII"));
             } catch (final UnsupportedEncodingException a1) {
 
-                throw new SerialRuntimeException(
+                throw new SerialException(
                         "ASCII encoding is required for serial communication",
                         a1);
             }
