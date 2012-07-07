@@ -53,8 +53,8 @@ public final class MSP {
     public static final int UAV_QUADP = 2;
     public static final int UAV_QUADX = 3;
 
-    
-    
+
+
     /**
      * the model for holding the value decoded by the MSP
      */
@@ -88,13 +88,10 @@ public final class MSP {
     final static class ByteBuffer extends ByteArrayInputStream implements Runnable {
         final MwDataModel model;
 
-        final int payloadz;
-        
-        public ByteBuffer(final byte[] input, final int count,final int dataSize) {
+        public ByteBuffer( byte[] input, int count ) {
             super(input, 0, count);
 
             model = MSP.model;
-            this.payloadz= dataSize;
         }
 
         // read from "this" ByteArrayInputStream, 8 lower bits only, uppers are
@@ -140,7 +137,7 @@ public final class MSP {
                 System.out.println();
             }
 
-            int cmd = read();
+            int     cmd = read();       // consume one byte from "buf"
 
             final Date d = new Date();
             switch (cmd) {
@@ -292,6 +289,9 @@ public final class MSP {
                     break;
 
                 case RC_TUNING:
+                    // Dividing an unsigned 8 bit value by 100, then converting back
+                    // to int, leaves a resolution of only 1 part in 3 ( 0 to 2 ).
+                    // 0 - 255 divided by 100 using integer math.
                     model.put(MSP.RCRATE_KEY, (int) (read8() / 100.0));
                     model.put(MSP.RCEXPO_KEY, (int) (read8() / 100.0));
                     model.put(MSP.ROLLPITCHRATE_KEY, (int) (read8() / 100.0));
@@ -342,17 +342,23 @@ public final class MSP {
 
                 case BOXNAMES:
                     model.removeAllBoxName();
-                    int i = 0;
-                    for (final String name : new String(buf, 0, payloadz).split(";")) {
-                        model.addBoxName(name, i++);
+                    {
+                        int i = 0;
+                        // start at index 1 because we've read the cmd byte out already
+                        for (String name : new String(buf, 1, available()).split(";")) {
+                            model.addBoxName(name, i++);
+                        }
                     }
                     break;
 
                 case PIDNAMES:
                     model.removeAllPIDName();
-                    i = 0;
-                    for (final String name : new String(buf, 0, payloadz).split(";")) {
-                        model.addPIDName(name, i++);
+                    {
+                        int i = 0;
+                        // start at index 1 because we've read the cmd byte out already
+                        for (String name : new String(buf, 1, available()).split(";")) {
+                            model.addPIDName(name, i++);
+                        }
                     }
                     break;
             }
@@ -451,36 +457,36 @@ public final class MSP {
         EEPROM_WRITE = 250,
         DEBUG = 254;
 
-    // protocol header in
+    // protocol header for reply packet
     private static final int MSP_IN_HEAD1 = '$';
     private static final int MSP_IN_HEAD2 = 'M';
     private static final int MSP_IN_HEAD3 = '>';
 
-    // protocol header out
+    // protocol header for command packet
     private static final byte[] MSP_OUT = { '$', 'M', '<' };
 
     /* status for the serial decoder */
-    private static final int 
-    IDLE = 0, 
-    HEADER_START = 1, 
-    HEADER_M = 2, 
-    HEADER_ARROW = 3, 
-    HEADER_SIZE = 4, 
+    private static final int
+    IDLE = 0,
+    HEADER_START = 1,
+    HEADER_M = 2,
+    HEADER_ARROW = 3,
+    HEADER_SIZE = 4,
     HEADER_CMD = 5,
-    HEADER_PAYLOAD = 6, 
+    HEADER_PAYLOAD = 6,
     HEADER_CHK = 6;
 
     private static int mspState = IDLE; // initial decoder state
-    private static int cmd; // incoming commande
-    private static int dataSize; // size of the incoming payload
-    private static int checksum; // checksum of the incoming message
+    private static int cmd;             // incoming commande
+    private static int dataSize;        // size of the incoming payload
+    private static int checksum;        // checksum of the incoming message
 
     /**
      * Function decode
      * is designed to be called only from a serialEvent thread, not from any
-     * other
-     * thread. It decodes the most recent input byte in an MSP reply. It manages
-     * state information so it knows where it is in a reply packet.
+     * other thread. It decodes the most recent input byte in an MSP reply.
+     * It manages state information so it knows where it is in a reply packet
+     * on each successive call.
      *
      * @param input
      *            is a an int with the upper 24 bits set to zero and thusly
@@ -523,29 +529,28 @@ public final class MSP {
                 checksum ^= input;
                 save(input);
             } else  {
-                // we have done reading ,reset the decoder 
+                // done reading, reset the decoder
                 mspState = IDLE;
-                
+
                 if ((checksum & MASK) != input) {
-                    
+
                     if (LOGGER.isTraceEnabled()) {
                         System.err.println("checksum error");
                     }else{
                         LOGGER.error("invalid checksum for command " + cmd + ": "
                                 + (checksum & MASK) + " expected, got " + input + "\n");
                     }
-                   
+
                 } else {
 
                     // Process the verified command on the event dispatching thread.
-                    // The checksum is omitted from count.  Give up buffer, replace below
-                    SwingUtilities.invokeLater(new ByteBuffer( buffer, offset,dataSize));
+                    // The checksum is omitted from count.
+                    // Give up "buffer", replace it below.
+                    SwingUtilities.invokeLater(new ByteBuffer( buffer, offset));
 
                     // replace the buffer which we gave up to ByteBuffer
                     buffer = new byte[BUFZ];
-
                 }
-
             }
         }
     }
