@@ -19,7 +19,6 @@ import java.util.List;
 
 public class MwColorDefault extends MwColor{
 
-   
 
     public  List<Color> COLOR_GRAPH = getGraphColor();
     public  List<Color> COLOR = getColor();
@@ -81,17 +80,9 @@ public class MwColorDefault extends MwColor{
     }
 
 
-    /**
-     * change graph color for a timeserie 
-     * @param the index of the timeserie
-     * @param the new color
-     */
     @Override
     void setColorGraphImpl(int index, Color color) {
-        // TODO Auto-generated method stub
         COLOR_GRAPH.set(index, color);
     }
     
-
-
 }

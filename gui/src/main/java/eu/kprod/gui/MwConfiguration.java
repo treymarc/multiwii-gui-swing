@@ -35,10 +35,7 @@ public class MwConfiguration {
     public static final int FONT = 0;
     public static final int THEME = 1;
     
-    public MwConfiguration() {
-        setLookAndFeel();
-    }
-    
+
     public MwColor color = new MwColorDefault();
     
     private MwResources pathManager;
@@ -56,7 +53,7 @@ public class MwConfiguration {
         return pathManager;
     }
 
-    void setLookAndFeel() {
+    public static void setLookAndFeel() {
         // TODO remember OS
         if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");

@@ -89,7 +89,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     private final JTextArea textArea;
     private final JTextField textField;
 
-    public DebugFrame(final String title) {
+    public DebugFrame(final String title, final MwGuiFrame frame) {
         super(title);
 
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -100,7 +100,7 @@ public class DebugFrame extends JFrame implements SerialListener {
             public void windowClosing(final WindowEvent e) {
                 LOGGER.trace("windowClosing "
                         + e.getSource().getClass().getName() + "\n");
-                MwGuiFrame.closeDebugFrame();
+                frame.closeDebugFrame();
             }
         });
 
@@ -140,7 +140,7 @@ public class DebugFrame extends JFrame implements SerialListener {
                         + e.getSource().getClass().getName()+"\n");
 
                 try {
-                    MwGuiFrame.getCom().send(textField.getText(),
+                    frame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
                 } catch (final SerialException e1) {
                     LOGGER.error(e1.getMessage()+"\n");
@@ -157,7 +157,7 @@ public class DebugFrame extends JFrame implements SerialListener {
                         + e.getSource().getClass().getName()+"\n");
 
                 try {
-                    MwGuiFrame.getCom().send(textField.getText(),
+                    frame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
                 } catch (final SerialException e1) {
                     LOGGER.error(e1.getMessage()+"\n");

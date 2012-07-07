@@ -40,21 +40,17 @@ public final class MwGui {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-//                MwColorDefault.setLookAndFeel();
-//                 MwConfiguration conf = new ;
-                 
-                 MwGuiFrame.setConf(new MwConfiguration());
-                MwGuiFrame.getInstance().setVisible(true);
-                MwGuiFrame.getInstance().repaint();
 
+                MwConfiguration.setLookAndFeel();
+                
+
+                MwGuiFrame frame = new MwGuiFrame(new MwConfiguration());
+                frame.setVisible(true);
             }
 
         });
 
     }
 
-    private MwGui() {
-
-    }
 
 }

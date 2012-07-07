@@ -19,10 +19,10 @@ import java.awt.Color;
 
 
 public abstract class MwColor {
+   
 
     public static final int COLORSET = 0;
-    public static final int COLORSETGRAPH = 1;
-    
+    // begin     
     public static final int BACKGROUND_COLOR = 0;
     public static final int FORGROUND_COLOR = 1;
     public static final int INSTR_SKY_BLUE = 2;
@@ -30,22 +30,45 @@ public abstract class MwColor {
     public static final int INSTR_EARTH_ORANGE = 4;
     public static final int INSTR_BAR_RED = 5;
     public static final int INSTR_BAR_YELLOW = 6;
+    // end 
     
 
-    public Color getColorGraph(int colorKey){
-        return getColorImpl(COLORSETGRAPH, colorKey);
+    public static final int COLORSETGRAPH = 1;
+    // begin 
+    //  we dont need the name
+    // end
+    
+    /**
+     * get the color of timeserie
+     * @param key of the timeserie
+     * @return
+     */
+    public Color getColorGraph(int key){
+        return getColorImpl(COLORSETGRAPH, key);
     }
     
-    public Color getColor(int colorKey){
-        return getColorImpl(COLORSET, colorKey);
+    /**
+     * get the color of element
+     * @param key of the element
+     * @return
+     */
+    public Color getColor(int key){
+        return getColorImpl(COLORSET, key);
     }
     
-    abstract Color getColorImpl(int set, int colorKey);
+    /**
+     * change graph color for a timeserie 
+     * @param key of the timeserie
+     * @param the new color
+     */
+    public void setColorGraph(int key, Color color){
+        setColorGraphImpl( key,  color);
+    }
+    
+    
+    
+    abstract Color getColorImpl(int set, int key);
     
     abstract void setColorGraphImpl(int index, Color color);
-    
-    public void setColorGraph(int index, Color color){
-        setColorGraphImpl( index,  color);
-    }
-    
+
 }
