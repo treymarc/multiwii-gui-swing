@@ -90,6 +90,8 @@ public class SerialDevice implements SerialPortEventListener {
 
     private int stopbits;
 
+    private String deviceName;
+
     public SerialDevice(final String device) throws SerialException {
         this(device, SerialDevice.SERIAL_BAUD_RATE.get(115200), 'N', 8, 1.0f );
     }
@@ -100,11 +102,11 @@ public class SerialDevice implements SerialPortEventListener {
 
     }
 
-    public SerialDevice(final String device, final int irate,
+    public SerialDevice(final String device1, final int irate,
             final char iparity, final int idatabits, final float istopbits)
                     throws SerialException {
 
-        LOGGER.trace("new SerialDevice(String " + device + ", int " + irate
+        LOGGER.trace("new SerialDevice(String " + device1 + ", int " + irate
                 + ")");
 
         this.rate = irate;
@@ -138,7 +140,7 @@ public class SerialDevice implements SerialPortEventListener {
 
                 if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
                     // LOGGER.debug("serial possibly " + portId.getName());
-                    if (portId.getName().equals(device)) {
+                    if (portId.getName().equals(device1)) {
                         // LOGGER.debug("found "+device);
                         port = (SerialPort) portId.open("open", 200);
                         input = port.getInputStream();
@@ -159,18 +161,19 @@ public class SerialDevice implements SerialPortEventListener {
             throw new SerialException(
                     I18n.format(
                             "Serial port ''{0}'' already in use. Try quiting any programs that may be using it.",
-                            device)
+                            device1)
                     );
         } catch (final Exception e) {
             throw new SerialException(I18n.format(
-                    "Error opening serial port ''{0}''.", device), e);
+                    "Error opening serial port ''{0}''.", device1), e);
         }
 
         if (port == null) {
             throw new SerialNotFoundException(I18n.format(
-                    "Serial port ''{0}'' not found.", device)
+                    "Serial port ''{0}'' not found.", device1)
                     );
         }
+        deviceName = device1;
     }
 
     public final void addListener(final SerialListener consumer) {
@@ -202,7 +205,8 @@ public class SerialDevice implements SerialPortEventListener {
             e.printStackTrace();
         }
         port = null;
-        LOGGER.trace("close SerialDevice" + this);
+
+        LOGGER.trace(I18n.format("close SerialDevice : {0}()",deviceName ));
     }
 
     public final SerialListener getListener() {
@@ -393,9 +397,13 @@ public class SerialDevice implements SerialPortEventListener {
 */
     public final void reportErrorMessage(final String where, String msg,
             final Throwable e) {
-        LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
+        if (LOGGER.isTraceEnabled()) {
+            e.printStackTrace();
+        } else {
+            LOGGER.trace(I18n.format("Error inside Serial.{0}()", where));
+        }
+        listener.reportSerial( new SerialException(msg, e));
 
-        listener.reportSerial(e);
     }
 
     @Override
@@ -418,15 +426,13 @@ public class SerialDevice implements SerialPortEventListener {
     public final void write(byte[] bytes) throws SerialException {
         try {
             if (output == null) {
-                reportErrorMessage("write",
-                        "failed to write to output stream ", null);
+                reportErrorMessage("write", "output stream is null ", null);
             }
 
             output.write(bytes);
             output.flush();
-
         } catch (final Exception e) {
-            // close();
+           
             reportErrorMessage("write", "failed to write to output stream ", e);
         }
     }

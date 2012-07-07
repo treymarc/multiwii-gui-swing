@@ -80,6 +80,7 @@ import eu.kprod.gui.instrument.MwRCDataPanel;
 import eu.kprod.gui.instrument.MwUAVPanel;
 import eu.kprod.gui.setting.MwBOXPanel;
 import eu.kprod.gui.setting.MwPIDPanel;
+import eu.kprod.msg.I18n;
 import eu.kprod.msp.MSP;
 import eu.kprod.serial.SerialCom;
 import eu.kprod.serial.SerialDevice;
@@ -886,9 +887,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     @Override
     public void reportSerial(final Throwable e) {
-        // we have an error
-        LOGGER.error(e.getMessage() + "\n");
-        LOGGER.error(e.getCause() + "\n");
+        LOGGER.error(I18n.format("error SerialDevice : {0}()", e.getMessage() ));
+
         stopTimer();
         closeSerialPort();
     }
