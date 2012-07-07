@@ -28,41 +28,37 @@ import eu.kprod.msp.MSP;
 
 /**
  * resources : /uav/*.png
- * 
  */
 public class MwUAVPanel extends MwInstrumentJPanel {
 
-
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-   
-    
-    private Image[] uavImages = new Image[14];
+
+    private final Image[] uavImages = new Image[14];
 
     // position for drawing in the png uavImages
-    private static final int[] UAV_TRI_MOTOR_X = {  71, 121, 21 };
-    private static final int[] UAV_TRI_MOTOR_Y = { 129,  79, 79 };
-    
+    private static final int[] UAV_TRI_MOTOR_X = { 71, 121, 21 };
+    private static final int[] UAV_TRI_MOTOR_Y = { 129, 79, 79 };
+
     private static final int[] UAV_TRI_SERVO_INDEX = { 5 };
     private static final int[] UAV_TRI_SERVO_X = { 41 };
     private static final int[] UAV_TRI_SERVO_Y = { 151 };
-    
+
     private static final int[] UAV_QUADP_MOTOR_Y = { 179, 129, 129, 79 };
-    private static final int[] UAV_QUADP_MOTOR_X = {  76, 126,  26, 76 };
-    
-    private static final int[] UAV_QUADX_MOTOR_X = { 121, 121,  41, 41 };
-    private static final int[] UAV_QUADX_MOTOR_Y = { 169,  79, 169, 79 };
-    
-    
+    private static final int[] UAV_QUADP_MOTOR_X = { 76, 126, 26, 76 };
+
+    private static final int[] UAV_QUADX_MOTOR_X = { 121, 121, 41, 41 };
+    private static final int[] UAV_QUADX_MOTOR_Y = { 169, 79, 169, 79 };
+
     private final double[] motor = new double[8];
     private final double[] servo = new double[8];
-    
+
     private int uavType = MSP.UAV_TRI;
 
-    public MwUAVPanel( MwConfiguration conf) {
-        super(new Dimension(170, 200),conf);
+    public MwUAVPanel(MwConfiguration conf) {
+        super(new Dimension(170, 200), conf);
         super.setBarMax(67);
         super.setBarWidth(8);
 
@@ -152,16 +148,20 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
         switch (uavType) {
             case MSP.UAV_TRI:
-                drawBar(g2d, 0, motor, null, UAV_TRI_MOTOR_X,  UAV_TRI_MOTOR_Y, YAXIS);
-                drawBar(g2d, 0, servo, UAV_TRI_SERVO_INDEX, UAV_TRI_SERVO_X, UAV_TRI_SERVO_Y, XAXIS);
+                drawBar(g2d, 0, motor, null, UAV_TRI_MOTOR_X, UAV_TRI_MOTOR_Y,
+                        YAXIS);
+                drawBar(g2d, 0, servo, UAV_TRI_SERVO_INDEX, UAV_TRI_SERVO_X,
+                        UAV_TRI_SERVO_Y, XAXIS);
 
                 break;
             case MSP.UAV_QUADP:
-                drawBar(g2d, 0, motor, null, UAV_QUADP_MOTOR_X, UAV_QUADP_MOTOR_Y, YAXIS);
+                drawBar(g2d, 0, motor, null, UAV_QUADP_MOTOR_X,
+                        UAV_QUADP_MOTOR_Y, YAXIS);
 
                 break;
             case MSP.UAV_QUADX:
-                drawBar(g2d, 0, motor, null, UAV_QUADX_MOTOR_X, UAV_QUADX_MOTOR_Y, YAXIS);
+                drawBar(g2d, 0, motor, null, UAV_QUADX_MOTOR_X,
+                        UAV_QUADX_MOTOR_Y, YAXIS);
 
                 break;
             default:
@@ -170,9 +170,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         ;
 
     }
-
-
-
 
     private void drawUAV(final Graphics2D g2d) {
 
@@ -215,16 +212,16 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
-       
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass,
+            final String name, final Double value) {
+
         final int index = Integer.parseInt(name.charAt(name.length() - 1) + "");
 
-
         String sensor = sensorClass.getName();
-        
+
         if (sensor.equals(MwSensorClassMotor.class.getName())) {
             motor[index] = value;
-        }else if (sensor.equals(MwSensorClassServo.class.getName())){
+        } else if (sensor.equals(MwSensorClassServo.class.getName())) {
             servo[index] = value;
         }
 
