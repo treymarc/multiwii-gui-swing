@@ -478,6 +478,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     protected static void stopTimer() {
         if (timer != null) {
+            // if there is a serial io in jni , the job can not be canceled ?
+            // 
             timer.cancel();
             timer.purge();
         }
@@ -887,7 +889,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     @Override
     public void reportSerial(final Throwable e) {
-        LOGGER.error(I18n.format("error SerialDevice : {0}()", e.getMessage() ));
+        LOGGER.error(I18n.format("error SerialDevice : {0}\n", e.getMessage() ));
 
         stopTimer();
         closeSerialPort();
