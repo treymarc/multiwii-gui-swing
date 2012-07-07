@@ -18,7 +18,6 @@
 package eu.kprod.gui.instrument;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -30,7 +29,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 
 import eu.kprod.ds.MwSensorClass;
-import eu.kprod.gui.comp.StyleColor;
+import eu.kprod.gui.MwConfiguration;
+import eu.kprod.gui.comp.MwColor;
 import eu.kprod.msp.MSP;
 
 public class MwHudPanel extends MwInstrumentJPanel {
@@ -46,14 +46,12 @@ public class MwHudPanel extends MwInstrumentJPanel {
     private int rollAngle;
     private final Arc2D upperArc; // Upper part of the Horizon
 
-    public MwHudPanel(final Color c) {
-        super(null);
-        setBackground(c);
-
+    public MwHudPanel(MwConfiguration conf) {
+        super(null,conf);
+        
         // Creates two arcs used to draw the outline
         upperArc = new Arc2D.Float();
         lowerArc = new Arc2D.Float();
-
     }
 
     private void drawBankRollMarker(final Graphics2D g2d) {
@@ -139,17 +137,17 @@ public class MwHudPanel extends MwInstrumentJPanel {
         // Draw the artificial horizon itself, composed by 2 half arcs
         lowerArc.setArcByCenter(getCenterPoint().getX(), getCenterPoint()
                 .getY(), getRadiusy(), angStartLower, angExtLower, Arc2D.CHORD);
-        g2d.setPaint(StyleColor.INSTR_EARTH_ORANGE);
+        g2d.setPaint(conf.color.getColor(MwColor.INSTR_EARTH_ORANGE));
         g2d.fill(lowerArc);
 
         upperArc.setArcByCenter(getCenterPoint().getX(), getCenterPoint()
                 .getY(), getRadiusy(), angStartUpper, angExtUpper, Arc2D.CHORD);
-        g2d.setPaint(StyleColor.INSTR_SKY_BLUE);
+        g2d.setPaint(conf.color.getColor(MwColor.INSTR_SKY_BLUE));
         g2d.fill(upperArc);
 
         // Draw the middle white line
         g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         g2d.draw(upperArc);
 
         drawLines(g2d);
@@ -183,7 +181,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
         centerShape.lineTo((getCenterPoint().getX() + 15), getCenterPoint()
                 .getY());
 
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         g2d.setStroke(new BasicStroke(2));
         g2d.draw(centerShape);
 
@@ -208,7 +206,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
             distance = Math.abs(i * 5); // Put the text and the lines length at
             // the right position
 
-            g2d.setPaint(StyleColor.FORGROUND_COLOR);
+            g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
             g2d.setStroke(new BasicStroke(1));
             g2d.setFont(getWriting());
 
@@ -255,12 +253,12 @@ public class MwHudPanel extends MwInstrumentJPanel {
     void drawValue(final Graphics2D g2d) {
 
         g2d.setFont(getWriting());
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         g2d.setStroke(new BasicStroke(1));
         g2d.drawString("X " + (-rollAngle), 10, getMaxRadiusY() - 20);
 
         g2d.setFont(getWriting());
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         g2d.setStroke(new BasicStroke(1));
         g2d.drawString("Y " + (-pitchAngle), 10, getMaxRadiusY() - 10);
     }
@@ -282,7 +280,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
         drawHorizon(g2d);
 
         g2d.setStroke(new BasicStroke(2));
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
         // Draw the Bank roll lines on the top
         drawBankRollMarker(g2d);

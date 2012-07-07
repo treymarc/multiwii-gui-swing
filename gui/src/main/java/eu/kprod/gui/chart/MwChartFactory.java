@@ -21,26 +21,27 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYDataset;
 
-import eu.kprod.gui.comp.StyleColor;
+import eu.kprod.gui.MwConfiguration;
+import eu.kprod.gui.comp.MwColor;
 
 public final class MwChartFactory {
 
-    public static MwChartPanel createChart(final XYDataset xyDataset) {
+    public static MwChartPanel createChart(MwConfiguration conf , final XYDataset xyDataset) {
         final JFreeChart chart;
 
         chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
                 false, true, true);
 
-        chart.setBackgroundPaint(StyleColor.BACKGROUND_COLOR);
+        chart.setBackgroundPaint(conf.color.getColor(MwColor.BACKGROUND_COLOR));
         chart.setBorderVisible(false);
         final XYPlot plot = chart.getXYPlot();
 
-        plot.setBackgroundPaint(StyleColor.BACKGROUND_COLOR);
+        plot.setBackgroundPaint(conf.color.getColor(MwColor.BACKGROUND_COLOR));
 
-        plot.setDomainGridlinePaint(StyleColor.FORGROUND_COLOR);
-        plot.setRangeGridlinePaint(StyleColor.FORGROUND_COLOR);
+        plot.setDomainGridlinePaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
+        plot.setRangeGridlinePaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         plot.setDomainGridlinesVisible(false);
-        plot.setDomainCrosshairPaint(StyleColor.FORGROUND_COLOR);
+        plot.setDomainCrosshairPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 
@@ -48,22 +49,23 @@ public final class MwChartFactory {
         // axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
         axis.setAxisLineVisible(false);
         axis.setTickLabelsVisible(false);
-        axis.setTickLabelPaint(StyleColor.FORGROUND_COLOR);
+        axis.setTickLabelPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
         // force integer display
         final ValueAxis va = plot.getRangeAxis();
         va.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        va.setLabelPaint(StyleColor.FORGROUND_COLOR);
-        va.setAxisLinePaint(StyleColor.FORGROUND_COLOR);
-        va.setTickLabelPaint(StyleColor.FORGROUND_COLOR);
-        //        va.setRange(-280,280);
+        va.setLabelPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
+        va.setAxisLinePaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
+        va.setTickLabelPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
+        
+       //        va.setRange(-280,280);
         //        va.setFixedAutoRange(560);
         //        va.setLowerBound(-280);
         //        va.setUpperBound(280);
         //        va.setAutoRange(false);
         va.setRangeWithMargins(-280, 280);
 
-        final MwChartPanel chartPanel = new MwChartPanel(chart);
+        final MwChartPanel chartPanel = new MwChartPanel(chart,conf);
         chartPanel.setMouseWheelEnabled(false);
         chartPanel.setDomainZoomable(false);
         chartPanel.setRangeZoomable(false);

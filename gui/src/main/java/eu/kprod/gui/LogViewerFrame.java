@@ -37,7 +37,7 @@ public class LogViewerFrame extends JFrame {
     private final MwDataSource refDs;
     private Class<? extends MwSensorClass> refsclass;
 
-    public LogViewerFrame(final String name, final MwDataSource mwDataSource) {
+    public LogViewerFrame(final String name, final MwDataSource mwDataSource,MwConfiguration conf) {
         super(name);
         // when loading a file, we want to dipose the frame after usage
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -50,7 +50,7 @@ public class LogViewerFrame extends JFrame {
             ds = new MwDataSourceImpl();
         }
         refDs = ds;
-        chartTrendPanel = MwChartFactory.createChart(ds
+        chartTrendPanel = MwChartFactory.createChart(conf, ds
                 .getDataSet(MwSensorClass.class));
         chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         getContentPane().add(chartTrendPanel);
@@ -58,13 +58,13 @@ public class LogViewerFrame extends JFrame {
     }
 
     public LogViewerFrame(final String name, final MwDataSource ds,
-            final Class<? extends MwSensorClass> sclass) {
+            final Class<? extends MwSensorClass> sclass,MwConfiguration conf) {
         super(name);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         refDs = ds;
         refsclass = sclass;
-        chartTrendPanel = MwChartFactory.createChart(ds.getDataSet(sclass));
+        chartTrendPanel = MwChartFactory.createChart(conf,ds.getDataSet(sclass));
         ds.addListener(sclass, chartTrendPanel);
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();

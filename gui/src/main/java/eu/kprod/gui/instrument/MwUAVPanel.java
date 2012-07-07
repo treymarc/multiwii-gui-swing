@@ -13,7 +13,6 @@
  */
 package eu.kprod.gui.instrument;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,6 +23,7 @@ import java.awt.image.BufferedImage;
 import eu.kprod.ds.MwSensorClass;
 import eu.kprod.ds.MwSensorClassMotor;
 import eu.kprod.ds.MwSensorClassServo;
+import eu.kprod.gui.MwConfiguration;
 import eu.kprod.msp.MSP;
 
 /**
@@ -61,13 +61,11 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     
     private int uavType = MSP.UAV_TRI;
 
-    public MwUAVPanel(final Color c) {
-        super(new Dimension(170, 200));
+    public MwUAVPanel( MwConfiguration conf) {
+        super(new Dimension(170, 200),conf);
         super.setBarMax(67);
         super.setBarWidth(8);
 
-        setBackground(c);
-        
         for (int i = 1; i < uavImages.length; i++) {
             uavImages[i] = super.getImage("uav/" + i + ".png");
         }

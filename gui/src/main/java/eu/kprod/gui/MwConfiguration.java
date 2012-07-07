@@ -13,8 +13,20 @@
  */
 package eu.kprod.gui;
 
+import java.awt.Color;
+
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
+import eu.kprod.gui.comp.MwColor;
+import eu.kprod.gui.comp.MwColorDefault;
+
 /**
- * Entry point for the gui configuration
+ * Everything for the gui configuration
+ *      - resources path
+ *              - font
+ *              - theme
+ *      - colors
  * @author treym
  *
  */
@@ -23,22 +35,55 @@ public class MwConfiguration {
     public static final int FONT = 0;
     public static final int THEME = 1;
     
-    private static MwResources pathManager;
+    public MwConfiguration() {
+        setLookAndFeel();
+    }
+    
+    public MwColor color = new MwColorDefault();
+    
+    private MwResources pathManager;
 
-    public static String getPath(int path) {
+    public String getPath(int path) {
 
         return getPathManager().get(path);
  
     }
 
-    private static MwResources getPathManager() {
+    private  MwResources getPathManager() {
         if (pathManager == null){
             pathManager = new MwResources();
         }
         return pathManager;
     }
 
-    
+    void setLookAndFeel() {
+        // TODO remember OS
+        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+
+        } else {
+            try {
+                for (final LookAndFeelInfo info : UIManager
+                        .getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+
+            } catch (final Exception e) {
+                // continue
+            }
+        }
+
+    }
+
+    public void setColorGraph(int index, Color colorValue) {
+        // TODO Auto-generated method stub
+        color.setColorGraph( index,  colorValue);
+    }
+
+   
   
 
 }

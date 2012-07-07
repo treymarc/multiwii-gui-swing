@@ -28,8 +28,8 @@ import java.net.URL;
 import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.gui.MwConfiguration;
 import eu.kprod.gui.MwGuiRuntimeException;
+import eu.kprod.gui.comp.MwColor;
 import eu.kprod.gui.comp.MwJPanel;
-import eu.kprod.gui.comp.StyleColor;
 
 public abstract class MwInstrumentJPanel extends MwJPanel implements
         MwDataSourceListener {
@@ -66,7 +66,9 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     private int sizeX;
     private int sizey;
 
-    public MwInstrumentJPanel(final Dimension dimension) {
+    public MwInstrumentJPanel(final Dimension dimension, MwConfiguration conf) {
+        this.conf=conf;
+        setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
         if (dimension == null) {
             // Instance variables initialization
             dimPanel = new Dimension(this.maxSizeX, this.maxSizeY);
@@ -86,7 +88,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         if (writing == null) {
 
             final InputStream is = this.getClass().getResourceAsStream(
-                    MwConfiguration.getPath(MwConfiguration.FONT));
+                    conf .getPath(MwConfiguration.FONT));
 
             try {
                 writing = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -190,6 +192,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     // bar w/h
     private int barWidth = 8;
     private int barMax = 67;
+
+    MwConfiguration conf;
     
     /**
      *  will draw bar value for each position defined in xpoint,ypoint ; there must enough value to draw in values
@@ -230,11 +234,11 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
             }
 
             if (barValue < 0) {
-                g2d.setPaint(StyleColor.INSTR_BAR_YELLOW);
+                g2d.setPaint(conf.color.getColor(MwColor.INSTR_BAR_YELLOW));
             } else if (barValue > barMax) {
-                g2d.setPaint(StyleColor.INSTR_BAR_RED);
+                g2d.setPaint(conf.color.getColor(MwColor.INSTR_BAR_RED));
             } else {
-                g2d.setPaint(StyleColor.INSTR_BAR_GREEN);
+                g2d.setPaint(conf.color.getColor(MwColor.INSTR_BAR_GREEN));
             }
             g2d.setStroke(new BasicStroke(1));
             bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
@@ -264,7 +268,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     Image getImage(String image) {
-        URL url = this.getClass().getResource(MwConfiguration.getPath(MwConfiguration.THEME)+"/"+image);
+        URL url = this.getClass().getResource(conf.getPath(MwConfiguration.THEME)+"/"+image);
         
         try {
             return  Toolkit.getDefaultToolkit().getImage(url);

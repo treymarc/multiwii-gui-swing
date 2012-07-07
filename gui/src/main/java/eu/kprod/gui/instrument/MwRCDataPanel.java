@@ -14,7 +14,6 @@
 
 package eu.kprod.gui.instrument;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,6 +22,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import eu.kprod.ds.MwSensorClass;
+import eu.kprod.gui.MwConfiguration;
 import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
@@ -68,16 +68,14 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     private final double[] dataRC = new double[8];
 
 
-    public MwRCDataPanel(final Color c) {
-        super(new Dimension(200, 150));
+    public MwRCDataPanel( MwConfiguration conf) {
+        super(new Dimension(200, 150),conf);
         super.setBarMax(118);
         super.setBarWidth(rcDatabarWidth);
 
         for (int i = 0; i < dataRC.length; i++) {
             dataRC[i] = 0;
         }
-        
-        setBackground(c);
 
     }
 

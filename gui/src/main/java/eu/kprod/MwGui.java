@@ -15,10 +15,9 @@ package eu.kprod;
 
 import javax.swing.SwingUtilities;
 
+import eu.kprod.gui.MwConfiguration;
 import eu.kprod.gui.MwGuiFrame;
-import eu.kprod.gui.comp.StyleColor;
 
-//import eu.kprod.serial.SerialException;
 
 /**
  * Known issues
@@ -41,7 +40,10 @@ public final class MwGui {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                StyleColor.setLookAndFeel();
+//                MwColorDefault.setLookAndFeel();
+//                 MwConfiguration conf = new ;
+                 
+                 MwGuiFrame.setConf(new MwConfiguration());
                 MwGuiFrame.getInstance().setVisible(true);
                 MwGuiFrame.getInstance().repaint();
 

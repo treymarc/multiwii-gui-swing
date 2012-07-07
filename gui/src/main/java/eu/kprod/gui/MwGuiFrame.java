@@ -14,6 +14,7 @@
 package eu.kprod.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -64,6 +65,7 @@ import eu.kprod.ds.MwSensorClassRC;
 import eu.kprod.ds.MwSensorClassServo;
 import eu.kprod.gui.chart.MwChartFactory;
 import eu.kprod.gui.chart.MwChartPanel;
+import eu.kprod.gui.comp.MwColor;
 import eu.kprod.gui.comp.MwJButton;
 import eu.kprod.gui.comp.MwJComboBox;
 import eu.kprod.gui.comp.MwJMenu;
@@ -71,7 +73,6 @@ import eu.kprod.gui.comp.MwJMenuBar;
 import eu.kprod.gui.comp.MwJMenuItem;
 import eu.kprod.gui.comp.MwJPanel;
 import eu.kprod.gui.comp.MwJRadioButton;
-import eu.kprod.gui.comp.StyleColor;
 import eu.kprod.gui.instrument.MwCompasPanel;
 import eu.kprod.gui.instrument.MwHudPanel;
 import eu.kprod.gui.instrument.MwInstrumentJPanel;
@@ -177,6 +178,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 //    private static LogViewerFrame servoFrame;
     private static Timer timer;
     private static MwUAVPanel uavPanel;
+    private static MwConfiguration conf;
 
     public static void addSensorCheckBox(final String sensorName) {
         getChartCheckBoxPanel().addSensorBox(sensorName);
@@ -219,7 +221,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     public static MwSensorCheckBoxJPanel getChartCheckBoxPanel() {
         if (chartCheckBoxsPanel == null) {
-            chartCheckBoxsPanel = new MwSensorCheckBoxJPanel();
+            chartCheckBoxsPanel = new MwSensorCheckBoxJPanel(conf);
         }
         return chartCheckBoxsPanel;
     }
@@ -270,31 +272,29 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     public static MwJPanel getInstrumentPanel() {
         if (instrumentPanel == null) {
 
-            final MwJPanel pane = new MwJPanel(StyleColor.BACKGROUND_COLOR);
+            final MwJPanel pane = new MwJPanel(conf);
             pane.setLayout(new GridLayout(1, 4));
 
-            pane.add(hudPanel = new MwHudPanel(StyleColor.BACKGROUND_COLOR));
+            pane.add(hudPanel = new MwHudPanel(conf));
             MSP.getRealTimeData().addListener(MwSensorClassHUD.class, hudPanel);
 
-            pane.add(compasPanel = new MwCompasPanel(
-                    StyleColor.BACKGROUND_COLOR));
+            pane.add(compasPanel = new MwCompasPanel(conf));
             MSP.getRealTimeData().addListener(MwSensorClassCompas.class,
                     compasPanel);
 
-            pane.add(uavPanel = new MwUAVPanel(StyleColor.BACKGROUND_COLOR));
+            pane.add(uavPanel = new MwUAVPanel(conf));
             MSP.getRealTimeData().addListener(MwSensorClassMotor.class,
                     uavPanel);
             MSP.getRealTimeData().addListener(MwSensorClassServo.class,
                     uavPanel);
             
-            pane.add(rcDataPanel = new MwRCDataPanel(
-                    StyleColor.BACKGROUND_COLOR));
+            pane.add(rcDataPanel = new MwRCDataPanel(conf));
             MSP.getRealTimeData().addListener(MwSensorClassRC.class,
                     rcDataPanel);
             pane.setMinimumSize(new Dimension(770, 200));
             pane.setMaximumSize(new Dimension(770, 200));
 
-            instrumentPanel = new MwJPanel(StyleColor.BACKGROUND_COLOR);
+            instrumentPanel = new MwJPanel(conf);
             instrumentPanel.add(Box.createHorizontalGlue());
             instrumentPanel.setLayout(new BoxLayout(instrumentPanel,
                     BoxLayout.LINE_AXIS));
@@ -533,7 +533,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             }
         });
 
-        setBackground(StyleColor.BACKGROUND_COLOR);
+        setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
         getContentPane().setLayout(new BorderLayout());
         // getContentPane().add(new MwJPanel(), BorderLayout.SOUTH);
         getContentPane().add(
@@ -693,7 +693,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 }
             });
 
-            setRealTimeChart(MwChartFactory.createChart(MSP.getRealTimeData()
+            setRealTimeChart(MwChartFactory.createChart(conf, MSP.getRealTimeData()
                     .getDataSet(MwSensorClassIMU.class)));
 
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
@@ -916,6 +916,16 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     public void stateChanged(final ChangeEvent e) {
         // TODO Auto-generated method stub
 
+    }
+
+    public static void setConf(MwConfiguration conf1) {
+        conf=conf1;
+        
+    }
+
+    public static void setColorGraph(int index, Color color) {
+        // TODO Auto-generated method stub
+         conf.setColorGraph( index,  color);
     }
 
 }

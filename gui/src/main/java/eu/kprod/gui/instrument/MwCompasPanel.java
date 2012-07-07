@@ -28,7 +28,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 
 import eu.kprod.ds.MwSensorClass;
-import eu.kprod.gui.comp.StyleColor;
+import eu.kprod.gui.MwConfiguration;
+import eu.kprod.gui.comp.MwColor;
 import eu.kprod.msp.MSP;
 
 public class MwCompasPanel extends MwInstrumentJPanel {
@@ -43,9 +44,9 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     private Integer head = 0;
 
    
-    public MwCompasPanel(final Color c) {
-        super(null);
-        setBackground(c);
+    public MwCompasPanel(MwConfiguration conf) {
+        super(null,conf);
+        setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
 
     }
 
@@ -70,7 +71,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         g2d.transform(at);
 
         g2d.setStroke(new BasicStroke(2));
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
         final GeneralPath bankMarker = new GeneralPath(Path2D.WIND_EVEN_ODD);
         bankMarker.moveTo((getCenterPoint().getX() - getRadiusx()),
@@ -187,7 +188,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         // g2d.fill(triangle);
 
         g2d.setStroke(new BasicStroke(1));
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
         final String k = head.toString();
 
@@ -215,7 +216,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     void drawValue(final Graphics2D g2d) {
 
         g2d.setFont(getWriting());
-        g2d.setPaint(StyleColor.FORGROUND_COLOR);
+        g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         g2d.setStroke(new BasicStroke(1));
         g2d.drawString("Alt " + (alt), 10, 10);
 

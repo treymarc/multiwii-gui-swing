@@ -14,10 +14,11 @@
 package eu.kprod.gui.comp;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
+
+import eu.kprod.gui.MwConfiguration;
 
 public class MwJPanel extends JPanel {
 
@@ -25,6 +26,7 @@ public class MwJPanel extends JPanel {
      * 
      */
     private static final long serialVersionUID = 1L;
+    public MwConfiguration conf;
 
     public MwJPanel() {
         super();
@@ -35,13 +37,14 @@ public class MwJPanel extends JPanel {
         super(borderLayout);
     }
 
-    public MwJPanel(final Color background) {
-        super();
-        setBackground(background);
-    }
-
     public MwJPanel(final GridLayout gridLayout) {
         super(gridLayout);
+    }
+
+    public MwJPanel(MwConfiguration conf1) {
+        // TODO Auto-generated constructor stub
+        setBackground(conf1.color.getColor(MwColor.BACKGROUND_COLOR));
+        conf = conf1;
     }
 
 }

@@ -58,7 +58,7 @@ public final class MwColorChooser extends MwJFrame implements ChangeListener {
     @Override
     public void stateChanged(final ChangeEvent e) {
         if (index >= 0) {
-            StyleColor.setColor(index, chooser.getColor());
+            MwGuiFrame.setColorGraph(index, chooser.getColor());
             MwGuiFrame.getChartPanel().setVisible(index, true);
             MwGuiFrame.getChartCheckBoxPanel().refreshBox(index,
                     chooser.getColor());

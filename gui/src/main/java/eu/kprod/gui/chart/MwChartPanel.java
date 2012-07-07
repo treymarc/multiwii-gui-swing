@@ -19,7 +19,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 
 import eu.kprod.ds.MwDataSourceListener;
 import eu.kprod.ds.MwSensorClass;
-import eu.kprod.gui.comp.StyleColor;
+import eu.kprod.gui.MwConfiguration;
 
 public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
 
@@ -27,9 +27,11 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
      * 
      */
     private static final long serialVersionUID = 1L;
+    private MwConfiguration conf;
 
-    public MwChartPanel(final JFreeChart chart) {
+    public MwChartPanel(final JFreeChart chart, MwConfiguration conf1) {
         super(chart);
+        conf = conf1;
         // TODO Auto-generated constructor stub
     }
 
@@ -66,7 +68,7 @@ public class MwChartPanel extends ChartPanel implements MwDataSourceListener {
 
         renderer.setSeriesVisible(l, b);
         if (b) {
-            renderer.setSeriesPaint(l, StyleColor.getColor(l));
+            renderer.setSeriesPaint(l,conf.color.getColorGraph(l));
         }
 
     }
