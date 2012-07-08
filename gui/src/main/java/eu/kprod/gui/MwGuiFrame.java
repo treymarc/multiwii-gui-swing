@@ -93,7 +93,7 @@ import eu.kprod.serial.SerialNotFoundException;
  * - when zooming the chart : news values are still recorded so due to the
  * dataSource maxItemcounts and AgeLimite , the chart gets emptied at the zoomed
  * date
- *
+ * 
  * @author treym
  */
 public final class MwGuiFrame extends JFrame implements SerialListener,
@@ -122,13 +122,13 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 stopTimer();
                 restart = true;
             }
-            for ( int i : requests) {
+            for (int i : requests) {
                 try {
                     Thread.sleep(SERIALDELAY);
                     send(MSP.request(i));
                     Thread.sleep(SERIALDELAY);
 
-                } catch ( Exception p) {
+                } catch (Exception p) {
                     LOGGER.error(p.getMessage() + "\n");
                 }
             }
@@ -155,7 +155,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     private static MwInstrumentJPanel hudPanel;
     private static boolean inited = false;
 
-    private  MwGuiFrame instance;
+    private MwGuiFrame instance;
     private static MwJPanel instrumentPanel;
 
     private static final Logger LOGGER = Logger.getLogger(MwGuiFrame.class);
@@ -176,7 +176,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             + "This is free software, and you are welcome to redistribute it\n"
             + "under certain conditions";
     // private static LogViewerFrame motorFrame;
-//    private static LogViewerFrame servoFrame;
+    // private static LogViewerFrame servoFrame;
     private static Timer timer;
     private static MwUAVPanel uavPanel;
     private static MwConfiguration conf;
@@ -241,7 +241,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         return com;
     }
 
-    public  DebugFrame getDebugFrame() {
+    public DebugFrame getDebugFrame() {
         if (debugFrame == null) {
             debugFrame = new DebugFrame("Debug serial", instance);
         }
@@ -261,14 +261,15 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         }
         return disconnectSerial;
     }
-//
-//    public  MwGuiFrame getInstance() {
-//        if (instance == null) {
-//            instance = new MwGuiFrame();
-//            MSP.setUavChangeListener(instance);
-//        }
-//        return instance;
-//    }
+
+    //
+    // public MwGuiFrame getInstance() {
+    // if (instance == null) {
+    // instance = new MwGuiFrame();
+    // MSP.setUavChangeListener(instance);
+    // }
+    // return instance;
+    // }
 
     public static MwJPanel getInstrumentPanel() {
         if (instrumentPanel == null) {
@@ -358,7 +359,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         return Collections.unmodifiableList(m);
     }
 
-    protected  void openSerialPort() {
+    protected void openSerialPort() {
         closeSerialPort();
         getSerialPortAsMenuItem();
         if (portNameMenuGroup.getSelection() == null) {
@@ -367,8 +368,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 list.add("");
             }
             final Object[] array = list.toArray(new String[list.size()]);
-            final String name = (String) JOptionPane.showInputDialog(
-                    this, "Select a Serial Port", "port",
+            final String name = (String) JOptionPane.showInputDialog(this,
+                    "Select a Serial Port", "port",
                     JOptionPane.INFORMATION_MESSAGE, null, array, array[0]);
 
             final Enumeration<AbstractButton> els = portNameMenuGroup
@@ -406,12 +407,11 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             com.openSerialPort();
             com.setListener(this);
             MSP.setUavChangeListener(instance);
-            this.setTitle(
-                    new StringBuffer()
-                            .append(portname)
-                            .append("@")
-                            .append(baudRateMenuGroup.getSelection()
-                                    .getActionCommand()).toString());
+            this.setTitle(new StringBuffer()
+                    .append(portname)
+                    .append("@")
+                    .append(baudRateMenuGroup.getSelection().getActionCommand())
+                    .toString());
         } catch (final SerialNotFoundException e) {
             LOGGER.error(e.getMessage() + "\n");
         } catch (final SerialException e) {
@@ -432,9 +432,9 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     // if (motorFrame != null && motorFrame.isVisible()) {
                     send(MSP.request(MSP.MOTOR));
                     // }
-//                    if (servoFrame != null && servoFrame.isVisible()) {
+                    // if (servoFrame != null && servoFrame.isVisible()) {
                     send(MSP.request(MSP.SERVO));
-//                    }
+                    // }
                     send(MSP.request(MSP.RAW_IMU));
                     send(MSP.request(MSP.DEBUG));
                     send(MSP.request(MSP.RC));
@@ -456,7 +456,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     /**
      * send a string to the serial com
-     *
+     * 
      * @param command
      *            is the packet to send
      * @throws SerialException
@@ -471,7 +471,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         }
     }
 
-    protected  void showDebugFrame() {
+    protected void showDebugFrame() {
         getDebugFrame().setVisible(true);
         getDebugFrame().repaint();
     }
@@ -511,7 +511,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 appProps.load(url.openStream());
                 frameTitle = appProps.getProperty("mainframe.title");
             } catch (final Exception e) {
-                throw new MwGuiRuntimeException("INIT Failed to load app properties", e);
+                throw new MwGuiRuntimeException(
+                        "INIT Failed to load app properties", e);
             }
         }
 
@@ -553,20 +554,18 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         final JMenuBar menubar = new MwJMenuBar();
         /* différents menus */
         final JMenu menu1 = new MwJMenu("File");
-        final JMenu menu2 = new MwJMenu("Edit");
         final JMenu menu3 = new MwJMenu("Upload");
         final JMenu menu4 = new MwJMenu("Serial");
         final JMenu menu5 = new MwJMenu("Help");
 
         /* differents choix de chaque menu */
         // MwJMenuItem motor = new MwJMenuItem("Motor");
-//        final MwJMenuItem servo = new MwJMenuItem("Servo");
+        // final MwJMenuItem servo = new MwJMenuItem("Servo");
         final MwJMenuItem consoleSerial = new MwJMenuItem("Console");
 
         final MwJMenuItem quit = new MwJMenuItem("Quit");
-        final MwJMenuItem annuler = new MwJMenuItem("Undo");
-        final MwJMenuItem copier = new MwJMenuItem("Copy");
-        final MwJMenuItem coller = new MwJMenuItem("Paste");
+
+        final MwJMenuItem preferences = new MwJMenuItem("Preferences");
 
         final MwJMenuItem helpContent = new MwJMenuItem("Help Contents");
         final MwJMenuItem about = new MwJMenuItem("About MwGui");
@@ -574,13 +573,11 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         // MwJMenuItem openLog = new MwJMenuItem("Open");
 
         /* Ajouter les choix au menu */
+        menu1.add(preferences);
+        menu1.addSeparator();
         menu1.add(quit);
 
-        menu2.add(annuler);
-        menu2.add(copier);
-        menu2.add(coller);
-
-//        menu3.add(servo);
+        // menu3.add(servo);
         // menu3.add(motor);
 
         menu4.add(getSerialPortAsMenuItem());
@@ -593,10 +590,16 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
         /* Ajouter les menus */
         menubar.add(menu1);
-        menubar.add(menu2);
         menubar.add(menu3);
         menubar.add(menu4);
         menubar.add(menu5);
+
+        preferences.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                instance.showPreferencesFrame();
+            }
+        });
 
         about.addActionListener(new ActionListener() {
             @Override
@@ -608,8 +611,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setBorder(BorderFactory
                         .createTitledBorder((String) null));
-                JOptionPane.showMessageDialog(instance,
-                        scrollPane, "About MwGui", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(instance, scrollPane,
+                        "About MwGui", JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -629,17 +632,17 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             }
         });
 
-//        servo.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (servoFrame == null) {
-//                    servoFrame = new LogViewerFrame("Servo", MSP
-//                            .getRealTimeData(), MwSensorClassServo.class);
-//                } else {
-//                    servoFrame.setVisible(true);
-//                }
-//            }
-//        });
+        // servo.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // if (servoFrame == null) {
+        // servoFrame = new LogViewerFrame("Servo", MSP
+        // .getRealTimeData(), MwSensorClassServo.class);
+        // } else {
+        // servoFrame.setVisible(true);
+        // }
+        // }
+        // });
 
         // motor.addActionListener(new ActionListener() {
         // public void actionPerformed(ActionEvent e) {
@@ -662,6 +665,11 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         });
 
         return menubar;
+    }
+
+    protected void showPreferencesFrame() {
+        // TODO Auto-generated method stub
+
     }
 
     private MwJPanel getRealTimePanel() {
@@ -691,13 +699,14 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 @Override
                 public void actionPerformed(ActionEvent event) {
                     if (timer != null) {
-                        restartTimer((Integer) serialRefreshRate.getSelectedItem());
+                        restartTimer((Integer) serialRefreshRate
+                                .getSelectedItem());
                     }
                 }
             });
 
-            setRealTimeChart(MwChartFactory.createChart(conf, MSP.getRealTimeData()
-                    .getDataSet(MwSensorClassIMU.class)));
+            setRealTimeChart(MwChartFactory.createChart(conf, MSP
+                    .getRealTimeData().getDataSet(MwSensorClassIMU.class)));
 
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
                     getChartPanel());
@@ -746,7 +755,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     private JMenuItem getSerialBaudAsMenuItem() {
         JMenu m = new MwJMenu("Baud");
         baudRateMenuGroup = new ButtonGroup();
-        for ( Integer p : SerialDevice.SERIAL_BAUD_RATE) {
+        for (Integer p : SerialDevice.SERIAL_BAUD_RATE) {
             JRadioButton sm = new JRadioButton(p.toString());
             sm.setActionCommand(p.toString());
             sm.addActionListener(new ActionListener() {
@@ -786,7 +795,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             settingsPanel = new MwJPanel();
             settingsPanel.setLayout(new BorderLayout());
 
-            JButton writeToEepromButton = new MwJButton("Write", "Write to eeprom");
+            JButton writeToEepromButton = new MwJButton("Write",
+                    "Write to eeprom");
 
             writeToEepromButton.addActionListener(new ActionListener() {
                 @Override
@@ -861,13 +871,14 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     }
 
     @Override
-    public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass,
+            String name, Double value) {
         MwGuiFrame.addSensorCheckBox(name);
     }
 
     /**
      * (non-Javadoc)
-     *
+     * 
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
      */
     @Override
@@ -885,7 +896,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     @Override
     public void reportSerial(Throwable e) {
-        LOGGER.error(I18n.format("error SerialDevice : {0}\n", e.getMessage() ));
+        LOGGER.error(I18n.format("error SerialDevice : {0}\n", e.getMessage()));
 
         stopTimer();
         closeSerialPort();
@@ -919,12 +930,12 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     }
 
     public static void setConf(MwConfiguration conf1) {
-        conf=conf1;
+        conf = conf1;
 
     }
 
     public static void setColorGraph(int index, Color color) {
         // TODO Auto-generated method stub
-         conf.setColorGraph( index,  color);
+        conf.setColorGraph(index, color);
     }
 }

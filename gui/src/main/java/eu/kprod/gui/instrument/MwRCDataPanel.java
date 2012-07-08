@@ -27,14 +27,14 @@ import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-    private final Image imageRCdataeBg = super.getImage("rcdata.png");
+    private static final long serialVersionUID = 1L;
 
-    private static final int rcDatabarWidth = 7;
-
+    private final Image background = super.getImage("rcdata.png");
     private final int[] startx = initializePositionX();
     private final int[] starty = initializePositionY();
+    private final int rcDatabarWidth = 7;
 
-    private static int[] initializePositionY() {
+    private int[] initializePositionY() {
         int[] m = new int[8];
         int starty = 16;
         for (int i = 0; i < m.length; i++) {
@@ -44,15 +44,13 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         return m;
     }
 
-    private static int[] initializePositionX() {
+    private int[] initializePositionX() {
         int[] m = new int[8];
         for (int i = 0; i < m.length; i++) {
             m[i] = 41;
         }
         return m;
     }
-
-    private static final long serialVersionUID = 1L;
 
     private final double[] dataRC = new double[8];
 
@@ -74,7 +72,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
                 BufferedImage.TYPE_INT_ARGB);
 
         Graphics g = bi.getGraphics();
-        g.drawImage(imageRCdataeBg, 0, 0, null);
+        g.drawImage(background, 0, 0, null);
 
         // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
         // float[] offsets = new float[4];

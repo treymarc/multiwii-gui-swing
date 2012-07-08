@@ -20,12 +20,6 @@ import eu.kprod.gui.MwGuiFrame;
 
 
 /**
- * Known issues
- * 
- * - when zooming the chart : news values are still recorded so due to the
- * dataSource maxItemcounts and AgeLimite , the chart gets emptied at the zoomed
- * date
- * 
  * @author treym
  * 
  */
@@ -46,6 +40,7 @@ public final class MwGui {
 
                 MwGuiFrame frame = new MwGuiFrame(new MwConfiguration());
                 frame.setVisible(true);
+                frame.repaint();
             }
 
         });
