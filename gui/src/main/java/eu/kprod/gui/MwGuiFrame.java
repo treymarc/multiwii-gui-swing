@@ -670,6 +670,12 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     protected void showPreferencesFrame() {
         // TODO Auto-generated method stub
 
+//        conf =new MwConfiguration;
+//        {
+//            MwColor
+//            MwResources
+//        }
+
     }
 
     private MwJPanel getRealTimePanel() {
