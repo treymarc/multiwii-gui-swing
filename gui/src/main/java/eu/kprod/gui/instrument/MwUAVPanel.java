@@ -36,7 +36,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    private final Image[] uavImages = new Image[14];
+    private final Image[] uavImages = getImages();
 
     // position for drawing in the png uavImages
     private static final int[] UAV_TRI_MOTOR_X = { 71, 121, 21 };
@@ -61,10 +61,14 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         super(new Dimension(170, 200), conf);
         super.setBarMax(67);
         super.setBarWidth(8);
+    }
 
-        for (int i = 1; i < uavImages.length; i++) {
-            uavImages[i] = super.getImage("uav/" + i + ".png");
+    private Image[] getImages() {
+        Image[] mm = new Image[14];
+        for (int i = 1; i < mm.length; i++) {
+            mm[i] = super.getImage("uav/" + i + ".png");
         }
+        return mm;
     }
 
     /**************** main Mix Table ******************/
@@ -170,8 +174,8 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     private void drawUAV(Graphics2D g2d) {
 
-        BufferedImage bi = new BufferedImage(getMaxRadiusY(),
-                getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(getMaxRadiusY(), getMaxRadiusY(),
+                BufferedImage.TYPE_INT_ARGB);
         Graphics g = bi.getGraphics();
         g.drawImage(uavImages[uavType], 0, 0, null);
 

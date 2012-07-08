@@ -27,33 +27,28 @@ import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-    private Image imageRCdataeBg = super.getImage("rcdata.png");
+    private final Image imageRCdataeBg = super.getImage("rcdata.png");
 
     private static final int rcDatabarWidth = 7;
 
-    private int[] startx = initializePositionX();
-    private int[] starty = initializePositionY();
-
+    private final int[] startx = initializePositionX();
+    private final int[] starty = initializePositionY();
 
     private static int[] initializePositionY() {
-        int[]   m = new int[8];
-        int     starty = 16;
-
+        int[] m = new int[8];
+        int starty = 16;
         for (int i = 0; i < m.length; i++) {
             m[i] = starty;
             starty += rcDatabarWidth + 8;
         }
-
         return m;
     }
 
     private static int[] initializePositionX() {
         int[] m = new int[8];
-
         for (int i = 0; i < m.length; i++) {
             m[i] = 41;
         }
-
         return m;
     }
 
@@ -61,9 +56,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     private final double[] dataRC = new double[8];
 
-
     public MwRCDataPanel(MwConfiguration conf) {
-        super(new Dimension(200, 150),conf);
+        super(new Dimension(200, 150), conf);
         super.setBarMax(118);
         super.setBarWidth(rcDatabarWidth);
 
@@ -76,8 +70,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         // int w = 200;
 
-        BufferedImage bi = new BufferedImage( getMaxRadiusX(),
-                getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = new BufferedImage(getMaxRadiusX(), getMaxRadiusY(),
+                BufferedImage.TYPE_INT_ARGB);
 
         Graphics g = bi.getGraphics();
         g.drawImage(imageRCdataeBg, 0, 0, null);
@@ -88,7 +82,6 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         g2d.drawImage(bi, null, 0, 0);
     }
-
 
     @Override
     public void paintComponent(Graphics g) {
@@ -110,7 +103,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass,
+            String name, Double value) {
 
         if (MSP.IDRCTHROTTLE.equals(name)) {
             dataRC[0] = value;
