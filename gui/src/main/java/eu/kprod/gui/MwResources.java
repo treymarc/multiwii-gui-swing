@@ -22,24 +22,24 @@ import java.util.HashMap;
  */
 public class MwResources {
 
-    private final String FONT_PREFIX = "/fonts/";
-    private final String THEME_PREFIXE = "/images/";
+    private static final String FONT_PREFIX = "/fonts/";
+    private static final String THEME_PREFIXE = "/images/";
 
-    private final String DEFAULT_FONT = FONT_PREFIX + "Liberation/LiberationMono-Regular.ttf";
-    private final String DEFAULT_THEME = THEME_PREFIXE + "default/";
-    
+    private static final String DEFAULT_FONT = FONT_PREFIX + "Liberation/LiberationMono-Regular.ttf";
+    private static final String DEFAULT_THEME = THEME_PREFIXE + "default/";
+
     HashMap<Integer, String> ressources;
 
     MwResources() {
         ressources = initDefaultMap();
-        
+
     }
 
     MwResources(HashMap<Integer, String>  r) {
         ressources = r;
     }
 
-    
+
     boolean setResources(HashMap<Integer, String> ressources1) {
         if (ressources1 != null) {
             ressources = ressources1;
@@ -55,7 +55,7 @@ public class MwResources {
        ress.put(MwConfiguration.FONT, DEFAULT_FONT);
        ress.put(MwConfiguration.THEME, DEFAULT_THEME);
        return ress;
-       
+
     }
 
    String get(int key) {
@@ -66,7 +66,6 @@ public class MwResources {
        }else{
            return r;
        }
-           
-   }
 
+   }
 }

@@ -277,13 +277,15 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     Image getImage(String image) {
-        String fpath = conf.getPath(MwConfiguration.THEME) + "/" + image;
+        String fpath = conf.getPath(MwConfiguration.THEME) + image;
 
         try {
+            // System.out.println("fpath:"+fpath);
             URL url = this.getClass().getResource(fpath);
             return Toolkit.getDefaultToolkit().getImage(url);
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
+            // this never works, images seem to be loaded on another thread
             throw new MwGuiRuntimeException("Could not load image : " + fpath, e);
         }
     }

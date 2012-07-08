@@ -65,7 +65,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         for (int i = 1; i < uavImages.length; i++) {
             uavImages[i] = super.getImage("uav/" + i + ".png");
         }
-
     }
 
     /**************** main Mix Table ******************/
@@ -167,8 +166,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
             default:
                 break;
         }
-        ;
-
     }
 
     private void drawUAV(Graphics2D g2d) {
@@ -192,7 +189,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -202,7 +198,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
         drawUAV(g2d);
         drawBarValue(g2d);
-
     }
 
     @Override
@@ -237,5 +232,4 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         uavType = uAVTYPE;
         repaint();
     }
-
 }

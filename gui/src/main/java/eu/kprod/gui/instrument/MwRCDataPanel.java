@@ -31,9 +31,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     private static final int rcDatabarWidth = 7;
 
-    private int[] startx=initializePositionX();
-
-    private int[] starty=initializePositionY();
+    private int[] startx = initializePositionX();
+    private int[] starty = initializePositionY();
 
 
     private static int[] initializePositionY() {
@@ -41,9 +40,8 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         int     starty = 16;
 
         for (int i = 0; i < m.length; i++) {
-
-            m[i]=starty;
-              starty += rcDatabarWidth + 8;
+            m[i] = starty;
+            starty += rcDatabarWidth + 8;
         }
 
         return m;
@@ -53,7 +51,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         int[] m = new int[8];
 
         for (int i = 0; i < m.length; i++) {
-            m[i]=41;
+            m[i] = 41;
         }
 
         return m;
@@ -78,8 +76,9 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
         // int w = 200;
 
-        BufferedImage bi = new BufferedImage(getMaxRadiusX(),
+        BufferedImage bi = new BufferedImage( getMaxRadiusX(),
                 getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
+
         Graphics g = bi.getGraphics();
         g.drawImage(imageRCdataeBg, 0, 0, null);
 
@@ -88,7 +87,6 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         // RescaleOp rop = new RescaleOp(scales, offsets, null);
 
         g2d.drawImage(bi, null, 0, 0);
-
     }
 
 
@@ -136,7 +134,5 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     @Override
     void resetAllValuesImpl() {
-
     }
-
 }

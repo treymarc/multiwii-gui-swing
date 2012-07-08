@@ -63,9 +63,9 @@ public class MwHudPanel extends MwInstrumentJPanel {
         bankMarkerLong.lineTo((getCenterPoint().getX() - getRadiusx() + 6),
                 getCenterPoint().getY());
 
-        AffineTransform ata = AffineTransform.getRotateInstance(Math
-                .toRadians(150), getCenterPoint().getX(), getCenterPoint()
-                .getY());
+        AffineTransform ata = AffineTransform.getRotateInstance(
+                Math.toRadians(150),
+                getCenterPoint().getX(), getCenterPoint().getY());
         g2d.transform(ata);
 
         for (int i = 0; i < 5; i++) {
@@ -294,7 +294,6 @@ public class MwHudPanel extends MwInstrumentJPanel {
 
         g2d.setStroke(new BasicStroke(3));
         g2d.draw(roundHorizon);
-
     }
 
     @Override
