@@ -313,6 +313,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             rescanSerial.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
+                    stopTimer();
+
                     closeSerialPort();
                     getSerialPortAsMenuItem();
                     SwingUtilities.updateComponentTreeUI(menuBar);
@@ -438,9 +440,11 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     send(MSP.request(MSP.RAW_IMU));
                     send(MSP.request(MSP.DEBUG));
                     send(MSP.request(MSP.RC));
+                } catch (SerialException e) {
+                    LOGGER.error("Error while sending command");
                 } catch (final Exception e) {
                     timer.cancel();
-                    // timer.purge();
+
                 }
             }
         }
@@ -670,11 +674,11 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     protected void showPreferencesFrame() {
         // TODO Auto-generated method stub
 
-//        conf =new MwConfiguration;
-//        {
-//            MwColor
-//            MwResources
-//        }
+        // conf =new MwConfiguration;
+        // {
+        // MwColor
+        // MwResources
+        // }
 
     }
 
