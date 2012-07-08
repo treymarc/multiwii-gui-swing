@@ -663,6 +663,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                stopTimer();
+
                 closeSerialPort();
                 System.exit(0);
             }
