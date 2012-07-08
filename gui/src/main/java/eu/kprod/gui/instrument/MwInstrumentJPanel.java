@@ -37,7 +37,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     private static final Float FONTSIZE = 12.0f;
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         return writing;
     }
 
-    public static void setWriting(final Font writing1) {
+    public static void setWriting(Font writing1) {
         MwInstrumentJPanel.writing = writing1;
     }
 
@@ -66,7 +66,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     private int sizeX;
     private int sizey;
 
-    public MwInstrumentJPanel(final Dimension dimension, MwConfiguration conf) {
+    public MwInstrumentJPanel(Dimension dimension, MwConfiguration conf) {
         this.conf = conf;
         setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
         if (dimension == null) {
@@ -195,7 +195,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     /**
      * will draw bar value for each position defined in xpoint,ypoint ; there
      * must enough value to draw in values
-     * 
+     *
      * @param g2d
      *            is the graphic (where we draw)
      * @param offset
@@ -213,9 +213,8 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
      * @param orientation
      *            , can be YAXIS or XAXIS
      */
-    protected void drawBar(final Graphics2D g2d, int offset, double[] values,
-            int[] indexes, final int[] xpoint, final int[] ypoint,
-            final int orientation) {
+    protected void drawBar(Graphics2D g2d, int offset, double[] values,
+            int[] indexes, int[] xpoint, int[] ypoint, int orientation) {
 
         GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
         int barValue;
@@ -278,17 +277,14 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     Image getImage(String image) {
-
         String fpath = conf.getPath(MwConfiguration.THEME) + "/" + image;
+
         try {
             URL url = this.getClass().getResource(fpath);
             return Toolkit.getDefaultToolkit().getImage(url);
 
-        } catch (final Exception e) {
-            throw new MwGuiRuntimeException("Could not load image : " + fpath,
-                    e);
-
+        } catch (Exception e) {
+            throw new MwGuiRuntimeException("Could not load image : " + fpath, e);
         }
     }
-
 }

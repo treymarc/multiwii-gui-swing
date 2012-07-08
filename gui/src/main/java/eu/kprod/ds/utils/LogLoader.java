@@ -25,19 +25,21 @@ import eu.kprod.ds.MwDataSourceImpl;
 
 /**
  * load a DataSource from a formated Log file.
- * 
+ *
  * @author treym
- * 
+ *
  */
 public class LogLoader implements DSLoadable {
 
-    private static String[] parse(final String line) {
+    private static String[] parse(String line) {
+
         // System.err.println("line = "+line);
-        final String[] content = new String[3];
+        String[] content = new String[3];
+
         // TODO Auto-generated method stub
         if (line.contains("SENSOR") && line.contains(":")) {
-            final String s = line.substring(line.lastIndexOf('R') + 1);
-            final int pos = s.lastIndexOf(':');
+            String s = line.substring(line.lastIndexOf('R') + 1);
+            int pos = s.lastIndexOf(':');
             content[0] = s.substring(0, pos - 1);
             content[1] = s.substring(pos + 1);
 
@@ -54,7 +56,7 @@ public class LogLoader implements DSLoadable {
 
     /**
      * charge un fichier ligne par ligne
-     * 
+     *
      * @param filePath
      *            le chemin du ficher à lire
      * @return le contenu du fichier,une liste vide pour une fichier vide, null
@@ -62,7 +64,7 @@ public class LogLoader implements DSLoadable {
      * @throws DSLoadableException
      */
     @Override
-    public final MwDataSource getDataSourceContent(final String filePath)
+    public final MwDataSource getDataSourceContent(String filePath)
             throws DSLoadableException {
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");

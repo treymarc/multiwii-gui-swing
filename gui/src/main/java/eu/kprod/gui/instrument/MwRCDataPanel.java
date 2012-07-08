@@ -27,48 +27,44 @@ import eu.kprod.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
-    private Image imageRCdataeBg= super.getImage("rcdata.png");
-    
-    
+    private Image imageRCdataeBg = super.getImage("rcdata.png");
 
     private static final int rcDatabarWidth = 7;
-    
+
     private int[] startx=initializePositionX();
 
     private int[] starty=initializePositionY();
 
 
     private static int[] initializePositionY() {
-        final int[] m = new int[8];
-        int starty = 16;
+        int[]   m = new int[8];
+        int     starty = 16;
 
         for (int i = 0; i < m.length; i++) {
-            
+
             m[i]=starty;
               starty += rcDatabarWidth + 8;
         }
 
         return m;
     }
-    
+
     private static int[] initializePositionX() {
-        final int[] m = new int[8];
-       
+        int[] m = new int[8];
+
         for (int i = 0; i < m.length; i++) {
             m[i]=41;
         }
 
         return m;
     }
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
 
     private final double[] dataRC = new double[8];
 
 
-    public MwRCDataPanel( MwConfiguration conf) {
+    public MwRCDataPanel(MwConfiguration conf) {
         super(new Dimension(200, 150),conf);
         super.setBarMax(118);
         super.setBarWidth(rcDatabarWidth);
@@ -76,16 +72,15 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         for (int i = 0; i < dataRC.length; i++) {
             dataRC[i] = 0;
         }
-
     }
 
-    private void drawBackground(final Graphics2D g2d) {
+    private void drawBackground(Graphics2D g2d) {
 
         // int w = 200;
 
-        final BufferedImage bi = new BufferedImage(getMaxRadiusX(),
+        BufferedImage bi = new BufferedImage(getMaxRadiusX(),
                 getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
-        final Graphics g = bi.getGraphics();
+        Graphics g = bi.getGraphics();
         g.drawImage(imageRCdataeBg, 0, 0, null);
 
         // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
@@ -96,13 +91,11 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
 
     }
 
-    
-    
 
     @Override
-    public void paintComponent(final Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        final Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -110,17 +103,16 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         drawBackground(g2d);
 
         drawBar(g2d, 2, dataRC, null, startx, starty, XAXIS);
-
     }
 
     @Override
-    public void readNewValue(final Integer string, final int i) {
+    public void readNewValue(Integer string, int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
 
         if (MSP.IDRCTHROTTLE.equals(name)) {
             dataRC[0] = value;

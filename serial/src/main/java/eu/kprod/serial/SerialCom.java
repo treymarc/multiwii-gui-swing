@@ -33,7 +33,7 @@ public class SerialCom {
 
     private int serialRate;
 
-    public SerialCom(final String device, final int serialRateIn) {
+    public SerialCom(String device, int serialRateIn) {
 
         this.deviceName = device;
         this.serialRate = serialRateIn;
@@ -87,19 +87,19 @@ public class SerialCom {
         }
     }
 
-    public final void send(final String s) throws SerialException {
+    public final void send(String s) throws SerialException {
         if (serial != null) {
             serial.write(s);
         }
     }
 
-    public final void send(String s, final Integer d) throws SerialException {
+    public final void send(String s, Integer d) throws SerialException {
 
         send(new StringBuffer().append(s).append(lineEnding[d]).toString());
 
     }
 
-    public final void setDeviceName(final String deviceName1) {
+    public final void setDeviceName(String deviceName1) {
         this.deviceName = deviceName1;
     }
 
@@ -110,7 +110,7 @@ public class SerialCom {
         }
     }
 
-    public void setSerialRate(final int serialRate1) {
+    public void setSerialRate(int serialRate1) {
         this.serialRate = serialRate1;
     }
 

@@ -57,13 +57,13 @@ public class DebugFrame extends JFrame implements SerialListener {
         private static final long serialVersionUID = 1L;
         private final JTextArea field;
 
-        public RollingDocument(final JTextArea textArea) {
+        public RollingDocument(JTextArea textArea) {
             field = textArea;
         }
 
         @Override
-        public void insertString(final int offs, final String str,
-                final AttributeSet a) throws BadLocationException {
+        public void insertString(int offs, String str,
+                                 AttributeSet a) throws BadLocationException {
 
             if (str == null) {
                 return;
@@ -89,7 +89,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     private final JTextArea textArea;
     private final JTextField textField;
 
-    public DebugFrame(final String title, final MwGuiFrame frame) {
+    public DebugFrame( String title, final MwGuiFrame frame) {
         super(title);
 
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -97,7 +97,7 @@ public class DebugFrame extends JFrame implements SerialListener {
         addWindowListener(new WindowAdapter() {
 
             @Override
-            public void windowClosing(final WindowEvent e) {
+            public void windowClosing( WindowEvent e) {
                 LOGGER.trace("windowClosing "
                         + e.getSource().getClass().getName() + "\n");
                 frame.closeDebugFrame();
@@ -135,14 +135,14 @@ public class DebugFrame extends JFrame implements SerialListener {
         textField = new JTextField(40);
         textField.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 LOGGER.trace("actionPerformed "
                         + e.getSource().getClass().getName()+"\n");
 
                 try {
                     frame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
-                } catch (final SerialException e1) {
+                } catch ( SerialException e1) {
                     LOGGER.error(e1.getMessage()+"\n");
                 }
                 textField.setText("");
@@ -152,20 +152,19 @@ public class DebugFrame extends JFrame implements SerialListener {
         sendButton = new MwJButton("Send", "Send serial commande");
         sendButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 LOGGER.trace("actionPerformed "
                         + e.getSource().getClass().getName()+"\n");
 
                 try {
                     frame.getCom().send(textField.getText(),
                             lineEndings.getSelectedIndex());
-                } catch (final SerialException e1) {
+                } catch (SerialException e1) {
                     LOGGER.error(e1.getMessage()+"\n");
                 }
                 textField.setText("");
                 if (autoscrollBox.isSelected()) {
-                    textArea.setCaretPosition(textArea.getDocument()
-                            .getLength());
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
                 }
             }
         });
@@ -198,10 +197,9 @@ public class DebugFrame extends JFrame implements SerialListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                textArea.append(String.valueOf(aByte));
+                textArea.append(String.valueOf( (char)aByte ));
                 if (autoscrollBox.isSelected()) {
-                    textArea.setCaretPosition(textArea.getDocument()
-                            .getLength());
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
                 }
             }
         });
@@ -209,9 +207,7 @@ public class DebugFrame extends JFrame implements SerialListener {
     }
 
     @Override
-    public void reportSerial(final Throwable e) {
+    public void reportSerial(Throwable e) {
         // TODO Auto-generated method stub
-
     }
-
 }

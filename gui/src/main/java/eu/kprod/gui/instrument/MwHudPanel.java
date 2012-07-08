@@ -1,6 +1,6 @@
 /**
  * Copyright (C)
- * 
+ *
  * @author wilhem (Davide Picchi) Feb 24, 2010
  * @author treym (Trey Marc) Jun 16 2012
  *         This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ import eu.kprod.msp.MSP;
 public class MwHudPanel extends MwInstrumentJPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -48,16 +48,16 @@ public class MwHudPanel extends MwInstrumentJPanel {
 
     public MwHudPanel(MwConfiguration conf) {
         super(null,conf);
-        
+
         // Creates two arcs used to draw the outline
         upperArc = new Arc2D.Float();
         lowerArc = new Arc2D.Float();
     }
 
-    private void drawBankRollMarker(final Graphics2D g2d) {
+    private void drawBankRollMarker(Graphics2D g2d) {
 
         // Draw the line markers for bank angle
-        final GeneralPath bankMarkerLong = new GeneralPath(Path2D.WIND_EVEN_ODD);
+        GeneralPath bankMarkerLong = new GeneralPath(Path2D.WIND_EVEN_ODD);
         bankMarkerLong.moveTo((getCenterPoint().getX() - getRadiusx()),
                 getCenterPoint().getY());
         bankMarkerLong.lineTo((getCenterPoint().getX() - getRadiusx() + 6),
@@ -92,16 +92,16 @@ public class MwHudPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawHorizon(final Graphics2D g2d) {
+    private void drawHorizon(Graphics2D g2d) {
 
         // Start doing some math calculation for angles
         int angStartUpper = 0;
         int angExtUpper = 0;
-        final int angStartLower = 0;
-        final int angExtLower = 360;
+        int angStartLower = 0;
+        int angExtLower = 360;
 
         // First step is to determine the roll display position
-        final AffineTransform at = AffineTransform.getRotateInstance(
+        AffineTransform at = AffineTransform.getRotateInstance(
                 Math.toRadians(rollAngle), getCenterPoint().getX(),
                 getCenterPoint().getY());
         g2d.transform(at);
@@ -154,15 +154,15 @@ public class MwHudPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawLines(final Graphics2D g2d) {
-        final AffineTransform at = AffineTransform.getRotateInstance(
+    private void drawLines(Graphics2D g2d) {
+        AffineTransform at = AffineTransform.getRotateInstance(
                 Math.toRadians(-rollAngle), getCenterPoint().getX(),
                 getCenterPoint().getY());
 
         g2d.transform(at);
 
         // Draw the center shape
-        final GeneralPath centerShape = new GeneralPath(Path2D.WIND_EVEN_ODD);
+        GeneralPath centerShape = new GeneralPath(Path2D.WIND_EVEN_ODD);
         centerShape.moveTo((getCenterPoint().getX() - getRadiusx() / 2.5),
                 getCenterPoint().getY());
         centerShape.lineTo((getCenterPoint().getX() - 15), getCenterPoint()
@@ -189,7 +189,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
         int distance;
         int angleCorrUp;
         int limitInf, limitMax;
-        final Integer ppitchangle = this.pitchAngle;
+        Integer ppitchangle = this.pitchAngle;
 
         limitInf = ((ppitchangle / 10) - 5);
         if (limitInf < -18) {
@@ -250,7 +250,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
 
     }
 
-    void drawValue(final Graphics2D g2d) {
+    void drawValue(Graphics2D g2d) {
 
         g2d.setFont(getWriting());
         g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
@@ -267,11 +267,11 @@ public class MwHudPanel extends MwInstrumentJPanel {
      * Main paintComponent method
      ***************************/
     @Override
-    public void paintComponent(final Graphics g) {
+    public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
 
-        final Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -287,7 +287,7 @@ public class MwHudPanel extends MwInstrumentJPanel {
 
         setRadiusx(((Double) (0.45 * getMaxRadiusX())).intValue());
         setRadiusy(((Double) (0.45 * getMaxRadiusY())).intValue());
-        final Ellipse2D roundHorizon = new Ellipse2D.Float(
+        Ellipse2D roundHorizon = new Ellipse2D.Float(
                 (getMaxRadiusX() - getRadiusx() * 2) / 2,
                 (getMaxRadiusY() - getRadiusy() * 2) / 2, 2 * getRadiusx(),
                 2 * getRadiusy());
@@ -298,11 +298,11 @@ public class MwHudPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final Integer string, final int i) {
+    public void readNewValue(Integer string, int i) {
     }
 
     @Override
-    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
         if (MSP.IDANGY.equals(name)) {
 
             this.pitchAngle = -value.intValue();

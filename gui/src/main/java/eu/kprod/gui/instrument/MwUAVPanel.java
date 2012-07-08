@@ -144,7 +144,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     // motor[2] = PIDMIX(+0,+1, +1/2); //REAR_L
     // motor[3] = PIDMIX(+1, -1, -0); //FRONT_L
     // #endif
-    void drawBarValue(final Graphics2D g2d) {
+    void drawBarValue(Graphics2D g2d) {
 
         switch (uavType) {
             case MSP.UAV_TRI:
@@ -171,11 +171,11 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawUAV(final Graphics2D g2d) {
+    private void drawUAV(Graphics2D g2d) {
 
-        final BufferedImage bi = new BufferedImage(getMaxRadiusY(),
+        BufferedImage bi = new BufferedImage(getMaxRadiusY(),
                 getMaxRadiusY(), BufferedImage.TYPE_INT_ARGB);
-        final Graphics g = bi.getGraphics();
+        Graphics g = bi.getGraphics();
         g.drawImage(uavImages[uavType], 0, 0, null);
 
         // float[] scales = { 1.0f ,1.0f,1.0f,0.8f};
@@ -191,11 +191,11 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void paintComponent(final Graphics g) {
+    public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
 
-        final Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -206,16 +206,16 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final Integer string, final int i) {
+    public void readNewValue(Integer string, int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
     public void readNewValue(Class<? extends MwSensorClass> sensorClass,
-            final String name, final Double value) {
+            String name, Double value) {
 
-        final int index = Integer.parseInt(name.charAt(name.length() - 1) + "");
+        int index = Integer.parseInt(name.charAt(name.length() - 1) + "");
 
         String sensor = sensorClass.getName();
 
@@ -233,7 +233,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
 
     }
 
-    public void setUavType(final int uAVTYPE) {
+    public void setUavType(int uAVTYPE) {
         uavType = uAVTYPE;
         repaint();
     }

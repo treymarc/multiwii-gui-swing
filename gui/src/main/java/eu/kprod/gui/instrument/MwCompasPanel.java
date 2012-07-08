@@ -34,16 +34,15 @@ import eu.kprod.msp.MSP;
 
 public class MwCompasPanel extends MwInstrumentJPanel {
 
-    private Image imageCompas= super.getImage("compas.png");
+    private Image imageCompas = super.getImage("compas.png");
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
-    private Double alt = 0.0;
-    private Integer head = 0;
+    private double  alt;
+    private int     head;
 
-   
     public MwCompasPanel(MwConfiguration conf) {
         super(null,conf);
         setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
@@ -51,9 +50,9 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     }
 
 
-    private void drawBackground(final Graphics2D g2d) {
+    private void drawBackground(Graphics2D g2d) {
 
-        final Float background = new Ellipse2D.Float(
+        Float background = new Ellipse2D.Float(
                 (getMaxRadiusX() - getRadiusx() * 2) / 2,
                 (getMaxRadiusY() - getRadiusy() * 2) / 2, 2 * getRadiusx(),
                 2 * getRadiusy());
@@ -63,7 +62,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawCompas(final Graphics2D g2d) {
+    private void drawCompas(Graphics2D g2d) {
         // rotate to heading
         AffineTransform at = AffineTransform.getRotateInstance(
                 Math.toRadians(-head), getCenterPoint().getX(),
@@ -73,13 +72,13 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         g2d.setStroke(new BasicStroke(2));
         g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
-        final GeneralPath bankMarker = new GeneralPath(Path2D.WIND_EVEN_ODD);
+        GeneralPath bankMarker = new GeneralPath(Path2D.WIND_EVEN_ODD);
         bankMarker.moveTo((getCenterPoint().getX() - getRadiusx()),
                 getCenterPoint().getY());
         bankMarker.lineTo((getCenterPoint().getX() - getRadiusx() + 6),
                 getCenterPoint().getY());
 
-        final AffineTransform ata = AffineTransform.getRotateInstance(Math
+        AffineTransform ata = AffineTransform.getRotateInstance(Math
                 .toRadians(22.5), getCenterPoint().getX(), getCenterPoint()
                 .getY());
 
@@ -171,7 +170,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    private void drawUAV(final Graphics2D g2d) {
+    private void drawUAV(Graphics2D g2d) {
 
         g2d.setStroke(new BasicStroke(2));
         g2d.setPaint(Color.lightGray);
@@ -190,21 +189,21 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         g2d.setStroke(new BasicStroke(1));
         g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
-        final String k = head.toString();
+        String k = ""+head;
 
         g2d.drawString(k, (float) (getCenterPoint().getX() - k.length() * 3),
                 (float) getCenterPoint().getY());
 
-        final int w = 200;
+        int w = 200;
 
-        final BufferedImage bi = new BufferedImage(getMaxRadiusY(), getMaxRadiusY(),
+        BufferedImage bi = new BufferedImage(getMaxRadiusY(), getMaxRadiusY(),
                 BufferedImage.TYPE_INT_ARGB);
-        final Graphics g = bi.getGraphics();
+        Graphics g = bi.getGraphics();
         g.drawImage(imageCompas, 0, 0, null);
 
-        final float[] scales = { 1.0f, 1.0f, 1.0f, 0.8f };
-        final float[] offsets = new float[4];
-        final RescaleOp rop = new RescaleOp(scales, offsets, null);
+        float[] scales = { 1.0f, 1.0f, 1.0f, 0.8f };
+        float[] offsets = new float[4];
+        RescaleOp rop = new RescaleOp(scales, offsets, null);
 
         g2d.drawImage(bi, rop, (getMaxRadiusX() - w) / 2,
                 (getMaxRadiusY() - w) / 2);
@@ -213,7 +212,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    void drawValue(final Graphics2D g2d) {
+    void drawValue(Graphics2D g2d) {
 
         g2d.setFont(getWriting());
         g2d.setPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
@@ -223,11 +222,11 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void paintComponent(final Graphics g) {
+    public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
 
-        final Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -238,7 +237,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
         drawUAV(g2d);
 
-        final Float roundHorizon = new Ellipse2D.Float(
+        Float roundHorizon = new Ellipse2D.Float(
                 (getMaxRadiusX() - getRadiusx() * 2) / 2,
                 (getMaxRadiusY() - getRadiusy() * 2) / 2, 2 * getRadiusx(),
                 2 * getRadiusy());
@@ -249,13 +248,13 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     }
 
     @Override
-    public void readNewValue(final Integer string, final int i) {
+    public void readNewValue(Integer string, int i) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value) {
+    public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
         if (MSP.IDHEAD.equals(name)) {
             this.head = value.intValue();
         } else if (MSP.IDALT.equals(name)) {
@@ -269,7 +268,5 @@ public class MwCompasPanel extends MwInstrumentJPanel {
     void resetAllValuesImpl() {
         head = 0;
         alt = 0.0;
-
     }
-
 }
