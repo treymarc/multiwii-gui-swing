@@ -43,7 +43,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
     static final int XAXIS = 0;
     static final int YAXIS = 1;
-    
+
     private static Font writing = null;
 
     public static Font getWriting() {
@@ -67,7 +67,7 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     private int sizey;
 
     public MwInstrumentJPanel(final Dimension dimension, MwConfiguration conf) {
-        this.conf=conf;
+        this.conf = conf;
         setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
         if (dimension == null) {
             // Instance variables initialization
@@ -82,13 +82,12 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
         // this.setMinimumSize(dimPanel);
         // Define a center point as a reference
-        centerPoint = new Point2D.Float(this.maxSizeX / 2,
-                this.maxSizeY / 2);
+        centerPoint = new Point2D.Float(this.maxSizeX / 2, this.maxSizeY / 2);
 
         if (writing == null) {
 
             final InputStream is = this.getClass().getResourceAsStream(
-                    conf .getPath(MwConfiguration.FONT));
+                    conf.getPath(MwConfiguration.FONT));
 
             try {
                 writing = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -171,7 +170,6 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         this.sizey = radiusy1;
     }
 
-
     public int getBarWidth() {
         return barWidth;
     }
@@ -188,44 +186,56 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
         this.barMax = barMax;
     }
 
-
     // bar w/h
     private int barWidth = 8;
     private int barMax = 67;
 
     MwConfiguration conf;
-    
+
     /**
-     *  will draw bar value for each position defined in xpoint,ypoint ; there must enough value to draw in values
-     *  
-     * @param g2d is the graphic (where we draw) 
-     * @param offset the bar limit , allow the bar to reach barMax + offset and -offest value  
-     * @param values , All the values to draw
-     * @param indexes of the value to draw , use null to draw all value defined by xpoint,ypoint
-     * @param xpoint, the x position for each bar to draw
-     * @param ypoint, the y position for each bar to draw
-     * @param orientation , can be YAXIS or XAXIS
+     * will draw bar value for each position defined in xpoint,ypoint ; there
+     * must enough value to draw in values
+     * 
+     * @param g2d
+     *            is the graphic (where we draw)
+     * @param offset
+     *            the bar limit , allow the bar to reach barMax + offset and
+     *            -offest value
+     * @param values
+     *            , All the values to draw
+     * @param indexes
+     *            of the value to draw , use null to draw all value defined by
+     *            xpoint,ypoint
+     * @param xpoint
+     *            , the x position for each bar to draw
+     * @param ypoint
+     *            , the y position for each bar to draw
+     * @param orientation
+     *            , can be YAXIS or XAXIS
      */
-    protected void drawBar(final Graphics2D g2d, int offset, double[] values,int[] indexes, final int[] xpoint, final int[] ypoint , final int orientation) {
-       
+    protected void drawBar(final Graphics2D g2d, int offset, double[] values,
+            int[] indexes, final int[] xpoint, final int[] ypoint,
+            final int orientation) {
+
         GeneralPath bar = new GeneralPath(Path2D.WIND_EVEN_ODD);
         int barValue;
         int barMaxNumber;
-        
-        if (indexes == null){
-             barMaxNumber = xpoint.length;
-        }else{
+
+        if (indexes == null) {
+            barMaxNumber = xpoint.length;
+        } else {
             barMaxNumber = indexes.length;
         }
-        
+
         for (int i = 0; i < barMaxNumber; i++) {
 
-            if (indexes == null){
-                barValue = new Double(((values[i] - 1000) / 1000) * barMax).intValue();
-            }else{
-                barValue = new Double(((values[indexes[i]] - 1000) / 1000) * barMax).intValue();
+            if (indexes == null) {
+                barValue = new Double(((values[i] - 1000) / 1000) * barMax)
+                        .intValue();
+            } else {
+                barValue = new Double(((values[indexes[i]] - 1000) / 1000)
+                        * barMax).intValue();
             }
-            
 
             if (barValue < -offset) {
                 barValue = -offset;
@@ -246,21 +256,21 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
             switch (orientation) {
                 case YAXIS:
-                    bar.lineTo(xpoint[i], ypoint[i] - barValue); 
+                    bar.lineTo(xpoint[i], ypoint[i] - barValue);
                     bar.lineTo(xpoint[i] + barWidth, ypoint[i] - barValue);
                     bar.lineTo(xpoint[i] + barWidth, ypoint[i]);
                     break;
 
                 case XAXIS:
-                    bar.lineTo(xpoint[i]+barValue, ypoint[i]);
-                    bar.lineTo(xpoint[i]+barValue, ypoint[i]+barWidth);
-                    bar.lineTo(xpoint[i], ypoint[i]+barWidth);
-                    
+                    bar.lineTo(xpoint[i] + barValue, ypoint[i]);
+                    bar.lineTo(xpoint[i] + barValue, ypoint[i] + barWidth);
+                    bar.lineTo(xpoint[i], ypoint[i] + barWidth);
+
                     break;
                 default:
-                    throw new MwGuiRuntimeException("coding bug, please report");    
+                    throw new MwGuiRuntimeException("coding bug, please report");
             }
-            
+
             bar.closePath();
             g2d.fill(bar);
 
@@ -268,16 +278,17 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
     }
 
     Image getImage(String image) {
-        URL url = this.getClass().getResource(conf.getPath(MwConfiguration.THEME)+"/"+image);
-        
+
+        String fpath = conf.getPath(MwConfiguration.THEME) + "/" + image;
         try {
-            return  Toolkit.getDefaultToolkit().getImage(url);
+            URL url = this.getClass().getResource(fpath);
+            return Toolkit.getDefaultToolkit().getImage(url);
 
         } catch (final Exception e) {
-            throw new MwGuiRuntimeException("Could not load images for "
-                    + this.getClass(), e);
+            throw new MwGuiRuntimeException("Could not load image : " + fpath,
+                    e);
 
         }
     }
-    
+
 }
