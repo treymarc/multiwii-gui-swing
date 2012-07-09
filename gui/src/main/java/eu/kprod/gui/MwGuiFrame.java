@@ -512,9 +512,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         super();
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                stopTimer();
-                closeSerialPort();
-                System.exit(0);
+                Quit(0);
             }
         });
         instance = this;
@@ -676,14 +674,23 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         quit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stopTimer();
-
-                closeSerialPort();
-                System.exit(0);
+                Quit(0);
             }
         });
 
         return menubar;
+    }
+
+    /**
+     * close the frame
+     * 
+     * @param state
+     */
+    protected void Quit(int state) {
+        stopTimer();
+        closeSerialPort();
+        System.exit(state);
+
     }
 
     protected void showPreferencesFrame() {
