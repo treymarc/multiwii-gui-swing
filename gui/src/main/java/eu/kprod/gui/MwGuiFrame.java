@@ -171,8 +171,18 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     private static JMenuBar menuBar;
     private static ButtonGroup portNameMenuGroup;
 
-    private static MwChartPanel realTimeChart;
+    private MwChartPanel realTimeChart;
 
+    private MwJPanel centerChartPanel;
+
+    private String frameTitle;
+
+    private MwJPanel realTimePanel;
+    private MwJPanel settingsPanel;
+
+    private final int sizeX = 700;
+    private final int sizeY = 400;
+    
     /**
      *
      */
@@ -233,7 +243,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         return chartCheckBoxsPanel;
     }
 
-    public static MwChartPanel getChartPanel() {
+    public MwChartPanel getChartPanel() {
         return realTimeChart;
     }
 
@@ -496,18 +506,6 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         timer = null;
     }
 
-    private MwJPanel centerChartPanel;
-
-    private String frameTitle;
-
-    private MwJPanel realTimePanel;
-
-    private MwJPanel settingsPanel;
-
-    private final int sizeX = 700;
-
-    private final int sizeY = 400;
-
     public MwGuiFrame(MwConfiguration mwConfiguration) {
         super();
         addWindowListener(new WindowAdapter() {
@@ -555,13 +553,12 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
         setBackground(conf.color.getColor(MwColor.BACKGROUND_COLOR));
         getContentPane().setLayout(new BorderLayout());
-        // getContentPane().add(new MwJPanel(), BorderLayout.SOUTH);
         getContentPane().add(
                 new MwMainPanel(getRealTimePanel(), getSettingsPanel()),
                 BorderLayout.CENTER);
 
-        pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();   
     }
 
     private JMenuBar createMenuBar() {
@@ -694,20 +691,17 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     }
 
     protected void showPreferencesFrame() {
-        // TODO Auto-generated method stub
-
         // conf =new MwConfiguration;
         // {
         // MwColor
         // MwResources
         // }
-
     }
 
     private MwJPanel getRealTimePanel() {
 
         if (realTimePanel == null) {
-
+            
             JButton stopButton = new MwJButton("Stop", "Stop monitoring");
             stopButton.addActionListener(new ActionListener() {
                 @Override
@@ -747,7 +741,6 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     new java.awt.Dimension(sizeX, sizeY));
 
             centerChartPanel = new MwJPanel(new BorderLayout());
-
             centerChartPanel.add(getChartPanel(), BorderLayout.CENTER);
             centerChartPanel.add(getChartCheckBoxPanel(), BorderLayout.EAST);
             centerChartPanel.add(getInstrumentPanel(), BorderLayout.SOUTH);
@@ -757,7 +750,6 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             realTimePanel.add(centerChartPanel, BorderLayout.CENTER);
 
             JButton startButton = new MwJButton("Start", "Start monitoring");
-
             startButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -779,7 +771,6 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             pane.add(serialRefreshRate);
 
             realTimePanel.add(pane, BorderLayout.SOUTH);
-            // realTimePanel.add(getHudPanel() ,BorderLayout.EAST);
         }
         return realTimePanel;
     }
@@ -890,10 +881,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     public void readNewValue(Integer string, int i) {
         switch (string) {
             case MSP.UAVVERSION_KEY:
-
                 inited = true;
                 break;
-
             case MSP.UAVTYPE_KEY:
                 uavPanel.setUavType(i);
                 break;
@@ -939,7 +928,6 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         realTimeChart.resetAllValues();
         hudPanel.resetAllValues();
         compasPanel.resetAllValues();
-
     }
 
     public void setRealTimeChart(MwChartPanel realTimeChart1) {
@@ -958,12 +946,10 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     @Override
     public void stateChanged(ChangeEvent e) {
         // TODO Auto-generated method stub
-
     }
 
     public static void setConf(MwConfiguration conf1) {
         conf = conf1;
-
     }
 
     public static void setColorGraph(int index, Color color) {
