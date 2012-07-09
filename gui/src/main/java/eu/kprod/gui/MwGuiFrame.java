@@ -171,7 +171,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     private static JMenuBar menuBar;
     private static ButtonGroup portNameMenuGroup;
 
-    private MwChartPanel realTimeChart;
+    private static MwChartPanel realTimeChart;
 
     private MwJPanel centerChartPanel;
 
@@ -182,7 +182,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     private final int sizeX = 700;
     private final int sizeY = 400;
-    
+
     /**
      *
      */
@@ -243,7 +243,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         return chartCheckBoxsPanel;
     }
 
-    public MwChartPanel getChartPanel() {
+    public static MwChartPanel getChartPanel() {
         return realTimeChart;
     }
 
@@ -558,7 +558,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 BorderLayout.CENTER);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();   
+        pack();
     }
 
     private JMenuBar createMenuBar() {
@@ -701,7 +701,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     private MwJPanel getRealTimePanel() {
 
         if (realTimePanel == null) {
-            
+
             JButton stopButton = new MwJButton("Stop", "Stop monitoring");
             stopButton.addActionListener(new ActionListener() {
                 @Override
