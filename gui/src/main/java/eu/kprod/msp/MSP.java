@@ -152,33 +152,53 @@ public final class MSP {
                 case STATUS:
                     int cycleTime = read16();
                     int i2cError = read16();
+
                     int present = read16();
                     int mode = read32();
-                    // if ((present&1) >0)
-                    // {buttonAcc.setColorBackground(green_);} else
-                    // {buttonAcc.setColorBackground(red_);tACC_ROLL.setState(false);
-                    // tACC_PITCH.setState(false); tACC_Z.setState(false);}
-                    // if ((present&2) >0)
-                    // {buttonBaro.setColorBackground(green_);} else
-                    // {buttonBaro.setColorBackground(red_);
-                    // tBARO.setState(false); }
-                    // if ((present&4) >0)
-                    // {buttonMag.setColorBackground(green_);} else
-                    // {buttonMag.setColorBackground(red_);
-                    // tMAGX.setState(false); tMAGY.setState(false);
-                    // tMAGZ.setState(false); }
-                    // if ((present&8) >0)
-                    // {buttonGPS.setColorBackground(green_);} else
-                    // {buttonGPS.setColorBackground(red_);
-                    // tHEAD.setState(false);}
-                    // if ((present&16)>0)
-                    // {buttonSonar.setColorBackground(green_);} else
-                    // {buttonSonar.setColorBackground(red_);}
-                    for (int i = 0; i < model.getBoxNameCount(); i++) {
-                        // if ((mode&(1<<i))>0)
-                        // buttonCheckbox[i].setColorBackground(green_); else
-                        // buttonCheckbox[i].setColorBackground(red_);
+
+                    if ((present & 1) > 0) {
+                        // buttonAcc.setColorBackground(green_);
+                    } else {
+                        // buttonAcc.setColorBackground(red_);
+                        // tACC_ROLL.setState(false);
+                        // tACC_PITCH.setState(false);
+                        // tACC_Z.setState(false);
                     }
+
+                    if ((present & 2) > 0) {
+                        // buttonBaro.setColorBackground(green_);
+                    } else {
+                        // buttonBaro.setColorBackground(red_);
+                        // tBARO.setState(false);
+                    }
+
+                    if ((present & 4) > 0) {
+                        // buttonMag.setColorBackground(green_);
+                    } else {
+                        // buttonMag.setColorBackground(red_);
+                        // tMAGX.setState(false);
+                        // tMAGY.setState(false);
+                        // tMAGZ.setState(false);
+                    }
+
+                    if ((present & 8) > 0) {
+                        // buttonGPS.setColorBackground(green_);
+                    } else {
+                        // buttonGPS.setColorBackground(red_);
+                        // tHEAD.setState(false);
+                    }
+
+                    if ((present & 16) > 0) {
+                        // buttonSonar.setColorBackground(green_);
+                    } else {
+                        // buttonSonar.setColorBackground(red_);
+                    }
+
+                    for (int index = 0; index < model.getBoxNameCount(); index++) {
+                        model.setBoxNameState(index,
+                                ((mode & (1 << index)) > 0));
+                    }
+                    // notify panel
                     break;
 
                 case RAW_IMU:

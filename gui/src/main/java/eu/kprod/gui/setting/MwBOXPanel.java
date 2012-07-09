@@ -20,10 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import eu.kprod.ds.MwDataModel;
+import eu.kprod.gui.MwConfiguration;
+import eu.kprod.gui.comp.MwColor;
 import eu.kprod.gui.comp.MwJCheckBox;
 import eu.kprod.gui.comp.MwJLabel;
 import eu.kprod.gui.comp.MwJPanel;
@@ -36,12 +37,13 @@ public class MwBOXPanel extends MwChangeablePanel {
     private static final long serialVersionUID = 1L;
     private final int boxGroupCount = 3;
 
-    public MwBOXPanel(final String name) {
+    public MwBOXPanel(MwConfiguration conf, final String name) {
         super(name);
+        super.conf = conf;
     }
 
     private Component build(final Map<String, List<Boolean>> map,
-            final Map<Integer, String> index) {
+            final Map<Integer, String> index, boolean[] bs) {
         final MwJPanel mainPane = new MwJPanel();
         mainPane.setLayout(new GridLayout(
                 1 + (index == null ? 0 : index.size()), 1));
@@ -67,7 +69,13 @@ public class MwBOXPanel extends MwChangeablePanel {
             pane = new MwJPanel();
             pane.setLayout(new GridLayout(1, 5));
 
-            pane.add(new JLabel(name));
+            if (bs[i]) {
+                pane.add(new MwJLabel(
+                        conf.color.getColor(MwColor.ACTIVE_COLOR), name));
+            } else {
+                pane.add(new MwJLabel(name));
+
+            }
 
             // List<Boolean> BoxItem = ;
             int j = 0;
@@ -103,7 +111,7 @@ public class MwBOXPanel extends MwChangeablePanel {
 
                 removeAll();
                 setLayout(new GridLayout(1, 1));
-                add(build(m.getBOXs(), m.getBoxNameIndex()));
+                add(build(m.getBOXs(), m.getBoxNameIndex(), m.getBoxNameState()));
                 revalidate();
 
             }

@@ -23,32 +23,23 @@ import javax.swing.event.ChangeListener;
 
 public class MwDataModel {
 
-    private static final int ITEM_BOX_COUNT = 12;
+    private static final int MAX_BOX_COUNT = 20;
 
+    private static final int ITEM_BOX_COUNT = 12;
     private static final int ITEM_PID_COUNT = 3;
 
+    private ChangeListener pidChangeListener;
     private ChangeListener boxChangeListener;
 
-    private final Map<Integer, String> boxNameIndex = new HashMap<Integer, String>();
-
-    // // rc conf
-    // int rcRate, rcExpo, rollPitchRate, yawRate, dynThrPID, throttleMID,
-    // throttleEXPO;
-
-    // ------
-
-    // private HashMap<Integer, Integer> uavSettings = new HashMap<Integer,
-    // Integer>();
-
     private final Map<String, List<Boolean>> boxs = new HashMap<String, List<Boolean>>();
+    private final Map<Integer, String> boxNameIndex = new HashMap<Integer, String>();
+    private static boolean[] boxsState = new boolean[MAX_BOX_COUNT];
 
     // for real time data
     // TODO get impl
     private final MwDataSource ds = new MwDataSourceImpl();
 
     private final int[] motorPins = new int[8];
-
-    private ChangeListener pidChangeListener;
 
     private final Map<Integer, String> pidNameIndex = new HashMap<Integer, String>();
 
@@ -171,7 +162,6 @@ public class MwDataModel {
     }
 
     /**
-     * 
      * @param i
      *            the motor number
      * @param read8
@@ -188,14 +178,8 @@ public class MwDataModel {
         this.pidChangeListener = pidChangeListener1;
     }
 
-    // public void setPowerTrigger(int read16) {
-    // powerTrigger = read16;
-    //
-    // }
-
     public final void setPidValue(final int index, final int p, final int i,
             final int d) {
-        // TODO Auto-generated method stub
         final List<Double> pidItem = new ArrayList<Double>(ITEM_PID_COUNT);
         for (int f = 0; f < ITEM_PID_COUNT; f++) {
             double fp = 0, fd = 0, fi = 0;
@@ -251,7 +235,7 @@ public class MwDataModel {
                     fi = i / 100.0;
                     fd = d / 1000.0;
                     break;
-                default: 
+                default:
                     break;
             }
 
@@ -266,5 +250,18 @@ public class MwDataModel {
     public final void setUavChangeListener(
             final MwDataSourceListener uavChangeListener1) {
         this.uavChangeListener = uavChangeListener1;
+    }
+
+    public boolean getBoxNameState(int index) {
+        return boxsState[index];
+    }
+
+    public void setBoxNameState(int index, boolean b) {
+        boxsState[index] = b;
+    }
+
+    public boolean[] getBoxNameState() {
+        // TODO Auto-generated method stub
+        return boxsState;
     }
 }

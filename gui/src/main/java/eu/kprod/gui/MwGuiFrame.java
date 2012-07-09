@@ -93,7 +93,7 @@ import eu.kprod.serial.SerialNotFoundException;
  * - when zooming the chart : news values are still recorded so due to the
  * dataSource maxItemcounts and AgeLimite , the chart gets emptied at the zoomed
  * date
- *
+ * 
  * @author treym
  */
 public final class MwGuiFrame extends JFrame implements SerialListener,
@@ -390,8 +390,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     "Select a Serial Port", "port",
                     JOptionPane.INFORMATION_MESSAGE, null, array, array[0]);
 
-            Enumeration<AbstractButton> els = portNameMenuGroup
-                    .getElements();
+            Enumeration<AbstractButton> els = portNameMenuGroup.getElements();
             ButtonModel model = null;
             while (els.hasMoreElements()) {
                 AbstractButton abstractButton = els.nextElement();
@@ -446,6 +445,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                     // TODO do not send all requests at the same time
                     send(MSP.request(MSP.ATTITUDE));
                     send(MSP.request(MSP.ALTITUDE));
+                    send(MSP.request(MSP.STATUS));
 
                     // if (motorFrame != null && motorFrame.isVisible()) {
                     send(MSP.request(MSP.MOTOR));
@@ -476,7 +476,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     /**
      * send a string to the serial com
-     *
+     * 
      * @param command
      *            is the packet to send
      * @throws SerialException
@@ -680,7 +680,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     /**
      * close the frame
-     *
+     * 
      * @param state
      */
     protected void Quit(int state) {
@@ -832,8 +832,8 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
             JButton readFromEepromButton = new MwJButton("Read", "Read eeprom");
 
-            int[] req = { MSP.BOXNAMES, MSP.PIDNAMES, MSP.RC_TUNING,
-                    MSP.PID, MSP.BOX, MSP.MISC };
+            int[] req = { MSP.BOXNAMES, MSP.PIDNAMES, MSP.RC_TUNING, MSP.PID,
+                    MSP.BOX, MSP.MISC };
 
             readFromEepromButton.addActionListener(new ActionMspSender(req));
 
@@ -856,7 +856,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             MSP.setPidChangeListener((ChangeListener) pidPane);
             pane.add(pidPane);
 
-            MwJPanel boxPane = new MwBOXPanel("AUX Box");
+            MwJPanel boxPane = new MwBOXPanel(conf, "AUX Box");
             MSP.setBoxChangeListener((ChangeListener) boxPane);
             pane.add(boxPane);
 
@@ -899,7 +899,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     /**
      * (non-Javadoc)
-     *
+     * 
      * @see net.fd.gui.AbstractSerialMonitor#message(java.lang.String)
      */
     @Override
