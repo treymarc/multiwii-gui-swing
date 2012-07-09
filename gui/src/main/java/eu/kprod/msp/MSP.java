@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012
- *
+ * 
  * @author treym (Trey Marc)
  * @author dick@softplc.com
  *         This program is free software: you can redistribute it and/or modify
@@ -20,8 +20,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
-import javax.swing.event.ChangeListener;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
 
@@ -38,7 +38,7 @@ import eu.kprod.ds.MwSensorClassServo;
 
 /**
  * Multiwii Serial Protocol
- *
+ * 
  * @author treym
  */
 public final class MSP {
@@ -49,10 +49,11 @@ public final class MSP {
     private static final int MAXMOTOR = 8;
 
     public static final int UAV_TRI = 1;
-    public static final int UAV_BI = 0;
     public static final int UAV_QUADP = 2;
     public static final int UAV_QUADX = 3;
-
+    public static final int UAV_BI = 4;
+    public static final int UAV_GUIMBAL = 5; // TODO
+    public static final int UAV_Y6 = 6;
 
     /**
      * the model for holding the value decoded by the MSP
@@ -71,7 +72,8 @@ public final class MSP {
         model.setPidChangeListener(pidPane);
     }
 
-    public static void setUavChangeListener(MwDataSourceListener uavChangeListener) {
+    public static void setUavChangeListener(
+            MwDataSourceListener uavChangeListener) {
         model.setUavChangeListener(uavChangeListener);
     }
 
@@ -83,10 +85,11 @@ public final class MSP {
      * This holds a portion of the command packet so method run() can process it
      * on the event dispatching (Swing GUI) thread.
      */
-    final static class ByteBuffer extends ByteArrayInputStream implements Runnable {
+    final static class ByteBuffer extends ByteArrayInputStream implements
+            Runnable {
         final MwDataModel model;
 
-        public ByteBuffer( byte[] input, int count ) {
+        public ByteBuffer(byte[] input, int count) {
             super(input, 0, count);
 
             model = MSP.model;
@@ -135,7 +138,7 @@ public final class MSP {
                 System.out.println();
             }
 
-            int     cmd = read();       // consume one byte from "buf"
+            int cmd = read(); // consume one byte from "buf"
 
             Date d = new Date();
             switch (cmd) {
@@ -209,7 +212,7 @@ public final class MSP {
 
                 case SERVO:
                     for (int i = 0; i < MAXSERVO; i++) {
-                        model.getRealTimeData().put( d, "servo"+i,
+                        model.getRealTimeData().put(d, "servo" + i,
                                 Double.valueOf(read16()),
                                 MwSensorClassServo.class);
                     }
@@ -217,7 +220,7 @@ public final class MSP {
 
                 case MOTOR:
                     for (int i = 0; i < MAXMOTOR; i++) {
-                        model.getRealTimeData().put( d, "mot"+i,
+                        model.getRealTimeData().put(d, "mot" + i,
                                 Double.valueOf(read16()),
                                 MwSensorClassMotor.class);
                     }
@@ -283,8 +286,10 @@ public final class MSP {
                     break;
 
                 case RC_TUNING:
-                    // Dividing an unsigned 8 bit value by 100, then converting back
-                    // to int, leaves a resolution of only 1 part in 3 ( 0 to 2 ).
+                    // Dividing an unsigned 8 bit value by 100, then converting
+                    // back
+                    // to int, leaves a resolution of only 1 part in 3 ( 0 to 2
+                    // ).
                     // 0 - 255 divided by 100 using integer math.
                     model.put(MSP.RCRATE_KEY, (int) (read8() / 100.0));
                     model.put(MSP.RCEXPO_KEY, (int) (read8() / 100.0));
@@ -338,8 +343,10 @@ public final class MSP {
                     model.removeAllBoxName();
                     {
                         int i = 0;
-                        // start at index 1 because we've read the cmd byte out already
-                        for (String name : new String(buf, 1, available()).split(";")) {
+                        // start at index 1 because we've read the cmd byte out
+                        // already
+                        for (String name : new String(buf, 1, available())
+                                .split(";")) {
                             model.addBoxName(name, i++);
                         }
                     }
@@ -349,8 +356,10 @@ public final class MSP {
                     model.removeAllPIDName();
                     {
                         int i = 0;
-                        // start at index 1 because we've read the cmd byte out already
-                        for (String name : new String(buf, 1, available()).split(";")) {
+                        // start at index 1 because we've read the cmd byte out
+                        // already
+                        for (String name : new String(buf, 1, available())
+                                .split(";")) {
                             model.addPIDName(name, i++);
                         }
                     }
@@ -412,7 +421,7 @@ public final class MSP {
      * frequently.
      */
     private static final int BUFZ = 100;
-    private static byte[] buffer = new byte[BUFZ];  // not final, replaced below
+    private static byte[] buffer = new byte[BUFZ]; // not final, replaced below
 
     /**
      * position in the reception inputBuffer
@@ -420,36 +429,14 @@ public final class MSP {
     private static int offset;
 
     // Multiwii serial commande definition : 8bit
-    public static final int
-        IDENT = 100,
-        STATUS = 101,
-        RAW_IMU = 102,
-        SERVO = 103,
-        MOTOR = 104,
-        RC = 105,
-        RAW_GPS = 106,
-        COMP_GPS = 107,
-        ATTITUDE = 108,
-        ALTITUDE = 109,
-        BAT = 110,
-        RC_TUNING = 111,
-        PID = 112,
-        BOX = 113,
-        MISC = 114,
-        MOTOR_PINS = 115,
-        BOXNAMES = 116,
-        PIDNAMES = 117,
-        SET_RAW_RC = 200,
-        SET_RAW_GPS = 201,
-        SET_PID = 202,
-        SET_BOX = 203,
-        SET_RC_TUNING = 204,
-        ACC_CALIBRATION = 205,
-        MAG_CALIBRATION = 206,
-        SET_MISC = 207,
-        RESET_CONF = 208,
-        EEPROM_WRITE = 250,
-        DEBUG = 254;
+    public static final int IDENT = 100, STATUS = 101, RAW_IMU = 102,
+            SERVO = 103, MOTOR = 104, RC = 105, RAW_GPS = 106, COMP_GPS = 107,
+            ATTITUDE = 108, ALTITUDE = 109, BAT = 110, RC_TUNING = 111,
+            PID = 112, BOX = 113, MISC = 114, MOTOR_PINS = 115, BOXNAMES = 116,
+            PIDNAMES = 117, SET_RAW_RC = 200, SET_RAW_GPS = 201, SET_PID = 202,
+            SET_BOX = 203, SET_RC_TUNING = 204, ACC_CALIBRATION = 205,
+            MAG_CALIBRATION = 206, SET_MISC = 207, RESET_CONF = 208,
+            EEPROM_WRITE = 250, DEBUG = 254;
 
     // protocol header for reply packet
     private static final int MSP_IN_HEAD1 = '$';
@@ -460,20 +447,14 @@ public final class MSP {
     private static final byte[] MSP_OUT = { '$', 'M', '<' };
 
     /* status for the serial decoder */
-    private static final int
-        IDLE = 0,
-        HEADER_START = 1,
-        HEADER_M = 2,
-        HEADER_ARROW = 3,
-        HEADER_SIZE = 4,
-        HEADER_CMD = 5,
-        HEADER_PAYLOAD = 6,
-        HEADER_CHK = 6;
+    private static final int IDLE = 0, HEADER_START = 1, HEADER_M = 2,
+            HEADER_ARROW = 3, HEADER_SIZE = 4, HEADER_CMD = 5,
+            HEADER_PAYLOAD = 6, HEADER_CHK = 6;
 
     private static int mspState = IDLE; // initial decoder state
-    private static int cmd;             // incoming commande
-    private static int dataSize;        // size of the incoming payload
-    private static int checksum;        // checksum of the incoming message
+    private static int cmd; // incoming commande
+    private static int dataSize; // size of the incoming payload
+    private static int checksum; // checksum of the incoming message
 
     /**
      * Function decode
@@ -481,7 +462,7 @@ public final class MSP {
      * other thread. It decodes the most recent input byte in an MSP reply.
      * It manages state information so it knows where it is in a reply packet
      * on each successive call.
-     *
+     * 
      * @param input
      *            is a an int with the upper 24 bits set to zero and thusly
      *            this contains only 8 bits of information.
@@ -523,7 +504,7 @@ public final class MSP {
                 // keep reading the payload in this state until offset==dataSize
                 checksum ^= input;
                 save(input);
-            } else  {
+            } else {
                 // done reading, reset the decoder
                 mspState = IDLE;
 
@@ -531,17 +512,19 @@ public final class MSP {
 
                     if (LOGGER.isTraceEnabled()) {
                         System.err.println("checksum error");
-                    }else{
-                        LOGGER.error("invalid checksum for command " + cmd + ": "
-                                + (checksum & MASK) + " expected, got " + input + "\n");
+                    } else {
+                        LOGGER.error("invalid checksum for command " + cmd
+                                + ": " + (checksum & MASK) + " expected, got "
+                                + input + "\n");
                     }
 
                 } else {
 
-                    // Process the verified command on the event dispatching thread.
+                    // Process the verified command on the event dispatching
+                    // thread.
                     // The checksum is omitted from count.
                     // Give up "buffer", replace it below.
-                    SwingUtilities.invokeLater(new ByteBuffer( buffer, offset));
+                    SwingUtilities.invokeLater(new ByteBuffer(buffer, offset));
 
                     // replace the buffer which we gave up to ByteBuffer
                     buffer = new byte[BUFZ];
@@ -567,8 +550,8 @@ public final class MSP {
 
         bf.write(MSP_OUT, 0, MSP_OUT.length);
 
-        int hash = 0;       // upper 24 bits will be ignored.
-        int payloadz = 0;   // siZe
+        int hash = 0; // upper 24 bits will be ignored.
+        int payloadz = 0; // siZe
 
         if (payload != null)
             payloadz = payload.length;

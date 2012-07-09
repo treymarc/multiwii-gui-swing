@@ -39,18 +39,27 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     private final Image[] uavImages = getImages();
 
     // position for drawing in the png uavImages
+    // UAV 1
     private static final int[] UAV_TRI_MOTOR_X = { 71, 121, 21 };
     private static final int[] UAV_TRI_MOTOR_Y = { 129, 79, 79 };
-
     private static final int[] UAV_TRI_SERVO_INDEX = { 5 };
     private static final int[] UAV_TRI_SERVO_X = { 41 };
     private static final int[] UAV_TRI_SERVO_Y = { 151 };
 
+    // UAV 2
     private static final int[] UAV_QUADP_MOTOR_Y = { 179, 129, 129, 79 };
     private static final int[] UAV_QUADP_MOTOR_X = { 76, 126, 26, 76 };
 
+    // UAV 3
     private static final int[] UAV_QUADX_MOTOR_X = { 121, 121, 41, 41 };
     private static final int[] UAV_QUADX_MOTOR_Y = { 169, 79, 169, 79 };
+
+    // UAV 4
+    private static final int[] UAV_BI_MOTOR_X = { 41, 121 };
+    private static final int[] UAV_BI_MOTOR_Y = { 88, 88 };
+    private static final int[] UAV_BI_SERVO_INDEX = { 4, 5 };
+    private static final int[] UAV_BI_SERVO_X = { 11, 91 };
+    private static final int[] UAV_BI_SERVO_Y = { 111, 111 };
 
     private final double[] motor = new double[8];
     private final double[] servo = new double[8];
@@ -72,14 +81,6 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     }
 
     /**************** main Mix Table ******************/
-    // #ifdef BI
-    // motor[0] = PIDMIX(+1, 0, 0); //LEFT
-    // motor[1] = PIDMIX(-1, 0, 0); //RIGHT
-    // servo[4] = constrain(1500 + YAW_DIRECTION * (axisPID[YAW] +
-    // axisPID[PITCH]), 1020, 2000); //LEFT
-    // servo[5] = constrain(1500 + YAW_DIRECTION * (axisPID[YAW] -
-    // axisPID[PITCH]), 1020, 2000); //RIGHT
-    // #endif
 
     // #ifdef Y4
     // motor[0] = PIDMIX(+0,+1,-1); //REAR_1 CW
@@ -95,7 +96,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     // motor[4] = PIDMIX(-1,-2/3,+1); //UNDER_RIGHT
     // motor[5] = PIDMIX(+1,-2/3,+1); //UNDER_LEFT
     // #endif
-    // #ifdef HEX6
+    // #ifdef BI
     // motor[0] = PIDMIX(-1/2,+1/2,+1); //REAR_R
     // motor[1] = PIDMIX(-1/2,-1/2,-1); //FRONT_R
     // motor[2] = PIDMIX(+1/2,+1/2,+1); //REAR_L
@@ -103,7 +104,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     // motor[4] = PIDMIX(+0 ,-1 ,+1); //FRONT
     // motor[5] = PIDMIX(+0 ,+1 ,-1); //REAR
     // #endif
-    // #ifdef HEX6X
+    // #ifdef BIX
     // motor[0] = PIDMIX(-1/2,+1/2,+1); //REAR_R
     // motor[1] = PIDMIX(-1/2,-1/2,+1); //FRONT_R
     // motor[2] = PIDMIX(+1/2,+1/2,-1); //REAR_L
@@ -150,6 +151,12 @@ public class MwUAVPanel extends MwInstrumentJPanel {
     void drawBarValue(Graphics2D g2d) {
 
         switch (uavType) {
+            case MSP.UAV_BI:
+                drawBar(g2d, 0, motor, null, UAV_BI_MOTOR_X, UAV_BI_MOTOR_Y,
+                        YAXIS);
+                drawBar(g2d, 0, servo, UAV_BI_SERVO_INDEX, UAV_BI_SERVO_X,
+                        UAV_BI_SERVO_Y, XAXIS);
+                break;
             case MSP.UAV_TRI:
                 drawBar(g2d, 0, motor, null, UAV_TRI_MOTOR_X, UAV_TRI_MOTOR_Y,
                         YAXIS);
