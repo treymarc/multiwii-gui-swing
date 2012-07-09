@@ -133,40 +133,46 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
                 }
             }
             if (restart) {
-                restartTimer(defaultRefreshRate);
+                restartTimer(refreshRate);
             }
 
         }
     }
+
+    private static final Logger LOGGER = Logger.getLogger(MwGuiFrame.class);
+
+    private static final Integer DEFAULT_BAUDRATE = 115200;
+    private static final Integer DEAULT_RATE = 10;
+
+    private Integer refreshRate = DEAULT_RATE;
+
+    public static final List<Integer> SERIAL_REFRESHRATES = initializeMap();
 
     private static ButtonGroup baudRateMenuGroup;
     private static MwSensorCheckBoxJPanel chartCheckBoxsPanel;
 
     private static SerialCom com;
 
-    private static MwInstrumentJPanel compasPanel;
+    private MwJPanel instrumentPanel;
+    private MwInstrumentJPanel hudPanel;
+    private MwInstrumentJPanel compasPanel;
+    private MwInstrumentJPanel rcDataPanel;
 
     private static DebugFrame debugFrame;
-    private static final Integer DEFAULT_BAUDRATE = 115200;
-
-    private static Integer defaultRefreshRate = 10;
 
     private static MwJMenuItem disconnectSerial;
-    private static MwInstrumentJPanel hudPanel;
-    private static boolean inited = false;
+    private static MwJMenuItem rescanSerial;
+    private static JMenu serialMenuPort;
+
+    private boolean inited = false;
 
     private MwGuiFrame instance;
-    private static MwJPanel instrumentPanel;
-
-    private static final Logger LOGGER = Logger.getLogger(MwGuiFrame.class);
 
     private static JMenuBar menuBar;
     private static ButtonGroup portNameMenuGroup;
-    private static MwInstrumentJPanel rcDataPanel;
+
     private static MwChartPanel realTimeChart;
-    private static MwJMenuItem rescanSerial;
-    public static final List<Integer> SERIAL_REFRESHRATES = initializeMap();
-    private static JMenu serialMenuPort;
+
     /**
      *
      */
@@ -271,7 +277,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
     // return instance;
     // }
 
-    public static MwJPanel getInstrumentPanel() {
+    public MwJPanel getInstrumentPanel() {
         if (instrumentPanel == null) {
 
             final MwJPanel pane = new MwJPanel(conf);
@@ -421,7 +427,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         }
     }
 
-    protected static void restartTimer(final Integer rate) {
+    protected void restartTimer(final Integer rate) {
         final class SerialTimeOut extends TimerTask {
 
             @Override
@@ -455,7 +461,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         }
         timer = new Timer();
         timer.schedule(new SerialTimeOut(), 10, 1000 / rate);
-        defaultRefreshRate = rate;
+        refreshRate = rate;
     }
 
     /**
@@ -465,7 +471,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
      *            is the packet to send
      * @throws SerialException
      */
-    private static synchronized void send(final ByteArrayOutputStream cmd)
+    private synchronized void send(final ByteArrayOutputStream cmd)
             throws SerialException {
         if (com != null) {
             if (!inited) {
@@ -504,6 +510,13 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
 
     public MwGuiFrame(MwConfiguration mwConfiguration) {
         super();
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                stopTimer();
+                closeSerialPort();
+                System.exit(0);
+            }
+        });
         instance = this;
         conf = mwConfiguration;
         MSP.getRealTimeData().addListener(MwSensorClassIMU.class, this);
