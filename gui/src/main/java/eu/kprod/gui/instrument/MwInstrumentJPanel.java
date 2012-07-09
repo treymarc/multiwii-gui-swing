@@ -86,15 +86,14 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
         if (writing == null) {
 
-            final InputStream is = this.getClass().getResourceAsStream(
+            InputStream is = this.getClass().getResourceAsStream(
                     conf.getPath(MwConfiguration.FONT));
 
             try {
                 writing = Font.createFont(Font.TRUETYPE_FONT, is);
-
                 writing = writing.deriveFont(FONTSIZE);
 
-            } catch (final Exception e) {
+            } catch ( Exception e) {
                 throw new MwGuiRuntimeException("Fonts creation failed", e);
             }
         }
@@ -142,31 +141,31 @@ public abstract class MwInstrumentJPanel extends MwJPanel implements
 
     abstract void resetAllValuesImpl();
 
-    public void setCenterPoint(final Point2D centerPoint1) {
+    public void setCenterPoint( Point2D centerPoint1) {
         this.centerPoint = centerPoint1;
     }
 
-    public void setDimMarker10Deg(final int dimMarker10Deg1) {
+    public void setDimMarker10Deg( int dimMarker10Deg1) {
         this.dimMarker10Deg = dimMarker10Deg1;
     }
 
-    public void setDimMarker5Deg(final int dimMarker5Deg1) {
+    public void setDimMarker5Deg( int dimMarker5Deg1) {
         this.dimMarker5Deg = dimMarker5Deg1;
     }
 
-    public void setMaxRadiusX(final int maxRadiusX1) {
+    public void setMaxRadiusX(int maxRadiusX1) {
         this.maxSizeX = maxRadiusX1;
     }
 
-    public void setMaxRadiusY(final int maxRadiusY1) {
+    public void setMaxRadiusY(int maxRadiusY1) {
         this.maxSizeY = maxRadiusY1;
     }
 
-    public void setRadiusx(final int radiusx1) {
+    public void setRadiusx(int radiusx1) {
         this.sizeX = radiusx1;
     }
 
-    public void setRadiusy(final int radiusy1) {
+    public void setRadiusy(int radiusy1) {
         this.sizey = radiusy1;
     }
 

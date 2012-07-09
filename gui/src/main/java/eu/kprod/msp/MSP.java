@@ -43,8 +43,8 @@ import eu.kprod.ds.MwSensorClassServo;
  */
 public final class MSP {
 
-    // TODO create classe for constant value for each msp version
-    // we might have more than 8 motor in the futur
+    // TODO create classes for constant value for each msp version
+    // we might have more than 8 motors in the future
     private static final int MAXSERVO = 8;
     private static final int MAXMOTOR = 8;
 
@@ -52,7 +52,6 @@ public final class MSP {
     public static final int UAV_BI = 0;
     public static final int UAV_QUADP = 2;
     public static final int UAV_QUADX = 3;
-
 
 
     /**
@@ -64,16 +63,15 @@ public final class MSP {
         return model.getRealTimeData();
     }
 
-    public static void setBoxChangeListener(final ChangeListener boxPane) {
+    public static void setBoxChangeListener(ChangeListener boxPane) {
         model.setBoxChangeListener(boxPane);
     }
 
-    public static void setPidChangeListener(final ChangeListener pidPane) {
+    public static void setPidChangeListener(ChangeListener pidPane) {
         model.setPidChangeListener(pidPane);
     }
 
-    public static void setUavChangeListener(
-            final MwDataSourceListener uavChangeListener) {
+    public static void setUavChangeListener(MwDataSourceListener uavChangeListener) {
         model.setUavChangeListener(uavChangeListener);
     }
 
@@ -139,7 +137,7 @@ public final class MSP {
 
             int     cmd = read();       // consume one byte from "buf"
 
-            final Date d = new Date();
+            Date d = new Date();
             switch (cmd) {
                 case IDENT:
                     model.put(MSP.UAVVERSION_KEY, read8());
@@ -211,20 +209,16 @@ public final class MSP {
 
                 case SERVO:
                     for (int i = 0; i < MAXSERVO; i++) {
-                        model.getRealTimeData().put(
-                                d,
-                                new StringBuffer().append("servo").append(i)
-                                        .toString(), Double.valueOf(read16()),
+                        model.getRealTimeData().put( d, "servo"+i,
+                                Double.valueOf(read16()),
                                 MwSensorClassServo.class);
                     }
                     break;
 
                 case MOTOR:
                     for (int i = 0; i < MAXMOTOR; i++) {
-                        model.getRealTimeData().put(
-                                d,
-                                new StringBuffer().append("mot").append(i)
-                                        .toString(), Double.valueOf(read16()),
+                        model.getRealTimeData().put( d, "mot"+i,
+                                Double.valueOf(read16()),
                                 MwSensorClassMotor.class);
                     }
                     break;
@@ -316,7 +310,7 @@ public final class MSP {
 
                 case BOX:
                     for (int index = 0; index < model.getBoxNameCount(); index++) {
-                        final int bytread = read16();
+                        int bytread = read16();
                         model.setBoxNameValue(index, bytread);
                     }
                     model.boxChanged();
@@ -467,14 +461,14 @@ public final class MSP {
 
     /* status for the serial decoder */
     private static final int
-    IDLE = 0,
-    HEADER_START = 1,
-    HEADER_M = 2,
-    HEADER_ARROW = 3,
-    HEADER_SIZE = 4,
-    HEADER_CMD = 5,
-    HEADER_PAYLOAD = 6,
-    HEADER_CHK = 6;
+        IDLE = 0,
+        HEADER_START = 1,
+        HEADER_M = 2,
+        HEADER_ARROW = 3,
+        HEADER_SIZE = 4,
+        HEADER_CMD = 5,
+        HEADER_PAYLOAD = 6,
+        HEADER_CHK = 6;
 
     private static int mspState = IDLE; // initial decoder state
     private static int cmd;             // incoming commande
@@ -492,7 +486,7 @@ public final class MSP {
      *            is a an int with the upper 24 bits set to zero and thusly
      *            this contains only 8 bits of information.
      */
-    public static void decode(final int input) {
+    public static void decode(int input) {
         // LOGGER.trace("mspState = " + mspState + "\n");
         if (mspState == IDLE) {
             mspState = (MSP_IN_HEAD1 == input) ? HEADER_START : IDLE;
@@ -503,7 +497,8 @@ public final class MSP {
         } else if (mspState == HEADER_ARROW) {
 
             // This is the count of bytes which follow AFTER the command
-            // byte which is next. +1 because we save() the cmd byte too.
+            // byte which is next. +1 because we save() the cmd byte too, but
+            // it excludes the checksum
             dataSize = input + 1;
 
             // reset index variables
@@ -525,7 +520,7 @@ public final class MSP {
         } else if (mspState == HEADER_CMD) {
 
             if (offset < dataSize) {
-                // we keep reading the payload in this state
+                // keep reading the payload in this state until offset==dataSize
                 checksum ^= input;
                 save(input);
             } else  {
