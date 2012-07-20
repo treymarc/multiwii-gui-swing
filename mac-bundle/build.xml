@@ -1,9 +1,12 @@
 <project name="MultiWiiConf" default="bundle" basedir=".">
-	<property name="root.dir" location=".."/>
-	<property name="build.dir" location="${root.dir}/build"/>
-	<property name="target.dir" location="${root.dir}/gui/target"/>
-	<property name="lib.dir" location="${build.dir}/lib"/>
-	
+	<mkdir dir="dist"/>
+
+	<property name="dist.dir"	location="./dist"/>
+	<property name="root.dir"	location=".."/>
+	<property name="build.dir"	location="${root.dir}/build"/>
+	<property name="target.dir"	location="${root.dir}/gui/target"/>
+	<property name="lib.dir"	location="${build.dir}/lib"/>
+		
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 
 	<path id="project.class.path">
@@ -19,14 +22,14 @@
 
 	<target name="bundle">
 		<!-- create a jar bundle for the mac -->
-		<jarbundler dir = "target"
+		<jarbundler dir = "${dist.dir}"
 			name = "MultiWiiConf"
 			shortname = "MWConf"
 			signature = "AT"
 			mainclass = "eu.kprod.MwGui" 
 			jvmversion = "1.6+"
-			version = "0.1"
-			infostring = "MultiWiiConf v0.1, June 2012"
+			version = "0.2"
+			infostring = "MultiWiiConf"
 			build = "001"
 			bundleid = "eu.kprod.MultiWiiConf" >
 
