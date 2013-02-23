@@ -50,7 +50,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>eu.kprod.MwGui</mainClass>
+							<mainClass>org.multiwii.swinggui.MWGui</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
