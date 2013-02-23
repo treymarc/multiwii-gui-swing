@@ -1,26 +1,11 @@
 ## Build ##
-* You need the GNU Serial lib in your local maven repository, you can manualy download it from
-http://multiwii.fiendie.net:8081/nexus/content/repositories/thirdparty/gnu/serial/1.0/
-and install the jar with:	
-		
-		mvn install:install-file -Dfile=/path/to/mwi-swing/build/repository/gnu/serial/1.0/serial-1.0.jar -DgroupId=gnu -DartifactId=serial -Dversion=1.0 -Dpackaging=jar
-
-* After that just run:
+* The MwGui build system has been re-worked. It should now build cleanly on OS X, but for now you must manually mark the JavaApplicationStub as executable.
 
 		mvn clean install
-
-* To export a Mac OS X application bundle run:
-
-		mvn package -P mac
-For further information consult the README in the mac-bundle directory.  
-
-
-## Getting RxTx ##
-Download the latest version of RxTx from http://rxtx.qbang.org/pub/rxtx/rxtx-2.1-7-bins-r2.zip
-and unzip it into the directory
-
-	build/lib
-Make sure you get the version suitable for your platform.
+		
+		chmod +x target\mwgui-{project.version}\MultiWii\ Swing\ GUI.app/Contents/MacOS/JavaApplicationStub
+		
+* Windows/Linux packaging is currently broken.
 
 
 ## Run ##
@@ -32,7 +17,7 @@ Make sure you get the version suitable for your platform.
 	 
 			build/mwi-swing.sh
 
-* On Mac OS X just run the `MultiWiiConf.app` in the `mac-bundle/dist` directory.
+* On Mac OS X just run the `MultiWiiConf.app` in the `target/mwgui-{project.version}` directory.
  
 
 ## Notes on Bluetooth ##

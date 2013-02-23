@@ -1,2 +1,0 @@
-MWI-SWING script
-=========
