@@ -521,8 +521,12 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             try {
                 URL url = ClassLoader.getSystemResource("app.properties");
                 Properties appProps = new Properties();
-                appProps.load(url.openStream());
-                frameTitle = appProps.getProperty("mainframe.title");
+                if (url!=null){
+	                appProps.load(url.openStream());
+	                frameTitle = appProps.getProperty("mainframe.title");
+                }else{
+                	frameTitle="MwGui-dev";
+                }
             } catch (Exception e) {
                 throw new MwGuiRuntimeException(
                         "INIT Failed to load app properties", e);
