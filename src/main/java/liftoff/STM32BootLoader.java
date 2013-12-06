@@ -490,7 +490,7 @@ public class STM32BootLoader extends SerialTransact
 
         SerialPort sp = (SerialPort) comident.open( "STM32BootLoader", 200 );
 
-        sp.setSerialPortParams( 57600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_EVEN );
+        sp.setSerialPortParams( 115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_EVEN );
 
         sp.setFlowControlMode( SerialPort.FLOWCONTROL_NONE );
 
