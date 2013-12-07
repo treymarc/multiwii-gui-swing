@@ -20,7 +20,6 @@
 
 package org.multiwii.swingui.serial;
 
-import org.multiwii.swingui.msg.I18n;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -36,6 +35,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.multiwii.swingui.msg.I18n;
 
 public class SerialDevice implements SerialPortEventListener {
     private static final Logger LOGGER = Logger.getLogger(SerialDevice.class);

@@ -14,6 +14,7 @@
 package org.multiwii.swingui;
 
 import javax.swing.SwingUtilities;
+
 import org.multiwii.swingui.gui.MwConfiguration;
 import org.multiwii.swingui.gui.MwGuiFrame;
 

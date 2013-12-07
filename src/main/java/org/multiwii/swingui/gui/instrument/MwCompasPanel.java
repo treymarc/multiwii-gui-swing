@@ -27,10 +27,10 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 
+import org.multiwii.msp.MSP;
 import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.gui.MwConfiguration;
 import org.multiwii.swingui.gui.comp.MwColor;
-import org.multiwii.msp.MSP;
 
 public class MwCompasPanel extends MwInstrumentJPanel {
 
@@ -247,11 +247,7 @@ public class MwCompasPanel extends MwInstrumentJPanel {
 
     }
 
-    @Override
-    public void readNewValue(Integer string, int i) {
-        // TODO Auto-generated method stub
 
-    }
 
     @Override
     public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
@@ -269,4 +265,11 @@ public class MwCompasPanel extends MwInstrumentJPanel {
         head = 0;
         alt = 0.0;
     }
+
+
+	@Override
+	public void readNewValue(String string, Double valueOf) {
+		// TODO Auto-generated method stub
+
+	}
 }

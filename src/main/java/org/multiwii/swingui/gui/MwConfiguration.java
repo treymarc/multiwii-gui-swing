@@ -21,6 +21,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.multiwii.swingui.gui.comp.MwColor;
 import org.multiwii.swingui.gui.comp.MwColorDefault;
 
+
 /**
  * Everything for the gui configuration
  *      - resources path
@@ -75,7 +76,7 @@ public class MwConfiguration {
 
     }
 
-    public void setColorGraph(int index, Color colorValue) {
+    public void setColorGraph(String index, Color colorValue) {
         // TODO Auto-generated method stub
         color.setColorGraph( index,  colorValue);
     }

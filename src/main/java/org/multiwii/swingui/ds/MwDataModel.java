@@ -37,7 +37,7 @@ public class MwDataModel {
 
     // for real time data
     // TODO get impl
-    private final MwDataSource ds = new MwDataSourceImpl();
+    private  MwDataSource ds = new MwDataSourceImpl();
 
     private final int[] motorPins = new int[8];
 
@@ -131,7 +131,7 @@ public class MwDataModel {
 
     public final void put(final Integer string, final int i) {
         // TODO Auto-generated method stub
-        uavChangeListener.readNewValue(string, i);
+        uavChangeListener.readNewValue(string+"", Double.valueOf(i));
     }
 
     public final void removeAllBoxName() {

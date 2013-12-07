@@ -17,55 +17,58 @@ import java.util.HashMap;
 
 /**
  * for everythings related to resources path
+ * 
  * @author treym
- *
+ * 
  */
 public class MwResources {
+	public static final int FONT = 0;
+	public static final int THEME = 1;
 
-    private static final String FONT_PREFIX = "/fonts/";
-    private static final String THEME_PREFIXE = "/images/";
+	private static final String FONT_PREFIX = "/fonts/";
+	private static final String THEME_PREFIXE = "/images/";
 
-    private static final String DEFAULT_FONT = FONT_PREFIX + "Liberation/LiberationMono-Regular.ttf";
-    private static final String DEFAULT_THEME = THEME_PREFIXE + "default/";
+	private static final String DEFAULT_FONT = FONT_PREFIX
+			+ "Liberation/LiberationMono-Regular.ttf";
+	private static final String DEFAULT_THEME = THEME_PREFIXE + "default/";
 
-    HashMap<Integer, String> ressources;
+	HashMap<Integer, String> ressources;
 
-    MwResources() {
-        ressources = initDefaultMap();
+	MwResources() {
+		ressources = initDefaultMap();
 
-    }
+	}
 
-    MwResources(HashMap<Integer, String>  r) {
-        ressources = r;
-    }
+	MwResources(HashMap<Integer, String> r) {
+		ressources = r;
+	}
 
+	boolean setResources(HashMap<Integer, String> ressources1) {
+		if (ressources1 != null) {
+			ressources = ressources1;
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-    boolean setResources(HashMap<Integer, String> ressources1) {
-        if (ressources1 != null) {
-            ressources = ressources1;
-            return true;
-        } else {
-            return false;
-        }
-    }
+	private HashMap<Integer, String> initDefaultMap() {
 
-   private HashMap<Integer, String> initDefaultMap() {
+		HashMap<Integer, String> ress = new HashMap<Integer, String>();
+		ress.put(FONT, DEFAULT_FONT);
+		ress.put(THEME, DEFAULT_THEME);
+		return ress;
 
-       HashMap<Integer, String> ress =  new  HashMap<Integer, String>();
-       ress.put(MwConfiguration.FONT, DEFAULT_FONT);
-       ress.put(MwConfiguration.THEME, DEFAULT_THEME);
-       return ress;
+	}
 
-    }
+	String get(int key) {
 
-   String get(int key) {
+		String r = ressources.get(key);
+		if (r == null) {
+			return "";
+		} else {
+			return r;
+		}
 
-       String r = ressources.get(key);
-       if (r==null){
-           return "";
-       }else{
-           return r;
-       }
-
-   }
+	}
 }

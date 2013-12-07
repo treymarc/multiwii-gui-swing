@@ -21,9 +21,10 @@ package org.multiwii.swingui.ds;
  */
 public interface MwDataSourceListener {
 
-    void readNewValue(final Integer string, final int i);
-
+ 
     void readNewValue(Class<? extends MwSensorClass> sensorClass, final String name, final Double value);
 
     void resetAllValues();
+
+	void readNewValue(String string, Double valueOf);
 }

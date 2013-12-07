@@ -25,14 +25,15 @@ import org.multiwii.swingui.gui.MwGuiFrame;
 
 public final class MwColorChooser extends MwJFrame implements ChangeListener {
     private static JColorChooser chooser;
-    private static int index = -1;
+    private static String index = null;
     private static MwColorChooser instance;
+    
     /**
      * 
      */
-    private static final long serialVersionUID = 6206134450489506329L;
+    private static final long serialVersionUID = 62061344563206329L;
 
-    static void getInstance(final int index1, final Color c) {
+    static void getInstance(final String index1, int colorsetgraph1, final Color c) {
         if (instance == null) {
             instance = new MwColorChooser();
         }
@@ -55,9 +56,9 @@ public final class MwColorChooser extends MwJFrame implements ChangeListener {
         pack();
     }
 
-    @Override
+    
     public void stateChanged(final ChangeEvent e) {
-        if (index >= 0) {
+        if (index != null) {
             MwGuiFrame.setColorGraph(index, chooser.getColor());
             MwGuiFrame.getChartPanel().setVisible(index, true);
             MwGuiFrame.getChartCheckBoxPanel().refreshBox(index,

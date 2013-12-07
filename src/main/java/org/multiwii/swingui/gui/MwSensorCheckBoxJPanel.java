@@ -36,7 +36,7 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
     private static final long serialVersionUID = 1L;
 
     private final Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
-    private final Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
+    private final Map<String, String> boxsIndex = new HashMap<String, String>();
 
     public MwSensorCheckBoxJPanel(MwConfiguration conf) {
         super(conf);
@@ -52,17 +52,17 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
         if (p != null) {
             return;
         } else {
-            final int index = boxs.size();
+            
 
             final MwJPanel pane = new MwJPanel(conf);
             pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
             final MwJCheckBox c = new MwJCheckBox(sensorName, -1, "sensors");
             c.addChangeListener(new ChangeListener() {
-                @Override
+               
                 public void stateChanged(final ChangeEvent evt) {
 
                     MwGuiFrame.getChartPanel()
-                            .setVisible(index, c.isSelected());
+                            .setVisible(sensorName, c.isSelected());
 
                 }
             });
@@ -71,9 +71,9 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
 
             pane.add(c);
             final MwJButtonColorChooser check = new MwJButtonColorChooser(
-                    index, sensorName, conf.color.getColorGraph(index));
+                     sensorName, MwColor.COLORSETGRAPH,conf.color.getColorGraph(sensorName));
             boxs.put(sensorName, check);
-            boxsIndex.put(index, sensorName);
+            boxsIndex.put(sensorName, sensorName);
             pane.add(check);
 
             pane.add(new MwJLabel(conf.color.getColor(MwColor.FORGROUND_COLOR), sensorName));
@@ -84,7 +84,7 @@ public class MwSensorCheckBoxJPanel extends MwJPanel {
         }
     }
 
-    public void refreshBox(final int index, final Color c) {
+    public void refreshBox(final String index, final Color c) {
         boxs.get(boxsIndex.get(index)).setColor(c);
     }
 

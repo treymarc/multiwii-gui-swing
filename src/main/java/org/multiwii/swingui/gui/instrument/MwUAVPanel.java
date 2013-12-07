@@ -20,11 +20,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import org.multiwii.msp.MSP;
 import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.ds.MwSensorClassMotor;
 import org.multiwii.swingui.ds.MwSensorClassServo;
 import org.multiwii.swingui.gui.MwConfiguration;
-import org.multiwii.msp.MSP;
 
 /**
  * resources : /uav/*.png
@@ -211,11 +211,7 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         drawBarValue(g2d);
     }
 
-    @Override
-    public void readNewValue(Integer string, int i) {
-        // TODO Auto-generated method stub
 
-    }
 
     @Override
     public void readNewValue(Class<? extends MwSensorClass> sensorClass,
@@ -243,4 +239,9 @@ public class MwUAVPanel extends MwInstrumentJPanel {
         uavType = uAVTYPE;
         repaint();
     }
+
+	@Override
+	public void readNewValue(String string, Double valueOf) {
+
+	}
 }

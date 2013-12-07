@@ -19,17 +19,18 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYDataset;
-
+import org.multiwii.swingui.ds.MwDataSource;
+import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.gui.MwConfiguration;
 import org.multiwii.swingui.gui.comp.MwColor;
 
+
 public final class MwChartFactory {
 
-    public static MwChartPanel createChart(MwConfiguration conf , final XYDataset xyDataset) {
+    public static MwChartPanel createChart(MwConfiguration conf , final MwDataSource ds) {
         final JFreeChart chart;
 
-        chart = ChartFactory.createTimeSeriesChart(null, null, null, xyDataset,
+        chart = ChartFactory.createTimeSeriesChart(null, null, null, ds.getDataSet(MwSensorClass.class),
                 false, true, true);
 
         chart.setBackgroundPaint(conf.color.getColor(MwColor.BACKGROUND_COLOR));
@@ -40,15 +41,15 @@ public final class MwChartFactory {
 
         plot.setDomainGridlinePaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         plot.setRangeGridlinePaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
-        plot.setDomainGridlinesVisible(false);
+        plot.setDomainGridlinesVisible(true);
         plot.setDomainCrosshairPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 
         final DateAxis axis = (DateAxis) plot.getDomainAxis();
         // axis.setDateFormatOverride(new SimpleDateFormat("mm''ss''''SSS"));
-        axis.setAxisLineVisible(false);
-        axis.setTickLabelsVisible(false);
+        axis.setAxisLineVisible(true);
+        axis.setTickLabelsVisible(true);
         axis.setTickLabelPaint(conf.color.getColor(MwColor.FORGROUND_COLOR));
 
         // force integer display
@@ -65,10 +66,10 @@ public final class MwChartFactory {
         //        va.setAutoRange(false);
         va.setRangeWithMargins(-280, 280);
 
-        final MwChartPanel chartPanel = new MwChartPanel(chart,conf);
-        chartPanel.setMouseWheelEnabled(false);
-        chartPanel.setDomainZoomable(false);
-        chartPanel.setRangeZoomable(false);
+        final MwChartPanel chartPanel = new MwChartPanel(chart,conf,ds);
+        chartPanel.setMouseWheelEnabled(true);
+        chartPanel.setDomainZoomable(true);
+        chartPanel.setRangeZoomable(true);
 
         return chartPanel;
 

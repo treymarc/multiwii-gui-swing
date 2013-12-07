@@ -54,7 +54,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
-
+import org.multiwii.msp.MSP;
 import org.multiwii.swingui.ds.MwDataSourceListener;
 import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.ds.MwSensorClassCompas;
@@ -81,7 +81,6 @@ import org.multiwii.swingui.gui.instrument.MwUAVPanel;
 import org.multiwii.swingui.gui.setting.MwBOXPanel;
 import org.multiwii.swingui.gui.setting.MwPIDPanel;
 import org.multiwii.swingui.msg.I18n;
-import org.multiwii.msp.MSP;
 import org.multiwii.swingui.serial.SerialCom;
 import org.multiwii.swingui.serial.SerialDevice;
 import org.multiwii.swingui.serial.SerialException;
@@ -736,7 +735,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
             });
 
             setRealTimeChart(MwChartFactory.createChart(conf, MSP
-                    .getRealTimeData().getDataSet(MwSensorClassIMU.class)));
+                    .getRealTimeData()));
 
             MSP.getRealTimeData().addListener(MwSensorClassIMU.class,
                     getChartPanel());
@@ -881,19 +880,7 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         return settingsPanel;
     }
 
-    @Override
-    public void readNewValue(Integer string, int i) {
-        switch (string) {
-            case MSP.UAVVERSION_KEY:
-                inited = true;
-                break;
-            case MSP.UAVTYPE_KEY:
-                uavPanel.setUavType(i);
-                break;
-            default:
-                break;
-        }
-    }
+
 
     @Override
     public void readNewValue(Class<? extends MwSensorClass> sensorClass,
@@ -956,8 +943,13 @@ public final class MwGuiFrame extends JFrame implements SerialListener,
         conf = conf1;
     }
 
-    public static void setColorGraph(int index, Color color) {
+    public static void setColorGraph(String index, Color color) {
         // TODO Auto-generated method stub
         conf.setColorGraph(index, color);
     }
+
+	@Override
+	public void readNewValue(String string, Double valueOf) {
+
+	}
 }

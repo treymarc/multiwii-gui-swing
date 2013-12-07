@@ -17,12 +17,11 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
-
-import org.multiwii.swingui.ds.DSLoadableException;
 import org.multiwii.swingui.ds.MwDataSource;
 import org.multiwii.swingui.ds.MwDataSourceImpl;
 import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.ds.utils.LogLoader;
+import org.multiwii.swingui.ds.utils.MWDataSourceLoaderException;
 import org.multiwii.swingui.gui.chart.MwChartFactory;
 import org.multiwii.swingui.gui.chart.MwChartPanel;
 
@@ -44,31 +43,32 @@ public class LogViewerFrame extends JFrame {
 
         MwDataSource ds;
         try {
-            ds = new LogLoader().getDataSourceContent(name);
-        } catch (final DSLoadableException e) {
+          
+				ds = new LogLoader().getDataSourceContent(name);
+		
+        } catch (final MWDataSourceLoaderException e) {
             LOGGER.error("Can not open log file : " + name+"\n");
             ds = new MwDataSourceImpl();
         }
         refDs = ds;
-        chartTrendPanel = MwChartFactory.createChart(conf, ds
-                .getDataSet(MwSensorClass.class));
+        chartTrendPanel = MwChartFactory.createChart(conf, ds);
         chartTrendPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         getContentPane().add(chartTrendPanel);
         frameSetDefaultPosition();
     }
 
-    public LogViewerFrame(final String name, final MwDataSource ds,
-            final Class<? extends MwSensorClass> sclass,MwConfiguration conf) {
-        super(name);
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        refDs = ds;
-        refsclass = sclass;
-        chartTrendPanel = MwChartFactory.createChart(conf,ds.getDataSet(sclass));
-        ds.addListener(sclass, chartTrendPanel);
-        getContentPane().add(chartTrendPanel);
-        frameSetDefaultPosition();
-    }
+//    public LogViewerFrame(final String name, final MwDataSource ds,
+//            final Class<? extends MwSensorClass> sclass,MwConfiguration conf) {
+//        super(name);
+//        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//        refDs = ds;
+//        refsclass = sclass;
+//        chartTrendPanel = MwChartFactory.createChart(conf,ds);
+//        ds.addListener(sclass, chartTrendPanel);
+//        getContentPane().add(chartTrendPanel);
+//        frameSetDefaultPosition();
+//    }
 
     @Override
     public final void dispose() {

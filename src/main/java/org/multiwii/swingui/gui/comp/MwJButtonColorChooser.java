@@ -26,14 +26,14 @@ public class MwJButtonColorChooser extends MwJButton {
 
     private Color color;
 
-    public MwJButtonColorChooser(final int index, final String name,
+    public MwJButtonColorChooser( final String name,final int colorsetgraph,
             final Color color1) {
         // TODO Auto-generated constructor stub
         super("", name + " color");
         super.addActionListener(new ActionListener() {
-            @Override
+           
             public void actionPerformed(final ActionEvent e) {
-                MwColorChooser.getInstance(index, color);
+                MwColorChooser.getInstance(name,colorsetgraph, color);
             }
         });
         setBackground(color1);

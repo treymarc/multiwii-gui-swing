@@ -16,9 +16,11 @@
 
 package liftoff;
 
-import gnu.io.*;
-import java.util.Enumeration;
-import java.io.*;
+import gnu.io.SerialPort;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Class SerialTransact

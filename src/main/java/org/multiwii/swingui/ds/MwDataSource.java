@@ -13,6 +13,7 @@
  */
 package org.multiwii.swingui.ds;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.jfree.data.xy.XYDataset;
@@ -28,6 +29,26 @@ public interface MwDataSource {
     void addListener(Class<? extends MwSensorClass> sensor,
             MwDataSourceListener listener);
 
+    /**
+     * get all sensors class in this dataset
+     * 
+     * @param sclass
+     *            SensorClass of the dataset
+     * @return the dataset
+     */
+    Collection<Class<? extends MwSensorClass>>getSensorsClass();
+
+   
+    /**
+     * get all sensors of class sclass 
+     * 
+     * @param sclass
+     *            SensorClass of the dataset
+     * @return the dataset
+     */
+   Collection<String> getSensorsName(Class<? extends MwSensorClass> sensorClass);
+
+    
     /**
      * ask for a specific dataset of sensor
      * 
@@ -65,5 +86,7 @@ public interface MwDataSource {
 
     boolean removeListener(Class<? extends MwSensorClass> sensorClass,
             MwDataSourceListener newListener);
+
+	int getIndex(String l);
 
 }

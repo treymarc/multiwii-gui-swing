@@ -28,10 +28,10 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 
+import org.multiwii.msp.MSP;
 import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.gui.MwConfiguration;
 import org.multiwii.swingui.gui.comp.MwColor;
-import org.multiwii.msp.MSP;
 
 public class MwHudPanel extends MwInstrumentJPanel {
 
@@ -296,9 +296,6 @@ public class MwHudPanel extends MwInstrumentJPanel {
         g2d.draw(roundHorizon);
     }
 
-    @Override
-    public void readNewValue(Integer string, int i) {
-    }
 
     @Override
     public void readNewValue(Class<? extends MwSensorClass> sensorClass, String name, Double value) {
@@ -318,5 +315,9 @@ public class MwHudPanel extends MwInstrumentJPanel {
         rollAngle = 0;
         pitchAngle = 0;
     }
+
+	@Override
+	public void readNewValue(String string, Double valueOf) {
+	}
 
 }

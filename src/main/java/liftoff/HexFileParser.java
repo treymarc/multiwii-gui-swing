@@ -14,8 +14,11 @@
 
 package liftoff;
 
-import java.util.Vector;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Arrays;
 

@@ -18,8 +18,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import org.multiwii.swingui.ds.DSLoadable;
-import org.multiwii.swingui.ds.DSLoadableException;
 import org.multiwii.swingui.ds.MwDataSource;
 import org.multiwii.swingui.ds.MwDataSourceImpl;
 
@@ -29,7 +27,7 @@ import org.multiwii.swingui.ds.MwDataSourceImpl;
  * @author treym
  *
  */
-public class LogLoader implements DSLoadable {
+public class LogLoader implements MwDataSourceLoader {
 
     private static String[] parse(String line) {
 
@@ -61,11 +59,10 @@ public class LogLoader implements DSLoadable {
      *            le chemin du ficher à lire
      * @return le contenu du fichier,une liste vide pour une fichier vide, null
      *         en cas d'erreur
-     * @throws DSLoadableException
+     * @throws MWDataSourceLoaderException
      */
-    @Override
     public final MwDataSource getDataSourceContent(String filePath)
-            throws DSLoadableException {
+            throws MWDataSourceLoaderException {
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:SS");
 
@@ -98,7 +95,7 @@ public class LogLoader implements DSLoadable {
                 buff.close();
             }
         } catch (final IOException ioe) {
-            throw new DSLoadableException(ioe);
+            throw new MWDataSourceLoaderException(ioe);
         }
         return content;
     }

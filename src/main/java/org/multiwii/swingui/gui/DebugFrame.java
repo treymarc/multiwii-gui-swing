@@ -37,7 +37,6 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.PlainDocument;
 
 import org.apache.log4j.Logger;
-
 import org.multiwii.swingui.gui.comp.MwJButton;
 import org.multiwii.swingui.gui.comp.MwJComboBox;
 import org.multiwii.swingui.gui.comp.MwJPanel;

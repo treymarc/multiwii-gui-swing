@@ -24,7 +24,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
-
 import org.multiwii.swingui.ds.MwDataModel;
 import org.multiwii.swingui.ds.MwDataSource;
 import org.multiwii.swingui.ds.MwDataSourceListener;

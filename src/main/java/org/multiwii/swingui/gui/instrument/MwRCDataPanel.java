@@ -21,9 +21,9 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import org.multiwii.msp.MSP;
 import org.multiwii.swingui.ds.MwSensorClass;
 import org.multiwii.swingui.gui.MwConfiguration;
-import org.multiwii.msp.MSP;
 
 public class MwRCDataPanel extends MwInstrumentJPanel {
 
@@ -94,11 +94,7 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
         drawBar(g2d, 2, dataRC, null, startx, starty, XAXIS);
     }
 
-    @Override
-    public void readNewValue(Integer string, int i) {
-        // TODO Auto-generated method stub
 
-    }
 
     @Override
     public void readNewValue(Class<? extends MwSensorClass> sensorClass,
@@ -127,4 +123,9 @@ public class MwRCDataPanel extends MwInstrumentJPanel {
     @Override
     void resetAllValuesImpl() {
     }
+
+	@Override
+	public void readNewValue(String string, Double valueOf) {
+		
+	}
 }

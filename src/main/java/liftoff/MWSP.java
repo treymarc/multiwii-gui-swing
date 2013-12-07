@@ -16,10 +16,15 @@
 
 package liftoff;
 
-import gnu.io.*;
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Enumeration;
-import java.io.*;
-import liftoff.*;
 
 
 /**

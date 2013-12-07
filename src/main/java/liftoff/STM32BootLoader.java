@@ -15,9 +15,14 @@
 
 package liftoff;
 
-import gnu.io.*;
-import liftoff.*;
-import java.io.*;
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+import gnu.io.UnsupportedCommOperationException;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 
 

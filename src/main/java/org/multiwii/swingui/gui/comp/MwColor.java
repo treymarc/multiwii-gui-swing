@@ -20,14 +20,14 @@ public abstract class MwColor {
 
     public static final int COLORSET = 0;
     // begin
-    public static final int BACKGROUND_COLOR = 0;
-    public static final int FORGROUND_COLOR = 1;
-    public static final int INSTR_SKY_BLUE = 2;
-    public static final int INSTR_BAR_GREEN = 3;
-    public static final int INSTR_EARTH_ORANGE = 4;
-    public static final int INSTR_BAR_RED = 5;
-    public static final int INSTR_BAR_YELLOW = 6;
-    public static final int ACTIVE_COLOR = 7;
+    public static final String BACKGROUND_COLOR = "BACKGROUND_COLOR";
+    public static final String FORGROUND_COLOR ="FORGROUND_COLOR";
+    public static final String INSTR_SKY_BLUE = "INSTR_SKY_BLUE";
+    public static final String INSTR_BAR_GREEN = "INSTR_SKY_BLUE";
+    public static final String INSTR_EARTH_ORANGE = "INSTR_EARTH_ORANGE";
+    public static final String INSTR_BAR_RED = "INSTR_BAR_RED";
+    public static final String INSTR_BAR_YELLOW = "INSTR_BAR_YELLOW";
+    public static final String ACTIVE_COLOR = "ACTIVE_COLOR";
     // end
 
     public static final int COLORSETGRAPH = 1;
@@ -39,12 +39,16 @@ public abstract class MwColor {
     /**
      * get the color of timeserie
      * 
-     * @param key
+     * @param sensorName
      *            of the timeserie
      * @return
      */
-    public Color getColorGraph(int key) {
-        return getColorImpl(COLORSETGRAPH, key);
+    public Color getColorGraph(String sensorName) {
+    	Color c = getColorImpl(COLORSETGRAPH, sensorName);
+    	if (c == null){
+    		c = getColorImpl(COLORSET, FORGROUND_COLOR);
+    	}
+        return c;
     }
 
     /**
@@ -54,7 +58,7 @@ public abstract class MwColor {
      *            of the element
      * @return
      */
-    public Color getColor(int key) {
+    public Color getColor(String key) {
         return getColorImpl(COLORSET, key);
     }
 
@@ -66,12 +70,12 @@ public abstract class MwColor {
      * @param the
      *            new color
      */
-    public void setColorGraph(int key, Color color) {
+    public void setColorGraph(String key, Color color) {
         setColorGraphImpl(key, color);
     }
 
-    abstract Color getColorImpl(int set, int key);
+    abstract Color getColorImpl(int set, String key);
 
-    abstract void setColorGraphImpl(int index, Color color);
+    abstract void setColorGraphImpl(String index, Color color);
 
 }

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.multiwii.swingui.ds.DSLoadable;
 import org.multiwii.swingui.ds.MwDataSource;
 
 
@@ -29,7 +28,7 @@ import org.multiwii.swingui.ds.MwDataSource;
  * @author treym
  *
  */
-public class FileLoader implements DSLoadable {
+public class FileLoader implements MwDataSourceLoader {
 
     /**
      *
@@ -38,7 +37,7 @@ public class FileLoader implements DSLoadable {
 
     }
 
-    @Override
+    
     public final MwDataSource getDataSourceContent(final String s) {
         // TODO Auto-generated method stub
         return null;
