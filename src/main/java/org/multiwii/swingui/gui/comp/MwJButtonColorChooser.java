@@ -19,35 +19,35 @@ import java.awt.event.ActionListener;
 
 public class MwJButtonColorChooser extends MwJButton {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Color color;
+	private Color color;
 
-    public MwJButtonColorChooser( final String name,final int colorsetgraph,
-            final Color color1) {
-        // TODO Auto-generated constructor stub
-        super("", name + " color");
-        super.addActionListener(new ActionListener() {
-           
-            public void actionPerformed(final ActionEvent e) {
-                MwColorChooser.getInstance(name,colorsetgraph, color);
-            }
-        });
-        setBackground(color1);
+	public MwJButtonColorChooser(final int index, final String name,
+			final Color color1) {
+		// TODO Auto-generated constructor stub
+		super("", name + " color");
+		super.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				MwColorChooser.getInstance(index, color);
+			}
+		});
+		setBackground(color1);
 
-        this.color = color1;
-    }
+		this.color = color1;
+	}
 
-    public Color getColor() {
-        return color;
-    }
+	public Color getColor() {
+		return color;
+	}
 
-    public void setColor(final Color color1) {
-        this.color = color1;
-        setBackground(color);
-    }
+	public void setColor(final Color color1) {
+		this.color = color1;
+		setBackground(color);
+	}
 
 }

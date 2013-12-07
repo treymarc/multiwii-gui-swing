@@ -22,8 +22,6 @@ import java.util.HashMap;
  * 
  */
 public class MwResources {
-	public static final int FONT = 0;
-	public static final int THEME = 1;
 
 	private static final String FONT_PREFIX = "/fonts/";
 	private static final String THEME_PREFIXE = "/images/";
@@ -55,8 +53,8 @@ public class MwResources {
 	private HashMap<Integer, String> initDefaultMap() {
 
 		HashMap<Integer, String> ress = new HashMap<Integer, String>();
-		ress.put(FONT, DEFAULT_FONT);
-		ress.put(THEME, DEFAULT_THEME);
+		ress.put(MwConfiguration.FONT, DEFAULT_FONT);
+		ress.put(MwConfiguration.THEME, DEFAULT_THEME);
 		return ress;
 
 	}

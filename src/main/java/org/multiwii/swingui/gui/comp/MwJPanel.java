@@ -22,29 +22,29 @@ import org.multiwii.swingui.gui.MwConfiguration;
 
 public class MwJPanel extends JPanel {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
-    public MwConfiguration conf;
+	private static final long serialVersionUID = 1L;
+	public MwConfiguration conf;
 
-    public MwJPanel() {
-        super();
+	public MwJPanel() {
+		super();
 
-    }
+	}
 
-    public MwJPanel(final BorderLayout borderLayout) {
-        super(borderLayout);
-    }
+	public MwJPanel(final BorderLayout borderLayout) {
+		super(borderLayout);
+	}
 
-    public MwJPanel(final GridLayout gridLayout) {
-        super(gridLayout);
-    }
+	public MwJPanel(final GridLayout gridLayout) {
+		super(gridLayout);
+	}
 
-    public MwJPanel(MwConfiguration conf1) {
-        // TODO Auto-generated constructor stub
-        setBackground(conf1.color.getColor(MwColor.BACKGROUND_COLOR));
-        conf = conf1;
-    }
+	public MwJPanel(MwConfiguration conf1) {
+		// TODO Auto-generated constructor stub
+		setBackground(conf1.color.getColor(MwColor.BACKGROUND_COLOR));
+		conf = conf1;
+	}
 
 }

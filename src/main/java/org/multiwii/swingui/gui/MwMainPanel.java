@@ -23,24 +23,24 @@ import org.multiwii.swingui.gui.comp.MwJTabbedPane;
 
 public class MwMainPanel extends MwJPanel {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwMainPanel(final Component realTimePanel,
-            final Component settingsPanel) {
-        // take all the place
-        super(new GridLayout(1, 1));
+	public MwMainPanel(final Component realTimePanel,
+			final Component settingsPanel) {
+		// take all the place
+		super(new GridLayout(1, 1));
 
-        final JTabbedPane tabbedPane = new MwJTabbedPane();
+		final JTabbedPane tabbedPane = new MwJTabbedPane();
 
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        tabbedPane.addTab("RealTime Data", null, realTimePanel, null);
-        tabbedPane.addTab("Settings", null, settingsPanel, null);
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPane.addTab("RealTime Data", null, realTimePanel, null);
+		tabbedPane.addTab("Settings", null, settingsPanel, null);
 
-        this.add(tabbedPane);
+		this.add(tabbedPane);
 
-    }
+	}
 
 }

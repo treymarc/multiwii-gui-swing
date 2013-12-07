@@ -14,11 +14,8 @@
 package org.multiwii.swingui;
 
 import javax.swing.SwingUtilities;
-
 import org.multiwii.swingui.gui.MwConfiguration;
 import org.multiwii.swingui.gui.MwGuiFrame;
-
-
 
 /**
  * @author treym
@@ -26,27 +23,25 @@ import org.multiwii.swingui.gui.MwGuiFrame;
  */
 public final class MwGui {
 
-    /**
-     * @param args
-     * @throws SerialException
-     */
-    public static void main(final String[] args) {
+	/**
+	 * @param args
+	 * @throws SerialException
+	 */
+	public static void main(final String[] args) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
 
-                MwConfiguration.setLookAndFeel();
-                
+				MwConfiguration.setLookAndFeel();
 
-                MwGuiFrame frame = new MwGuiFrame(new MwConfiguration());
-                frame.setVisible(true);
-                frame.repaint();
-            }
+				MwGuiFrame frame = new MwGuiFrame(new MwConfiguration());
+				frame.setVisible(true);
+				frame.repaint();
+			}
 
-        });
+		});
 
-    }
-
+	}
 
 }

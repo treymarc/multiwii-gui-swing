@@ -15,22 +15,25 @@ package org.multiwii.swingui.gui;
 
 public class MwGuiRuntimeException extends RuntimeException {
 
-    /**
+	/**
      *
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwGuiRuntimeException(String msg) {
-        super(msg);
-    }
+	public MwGuiRuntimeException(String msg) {
+		super(msg);
+	}
 
-    /**
-     * create a new MwGuiExpception
-     * @param msg message
-     * @param e the reason Exception or Error
-     */
-    public MwGuiRuntimeException(String msg, Throwable e) {
-        // TODO Auto-generated constructor stub
-        super(msg, e);
-    }
+	/**
+	 * create a new MwGuiExpception
+	 * 
+	 * @param msg
+	 *            message
+	 * @param e
+	 *            the reason Exception or Error
+	 */
+	public MwGuiRuntimeException(String msg, Throwable e) {
+		// TODO Auto-generated constructor stub
+		super(msg, e);
+	}
 }

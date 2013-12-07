@@ -15,13 +15,13 @@ package org.multiwii.swingui.ds;
 
 public class DSLoadableException extends Exception {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public DSLoadableException(final Exception e) {
-        super(e);
-    }
+	public DSLoadableException(final Exception e) {
+		super(e);
+	}
 
 }

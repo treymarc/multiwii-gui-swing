@@ -14,77 +14,74 @@
 package org.multiwii.swingui.gui.comp;
 
 import java.awt.Color;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MwColorDefault extends MwColor {
 
-    public Map<String,Color> COLOR_GRAPH = getGraphColor();
-    public Map<String,Color> COLOR = getColor();
+	public List<Color> COLOR_GRAPH = getGraphColor();
+	public List<Color> COLOR = getColor();
 
-    public Color getColorImpl(int colortype, String colorKey) {
-        switch (colortype) {
-            case COLORSETGRAPH:
-                return COLOR_GRAPH.get(colorKey);
-            case COLORSET:
-                return COLOR.get(colorKey);
-            default:
-                return COLOR.get(MwColor.FORGROUND_COLOR);
-        }
+	public Color getColorImpl(int colortype, int colorKey) {
+		switch (colortype) {
+		case COLORSETGRAPH:
+			return COLOR_GRAPH.get(colorKey);
+		case COLORSET:
+			return COLOR.get(colorKey);
+		default:
+			return COLOR.get(MwColor.FORGROUND_COLOR);
+		}
 
-    }
+	}
 
-    /**
-     * realtime graph color
-     * 
-     * @return
-     */
-    private static  Map<String,Color> getGraphColor() {
-        final Map<String,Color> m = new  Hashtable<String,Color>();
-        m.put("1",Color.BLUE);
-        m.put("2",Color.GREEN);
-        m.put("2",Color.YELLOW);
-        m.put("3",Color.PINK);
-        m.put("4",Color.RED);
-        m.put("5",Color.CYAN);
-        m.put("6",Color.MAGENTA);
-        m.put("7",Color.ORANGE);
-        m.put("8",Color.BLACK);
-        m.put("9",Color.DARK_GRAY);
-        m.put("10",new Color(51, 51, 51));
-        m.put("11",new Color(250, 100, 100));
-        m.put("12",new Color(250, 200, 100));
-        m.put("13",new Color(250, 100, 200));
-        m.put("14",new Color(250, 200, 200));
+	/**
+	 * realtime graph color
+	 * 
+	 * @return
+	 */
+	private static List<Color> getGraphColor() {
+		final List<Color> m = new ArrayList<Color>();
+		m.add(Color.BLUE);
+		m.add(Color.GREEN);
+		m.add(Color.YELLOW);
+		m.add(Color.PINK);
+		m.add(Color.RED);
+		m.add(Color.CYAN);
+		m.add(Color.MAGENTA);
+		m.add(Color.ORANGE);
+		m.add(Color.BLACK);
+		m.add(Color.DARK_GRAY);
+		m.add(new Color(51, 51, 51));
+		m.add(new Color(250, 100, 100));
+		m.add(new Color(250, 200, 100));
+		m.add(new Color(250, 100, 200));
+		m.add(new Color(250, 200, 200));
 
-        return m;
-    }
+		return m;
+	}
 
-    /**
-     * gui color
-     * 
-     * @return
-     */
-    private static Map<String,Color> getColor() {
-        final Map<String,Color> m = new Hashtable<String,Color>();
+	/**
+	 * gui color
+	 * 
+	 * @return
+	 */
+	private static List<Color> getColor() {
+		final List<Color> m = new ArrayList<Color>();
 
-        m.put(MwColor.BACKGROUND_COLOR,new Color(51, 51, 51)); // BACKGROUND_COLOR
-        m.put(MwColor.FORGROUND_COLOR,new Color(204, 204, 204)); // FORGROUND_COLOR
-        m.put(MwColor.INSTR_SKY_BLUE,new Color(10, 112, 156)); // INSTR_SKY_BLUE
-        m.put(MwColor.INSTR_BAR_GREEN,new Color(96, 220, 113)); // INSTR_BAR_GREEN
-        m.put(MwColor.INSTR_EARTH_ORANGE,new Color(202, 112, 14)); // INSTR_EARTH_ORANGE
-        m.put(MwColor.INSTR_BAR_RED,new Color(220, 113, 113)); // INSTR_BAR_RED
-        m.put(MwColor.INSTR_BAR_YELLOW,new Color(220, 220, 113)); // INSTR_BAR_YELLOW
-        m.put(MwColor.ACTIVE_COLOR,new Color(70, 180, 70)); // ACTIVE_COLOR = 0;
-        return m;
-    }
+		m.add(new Color(51, 51, 51)); // BACKGROUND_COLOR
+		m.add(new Color(204, 204, 204)); // FORGROUND_COLOR
+		m.add(new Color(10, 112, 156)); // INSTR_SKY_BLUE
+		m.add(new Color(96, 220, 113)); // INSTR_BAR_GREEN
+		m.add(new Color(202, 112, 14)); // INSTR_EARTH_ORANGE
+		m.add(new Color(220, 113, 113)); // INSTR_BAR_RED
+		m.add(new Color(220, 220, 113)); // INSTR_BAR_YELLOW
+		m.add(new Color(70, 180, 70)); // ACTIVE_COLOR = 0;
+		return m;
+	}
 
-
-    void setColorGraphImpl(String index, Color color) {
-    	COLOR_GRAPH.remove(index);
-        COLOR_GRAPH.put(index, color);
-    }
-
-
+	@Override
+	void setColorGraphImpl(int index, Color color) {
+		COLOR_GRAPH.set(index, color);
+	}
 
 }

@@ -19,57 +19,58 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.multiwii.swingui.ds.DSLoadable;
 import org.multiwii.swingui.ds.MwDataSource;
-
-
 
 /**
  * load a DataSource from a file.
+ * 
  * @author treym
- *
+ * 
  */
-public class FileLoader implements MwDataSourceLoader {
+public class FileLoader implements DSLoadable {
 
-    /**
+	/**
      *
      */
-    public FileLoader() {
+	public FileLoader() {
 
-    }
+	}
 
-    
-    public final MwDataSource getDataSourceContent(final String s) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public final MwDataSource getDataSourceContent(final String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /**
-     * charge un fichier ligne par ligne
-     *
-     * @param filePath
-     *            le chemin du ficher à lire
-     * @return le contenu du fichier,une liste vide pour une fichier vide, null
-     *         en cas d'erreur
-     * @throws IOException
-     */
-    public final List<String> getFileContent(final String filePath)
-            throws IOException {
+	/**
+	 * charge un fichier ligne par ligne
+	 * 
+	 * @param filePath
+	 *            le chemin du ficher à lire
+	 * @return le contenu du fichier,une liste vide pour une fichier vide, null
+	 *         en cas d'erreur
+	 * @throws IOException
+	 */
+	public final List<String> getFileContent(final String filePath)
+			throws IOException {
 
-        final List<String> content = new ArrayList<String>();
-        try {
-            final BufferedReader buff = new BufferedReader(new FileReader(filePath));
+		final List<String> content = new ArrayList<String>();
+		try {
+			final BufferedReader buff = new BufferedReader(new FileReader(
+					filePath));
 
-            try {
-                String line;
-                while ((line = buff.readLine()) != null) {
-                    content.add(line);
-                }
-            } finally {
-                buff.close();
-            }
-        } catch (final IOException ioe) {
-            throw ioe;
-        }
-        return content;
-    }
+			try {
+				String line;
+				while ((line = buff.readLine()) != null) {
+					content.add(line);
+				}
+			} finally {
+				buff.close();
+			}
+		} catch (final IOException ioe) {
+			throw ioe;
+		}
+		return content;
+	}
 }

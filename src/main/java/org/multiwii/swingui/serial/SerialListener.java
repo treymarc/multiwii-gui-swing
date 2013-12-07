@@ -18,18 +18,18 @@ package org.multiwii.swingui.serial;
  */
 public interface SerialListener {
 
-    /**
-     * @param aByte
-     *            holds the received byte in the least significant 8 bits.
-     */
-    void readSerialByte(int aByte);
+	/**
+	 * @param aByte
+	 *            holds the received byte in the least significant 8 bits.
+	 */
+	void readSerialByte(int aByte);
 
-    /**
-     * Report an error
-     * 
-     * @param e
-     *            the error
-     */
-    void reportSerial(Throwable e);
-    
+	/**
+	 * Report an error
+	 * 
+	 * @param e
+	 *            the error
+	 */
+	void reportSerial(Throwable e);
+
 }

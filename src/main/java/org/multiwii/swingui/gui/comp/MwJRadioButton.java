@@ -17,17 +17,17 @@ import javax.swing.JRadioButton;
 
 public class MwJRadioButton extends JRadioButton {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwJRadioButton() {
-        super();
+	public MwJRadioButton() {
+		super();
 
-    }
+	}
 
-    public MwJRadioButton(final String name) {
-        super(name);
-    }
+	public MwJRadioButton(final String name) {
+		super(name);
+	}
 }

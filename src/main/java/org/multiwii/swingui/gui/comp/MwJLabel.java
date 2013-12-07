@@ -18,24 +18,24 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 public class MwJLabel extends JLabel {
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwJLabel() {
-        super();
-    }
+	public MwJLabel() {
+		super();
+	}
 
-    public MwJLabel(final Color color, final String s) {
-        super(s);
-        setForeground(color);
-        setHorizontalAlignment(CENTER);
-    }
+	public MwJLabel(final Color color, final String s) {
+		super(s);
+		setForeground(color);
+		setHorizontalAlignment(CENTER);
+	}
 
-    public MwJLabel(final String s) {
-        super(s);
-        setHorizontalAlignment(CENTER);
-    }
+	public MwJLabel(final String s) {
+		super(s);
+		setHorizontalAlignment(CENTER);
+	}
 
 }

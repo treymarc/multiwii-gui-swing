@@ -15,15 +15,14 @@ package org.multiwii.swingui.gui.comp;
 
 import javax.swing.JMenuBar;
 
-
 public class MwJMenuBar extends JMenuBar {
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwJMenuBar() {
-        super();
-    }
+	public MwJMenuBar() {
+		super();
+	}
 
 }

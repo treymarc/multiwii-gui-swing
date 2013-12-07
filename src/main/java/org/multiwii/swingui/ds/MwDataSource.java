@@ -13,7 +13,6 @@
  */
 package org.multiwii.swingui.ds;
 
-import java.util.Collection;
 import java.util.Date;
 
 import org.jfree.data.xy.XYDataset;
@@ -26,67 +25,45 @@ import org.jfree.data.xy.XYDataset;
  */
 public interface MwDataSource {
 
-    void addListener(Class<? extends MwSensorClass> sensor,
-            MwDataSourceListener listener);
+	void addListener(Class<? extends MwSensorClass> sensor,
+			MwDataSourceListener listener);
 
-    /**
-     * get all sensors class in this dataset
-     * 
-     * @param sclass
-     *            SensorClass of the dataset
-     * @return the dataset
-     */
-    Collection<Class<? extends MwSensorClass>>getSensorsClass();
+	/**
+	 * ask for a specific dataset of sensor
+	 * 
+	 * @param sclass
+	 *            SensorClass of the dataset
+	 * @return the dataset
+	 */
+	XYDataset getDataSet(Class<? extends MwSensorClass> sclass);
 
-   
-    /**
-     * get all sensors of class sclass 
-     * 
-     * @param sclass
-     *            SensorClass of the dataset
-     * @return the dataset
-     */
-   Collection<String> getSensorsName(Class<? extends MwSensorClass> sensorClass);
+	/**
+	 * some overhead here ,worth extending
+	 * http://www.jfree.org/jfreechart/api/gjdoc
+	 * /org/jfree/data/general/DatasetChangeEvent.html
+	 * 
+	 * @param sensorClass
+	 */
+	void notifyListener(Class<? extends MwSensorClass> sensorClass,
+			String name, Double value);
 
-    
-    /**
-     * ask for a specific dataset of sensor
-     * 
-     * @param sclass
-     *            SensorClass of the dataset
-     * @return the dataset
-     */
-    XYDataset getDataSet(Class<? extends MwSensorClass> sclass);
+	/**
+	 * add a value to a dataset
+	 * 
+	 * @param date
+	 *            date of the value
+	 * @param sensorName
+	 *            name of the value
+	 * @param value
+	 *            the value
+	 * @param sclass
+	 *            the sensorclass of the value
+	 * @return
+	 */
+	boolean put(final Date d, final String sensorName, final Double value,
+			Class<? extends MwSensorClass> sclass);
 
-    /**
-     * some overhead here ,worth extending
-     * http://www.jfree.org/jfreechart/api/gjdoc
-     * /org/jfree/data/general/DatasetChangeEvent.html
-     * 
-     * @param sensorClass
-     */
-    void notifyListener(Class<? extends MwSensorClass> sensorClass,
-            String name, Double value);
-
-    /**
-     * add a value to a dataset
-     * 
-     * @param date
-     *            date of the value
-     * @param sensorName
-     *            name of the value
-     * @param value
-     *            the value
-     * @param sclass
-     *            the sensorclass of the value
-     * @return
-     */
-    boolean put(final Date d, final String sensorName,
-            final Double value, Class<? extends MwSensorClass> sclass);
-
-    boolean removeListener(Class<? extends MwSensorClass> sensorClass,
-            MwDataSourceListener newListener);
-
-	int getIndex(String l);
+	boolean removeListener(Class<? extends MwSensorClass> sensorClass,
+			MwDataSourceListener newListener);
 
 }

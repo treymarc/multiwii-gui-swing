@@ -19,15 +19,15 @@ import javax.swing.JSplitPane;
 
 public class MwJSplitPane extends JSplitPane {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwJSplitPane(final int horizontalSplit, final Component left,
-            final Component right) {
-        super(horizontalSplit, left, right);
+	public MwJSplitPane(final int horizontalSplit, final Component left,
+			final Component right) {
+		super(horizontalSplit, left, right);
 
-    }
+	}
 
 }

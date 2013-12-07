@@ -37,6 +37,7 @@ import javax.swing.text.DefaultCaret;
 import javax.swing.text.PlainDocument;
 
 import org.apache.log4j.Logger;
+
 import org.multiwii.swingui.gui.comp.MwJButton;
 import org.multiwii.swingui.gui.comp.MwJComboBox;
 import org.multiwii.swingui.gui.comp.MwJPanel;
@@ -45,168 +46,170 @@ import org.multiwii.swingui.serial.SerialListener;
 
 public class DebugFrame extends JFrame implements SerialListener {
 
-    static class RollingDocument extends PlainDocument {
-        /**
-         * max length of the fifo document
-         */
-        private static int maxTextLength = 1000;
-        /**
+	static class RollingDocument extends PlainDocument {
+		/**
+		 * max length of the fifo document
+		 */
+		private static int maxTextLength = 1000;
+		/**
          *
          */
-        private static final long serialVersionUID = 1L;
-        private final JTextArea field;
+		private static final long serialVersionUID = 1L;
+		private final JTextArea field;
 
-        public RollingDocument(JTextArea textArea) {
-            field = textArea;
-        }
+		public RollingDocument(JTextArea textArea) {
+			field = textArea;
+		}
 
-        @Override
-        public void insertString(int offs, String str,
-                                 AttributeSet a) throws BadLocationException {
+		@Override
+		public void insertString(int offs, String str, AttributeSet a)
+				throws BadLocationException {
 
-            if (str == null) {
-                return;
-            }
-            if (field.getText().length() > maxTextLength) {
-                super.remove(0, str.length());
-            }
-            super.insertString(offs, str, a);
-        }
-    }
+			if (str == null) {
+				return;
+			}
+			if (field.getText().length() > maxTextLength) {
+				super.remove(0, str.length());
+			}
+			super.insertString(offs, str, a);
+		}
+	}
 
-    private static final Logger LOGGER = Logger.getLogger(DebugFrame.class);
+	private static final Logger LOGGER = Logger.getLogger(DebugFrame.class);
 
-    /**
+	/**
      *
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final JCheckBox autoscrollBox;
-    private final MwJComboBox lineEndings;
-    private final JScrollPane scrollPane;
-    private final JButton sendButton;
-    private final JTextArea textArea;
-    private final JTextField textField;
+	private final JCheckBox autoscrollBox;
+	private final MwJComboBox lineEndings;
+	private final JScrollPane scrollPane;
+	private final JButton sendButton;
+	private final JTextArea textArea;
+	private final JTextField textField;
 
-    public DebugFrame( String title, final MwGuiFrame frame) {
-        super(title);
+	public DebugFrame(String title, final MwGuiFrame frame) {
+		super(title);
 
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        addWindowListener(new WindowAdapter() {
+		addWindowListener(new WindowAdapter() {
 
-            @Override
-            public void windowClosing( WindowEvent e) {
-                LOGGER.trace("windowClosing "
-                        + e.getSource().getClass().getName() + "\n");
-                frame.closeDebugFrame();
-            }
-        });
+			@Override
+			public void windowClosing(WindowEvent e) {
+				LOGGER.trace("windowClosing "
+						+ e.getSource().getClass().getName() + "\n");
+				frame.closeDebugFrame();
+			}
+		});
 
-        getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 
-        textArea = new JTextArea(16, 40);
-        textArea.setDocument(new RollingDocument(textArea));
+		textArea = new JTextArea(16, 40);
+		textArea.setDocument(new RollingDocument(textArea));
 
-        textArea.setEditable(false);
+		textArea.setEditable(false);
 
-        // don't automatically update the caret. that way we can manually decide
-        // whether or not to do so based on the autoscroll checkbox.
-        ((DefaultCaret) textArea.getCaret())
-                .setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+		// don't automatically update the caret. that way we can manually decide
+		// whether or not to do so based on the autoscroll checkbox.
+		((DefaultCaret) textArea.getCaret())
+				.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
-        autoscrollBox = new JCheckBox(("Autoscroll"), true);
+		autoscrollBox = new JCheckBox(("Autoscroll"), true);
 
-        lineEndings = new MwJComboBox("line Ending", new String[] {
-                ("No line ending"), ("Newline"), ("Carriage return"),
-                ("Both NL & CR") });
-        lineEndings.setSelectedIndex(0);
-        lineEndings.setMaximumSize(lineEndings.getMinimumSize());
+		lineEndings = new MwJComboBox("line Ending", new String[] {
+				("No line ending"), ("Newline"), ("Carriage return"),
+				("Both NL & CR") });
+		lineEndings.setSelectedIndex(0);
+		lineEndings.setMaximumSize(lineEndings.getMinimumSize());
 
-        scrollPane = new JScrollPane(textArea);
+		scrollPane = new JScrollPane(textArea);
 
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        MwJPanel pane = new MwJPanel();
-        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
+		MwJPanel pane = new MwJPanel();
+		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+		pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
-        textField = new JTextField(40);
-        textField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LOGGER.trace("actionPerformed "
-                        + e.getSource().getClass().getName()+"\n");
+		textField = new JTextField(40);
+		textField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LOGGER.trace("actionPerformed "
+						+ e.getSource().getClass().getName() + "\n");
 
-                try {
-                    frame.getCom().send(textField.getText(),
-                            lineEndings.getSelectedIndex());
-                } catch ( SerialException e1) {
-                    LOGGER.error(e1.getMessage()+"\n");
-                }
-                textField.setText("");
-            }
-        });
+				try {
+					frame.getCom().send(textField.getText(),
+							lineEndings.getSelectedIndex());
+				} catch (SerialException e1) {
+					LOGGER.error(e1.getMessage() + "\n");
+				}
+				textField.setText("");
+			}
+		});
 
-        sendButton = new MwJButton("Send", "Send serial commande");
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LOGGER.trace("actionPerformed "
-                        + e.getSource().getClass().getName()+"\n");
+		sendButton = new MwJButton("Send", "Send serial commande");
+		sendButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LOGGER.trace("actionPerformed "
+						+ e.getSource().getClass().getName() + "\n");
 
-                try {
-                    frame.getCom().send(textField.getText(),
-                            lineEndings.getSelectedIndex());
-                } catch (SerialException e1) {
-                    LOGGER.error(e1.getMessage()+"\n");
-                }
-                textField.setText("");
-                if (autoscrollBox.isSelected()) {
-                    textArea.setCaretPosition(textArea.getDocument().getLength());
-                }
-            }
-        });
+				try {
+					frame.getCom().send(textField.getText(),
+							lineEndings.getSelectedIndex());
+				} catch (SerialException e1) {
+					LOGGER.error(e1.getMessage() + "\n");
+				}
+				textField.setText("");
+				if (autoscrollBox.isSelected()) {
+					textArea.setCaretPosition(textArea.getDocument()
+							.getLength());
+				}
+			}
+		});
 
-        pane.add(textField);
-        pane.add(Box.createRigidArea(new Dimension(1, 0)));
-        pane.add(sendButton);
+		pane.add(textField);
+		pane.add(Box.createRigidArea(new Dimension(1, 0)));
+		pane.add(sendButton);
 
-        getContentPane().add(pane, BorderLayout.NORTH);
+		getContentPane().add(pane, BorderLayout.NORTH);
 
-        pane = new MwJPanel();
-        pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-        pane.setBorder(new EmptyBorder(1, 1, 1, 1));
+		pane = new MwJPanel();
+		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+		pane.setBorder(new EmptyBorder(1, 1, 1, 1));
 
-        pane.add(autoscrollBox);
-        pane.add(Box.createHorizontalGlue());
-        pane.add(lineEndings);
+		pane.add(autoscrollBox);
+		pane.add(Box.createHorizontalGlue());
+		pane.add(lineEndings);
 
-        getContentPane().add(pane, BorderLayout.SOUTH);
+		getContentPane().add(pane, BorderLayout.SOUTH);
 
-        pack();
-        setSize(new Dimension(500, 200));
-    }
+		pack();
+		setSize(new Dimension(500, 200));
+	}
 
-    /**
-     * add to textArea
-     */
-    @Override
-    public final void readSerialByte(final int aByte) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                textArea.append(String.valueOf( (char)aByte ));
-                if (autoscrollBox.isSelected()) {
-                    textArea.setCaretPosition(textArea.getDocument().getLength());
-                }
-            }
-        });
+	/**
+	 * add to textArea
+	 */
+	@Override
+	public final void readSerialByte(final int aByte) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				textArea.append(String.valueOf((char) aByte));
+				if (autoscrollBox.isSelected()) {
+					textArea.setCaretPosition(textArea.getDocument()
+							.getLength());
+				}
+			}
+		});
 
-    }
+	}
 
-    @Override
-    public void reportSerial(Throwable e) {
-        // TODO Auto-generated method stub
-    }
+	@Override
+	public void reportSerial(Throwable e) {
+		// TODO Auto-generated method stub
+	}
 }

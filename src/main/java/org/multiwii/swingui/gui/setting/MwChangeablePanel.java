@@ -25,36 +25,36 @@ import org.multiwii.swingui.gui.comp.MwJLabel;
 import org.multiwii.swingui.gui.comp.MwJPanel;
 
 public abstract class MwChangeablePanel extends MwJPanel implements
-        ChangeListener {
+		ChangeListener {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwChangeablePanel(final String name) {
-        setLayout(new GridLayout(1, 1));
-        final Border title = BorderFactory.createTitledBorder((Border) null);
-        // title.setTitleJustification(TitledBorder.CENTER);
-        add(new MwJLabel(name));
-        setBorder(title);
-    }
+	public MwChangeablePanel(final String name) {
+		setLayout(new GridLayout(1, 1));
+		final Border title = BorderFactory.createTitledBorder((Border) null);
+		// title.setTitleJustification(TitledBorder.CENTER);
+		add(new MwJLabel(name));
+		setBorder(title);
+	}
 
-    abstract void newModel(MwDataModel m);
+	abstract void newModel(MwDataModel m);
 
-    @Override
-    public void stateChanged(final ChangeEvent e) {
-        final Object source = e.getSource();
-        if (source instanceof MwDataModel) {
-            final MwDataModel m = (MwDataModel) source;
+	@Override
+	public void stateChanged(final ChangeEvent e) {
+		final Object source = e.getSource();
+		if (source instanceof MwDataModel) {
+			final MwDataModel m = (MwDataModel) source;
 
-            newModel(m);
+			newModel(m);
 
-        }
-        // else if (source instanceof JMenu) {
-        //
-        // // save to file , etc ...
-        // }
-    }
+		}
+		// else if (source instanceof JMenu) {
+		//
+		// // save to file , etc ...
+		// }
+	}
 
 }

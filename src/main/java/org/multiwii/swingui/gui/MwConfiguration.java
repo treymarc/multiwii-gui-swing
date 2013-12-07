@@ -21,67 +21,59 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.multiwii.swingui.gui.comp.MwColor;
 import org.multiwii.swingui.gui.comp.MwColorDefault;
 
-
 /**
- * Everything for the gui configuration
- *      - resources path
- *              - font
- *              - theme
- *      - colors
+ * Everything for the gui configuration - resources path - font - theme - colors
+ * 
  * @author treym
- *
+ * 
  */
 public class MwConfiguration {
 
-    public static final int FONT = 0;
-    public static final int THEME = 1;
-    
+	public static final int FONT = 0;
+	public static final int THEME = 1;
 
-    public MwColor color = new MwColorDefault();
-    
-    private MwResources pathManager;
+	public MwColor color = new MwColorDefault();
 
-    public String getPath(int path) {
+	private MwResources pathManager;
 
-        return getPathManager().get(path);
- 
-    }
+	public String getPath(int path) {
 
-    private  MwResources getPathManager() {
-        if (pathManager == null){
-            pathManager = new MwResources();
-        }
-        return pathManager;
-    }
+		return getPathManager().get(path);
 
-    public static void setLookAndFeel() {
-        // TODO remember OS
-        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
+	}
 
-        } else {
-            try {
-                for (final LookAndFeelInfo info : UIManager
-                        .getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
-                }
+	private MwResources getPathManager() {
+		if (pathManager == null) {
+			pathManager = new MwResources();
+		}
+		return pathManager;
+	}
 
-            } catch (final Exception e) {
-                // continue
-            }
-        }
+	public static void setLookAndFeel() {
+		// TODO remember OS
+		if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-    }
+		} else {
+			try {
+				for (final LookAndFeelInfo info : UIManager
+						.getInstalledLookAndFeels()) {
+					if ("Nimbus".equals(info.getName())) {
+						UIManager.setLookAndFeel(info.getClassName());
+						break;
+					}
+				}
 
-    public void setColorGraph(String index, Color colorValue) {
-        // TODO Auto-generated method stub
-        color.setColorGraph( index,  colorValue);
-    }
+			} catch (final Exception e) {
+				// continue
+			}
+		}
 
-   
-  
+	}
+
+	public void setColorGraph(int index, Color colorValue) {
+		// TODO Auto-generated method stub
+		color.setColorGraph(index, colorValue);
+	}
 
 }

@@ -17,13 +17,13 @@ import javax.swing.JMenuItem;
 
 public class MwJMenuItem extends JMenuItem {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwJMenuItem(final String name) {
-        super(name);
-    }
+	public MwJMenuItem(final String name) {
+		super(name);
+	}
 
 }

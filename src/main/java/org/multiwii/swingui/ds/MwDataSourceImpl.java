@@ -14,12 +14,10 @@
 package org.multiwii.swingui.ds;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jfree.data.time.Millisecond;
@@ -42,9 +40,10 @@ public class MwDataSourceImpl implements MwDataSource {
 	private Map<Class<? extends MwSensorClass>, TimeSeriesCollection> dataset = new Hashtable<Class<? extends MwSensorClass>, TimeSeriesCollection>();
 
 	private final Map<Class<? extends MwSensorClass>, List<MwDataSourceListener>> listeners = new Hashtable<Class<? extends MwSensorClass>, List<MwDataSourceListener>>();
-	private long maxItemAge = 1000000000;
+	private long maxItemAge = 2000;
+
 	private final Map<Class<? extends MwSensorClass>, Map<String, TimeSeries>> sensors = new Hashtable<Class<? extends MwSensorClass>, Map<String, TimeSeries>>();
-	private final Map<String,Integer> indexs = new Hashtable<String,Integer>();
+
 	// public int getMaxItemCount() {
 	// return maxItemCount;
 	// }
@@ -54,7 +53,7 @@ public class MwDataSourceImpl implements MwDataSource {
 	// public void setMaxItemCount(final int maxItemCount1) {
 	// if (maxItemCount1 > 0) {
 	// // this.maxItemCount = maxItemCount1;
-	// for (String sclass : sensors.keySet()) {
+	// for (Class<? extends MwSensorClass> sclass : sensors.keySet()) {
 	// Hashtable<String, TimeSeries> series = sensors.get(sclass);
 	// for (String sensorName : series.keySet()) {
 	// series.get(sensorName).setMaximumItemCount(maxItemCount);
@@ -63,6 +62,7 @@ public class MwDataSourceImpl implements MwDataSource {
 	// }
 	// }
 
+	@Override
 	public void addListener(final Class<? extends MwSensorClass> sensorClass,
 			final MwDataSourceListener newListener) {
 		if (sensorClass != null && newListener != null) {
@@ -81,6 +81,7 @@ public class MwDataSourceImpl implements MwDataSource {
 	 * @return the dataset.
 	 */
 
+	@Override
 	public final XYDataset getDataSet(
 			final Class<? extends MwSensorClass> sensorClass) {
 
@@ -124,23 +125,22 @@ public class MwDataSourceImpl implements MwDataSource {
 	// return dataset;
 	// }
 
+	@Override
 	public final void notifyListener(
 			final Class<? extends MwSensorClass> sensorClass,
 			final String name, final Double value) {
 		if (sensorClass != null) {
 			final List<MwDataSourceListener> listenersl = listeners
 					.get(sensorClass);
-			if (listenersl != null) {
-				for (final MwDataSourceListener mwDataSourceListener : listenersl) {
-					mwDataSourceListener.readNewValue(sensorClass, name, value);
+			for (final MwDataSourceListener mwDataSourceListener : listenersl) {
+				mwDataSourceListener.readNewValue(sensorClass, name, value);
 
-				}
 			}
 
 		}
 	}
 
-
+	@Override
 	public final boolean put(final Date date, final String sensorName,
 			final Double value, final Class<? extends MwSensorClass> sensorClass) {
 
@@ -148,7 +148,9 @@ public class MwDataSourceImpl implements MwDataSource {
 			return false;
 		}
 
-
+		if (sensorClass != null) {
+			notifyListener(sensorClass, sensorName, value);
+		}
 		Map<String, TimeSeries> s = sensors.get(sensorClass);
 		if (s == null) {
 			s = new Hashtable<String, TimeSeries>();
@@ -167,7 +169,7 @@ public class MwDataSourceImpl implements MwDataSource {
 			timeserie = new TimeSeries(sensorName);
 			// timeserie.setMaximumItemCount(maxItemCount);
 			timeserie.setMaximumItemAge(maxItemAge);
-			indexs.put(sensorName, indexs.size());
+
 			s.put(sensorName, timeserie);
 			ts.addSeries(s.get(sensorName));
 
@@ -180,13 +182,11 @@ public class MwDataSourceImpl implements MwDataSource {
 		} catch (final Exception e) {
 			LOGGER.error(e.getMessage());
 		}
-		if (sensorClass != null) {
-			notifyListener(sensorClass, sensorName, value);
-		}
 		return true;
 
 	}
 
+	@Override
 	public final boolean removeListener(
 			final Class<? extends MwSensorClass> sensorClass,
 			final MwDataSourceListener deadListener) {
@@ -215,29 +215,6 @@ public class MwDataSourceImpl implements MwDataSource {
 			}
 		}
 
-	}
-
-
-	public Set<Class<? extends MwSensorClass>> getSensorsClass() {
-		// TODO Auto-generated method stub
-		return sensors.keySet();
-	}
-
-
-	public Collection<String> getSensorsName(
-			Class<? extends MwSensorClass> sensorClass) {
-		Map<String, TimeSeries> s = sensors.get(sensorClass);
-		if (s!=null){
-			return s.keySet();
-		}
-		return null;
-	}
-
-
-	public int getIndex(String sensorsName) {
-
-		Integer p = indexs.get(sensorsName);
-		return p;
 	}
 
 }

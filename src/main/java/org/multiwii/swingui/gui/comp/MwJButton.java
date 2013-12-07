@@ -17,14 +17,14 @@ import javax.swing.JButton;
 
 public class MwJButton extends JButton {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public MwJButton(final String name,final String tooltips) {
-        super(name);
-        super.setToolTipText(tooltips);
-    }
+	public MwJButton(final String name, final String tooltips) {
+		super(name);
+		super.setToolTipText(tooltips);
+	}
 
 }

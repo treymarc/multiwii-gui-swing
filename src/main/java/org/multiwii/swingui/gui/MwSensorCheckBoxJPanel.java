@@ -30,62 +30,63 @@ import org.multiwii.swingui.gui.comp.MwJPanel;
 
 public class MwSensorCheckBoxJPanel extends MwJPanel {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
-    private final Map<String, String> boxsIndex = new HashMap<String, String>();
+	private final Map<String, MwJButtonColorChooser> boxs = new HashMap<String, MwJButtonColorChooser>();
+	private final Map<Integer, String> boxsIndex = new HashMap<Integer, String>();
 
-    public MwSensorCheckBoxJPanel(MwConfiguration conf) {
-        super(conf);
-        
-    }
+	public MwSensorCheckBoxJPanel(MwConfiguration conf) {
+		super(conf);
 
-//    public MwSensorCheckBoxJPanel(final Color c) {
-//        super(c);
-//    }
+	}
 
-    public final void addSensorBox(final String sensorName) {
-        final MwJButtonColorChooser p = boxs.get(sensorName);
-        if (p != null) {
-            return;
-        } else {
-            
+	// public MwSensorCheckBoxJPanel(final Color c) {
+	// super(c);
+	// }
 
-            final MwJPanel pane = new MwJPanel(conf);
-            pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-            final MwJCheckBox c = new MwJCheckBox(sensorName, -1, "sensors");
-            c.addChangeListener(new ChangeListener() {
-               
-                public void stateChanged(final ChangeEvent evt) {
+	public final void addSensorBox(final String sensorName) {
+		final MwJButtonColorChooser p = boxs.get(sensorName);
+		if (p != null) {
+			return;
+		} else {
+			final int index = boxs.size();
 
-                    MwGuiFrame.getChartPanel()
-                            .setVisible(sensorName, c.isSelected());
+			final MwJPanel pane = new MwJPanel(conf);
+			pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
+			final MwJCheckBox c = new MwJCheckBox(sensorName, -1, "sensors");
+			c.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(final ChangeEvent evt) {
 
-                }
-            });
+					MwGuiFrame.getChartPanel()
+							.setVisible(index, c.isSelected());
 
-            c.setSelected(true);
+				}
+			});
 
-            pane.add(c);
-            final MwJButtonColorChooser check = new MwJButtonColorChooser(
-                     sensorName, MwColor.COLORSETGRAPH,conf.color.getColorGraph(sensorName));
-            boxs.put(sensorName, check);
-            boxsIndex.put(sensorName, sensorName);
-            pane.add(check);
+			c.setSelected(true);
 
-            pane.add(new MwJLabel(conf.color.getColor(MwColor.FORGROUND_COLOR), sensorName));
+			pane.add(c);
+			final MwJButtonColorChooser check = new MwJButtonColorChooser(
+					index, sensorName, conf.color.getColorGraph(index));
+			boxs.put(sensorName, check);
+			boxsIndex.put(index, sensorName);
+			pane.add(check);
 
-            this.setLayout(new GridLayout(boxs.size(), 1));
-            this.add(pane);
-            this.revalidate();
-        }
-    }
+			pane.add(new MwJLabel(conf.color.getColor(MwColor.FORGROUND_COLOR),
+					sensorName));
 
-    public void refreshBox(final String index, final Color c) {
-        boxs.get(boxsIndex.get(index)).setColor(c);
-    }
+			this.setLayout(new GridLayout(boxs.size(), 1));
+			this.add(pane);
+			this.revalidate();
+		}
+	}
+
+	public void refreshBox(final int index, final Color c) {
+		boxs.get(boxsIndex.get(index)).setColor(c);
+	}
 
 }
